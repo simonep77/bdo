@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Attr_MultipleDefinition" xml:space="preserve">
+    <value>{0}.{1} - Non e' permessa la definizione multipla dell'attributo {2} sulla stessa proprieta'</value>
+  </data>
+  <data name="Case_OnlyOne" xml:space="preserve">
+    <value>E' permessa una sola modalita' di trasformazione stringhe tra UpperCase e LowerCase</value>
+  </data>
+  <data name="Column_SameOrder" xml:space="preserve">
+    <value>Impossibile mappare colonna {0} con ordine {1} poiche' lo stesso ordine appartiene alla colonna {2}.</value>
+  </data>
+  <data name="DBType_NotFound" xml:space="preserve">
+    <value>{0}.{1} - Il tipo fornito per il database ('{2}') non esiste.</value>
+  </data>
+  <data name="ExtraFeature_OnlyOne" xml:space="preserve">
+    <value>E' permessa una sola funzionalita' tra: AutoIncrement, AutoInsertTimestamp, AutoUpdateTimestamp</value>
+  </data>
+  <data name="PrimaryKey_Mismatch" xml:space="preserve">
+    <value>{0}.{1} - La Primary Key non corrisponde a quella dell'oggetto in input.</value>
+  </data>
+  <data name="PrimaryKey_NotSet" xml:space="preserve">
+    <value>{0} - Non e' stata definita alcuna PrimaryKey</value>
+  </data>
+  <data name="Property_OnlyOneColumn" xml:space="preserve">
+    <value>{0}.{1} - Non e' possibile definire piu' colonne su una proprietà di tipo semplice.</value>
+  </data>
+  <data name="Prop_AutoIncAcceptNull" xml:space="preserve">
+    <value>{0}.{1} - Una proprietà con attributo AutoIncrement non puo' avere attributo AcceptNull.</value>
+  </data>
+  <data name="Prop_AutoIncOnlySimple" xml:space="preserve">
+    <value>.</value>
+  </data>
+  <data name="Prop_ErrorTimestamp" xml:space="preserve">
+    <value>{0}.{1} - Non e' possibile definire contemporaneamente gli attributi InsertTimestamp che UpdateTimestamp.</value>
+  </data>
+  <data name="Prop_NoArrayBytes" xml:space="preserve">
+    <value>{0}.{1} - E' consentito il solo array di tipo byte.</value>
+  </data>
+  <data name="Prop_NoMultipleAutomatic" xml:space="preserve">
+    <value>{0}.{1} - Non e' possibile definire una proprieta' con più attributi automatici (AutoIncrement, AutoInsertTimestamp, AutoUpdateTimestamp, ConcurrencyControl)</value>
+  </data>
+  <data name="Prop_NoLowerUpperCase" xml:space="preserve">
+    <value>{0}.{1} - Non e' possibile definire una proprieta' come LowerCase e UpperCase contemporaneamente</value>
+  </data>
+  <data name="Prop_ObjectSpecifySubType" xml:space="preserve">
+    <value>{0}.{1} - E' necessario specificare un tipo dato per l'attributo Column.</value>
+  </data>
+  <data name="Prop_StoredProcedure_First" xml:space="preserve">
+    <value>{0}.{1} - Il nome della stored procedure associata ad una chiave multipla va specificato solo sulla prima proprieta'</value>
+  </data>
+  <data name="Prop_XmlTagUnused" xml:space="preserve">
+    <value>{0}.{1} - L'attributo XmlTag e' valido solo se non fornita una definizione per la colonna (dove e' gia' possibile specificarlo).</value>
+  </data>
+  <data name="Schema_AlreadyExists" xml:space="preserve">
+    <value>Non e' possibile caricare lo schema per la classe '{0}' poiche' gia' esistente.</value>
+  </data>
+  <data name="Schema_NoPrimaryKey" xml:space="preserve">
+    <value>{0} - E' necessario definire una PrimaryKey.</value>
+  </data>
+  <data name="Schema_NoProperties" xml:space="preserve">
+    <value>{0} - E' necessario definire almeno una proprieta'.</value>
+  </data>
+  <data name="Schema_NotFound" xml:space="preserve">
+    <value>Lo schema per il tipo '{0}' non risulta essere caricato.</value>
+  </data>
+  <data name="Type_NotApplicable" xml:space="preserve">
+    <value>{0}.{1} - L'attributo {2} e' valido solo per proprieta' di tipo "string".</value>
+  </data>
+  <data name="Prop_PrimaryKey_SimpleType" xml:space="preserve">
+    <value>{0}.{1} - E' possibile definire una PrimaryKey solo su proprieta' non mappate.</value>
+  </data>
+  <data name="Prop_PropertyMapMustBeFirst" xml:space="preserve">
+    <value>{0}.{1} - Il PropertyMap e' necessita che la proprieta' puntata esista e che venga definita prima (nel codice) rispetta alla proprieta' che la mappa. ({2})</value>
+  </data>
+  <data name="Prop_PropertyMapReadonly" xml:space="preserve">
+    <value>{0}.{1} - Il PropertyMap e' consentito su una proprieta' di tipo oggetto BDO in sola lettura e non ammette la definizione di attributi Column</value>
+  </data>
+  <data name="Prop_PropertyMapToSimple" xml:space="preserve">
+    <value>{0}.{1} - Il PropertyMap e' necessita che la proprieta' puntata deve essere di tipo semplice</value>
+  </data>
+  <data name="Prop_ObjectSpecifyOrder" xml:space="preserve">
+    <value>{0}.{1} - E' necessario specificare un Order dato per l'attributo Column in quanto presenti piu' attributi Column. Il sistema non e' in grado di garantire l'ordinamento specificato in fase di definizione (gli attributi possono venire letti al contrario!)</value>
+  </data>
+  <data name="Prop_ObjectSpecifyColumns" xml:space="preserve">
+    <value>{0}.{1} - Una proprietà mappata su oggetto deve contenere almeno una definizione Column.</value>
+  </data>
+  <data name="Prop_KeyNeedValueQuery" xml:space="preserve">
+    <value>{0}.{1} - L'appartenenza ad una chiave necessita che la proprieta' sia valorizzata nella query standard</value>
+  </data>
+  <data name="Prop_PropertyMapMissingNames" xml:space="preserve">
+    <value>{0}.{1} - Il PropertyMap necessita la specifica di almeno 1 nome proprieta'</value>
+  </data>
+  <data name="DbConnectionAlreadyDefined" xml:space="preserve">
+    <value>{0} - La connessione DB puo' essere definita a livello di attributo Table o attributo DbConnection ma non su entrambi</value>
+  </data>
+  <data name="Prop_AutoInc_32_Bit" xml:space="preserve">
+    <value>{0}.{1} - La proprieta' di tipo AutoIncrement deve essere di tipo intero di almeno 32 bit</value>
+  </data>
+  <data name="Prop_Encryped_Only_String" xml:space="preserve">
+    <value>{0}.{1} - E' possibile definire criptata solo una proprieta' di tipo "string"</value>
+  </data>
+  <data name="Prop_Must_Be_List" xml:space="preserve">
+    <value>{0}.{1} - La proprieta' deve essere una lista</value>
+  </data>
+</root>
