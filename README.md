@@ -8,4 +8,8 @@ Focus principale è limitare l'uso di query ripetitive e di ottimizzare l'access
 
 Essendo ideato prima del linq e come target framework 2.0 ha un suo meta-linguaggio tipo linq per poter eseguire le operazioni più comuni (Sum, Max, Sort, Group By).
 
+Il framework è production ready anche se non ha un progetto di test esaustivo e poca documentazione. All'interno della società dove lavoro è però molto diffuso ed utilizzato.
+
+Il motivo per utilizzarlo al posto di quanto offerto dal mercato? La possibilità di personalizzazione ed il focus all'utilizzo in ambienti multi-cliente, multi-db con un motore in grado di mappare gli oggetti in modalità cross.
+
 Simone
