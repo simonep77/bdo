@@ -220,7 +220,7 @@ namespace Bdo.Objects
                             DataObjectBase o = (DataObjectBase)this.mValue;
 
                             if (!o.mClassSchema.OriginalType.Equals(oProp.Type))
-                                throw new Bdo.Objects.ObjectException("{0}.{1} - Errore nella verifica del filtro: la proprieta' e' di tipo {2}, il valore del filtro e' di tipo {3}", oProp.Schema.ClassName, oProp.Name, oProp.Type.Name, o.mClassSchema.OriginalType.Name);
+                                throw new Bdo.Objects.ObjectException("{0} - Errore nella verifica del filtro: la proprieta' e' di tipo {1}, il valore del filtro e' di tipo {2}", oProp.Fullname, oProp.Type.Name, o.mClassSchema.OriginalType.Name);
                         }
                         else
                         { //NON E' UN DATAOBJECT: lo creo solo se non trattasi di una IN

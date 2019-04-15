@@ -330,11 +330,11 @@ namespace Bdo.ObjFactory
                         }
                         catch (NotImplementedException)
                         {
-                            throw new TypeFactoryException("{0}.{1} - Attrinuto '{2}' non previsto per il tipo di propieta'", oSchema.ClassName, oProp.Name, attr.GetType());
+                            throw new TypeFactoryException("{0} - Attributo '{1}' non previsto per il tipo di propieta'", oProp.Fullname, attr.GetType().Name);
                         }
                         catch (Exception ex)
                         {
-                            throw new TypeFactoryException("{0}.{1} - {2}", oSchema.ClassName, oProp.Name, ex.Message);
+                            throw new TypeFactoryException("{0} - {1}", oProp.Fullname, ex.Message);
                         }
                     }
 
@@ -513,7 +513,7 @@ namespace Bdo.ObjFactory
                 //Controllo Anomalie
                 //1) Nome chiave PK
                 if (!(oAttrKey is PrimaryKey) && oKey.Name == ClassSchema.PRIMARY_KEY)
-                    throw new TypeFactoryException("{0}.{1} - Il nome di chiave '{1}' e' riservato", oSchema.ClassName, oProp.Name, ClassSchema.PRIMARY_KEY);
+                    throw new TypeFactoryException("{0} - Il nome di chiave '{1}' e' riservato", oProp.Fullname, ClassSchema.PRIMARY_KEY);
 
             }
 
