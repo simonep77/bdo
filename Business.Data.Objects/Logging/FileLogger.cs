@@ -52,7 +52,7 @@ namespace Bdo.Logging
                 //scrive
                 using (StreamWriter oStream = File.AppendText(this.mFilePath))
                 {
-                    oStream.WriteLine(LoggerBase.FormatLogTextMessage(msgIn, args, this.DateFormat, this.WriteThreadId));
+                    oStream.WriteLine(LoggerBase.FormatLogTextMessage(this.DateFormat, this.WriteThreadId, msgIn, args));
                     oStream.Flush();
                 }
             }

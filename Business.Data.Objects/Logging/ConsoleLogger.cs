@@ -41,7 +41,7 @@ namespace Bdo.Logging
             if (!this._Active)
                 return;
 
-            Console.WriteLine(LoggerBase.FormatLogTextMessage(msgIn, args, this.DateFormat, this.WriteThreadId));
+            Console.WriteLine(LoggerBase.FormatLogTextMessage(this.DateFormat, this.WriteThreadId,msgIn, args));
         }
 
 

@@ -15,4 +15,4 @@ using System.Security;
 [assembly: ComVisible(false)]
 [assembly: Guid("e36e6263-b6e8-4e11-92ff-4fde415305d5")]
 [assembly: AssemblyVersion("4.0")]
-[assembly: AssemblyFileVersion("4.05")]
+[assembly: AssemblyFileVersion("4.06")]

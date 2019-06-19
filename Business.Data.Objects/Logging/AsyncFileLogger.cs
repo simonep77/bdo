@@ -106,7 +106,8 @@ namespace Bdo.Logging
         /// <param name="args"></param>
         public override void LogMessage(string msgIn, params object[] args)
         {
-            string s = LoggerBase.FormatLogTextMessage(msgIn, args, this.DateFormat, this.WriteThreadId);
+            //string s = LoggerBase.FormatLogTextMessage(msgIn, args, this.DateFormat, this.WriteThreadId);
+            string s = LoggerBase.FormatLogTextMessage(this.DateFormat, this.WriteThreadId, msgIn, args);
             this.appendLogData(ref s);
         }
 
