@@ -964,7 +964,7 @@ Public Class frmTests
     Private Sub ProvaConnessioneMultiplaToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ProvaConnessioneMultiplaToolStripMenuItem.Click
         Try
             Using ss1 = Me.CreateSlot()
-                ss1.AddDB("CONN2", "MYSQLDataBase", "data source=fetest01;database=faschimcollaudo;userid=root;password=!av007aM")
+                ss1.DbAdd("CONN2", "MYSQLDataBase", "data source=fetest01;database=faschimcollaudo;userid=root;password=!av007aM")
                 Dim dtStart As DateTime = DateTime.Now
                 Dim az As Azienda2 = ss1.LoadObjByPK(Of Azienda2)("FAS287")
                 Dim pv As Provincia2 = az.Provincia
@@ -988,7 +988,7 @@ Public Class frmTests
     Private Sub NuovaListaToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NuovaListaToolStripMenuItem.Click
         Try
             Using ss1 = Me.CreateSlot()
-                ss1.AddDB("CONN2", "MYSQLDataBase", "data source=fetest01;database=faschimcollaudo;userid=root;password=!av007aM")
+                ss1.DbAdd("CONN2", "MYSQLDataBase", "data source=fetest01;database=faschimcollaudo;userid=root;password=!av007aM")
                 Dim dtStart As DateTime = DateTime.Now
 
                 Dim az As Azienda = ss1.CreateObject(Of Azienda)()
@@ -1214,7 +1214,7 @@ Public Class frmTests
     Private Sub ChiaveRicercaOperatoreToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ChiaveRicercaOperatoreToolStripMenuItem.Click
         Try
             Using ss1 = Me.CreateSlot()
-                ss1.AddDB("CONN2", "MYSQLDataBase", "data source=fetest01;database=faschimcollaudo;userid=root;password=!av007aM")
+                ss1.DbAdd("CONN2", "MYSQLDataBase", "data source=fetest01;database=faschimcollaudo;userid=root;password=!av007aM")
                 Dim dtStart As DateTime = DateTime.Now
 
                 Dim az As Azienda = ss1.LoadObjByKEY(Of Azienda)("CAP", "22000")

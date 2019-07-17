@@ -56,6 +56,17 @@ namespace Bdo.Schema.Definition
         /// </summary>
         public abstract bool IsSqlSelectExcluded { get; }
 
+        /// <summary>
+        /// Ritorna il nomeclasse.nomeproprieta'
+        /// </summary>
+        public string Fullname
+        {
+            get
+            {
+                return string.Concat(this.Schema.ClassName, @".", this.Name);
+            }
+        }
+
         #endregion
 
         #region CONSTRUCTORS
@@ -137,7 +148,7 @@ namespace Bdo.Schema.Definition
 
         public virtual object GetValueForDb(Objects.Base.DataObjectBase obj)
         {
-            throw new NotImplementedException(string.Format(@"{0}.{1} - GetValueForDb non supportata per il tipo di proprieta'", this.Schema.ClassName, this.Name));
+            throw new NotImplementedException(string.Format(@"{0} - GetValueForDb non supportata per il tipo di proprieta'", this.Fullname));
         }
 
         /// <summary>
@@ -168,6 +179,8 @@ namespace Bdo.Schema.Definition
         public abstract void ReadDTO(Dictionary<string, object> dto, DataObjectBase obj);
 
         public abstract void SetValueFromReader(DataObjectBase obj, IDataReader dr);
+
+
 
         #endregion
 

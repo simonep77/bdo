@@ -166,3 +166,7 @@
 
 [2019-03-14] [4.05] Simone Pelaia
 - Fix bug su query cached alla seconda esecuzione: rimanevano allocati i parametri all'interno dell'oggetto DB
+- Interno: property.Fullname = Classe.NomeProprietà
+
+[2019-06-19] [4.06] Simone Pelaia
+- Fix errori formattazione nei vari log
