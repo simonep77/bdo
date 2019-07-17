@@ -140,7 +140,7 @@ namespace Bdo.Objects.Base
                         oItem.Object = this.Slot.CreateObjectByType(this.mObjSchema.OriginalType);
                         //Carica dati
                         oItem.Object.FillObjectFromReader(reader, false);
-                        oItem.PkValues = oItem.Object.mClassSchema.PrimaryKey.GetValues(oItem.Object);
+                        //oItem.PkValues = oItem.Object.mClassSchema.PrimaryKey.GetValues(oItem.Object);
                         //Prova ad inserire nelle cache
                         this.Slot.CacheSetAny(oItem.Object);
                     }
