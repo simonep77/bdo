@@ -560,12 +560,13 @@ namespace Bdo.Objects
         private void loopThreadExec(object arg)
         {
             var argDyn = (SlotAsyncWorkItem)arg;
-            dynamic func = argDyn.Func;
+           
 
             //Esegue la funzione esterna
             try
             {
-                func(argDyn.Slot, argDyn.Slice);
+        
+                argDyn.Func.DynamicInvoke(argDyn.Slot, argDyn.Slice);
             }
             catch (Exception ex)
             {
