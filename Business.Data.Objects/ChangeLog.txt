@@ -170,3 +170,6 @@
 
 [2019-06-19] [4.06] Simone Pelaia
 - Fix errori formattazione nei vari log
+
+[2019-08-14] [4.07] Simone Pelaia
+- Nuova routine su BusinessSlot per esecuzione cicli paralleli multi thread su datalist con slot clonato. DA TESTAREEEEEEEE!!!!!
