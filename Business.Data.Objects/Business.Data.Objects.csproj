@@ -124,6 +124,7 @@
     <Compile Include="Objects\Base\IBusinessObjFactory.cs" />
     <Compile Include="Objects\Base\InnerDataList.cs" />
     <Compile Include="Objects\Base\InnerDataListItem.cs" />
+    <Compile Include="Objects\Base\SlotAsyncWorkItem.cs" />
     <Compile Include="Objects\Base\SlotAwareObject.cs" />
     <Compile Include="Objects\BusinessObjFactory.cs" />
     <Compile Include="Objects\DataList.cs" />
@@ -332,7 +333,7 @@
   -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildAction="ReBuild" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_StartDate="2010/12/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_StartDate="2010/12/1" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_BuildAction="ReBuild" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

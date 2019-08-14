@@ -4,6 +4,6 @@
 
 
     Public Overrides Function Create(dalObj As Bdo.Objects.Base.DataObjectBase) As Bdo.Objects.Base.BusinessObjectBase
-        Return New AziendaBiz2(dalObj)
+        Return dalObj.tobi AziendaBiz(dalObj)
     End Function
 End Class

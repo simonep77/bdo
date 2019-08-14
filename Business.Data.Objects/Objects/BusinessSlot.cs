@@ -16,7 +16,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Text;
-
+using System.Threading;
 
 namespace Bdo.Objects
 {
@@ -443,6 +443,140 @@ namespace Bdo.Objects
 
 
         #region PUBLIC METHODS
+
+        #region MULTI-THREAD LOOP
+
+        public delegate void WorkListSlice<TL, T>(BusinessSlot slot, TL slice)
+            where T : DataObject<T>
+            where TL : DataList<TL, T>;
+
+        public void LoopMT<TL, T>(TL list, int itemCount, int maxThreads, WorkListSlice<TL, T> func)
+            where T: DataObject<T>
+            where TL: DataList<TL, T>
+        {
+            var numSlices = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count) / Convert.ToDecimal(itemCount)));
+            var thl = new List<SlotAsyncWorkItem>();
+
+            
+            for (int i = 0; i < numSlices; i++)
+            {
+                var slice = list.ToPagedList(i + 1, itemCount);
+                var slotCloned = this.Clone();
+
+                //Aggancia eventuale log dei clonati sull'originale
+                slotCloned.OnLogDebugSent = this.OnLogDebugSent;
+
+                list.SwitchToSlot(slotCloned);
+
+                //Crea thread
+
+                //Crea struttura dati dati per esecuzione
+                var arg = new SlotAsyncWorkItem();
+
+                arg.Page = i + 1;
+                arg.Offset = itemCount;
+                arg.Slot = slotCloned;
+                arg.Slice = slice;
+                arg.Thd = new Thread(loopThreadExec);
+                arg.Func = func;
+                arg.Exception = null;
+
+                //Aggiunge a lista thread
+                thl.Add(arg);
+
+                //Avvia
+                arg.Thd.Start(arg);
+            }
+
+            var errorSlices = new List<SlotAsyncWorkItem>();
+            
+            //Attende esito di tutti i thread
+            var bContinue = true;
+
+            while (bContinue)
+            {
+                bContinue = false;
+
+                foreach (var item in thl)
+                {
+                    //Se item gia' verificato continua
+                    if (item.Ack)
+                        continue;
+
+                    //Se thread non completato
+                    if (!item.Thd.Join(1000))
+                    {
+                        bContinue = true;
+                        continue;
+                    }
+
+                    item.Ack = true;
+
+                    //Predispone dispose dello slot
+                    using (item.Slot)
+                    {
+                        //Disattiva debug slot clonato
+                        item.Slot.OnLogDebugSent = null;
+
+                        if (item.Exception == null)
+                        {
+                            //terminato OK
+
+                            //Riporta la lista sullo slot di provenienza
+                            item.Slice.SwitchToSlot(this);
+                        }
+                        else
+                        {
+                            //terminato errore
+                            errorSlices.Add(item);
+                        }
+                    }
+
+                }
+            }
+
+            //Gestione cumulata errori threads
+            if (errorSlices.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine("Si sono verificati i seguenti errori nell'esecuzione del loop: ");
+                foreach (var item in errorSlices)
+                {
+                    sb.AppendFormat("Thd {0}, porzione {1} di {2}: {3}", item.Thd.ManagedThreadId, item.Page, numSlices, item.Exception.Message);
+                    sb.AppendLine();
+                    sb.AppendLine(item.Exception.StackTrace);
+                }
+
+                //Lancia eccezione unica
+                throw new BusinessSlotException(sb.ToString());
+            }
+
+        }
+
+        /// <summary>
+        /// Esecuzione del t
+        /// </summary>
+        /// <param name="arg"></param>
+        private void loopThreadExec(object arg)
+        {
+            var argDyn = (SlotAsyncWorkItem)arg;
+           
+
+            //Esegue la funzione esterna
+            try
+            {
+        
+                argDyn.Func.DynamicInvoke(argDyn.Slot, argDyn.Slice);
+            }
+            catch (Exception ex)
+            {
+                argDyn.Exception = ex;
+            }
+            
+        }
+
+        #endregion
+
 
         #region SLOT PROPERTIES
 
