@@ -31,7 +31,7 @@ Public Class frmTests
     End Function
 
     Private Function CreateSlotTest() As BusinessSlot
-        Return New BusinessSlot("TEST")
+        Return New BusinessSlot("LAVORO")
     End Function
 
     Private Sub AvvioSessioneToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AvvioSessioneToolStripMenuItem.Click
@@ -213,7 +213,7 @@ Public Class frmTests
 
                 For index As Integer = 1 To 10
                     Dim ob As Azienda = ss1.LoadObjByPK(Of Azienda)("FAS287")
-                    Dim oAzBiz As AziendaBiz = New AziendaBiz(ob)
+                    Dim oAzBiz As AziendaBiz = ob.ToBizObject(Of AziendaBiz)()
 
                     Me.WriteLog("{0} {1} {2}", ob.IdAzienda, ob.RagioneSociale, ob.PICF)
                     Me.WriteLog("{0} {1}", ob.IdAzienda, ob.Disabilitata)
@@ -762,7 +762,7 @@ Public Class frmTests
                 Me.WriteLog("Prova1")
 
                 For i As Integer = 1 To 4000000
-                    aziBiz = New AziendaBiz(az)
+                    aziBiz = New AziendaBiz2(az)
 
                 Next
 
@@ -1801,7 +1801,7 @@ Public Class frmTests
             Dim sw3 As New Stopwatch()
             sw3.Start()
             For i As Integer = 1 To I_CICLI
-                oAzBiz = New AziendaBiz(ss1.CreateObject(Of Azienda)())
+                oAzBiz = New AziendaBiz2(ss1.CreateObject(Of Azienda)())
             Next
             sw3.Stop()
             Me.WriteLog("REAL: " & sw3.ElapsedTicks)
