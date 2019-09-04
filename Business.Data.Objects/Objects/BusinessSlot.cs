@@ -450,31 +450,83 @@ namespace Bdo.Objects
             where T : DataObject<T>
             where TL : DataList<TL, T>;
 
-        public void LoopMT<TL, T>(TL list, int itemCount, int maxThreads, WorkListSlice<TL, T> func)
+
+        public class LoopResult
+        {
+            public bool ResultOK;
+            public int TotSlices;
+            public int TotSlices_OK;
+            public int TotSlices_ERR;
+
+            public List<SliceItem> Slices = new List<SliceItem>();
+
+            public class SliceItem
+            {
+                public int Pos;
+                public int Size;
+                public bool ResultOK;
+                public Exception Exception;
+            }
+        }
+
+        public LoopResult LoopMT<TL, T>(TL list, int blockSize, int maxThreads, WorkListSlice<TL, T> func)
             where T: DataObject<T>
             where TL: DataList<TL, T>
         {
-            var numSlices = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count) / Convert.ToDecimal(itemCount)));
+            var ret = new LoopResult();
+
+            //Check numero
+            if (maxThreads < 1 || maxThreads > 60)
+                throw new BusinessSlotException("Il numero di threads deve essere compreso tra 1 e 60");
+
+            //Se maxthreads = 1 forse deve forzare esecuzione unica sullo slot corrente
+            if (maxThreads == 1)
+                blockSize = list.Count; 
+
+            ret.TotSlices = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count) / Convert.ToDecimal(blockSize)));
             var thl = new List<SlotAsyncWorkItem>();
 
-            
-            for (int i = 0; i < numSlices; i++)
+            var thdRunningCount = 0;
+            var remainingSlices = ret.TotSlices;
+            var currentSlice = -1;
+
+            //Alloca i primi thread elaborativi fino la massimo numero di threads oppure al massimo numero di blocchi
+LB_ALLOCATE_THREADS:
+
+            while (thdRunningCount < maxThreads && remainingSlices > 0)
             {
-                var slice = list.ToPagedList(i + 1, itemCount);
-                var slotCloned = this.Clone();
+                //AVanza contatori
+                thdRunningCount++;
+                remainingSlices--;
+                currentSlice++;
+
+                //Dati per output
+                var sliceItem = new LoopResult.SliceItem();
+                ret.Slices.Add(sliceItem);
+
+                var slice = list.ToPagedList(currentSlice + 1, blockSize);
+
+                //Imposta size per output
+                sliceItem.Pos = currentSlice;
+                sliceItem.Size = slice.Count;
+
+                //clona slot solo se maxthreads > 1
+                var slotCloned = this;
+
+                if (maxThreads > 1)
+                    slotCloned = this.Clone();
 
                 //Aggancia eventuale log dei clonati sull'originale
                 slotCloned.OnLogDebugSent = this.OnLogDebugSent;
 
+                //Imposta slot clonato su elementi lista
                 list.SwitchToSlot(slotCloned);
-
-                //Crea thread
 
                 //Crea struttura dati dati per esecuzione
                 var arg = new SlotAsyncWorkItem();
 
-                arg.Page = i + 1;
-                arg.Offset = itemCount;
+                arg.Pos = sliceItem.Pos;
+                arg.Offset = blockSize;
                 arg.Slot = slotCloned;
                 arg.Slice = slice;
                 arg.Thd = new Thread(loopThreadExec);
@@ -487,12 +539,12 @@ namespace Bdo.Objects
                 //Avvia
                 arg.Thd.Start(arg);
             }
-
-            var errorSlices = new List<SlotAsyncWorkItem>();
             
+
+
             //Attende esito di tutti i thread
             var bContinue = true;
-
+            
             while (bContinue)
             {
                 bContinue = false;
@@ -504,11 +556,14 @@ namespace Bdo.Objects
                         continue;
 
                     //Se thread non completato
-                    if (!item.Thd.Join(1000))
+                    if (!item.Thd.Join(500))
                     {
                         bContinue = true;
                         continue;
                     }
+                    //Thread terminato
+                    //Decrementa numero di thread in esecuzione
+                    thdRunningCount--;
 
                     item.Ack = true;
 
@@ -518,43 +573,27 @@ namespace Bdo.Objects
                         //Disattiva debug slot clonato
                         item.Slot.OnLogDebugSent = null;
 
-                        if (item.Exception == null)
-                        {
-                            //terminato OK
+                        //Riporta la lista sullo slot di provenienza
+                        item.Slice.SwitchToSlot(this);
 
-                            //Riporta la lista sullo slot di provenienza
-                            item.Slice.SwitchToSlot(this);
-                        }
-                        else
-                        {
-                            //terminato errore
-                            errorSlices.Add(item);
-                        }
+                        //Valuta errore
+                        ret.Slices[item.Pos].ResultOK = (item.Exception == null);
+                        ret.Slices[item.Pos].Exception = item.Exception;
+                        
                     }
 
+                    //Se abbiamo ancora blocchi da elaborare allora riallochiamo nuovi threads
+                    if (remainingSlices > 0)
+                        goto LB_ALLOCATE_THREADS;
                 }
             }
 
-            //Gestione cumulata errori threads
-            if (errorSlices.Count > 0)
-            {
-                var sb = new StringBuilder();
-                sb.AppendLine("Si sono verificati i seguenti errori nell'esecuzione del loop: ");
-                foreach (var item in errorSlices)
-                {
-                    sb.AppendFormat("Thd {0}, porzione {1} di {2}: {3}", item.Thd.ManagedThreadId, item.Page, numSlices, item.Exception.Message);
-                    sb.AppendLine();
-                    sb.AppendLine(item.Exception.StackTrace);
-                }
-
-                //Lancia eccezione unica
-                throw new BusinessSlotException(sb.ToString());
-            }
+            return ret;
 
         }
 
         /// <summary>
-        /// Esecuzione del t
+        /// Esecuzione del thread
         /// </summary>
         /// <param name="arg"></param>
         private void loopThreadExec(object arg)
