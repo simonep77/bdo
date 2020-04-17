@@ -173,12 +173,10 @@
     <Compile Include="Objects\Filters\Filter.cs" />
     <Compile Include="Enumerations\ESeverity.cs" />
     <Compile Include="Exceptions\ConfigException.cs" />
-    <Compile Include="Database\ACCESSDataBase.cs" />
     <Compile Include="Database\CommonDataBase.cs" />
     <Compile Include="Database\DataBaseException.cs" />
     <Compile Include="Database\DataBaseFactory.cs" />
     <Compile Include="Database\DBStats.cs" />
-    <Compile Include="Database\FBDataBase.cs" />
     <Compile Include="Database\IDataBase.cs" />
     <Compile Include="Database\MSSQLDataBase.cs" />
     <Compile Include="Database\MYSQLDataBase.cs" />
@@ -333,7 +331,7 @@
   -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_StartDate="2010/12/1" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_BuildAction="ReBuild" />
+      <UserProperties BuildVersion_BuildAction="ReBuild" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_StartDate="2010/12/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

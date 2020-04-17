@@ -142,7 +142,7 @@
     <value>Il database corrente ({0}) non supporta la funzionalita' richiesta</value>
   </data>
   <data name="Provider_Unknown" xml:space="preserve">
-    <value>Il provider {0} non e' riconosciuto. Le possibili opzioni sono: MSSQLDataBase, MSSQL2005DataBase, MYSQLDataBase, FBDataBase, ACCESSDataBase, SQLITEDataBase</value>
+    <value>Il provider {0} non e' riconosciuto. Le possibili opzioni sono: MSSQLDataBase, MSSQL2005DataBase, MYSQLDataBase, SQLITEDataBase</value>
   </data>
   <data name="Query_Empty" xml:space="preserve">
     <value>Lo statement SQL non e' valorizzato. Attenzione: dopo ciascuna esecuzione viene cancellato sia lo statement SQL che i parametri.</value>

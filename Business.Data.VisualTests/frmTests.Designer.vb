@@ -113,9 +113,10 @@ Partial Class frmTests
         Me.ListeCachedToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListePrefetchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BenchmarkLoadFullObjectsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckModificatoriStringheNULLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.dgv1 = New System.Windows.Forms.DataGridView()
-        Me.CheckModificatoriStringheNULLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LoopMT1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsTest.SuspendLayout()
         CType(Me.dgv1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -581,7 +582,7 @@ Partial Class frmTests
         '
         'ToolStripSplitButton3
         '
-        Me.ToolStripSplitButton3.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TransazioniPendentiToolStripMenuItem, Me.DatalistYieldToolStripMenuItem, Me.TestPKDateToolStripMenuItem, Me.LogDebugNEWToolStripMenuItem, Me.Mailer365ToolStripMenuItem, Me.NewFilterINToolStripMenuItem, Me.CastSuLoadObjOrNewToolStripMenuItem, Me.ToJSONToolStripMenuItem, Me.HashStringsToolStripMenuItem, Me.ListeCachedToolStripMenuItem, Me.EncryptedPropertyToolStripMenuItem})
+        Me.ToolStripSplitButton3.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TransazioniPendentiToolStripMenuItem, Me.DatalistYieldToolStripMenuItem, Me.TestPKDateToolStripMenuItem, Me.LogDebugNEWToolStripMenuItem, Me.Mailer365ToolStripMenuItem, Me.NewFilterINToolStripMenuItem, Me.CastSuLoadObjOrNewToolStripMenuItem, Me.ToJSONToolStripMenuItem, Me.HashStringsToolStripMenuItem, Me.ListeCachedToolStripMenuItem, Me.EncryptedPropertyToolStripMenuItem, Me.LoopMT1ToolStripMenuItem})
         Me.ToolStripSplitButton3.Image = CType(resources.GetObject("ToolStripSplitButton3.Image"), System.Drawing.Image)
         Me.ToolStripSplitButton3.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton3.Name = "ToolStripSplitButton3"
@@ -687,6 +688,12 @@ Partial Class frmTests
         Me.BenchmarkLoadFullObjectsToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.BenchmarkLoadFullObjectsToolStripMenuItem.Text = "Benchmark LoadFullObjects"
         '
+        'CheckModificatoriStringheNULLToolStripMenuItem
+        '
+        Me.CheckModificatoriStringheNULLToolStripMenuItem.Name = "CheckModificatoriStringheNULLToolStripMenuItem"
+        Me.CheckModificatoriStringheNULLToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.CheckModificatoriStringheNULLToolStripMenuItem.Text = "Check Modificatori Stringhe (NULL)"
+        '
         'ToolStripButton1
         '
         Me.ToolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -704,11 +711,11 @@ Partial Class frmTests
         Me.dgv1.Size = New System.Drawing.Size(783, 232)
         Me.dgv1.TabIndex = 2
         '
-        'CheckModificatoriStringheNULLToolStripMenuItem
+        'LoopMT1ToolStripMenuItem
         '
-        Me.CheckModificatoriStringheNULLToolStripMenuItem.Name = "CheckModificatoriStringheNULLToolStripMenuItem"
-        Me.CheckModificatoriStringheNULLToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
-        Me.CheckModificatoriStringheNULLToolStripMenuItem.Text = "Check Modificatori Stringhe (NULL)"
+        Me.LoopMT1ToolStripMenuItem.Name = "LoopMT1ToolStripMenuItem"
+        Me.LoopMT1ToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.LoopMT1ToolStripMenuItem.Text = "LoopMT 1"
         '
         'frmTests
         '
@@ -821,4 +828,5 @@ Partial Class frmTests
     Friend WithEvents BenchmarkLoadFullObjectsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents CheckModificatoriStringheNULLToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LoopMT1ToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -698,6 +698,33 @@ namespace Bdo.Objects.Base
 
         #endregion
 
+
+        /// <summary>
+        /// Data una lista ritorna una sottolista paginata
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        internal DataListBase toPagedList(int page, int offset)
+        {
+
+            var newList = (DataListBase)ProxyAssemblyCache.Instance.CreateDaoNoSchemaObj(this.GetType().BaseType);
+            newList.Pager = new DataPager();
+            newList.Pager.Page = page;
+            newList.Pager.Offset = offset;
+            newList.Pager.TotRecords = this.Count;
+
+            int idxBegin = newList.Pager.Position;
+            int idxEnd = Math.Min(idxBegin + offset, this.Count);
+
+            for (int i = idxBegin; i < idxEnd; i++)
+            {
+                newList.mInnerList.Add(this.mInnerList[i]);
+            }
+
+            return newList;
+        }
+
         #endregion
 
         #region ABSTRACT

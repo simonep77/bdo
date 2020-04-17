@@ -173,3 +173,6 @@
 
 [2019-08-14] [4.07] Simone Pelaia
 - Nuova routine su BusinessSlot per esecuzione cicli paralleli multi thread su datalist con slot clonato. DA TESTAREEEEEEEE!!!!!
+
+[2019-08-14] [4.08] Simone Pelaia
+- Rimosse classi db mai utilizzate o comunque obsolete (es. ACCESS, Firebird)

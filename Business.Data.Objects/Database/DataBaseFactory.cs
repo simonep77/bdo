@@ -74,12 +74,12 @@ namespace Bdo.Database
                         return new MSSQLDataBase(connectionString);
                     case @"SQLITEDATABASE":
                         return new SQLITEDataBase(connectionString);
-                    case @"PGSQLDATABASE":
-                        return new PGSQLDataBase(connectionString);
-                    case @"FBDATABASE":
-                        return new FBDataBase(connectionString);
-                    case @"ACCESSDATABASE":
-                        return new ACCESSDataBase(connectionString);
+                    //case @"PGSQLDATABASE":
+                    //    return new PGSQLDataBase(connectionString);
+                    //case @"FBDATABASE":
+                    //    return new FBDataBase(connectionString);
+                    //case @"ACCESSDATABASE":
+                    //    return new ACCESSDataBase(connectionString);
                     default:
                         throw new DataBaseException(Resources.DatabaseMessages.Provider_Unknown, tipoDataBase);
                 }

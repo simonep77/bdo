@@ -446,13 +446,11 @@ namespace Bdo.Objects
 
         #region MULTI-THREAD LOOP
 
-        public delegate void WorkListSlice<TL, T>(BusinessSlot slot, TL slice)
-            where T : DataObject<T>
-            where TL : DataList<TL, T>;
+        public delegate void WorkListSlice<TL>(BusinessSlot slot, TL slice)
+            where TL : DataListBase;
 
-        public void LoopMT<TL, T>(TL list, int itemCount, int maxThreads, WorkListSlice<TL, T> func)
-            where T: DataObject<T>
-            where TL: DataList<TL, T>
+        public void LoopMT<TL>(TL list, int itemCount, int maxThreads, WorkListSlice<TL> func)
+            where TL: DataListBase
         {
             var numSlices = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count) / Convert.ToDecimal(itemCount)));
             var thl = new List<SlotAsyncWorkItem>();
@@ -460,15 +458,12 @@ namespace Bdo.Objects
             
             for (int i = 0; i < numSlices; i++)
             {
-                var slice = list.ToPagedList(i + 1, itemCount);
+                var slice = list.toPagedList(i + 1, itemCount);
                 var slotCloned = this.Clone();
+                slice.SwitchToSlot(slotCloned);
 
                 //Aggancia eventuale log dei clonati sull'originale
                 slotCloned.OnLogDebugSent = this.OnLogDebugSent;
-
-                list.SwitchToSlot(slotCloned);
-
-                //Crea thread
 
                 //Crea struttura dati dati per esecuzione
                 var arg = new SlotAsyncWorkItem();

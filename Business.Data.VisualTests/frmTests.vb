@@ -1,6 +1,7 @@
 Imports BDO.Objects
 Imports System.Reflection
 Imports System.Linq
+Imports System.Threading
 Imports Business.Data.Objects.TestClass.DAL
 Imports Business.Data.Objects.TestClass.BIZ
 
@@ -17,7 +18,12 @@ Public Class frmTests
     ''' <remarks></remarks>
     Private Sub WriteLog(ByVal msgFmt As String, ByVal ParamArray args() As Object)
 
+
         Dim msg As String = String.Format(msgFmt, args)
+
+        If Me.InvokeRequired Then
+            Me.Invoke(Sub() WriteLog(msg))
+        End If
 
         Me.txtLog.AppendText(String.Format("{0}  {1}{2}", Date.Now.ToString("dd/MM/yyyy HH:mm:ss"), msg, Environment.NewLine))
     End Sub
@@ -2526,4 +2532,37 @@ Public Class frmTests
         End Using
 
     End Sub
+
+    Private Sub LoopMT1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoopMT1ToolStripMenuItem.Click
+
+        Const I_NUM_ITEMS As Integer = 1000
+        Const I_NUM_SLICE As Integer = 1000
+
+        Using ss1 = Me.CreateSlotTest()
+            ss1.DB.AutoCloseConnection = True
+            ss1.LiveTrackingEnabled = True
+            ss1.ChangeTrackingEnabled = True
+            Me.WriteLog("Inizio lettura {0} elementi", I_NUM_ITEMS)
+
+            Dim oList = ss1.CreatePagedList(Of ListaAziende)(1, I_NUM_ITEMS).SearchAllObjects()
+
+            ss1.LoopMT(Of ListaAziende)(oList, I_NUM_SLICE, 5, AddressOf elaboraBloccoLista)
+
+        End Using
+
+
+    End Sub
+
+    Private Sub elaboraBloccoLista(slot As BusinessSlot, slice As ListaAziende)
+
+
+        For Each anag In slice
+            'Me.WriteLog("Sono: {0}", anag.RagioneSociale)
+            Console.WriteLine(anag.RagioneSociale)
+        Next
+
+
+    End Sub
+
+
 End Class
