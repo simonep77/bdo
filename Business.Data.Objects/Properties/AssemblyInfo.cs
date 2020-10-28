@@ -9,7 +9,7 @@ using System.Security;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Simone Pelaia")]
 [assembly: AssemblyProduct("Business.Data.Objects")]
-[assembly: AssemblyCopyright("Copyright 2014 © Simone Pelaia")]
+[assembly: AssemblyCopyright("Copyright 2020 © Simone Pelaia")]
 [assembly: AssemblyTrademark("Simone Pelaia")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
