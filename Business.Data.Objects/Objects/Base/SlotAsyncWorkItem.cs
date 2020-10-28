@@ -7,6 +7,7 @@ namespace Bdo.Objects.Base
 {
     internal class SlotAsyncWorkItem
     {
+        public int Page { get; set; }
         public int Pos { get; set; }
         public int Offset { get; set; }
         public BusinessSlot Slot { get; set; }

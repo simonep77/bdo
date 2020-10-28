@@ -18,7 +18,7 @@ namespace Bdo.Database
 	/// </summary>
 	public class PGSQLDataBase: CommonDataBase 
 	{
-        private readonly string PARAM_CHAR = @"";
+        private readonly string PARAM_CHAR = @":";
         private readonly string PARAM_REPLACE = @":$2";
         private readonly string PARAM_REGEX = @"(\B[@])([\w]*\b)";
 
@@ -56,9 +56,9 @@ namespace Bdo.Database
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public override void AddParameter(string name, object value)
+        public override DbParameter AddParameter(string name, object value)
         {
-            base.AddParameter(name.Replace(@"@", PARAM_CHAR), value);
+            return base.AddParameter(name.Replace(@"@", PARAM_CHAR), value);
         }
 		
 		#region "PUBLIC"

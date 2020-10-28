@@ -346,13 +346,11 @@ namespace Bdo.Objects
                     break;
                 case EOperator.Between:
                     arrValues = this.mValue as object[];
-                    oParam = db.CreateParameter(string.Concat(this.mName, paramIndex.ToString(), "_1"), arrValues[0]);
-                    db.AddParameter(oParam);
+                    oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString(), "_1"), arrValues[0]);
                     sql.Append(oParam.ParameterName);
                     sql.Append(@" AND ");
 
-                    oParam = db.CreateParameter(string.Concat(this.mName, paramIndex.ToString(), "_2"), arrValues[1]);
-                    db.AddParameter(oParam);
+                    oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString(), "_2"), arrValues[1]);
                     sql.Append(oParam.ParameterName);
 
                     break;
@@ -361,8 +359,7 @@ namespace Bdo.Objects
                     arrValues = this.mValue as object[];
                     for (int i = 0; i < arrValues.Length; i++)
                     {
-                        oParam = db.CreateParameter(string.Concat(this.mName, paramIndex.ToString(), "_", i.ToString()), arrValues[i]);
-                        db.AddParameter(oParam);
+                        oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString(), "_", i.ToString()), arrValues[i]);
                         sql.Append(oParam.ParameterName);
                         sql.Append(@", ");
                     }
@@ -371,8 +368,7 @@ namespace Bdo.Objects
 
                     break;
                 default:
-                    oParam = db.CreateParameter(string.Concat(this.mName, paramIndex.ToString()), this.mValue);
-                    db.AddParameter(oParam);
+                    oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString()), this.mValue);
                     sql.Append(oParam.ParameterName);
                     break;
             }

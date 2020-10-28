@@ -826,9 +826,9 @@ namespace Bdo.Database
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="value"></param>
-        public virtual void AddParameter(string name, object value)
+        public virtual DbParameter AddParameter(string name, object value)
 		{
-            this.AddParameter(this.CreateParameter(name, value));
+            return this.AddParameter(name, value, value?.GetType());
 		}
 
         /// <summary>
@@ -837,9 +837,11 @@ namespace Bdo.Database
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="type"></param>
-        public virtual void AddParameter(string name, object value, Type type)
+        public virtual DbParameter AddParameter(string name, object value, Type type)
         {
+            var p = this.CreateParameter(name, value, type);
             this.AddParameter(this.CreateParameter(name, value, type));
+            return p;
         }
 
 
@@ -892,23 +894,11 @@ namespace Bdo.Database
         {
             DbParameter param = this._FactoryCorrente.CreateParameter();
             param.ParameterName = this.CreateParamName(name);
-            param.DbType = this.TypeToDbType(type);
-            //Se fornito null imposta DBNULL
-            param.Value = (value != null) ? value : DBNull.Value;
-            return param;
-        }
 
+            //Se fornito un type allora lo decodifica
+            if (type != null)
+                param.DbType = this.TypeToDbType(type);
 
-        /// <summary>
-        /// Crea parametro per nome e valore 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public virtual DbParameter CreateParameter(string name, object value)
-        {
-            DbParameter param = this._FactoryCorrente.CreateParameter();
-            param.ParameterName = this.CreateParamName(name);
             //Se fornito null imposta DBNULL
             param.Value = (value != null) ? value : DBNull.Value;
             return param;
@@ -1418,7 +1408,7 @@ namespace Bdo.Database
         /// </summary>
         /// <param name="T"></param>
         /// <returns></returns>
-        protected System.Data.DbType TypeToDbType(Type t)
+        protected virtual System.Data.DbType TypeToDbType(Type t)
         {
             switch (Type.GetTypeCode(t))
             {
@@ -1457,6 +1447,7 @@ namespace Bdo.Database
 
                     return System.Data.DbType.Object;
             }
+
         }
 
 

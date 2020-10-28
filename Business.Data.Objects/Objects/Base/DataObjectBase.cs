@@ -654,7 +654,9 @@ namespace Bdo.Objects.Base
 
                         for (int i = 0; i < this.mClassSchema.PrimaryKey.Properties.Count; i++)
                         {
-                            oDbParams.Add(db.CreateParameter(this.mClassSchema.PrimaryKey.Properties[i].Column.GetKeyParamName(), this.mClassSchema.PrimaryKey.Properties[i].GetValueForDb(this)));
+                            oDbParams.Add(db.CreateParameter(this.mClassSchema.PrimaryKey.Properties[i].Column.GetKeyParamName(), 
+                                this.mClassSchema.PrimaryKey.Properties[i].GetValueForDb(this), 
+                                this.mClassSchema.PrimaryKey.Properties[i].Type));
                         }
                     }
 

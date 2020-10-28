@@ -200,7 +200,7 @@ namespace Bdo.Database
         /// Aggiunge paramtro con nome, valore e tipo
 		/// </summary>
 		/// <returns></returns>
-        void AddParameter(string name, object value);
+        DbParameter AddParameter(string name, object value);
 
         /// <summary>
         /// Aggiunge paramtro con nome, valore e tipo
@@ -208,7 +208,7 @@ namespace Bdo.Database
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="type"></param>
-        void AddParameter(string name, object value, Type type);
+        DbParameter AddParameter(string name, object value, Type type);
 
         /// <summary>
         /// Aggiunge parametro creato in precedenza
@@ -228,13 +228,6 @@ namespace Bdo.Database
         /// </summary>
         void ClearParameters();
 
-        /// <summary>
-        /// Crea paramtro con nome, valore senza aggiungerlo
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        DbParameter CreateParameter(string name, object value);
 
         /// <summary>
         /// Crea paramtro con nome, valore e tipo senza aggiungerlo
