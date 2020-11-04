@@ -177,5 +177,8 @@
 [2019-08-14] [4.08] Simone Pelaia
 - Rimosse classi db mai utilizzate o comunque obsolete (es. ACCESS, Firebird)
 
-[2019-08-14] [4.09] Simone Pelaia
+[2020-10-12] [4.09] Simone Pelaia
 - Gestione personalizzata dei parametri di SQL Server per evitare le cnversioni implicite su NVARCHAR nelle query parametriche
+
+[2020-11-04] [4.10] Simone Pelaia
+- Revisione routine per esecuzione cicli paralleli multi thread per implementazione limitatore numero threads e generalizzazione dei parametri in input

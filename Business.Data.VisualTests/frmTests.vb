@@ -2546,7 +2546,7 @@ Public Class frmTests
 
             Dim oList = ss1.CreatePagedList(Of ListaAziende)(1, I_NUM_ITEMS).SearchAllObjects()
 
-            ss1.LoopMT(Of ListaAziende)(oList, I_NUM_SLICE, 5, AddressOf elaboraBloccoLista)
+            ss1.LoopMT(Of ListaAziende, Azienda)(oList, I_NUM_SLICE, 5, AddressOf elaboraBloccoLista)
 
         End Using
 

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -446,45 +447,68 @@ namespace Bdo.Objects
 
         #region MULTI-THREAD LOOP
 
-        public delegate void WorkListSlice<TL>(BusinessSlot slot, TL slice)
-            where TL : DataListBase;
+        public delegate void WorkListSlice<TL>(BusinessSlot slot, TL slice);
 
-        public void LoopMT<TL>(TL list, int itemCount, int maxThreads, WorkListSlice<TL> func)
-            where TL: DataListBase
+        /// <summary>
+        /// Esegue un loop multithreading con attesa di completamento. Se si verificano errori all'interno dei thread lancia eccezione al completamento
+        /// </summary>
+        /// <typeparam name="TL"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="itemCount"></param>
+        /// <param name="maxThreads"></param>
+        /// <param name="func"></param>
+        public void LoopMT<TL, T>(TL list, int itemCount, int maxThreads, WorkListSlice<TL> func)
+            where TL : IEnumerable<T>
         {
-            var numSlices = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count) / Convert.ToDecimal(itemCount)));
-            var thl = new List<SlotAsyncWorkItem>();
+            bool isSlotAware = list is SlotAwareObject;
+            var pager = new DataPager();
+            pager.Offset = itemCount;
+            pager.TotRecords = list.Count();
 
-            
-            for (int i = 0; i < numSlices; i++)
+            var thl = new List<SlotAsyncWorkItem<T>>();
+
+            //Crea un semaforo sul numero massimo di threads ed esegue
+            using (var sem = new SemaphoreSlim(maxThreads, maxThreads))
             {
-                var slice = list.toPagedList(i + 1, itemCount);
-                var slotCloned = this.Clone();
-                slice.SwitchToSlot(slotCloned);
+                for (int i = 0; i < pager.TotPages - 1; i++)
+                {
+                    pager.Page = i + 1;
+                    //Si assicura il numero massimo di thread imposto
+                    sem.Wait();
 
-                //Aggancia eventuale log dei clonati sull'originale
-                slotCloned.OnLogDebugSent = this.OnLogDebugSent;
+                    var slice = list.Skip(pager.Position).Take(pager.Offset);
+                    var slotCloned = this.Clone();
+                    //Se trattasi di oggetto con slot allora assegna allo slot clonato
+                    if (isSlotAware)
+                        slice.Cast<SlotAwareObject>().ToList().ForEach(el => el.SwitchToSlot(slotCloned));
+                    
+                    //Aggancia eventuale log dei clonati sull'originale
+                    slotCloned.OnLogDebugSent = this.OnLogDebugSent;
 
-                //Crea struttura dati dati per esecuzione
-                var arg = new SlotAsyncWorkItem();
+                    //Crea struttura dati dati per esecuzione
+                    var arg = new SlotAsyncWorkItem<T>();
 
-                arg.Page = i + 1;
-                arg.Offset = itemCount;
-                arg.Slot = slotCloned;
-                arg.Slice = slice;
-                arg.Thd = new Thread(loopThreadExec);
-                arg.Func = func;
-                arg.Exception = null;
+                    arg.Page = i + 1;
+                    arg.Offset = itemCount;
+                    arg.Slot = slotCloned;
+                    arg.Slice = slice;
+                    arg.Thd = new Thread(loopThreadExec<T>);
+                    arg.Func = func;
+                    arg.Exception = null;
 
-                //Aggiunge a lista thread
-                thl.Add(arg);
+                    //Aggiunge a lista thread
+                    thl.Add(arg);
 
-                //Avvia
-                arg.Thd.Start(arg);
+                    //Avvia
+                    arg.Thd.Start(arg);
+                }
             }
 
-            var errorSlices = new List<SlotAsyncWorkItem>();
-            
+
+
+            var errorSlices = new List<SlotAsyncWorkItem<T>>();
+
             //Attende esito di tutti i thread
             var bContinue = true;
 
@@ -512,13 +536,13 @@ namespace Bdo.Objects
                     {
                         //Disattiva debug slot clonato
                         item.Slot.OnLogDebugSent = null;
+                        //Riporta su slot corrente
+                        if (isSlotAware)
+                            item.Slice.Cast<SlotAwareObject>().ToList().ForEach(el => el.SwitchToSlot(this));
 
-                        if (item.Exception == null)
+                        if (item.Exception != null)
                         {
                             //terminato OK
-
-                            //Riporta la lista sullo slot di provenienza
-                            item.Slice.SwitchToSlot(this);
                         }
                         else
                         {
@@ -537,7 +561,7 @@ namespace Bdo.Objects
                 sb.AppendLine("Si sono verificati i seguenti errori nell'esecuzione del loop: ");
                 foreach (var item in errorSlices)
                 {
-                    sb.AppendFormat("Thd {0}, porzione {1} di {2}: {3}", item.Thd.ManagedThreadId, item.Page, numSlices, item.Exception.Message);
+                    sb.AppendFormat($"Thd {item.Thd.ManagedThreadId}, porzione {item.Page} di {pager.TotPages}: {item.Exception.Message}");
                     sb.AppendLine();
                     sb.AppendLine(item.Exception.StackTrace);
                 }
@@ -548,19 +572,19 @@ namespace Bdo.Objects
 
         }
 
+
+
         /// <summary>
         /// Esecuzione del t
         /// </summary>
         /// <param name="arg"></param>
-        private void loopThreadExec(object arg)
+        private void loopThreadExec<T>(object arg)
         {
-            var argDyn = (SlotAsyncWorkItem)arg;
-           
+            var argDyn = (SlotAsyncWorkItem<T>)arg;
 
             //Esegue la funzione esterna
             try
             {
-        
                 argDyn.Func.DynamicInvoke(argDyn.Slot, argDyn.Slice);
             }
             catch (Exception ex)
