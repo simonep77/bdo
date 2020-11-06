@@ -31,6 +31,9 @@ namespace Bdo.Schema.Definition
         public bool ExcludeInsert;
         public bool ExcludeUpdate;
         public bool ExcludeXml;
+
+        public DbType? CustomDbType { get; set; }
+
         //public bool Encrypted;
 
 
@@ -66,6 +69,7 @@ namespace Bdo.Schema.Definition
                 return string.Concat(this.Schema.ClassName, @".", this.Name);
             }
         }
+
 
         #endregion
 
@@ -120,6 +124,11 @@ namespace Bdo.Schema.Definition
             else if (attr is AcceptNull)
             {
                 this.AcceptNull = true;
+            }
+            //DB Provider Type
+            else if (attr is DbDataType)
+            {
+                this.CustomDbType = ((DbDataType)attr).Value;
             }
             //ESCLUDE DA XML
             else if (attr is ExcludeFromXml)

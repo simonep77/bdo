@@ -374,22 +374,31 @@ namespace Bdo.Objects.Base
             //Imposta db
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
 
-            //Imposta SQL (preleva quello standard dalla PK e sostituisce il contenuto della select con il solo nome campo)
-            db.SQL = string.Concat(@"SELECT ", prop.Column.Name, " FROM " , this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), this.mClassSchema.PrimaryKey.SQL_Where_Clause);
-
-            //Imposta PK
-            var oKeyValues = this.mClassSchema.PrimaryKey.FillKeyQueryWhereParams(db, this);
-
-            //Esegue query su datareader
-            using (DbDataReader dr = db.ExecReader())
+            try
             {
-                //Controlla presenza risultato e si dispone sul record
-                if (!dr.Read())
-                    throw new ObjectException(Resources.ObjectMessages.Base_RecordKeyNotFound, this.GetType().Name, this.mClassSchema.PrimaryKey.Name, oKeyValues);
+                //Imposta SQL (preleva quello standard dalla PK e sostituisce il contenuto della select con il solo nome campo)
+                db.SQL = string.Concat(@"SELECT ", prop.Column.Name, " FROM " , this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), this.mClassSchema.PrimaryKey.SQL_Where_Clause);
 
-                //OK Imposta oggetto
-                prop.SetValueFromReader(this, dr);
+                //Imposta PK
+                var oKeyValues = this.mClassSchema.PrimaryKey.FillKeyQueryWhereParams(db, this);
+
+                //Esegue query su datareader
+                using (DbDataReader dr = db.ExecReader())
+                {
+                    //Controlla presenza risultato e si dispone sul record
+                    if (!dr.Read())
+                        throw new ObjectException(Resources.ObjectMessages.Base_RecordKeyNotFound, this.GetType().Name, this.mClassSchema.PrimaryKey.Name, oKeyValues);
+
+                    //OK Imposta oggetto
+                    prop.SetValueFromReader(this, dr);
+                }
             }
+            finally
+            {
+                db.Reset();
+            }
+
+
 
         }
 
@@ -685,10 +694,8 @@ namespace Bdo.Objects.Base
 
                     //Controlla esito per verificare situazioni anomale
                     if (db.ExecQuery() == 0)
-                    {
                         //Nessun Inserimento
                         throw new ObjectException(Resources.ObjectMessages.New_NoRecord, this.GetType().Name);
-                    }
                 }
 
                 //Imposta stato caricato comunque

@@ -78,6 +78,7 @@
     <Compile Include="Attributes\Modifiers\Truncate.cs" />
     <Compile Include="Attributes\Structure\Column.cs" />
     <Compile Include="Attributes\Modifiers\BaseStringModifierAttribute.cs" />
+    <Compile Include="Attributes\Structure\DbDataType.cs" />
     <Compile Include="Attributes\Validators\BaseValidatorAttribute.cs" />
     <Compile Include="Attributes\Modifiers\BaseModifierAttribute.cs" />
     <Compile Include="Attributes\Mapping\PropertyMap.cs" />
@@ -333,7 +334,7 @@
   -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildAction="ReBuild" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_StartDate="2010/12/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_StartDate="2010/12/1" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_BuildAction="ReBuild" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

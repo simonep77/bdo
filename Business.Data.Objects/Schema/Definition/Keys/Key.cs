@@ -77,7 +77,11 @@ namespace Bdo.Schema.Definition
                     value = ((DataObjectBase)value).mClassSchema.PrimaryKey.GetValuesForDb(bdoValue)[0];
                 }
                      
-                dbIn.AddParameter(this.Properties[i].Column.GetKeyParamName(), value);
+                var p = dbIn.AddParameter(this.Properties[i].Column.GetKeyParamName(), value);
+
+                //Se specificato un tipo db forzato lo utilizza
+                if (this.Properties[i].CustomDbType.HasValue)
+                    p.DbType = this.Properties[i].CustomDbType.Value;
             }
 
             return keyValuesIn;

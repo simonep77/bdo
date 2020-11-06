@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bdo.Objects.Base
 {
@@ -12,11 +13,9 @@ namespace Bdo.Objects.Base
         public int Offset { get; set; }
         public BusinessSlot Slot { get; set; }
         public IEnumerable<T> Slice { get; set; }
-        public Thread Thd { get; set; }
+        public Task Runtask { get; set; }
 
         public Delegate Func;
-
-        public bool Ack;
 
         public Exception Exception { get; set; }
        

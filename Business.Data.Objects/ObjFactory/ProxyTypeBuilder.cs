@@ -347,7 +347,6 @@ namespace Bdo.ObjFactory
                     if (oProp.Column == null)
                         oProp.Column = new Column(oProp.Name);
                 }
-                
 
                 //Gestisce una o più chiavi
                 for (int j = 0; j < oListKeys.Count; j++)

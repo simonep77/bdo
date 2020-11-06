@@ -182,3 +182,7 @@
 
 [2020-11-04] [4.10] Simone Pelaia
 - Revisione routine per esecuzione cicli paralleli multi thread per implementazione limitatore numero threads e generalizzazione dei parametri in input
+
+[2020-11-06] [4.11] Simone Pelaia
+- Fix routine LoopMT
+- Add attributo per specificare il tipo di dato del driver db
