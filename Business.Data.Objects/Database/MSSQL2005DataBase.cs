@@ -48,7 +48,7 @@ namespace Bdo.Database
         /// </summary>
         /// <param name="positionIn"></param>
         /// <param name="offsetIn"></param>
-        private void preparePagedQuery(int positionIn, int offsetIn)
+        protected virtual void preparePagedQuery(int positionIn, int offsetIn)
         {
             //Azzera contatore record
             this.setTotPagedRecords(0);
@@ -72,6 +72,27 @@ namespace Bdo.Database
 
             this.SQL = sb.ToString();
         }
+
+
+        public override string LastAutoIdFunction
+        {
+            get
+            {
+                return @"SCOPE_IDENTITY()";
+            }
+        }
+
+
+        /// <summary>
+        /// Ritorna l'Ultimo ID Autoincrement/Identity inserito
+        /// </summary>
+        /// <returns></returns>
+        public override long GetLastAutoId()
+        {
+            this.SQL = @"SELECT SCOPE_IDENTITY()";
+            return Convert.ToInt64(this.ExecScalar());
+        }
+
 
         /// <summary>
         /// Esegue query paginata

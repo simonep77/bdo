@@ -186,3 +186,6 @@
 [2020-11-06] [4.11] Simone Pelaia
 - Fix routine LoopMT
 - Add attributo per specificare il tipo di dato del driver db. Al momento attivo solo sui campi definiti chiave (PK, KEY) per evitare potenziali problemi di performance dovuti a ricerche per chiave con tipo di dato sbagliato (vedi sql server in caso di campo varchar edutilizzo dbtype.String!)
+
+[2020-11-10] [4.12] Simone Pelaia
+- Aggiornate classi db MSSQL (2005 e 2012) per utilizzo funzione SOPE_IDENTITY() invece di @@IDENTITY

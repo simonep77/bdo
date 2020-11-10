@@ -15,10 +15,10 @@ namespace Bdo.Database
 	/// <summary>
 	/// Description of MSSQLDataBase.
 	/// </summary>
-	public class MSSQL2012DataBase: MSSQLDataBase  
+	public class MSSQL2012DataBase: MSSQL2005DataBase  
 	{
         /// <summary>
-        /// Regex per cercare primo statement di selct che puo' avere o meno distinct e top
+        /// Regex per cercare primo statement di select che puo' avere o meno distinct e top
         /// </summary>
         private static Regex _PAGED_REGEX = new Regex(@"[\s]*(SELECT)[\s]+(?:(DISTINCT)[\s]+)?(?:(TOP[\s]+[\d]+)[\s]+)?", System.Text.RegularExpressions.RegexOptions.Compiled | RegexOptions.IgnoreCase);
         
@@ -48,7 +48,7 @@ namespace Bdo.Database
         /// </summary>
         /// <param name="positionIn"></param>
         /// <param name="offsetIn"></param>
-        private void preparePagedQuery(int positionIn, int offsetIn)
+        protected override void preparePagedQuery(int positionIn, int offsetIn)
         {
             //Azzera contatore record
             this.setTotPagedRecords(0);
@@ -102,28 +102,6 @@ namespace Bdo.Database
             }
         }
 
-        /// <summary>
-        /// Esegue query paginata con reader
-        /// </summary>
-        /// <param name="positionIn"></param>
-        /// <param name="offsetIn"></param>
-        /// <returns></returns>
-        internal override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
-        {
-            this.BeginThreadSafeWork();
-            try
-            {
-                //Imposta
-                this.preparePagedQuery(positionIn, offsetIn);
-
-                //Esegue
-                return this.ExecReader();
-            }
-            finally
-            {
-                this.EndThreadSafeWork();
-            }
-        }
 
 	}
 }
