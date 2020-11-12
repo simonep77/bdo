@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using Bdo.Objects;
 using Bdo.Utils;
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Common.Utils;
 
 namespace Bdo.Attributes
 {

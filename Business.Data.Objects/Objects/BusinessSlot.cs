@@ -1,7 +1,3 @@
-using Bdo.Cache;
-using Bdo.Common;
-using Bdo.Database;
-using Bdo.Logging;
 using Bdo.Objects.Base;
 using Bdo.ObjFactory;
 using Bdo.Properties;
@@ -9,6 +5,11 @@ using Bdo.Schema.Definition;
 using Bdo.Schema.Usage;
 using Bdo.Utils;
 using Bdo.Utils.BdoOnly;
+using Business.Data.Objects.Common;
+using Business.Data.Objects.Common.Cache;
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Common.Logging;
+using Business.Data.Objects.Database;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -59,9 +60,6 @@ namespace Bdo.Objects
         //Event management
         internal SlotEventManager mEventManager;
 
-        //Xml
-        private PagerXmlFunction mXmlDataPagerFunction;
-
         //Static Data
         private static ICache<string, DataSchema> _GlobalCache;
         internal static CacheTimed<string, DataTable> _ListCache;
@@ -83,21 +81,12 @@ namespace Bdo.Objects
         /// <param name="message"></param>
         public delegate void LogDebugHandler(BusinessSlot slot, DebugLevel level, string message);
 
-        /// <summary>
-        /// Consente di catturare una eccezione di tipo BusinessObjectException
-        /// </summary>
-        /// <param name="ex"></param>
-        public delegate void BizObjectExceptionHandler(BusinessObjectException ex);
-
+        
         /// <summary>
         /// Evento scatenato dalle chiamate al metodo LogDebug() dello slot
         /// </summary>
         public event LogDebugHandler OnLogDebugSent;
 
-        /// <summary>
-        /// Evento scatenato da una eccezione di tipo BusinessObjectException
-        /// </summary>
-        public event BizObjectExceptionHandler OnBizObjectException;
 
         #endregion
 
@@ -372,16 +361,6 @@ namespace Bdo.Objects
             { return this.mDbList.Count; }
         }
 
-
-        /// <summary>
-        /// Indicao imposta una funzione custom per la formattazione dell'xml di ogni pager
-        /// </summary>
-        public PagerXmlFunction XmlDataPagerFunction
-        {
-            get { return this.mXmlDataPagerFunction; }
-            set { this.mXmlDataPagerFunction = value; }
-        }
-
         /// <summary>
         /// Ottiene/Imposta i minuti di timeout da utilizzare nella cache delle liste. La modifica impatta solo i nuovi oggetti
         /// </summary>
@@ -433,14 +412,6 @@ namespace Bdo.Objects
 
         public delegate void BDEventPreHandler(DataObjectBase value, ref bool cancel);
         public delegate void BDEventPostHandler(DataObjectBase value);
-
-        #region DELEGATI ED EVENTI XML
-        
-        public delegate void PagerXmlFunction(DataPager value, XmlWrite writer);
-
-        public delegate void MessageListXmlFunction(MessageList value, XmlWrite writer);
-
-        #endregion
 
         #endregion
 
@@ -872,18 +843,6 @@ namespace Bdo.Objects
             return this.DbAdd(name, DataBaseFactory.CreaDataBase(dbType, connectionString));
         }
 
-        /// <summary>
-        /// Aggiunge allo slot un'altra istanza database identificata da un nome,
-        /// e costruita a partire da una definizione ConnectionString sul file di configurazione
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="connStrKey"></param>
-        /// <returns></returns>
-        public IDataBase DbAdd(string name, string connStrKey)
-        {
-            return this.DbAdd(name, DataBaseFactory.CreaDataBase(connStrKey));
-        }
-
 
         /// <summary>
         /// Rimuove database da elenco specificando se eventualmente eseguire rollback di transazioni appese
@@ -944,147 +903,7 @@ namespace Bdo.Objects
         #endregion
 
 
-        #region OBSOLETE
-
-        /// <summary>
-        /// Ritorna elenco nomi database registrati
-        /// </summary>
-        [Obsolete("Utilizzare il metodo DbGetNames")]
-        public string[] GetDBNames()
-        {
-            return this.DbGetNames();
-        }
-
-
-        /// <summary>
-        /// Ottiene istanza db associata allo schema
-        /// </summary>
-        /// <param name="schema"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbGet")]
-        internal IDataBase GetDB(ClassSchema schema)
-        {
-            return DbGet(schema);
-        }
-
-
-        /// <summary>
-        /// Ritorna il database identificato dal nome 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbGet")]
-        public IDataBase GetDB(string name)
-        {
-            return this.DbGet(name);
-        }
-
-        /// <summary>
-        /// Ritorna istanza database specifica per il tipo di oggetto
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbGet")]
-        public IDataBase GetDB<T>() where T : DataObjectBase
-        {
-            return this.DbGet<T>();
-        }
-
-
-        /// <summary>
-        /// Aggiunge db a lista
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="db"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbAdd")]
-        public IDataBase AddDB(string name, IDataBase db)
-        {
-            return DbAdd(name, db);
-        }
-
-        /// <summary>
-        /// Aggiunge allo slot un'altra istanza database identificata da un nome,
-        /// di tipo specificato e con connection string fornita
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="dbType"></param>
-        /// <param name="connectionString"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbAdd")]
-        public IDataBase AddDB(string name, string dbType, string connectionString)
-        {
-            return this.DbAdd(name, DataBaseFactory.CreaDataBase(dbType, connectionString));
-        }
-
-        /// <summary>
-        /// Aggiunge allo slot un'altra istanza database identificata da un nome,
-        /// e costruita a partire da una definizione ConnectionString sul file di configurazione
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="connStrKey"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbAdd")]
-        public IDataBase AddDB(string name, string connStrKey)
-        {
-            return this.DbAdd(name, DataBaseFactory.CreaDataBase(connStrKey));
-        }
-
-
-        /// <summary>
-        /// Rimuove database da elenco specificando se eventualmente eseguire rollback di transazioni appese
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="rollbackUnCommited"></param>
-        [Obsolete("Utilizzare il metodo DbRemove")]
-        public void RemoveDB(string name, bool rollbackUnCommited)
-        {
-            this.DbRemove(name, rollbackUnCommited);
-        }
-
-
-        /// <summary>
-        /// Ritorna una statistica compelssiva di tutte le attività database
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Utilizzare il metodo DbGetStatsAll")]
-        public DBStats GetStatsAllDB()
-        {
-            return this.DbGetStatsAll();
-        }
-
-
-        /// <summary>
-        /// Apre transazione su tutti i database collegati
-        /// </summary>
-        [Obsolete("Utilizzare il metodo DbBeginTransAll")]
-        public void BeginTransAllDB()
-        {
-            this.DbBeginTransAll();
-        }
-
-        /// <summary>
-        /// Esegue il commit su tutti i database collegati
-        /// </summary>
-        [Obsolete("Utilizzare il metodo DbCommitAll")]
-        public void CommitAllDB()
-        {
-            this.DbCommitAll();
-
-        }
-
-        /// <summary>
-        /// Esegue il rollback su tutti i database collegati
-        /// </summary>
-        [Obsolete("Utilizzare il metodo DbRollBackAll")]
-        public void RollbackAllDB()
-        {
-            this.DbRollBackAll();
-        }
-
-        #endregion
-
-
+    
         #region DBPREFIX
 
         /// <summary>
@@ -1161,18 +980,6 @@ namespace Bdo.Objects
 
 
         #region LOGGING
-
-        /// <summary>
-        /// Metodo interno di cattura BizObject
-        /// </summary>
-        /// <param name="ex"></param>
-        internal void BizObjectExceptionCatch(BusinessObjectException ex)
-        {
-            if (this.OnBizObjectException == null)
-                return;
-
-            this.OnBizObjectException(ex);
-        }
 
         /// <summary>
         /// Scrive LogDebug. per utilizzarlo è necessario agganciare l'evento OnLogDebugSent
@@ -1702,7 +1509,7 @@ namespace Bdo.Objects
         public TL CreatePagedList<TL>(int page, int offset) where TL : DataListBase
         {
             TL oList = this.CreateList<TL>();
-            oList.Pager = new DataPager() { XmlFunction=this.XmlDataPagerFunction };
+            oList.Pager = new DataPager();
             oList.Pager.Page = page;
             oList.Pager.Offset = offset;
 
@@ -2561,18 +2368,6 @@ namespace Bdo.Objects
         {
             //Crea istanza database associato
             this.InitSlot(DataBaseFactory.CreaDataBaseFromADO(conn, tran));
-        }
-
-        /// <summary>
-        /// Il nome della chiave connectionstring del file di configurazione (web.config, app.config) da utilizzare.
-        /// Attenzione nell'attributo ProviderName va impostato il tipo di database da utilizzare: MSSQLDataBase, MYSQLDataBase,
-        /// FBDataBase, ACCESSDataBase, SQLITEDataBase
-        /// </summary>
-        /// <param name="connStrKey"></param>
-        public BusinessSlot(string connStrKey)
-        {
-            //Crea istanza database associato
-            this.InitSlot(DataBaseFactory.CreaDataBase(connStrKey));
         }
 
         /// <summary>

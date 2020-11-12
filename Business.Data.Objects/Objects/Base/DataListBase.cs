@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data.Common;
-using Bdo.Common;
-using Bdo.Database;
-using Bdo.Schema;
 using Bdo.Schema.Definition;
 using Bdo.ObjFactory;
 using Bdo.Utils;
 using System.ComponentModel;
+using Business.Data.Objects.Common;
+using Business.Data.Objects.Common.Utils;
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Database;
 
 namespace Bdo.Objects.Base
 {

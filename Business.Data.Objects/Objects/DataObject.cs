@@ -5,6 +5,9 @@ using Bdo.Objects.Base;
 using Bdo.Schema.Definition;
 using Bdo.Schema.Usage;
 using Bdo.Utils;
+using Business.Data.Objects.Common;
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Common.Utils;
 
 namespace Bdo.Objects
 {

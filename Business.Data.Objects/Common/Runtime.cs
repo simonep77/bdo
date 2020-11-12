@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Bdo.Objects;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Common
 {

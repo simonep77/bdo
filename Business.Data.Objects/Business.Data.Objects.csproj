@@ -15,7 +15,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <SccProjectName>
     </SccProjectName>
@@ -71,7 +71,6 @@
     <Compile Include="Attributes\Automatic\BaseAutomaticAttribute.cs" />
     <Compile Include="Attributes\BaseAttribute.cs" />
     <Compile Include="Attributes\DefaultValue.cs" />
-    <Compile Include="Attributes\Information\DataMask.cs" />
     <Compile Include="Attributes\Information\Encrypted.cs" />
     <Compile Include="Attributes\Mapping\ListMap.cs" />
     <Compile Include="Attributes\Modifiers\PadRight.cs" />
@@ -101,28 +100,7 @@
     <Compile Include="Attributes\Automatic\AutoIncrement.cs" />
     <Compile Include="Attributes\Keys\SearchKey.cs" />
     <Compile Include="Attributes\XmlFormatString.cs" />
-    <Compile Include="Cache\CacheBase.cs" />
-    <Compile Include="Cache\CacheFIFO.cs" />
-    <Compile Include="Cache\CacheTimed.cs" />
-    <Compile Include="Cache\CacheSimple.cs" />
-    <Compile Include="Cache\ICache.cs" />
     <Compile Include="Common\Runtime.cs" />
-    <Compile Include="Common\Constants.cs" />
-    <Compile Include="Common\DataPager.cs" />
-    <Compile Include="Database\DatabaseList.cs" />
-    <Compile Include="Database\MSSQL2012DataBase.cs" />
-    <Compile Include="Database\MSSQL2005DataBase.cs" />
-    <Compile Include="Enumerations\ESaveResult.cs" />
-    <Compile Include="Enumerations\EObjectSource.cs" />
-    <Compile Include="Exceptions\FilterException.cs" />
-    <Compile Include="Exceptions\BusinessObjectException.cs" />
-    <Compile Include="Exceptions\BdoBaseException.cs" />
-    <Compile Include="Logging\AsyncFileLogger.cs" />
-    <Compile Include="Logging\CustomLogger.cs" />
-    <Compile Include="Logging\ConsoleLogger.cs" />
-    <Compile Include="Logging\SimpleTextFileAppend.cs" />
-    <Compile Include="Logging\FileStreamLogger.cs" />
-    <Compile Include="Logging\LoggerBase.cs" />
     <Compile Include="Objects\Base\BusinessObjectBase.cs" />
     <Compile Include="Objects\Base\DbPrefixDictionary.cs" />
     <Compile Include="Objects\Base\IBusinessObjFactory.cs" />
@@ -173,26 +151,7 @@
     </Compile>
     <Compile Include="Objects\GroupByResult.cs" />
     <Compile Include="Objects\OrderBy.cs" />
-    <Compile Include="Database\PGSQLDataBase.cs" />
     <Compile Include="Objects\Filters\Filter.cs" />
-    <Compile Include="Enumerations\ESeverity.cs" />
-    <Compile Include="Exceptions\ConfigException.cs" />
-    <Compile Include="Database\CommonDataBase.cs" />
-    <Compile Include="Database\DataBaseException.cs" />
-    <Compile Include="Database\DataBaseFactory.cs" />
-    <Compile Include="Database\DBStats.cs" />
-    <Compile Include="Database\IDataBase.cs" />
-    <Compile Include="Database\MSSQLDataBase.cs" />
-    <Compile Include="Database\MYSQLDataBase.cs" />
-    <Compile Include="Database\SQLITEDataBase.cs" />
-    <Compile Include="Enumerations\EObjectState.cs" />
-    <Compile Include="Enumerations\EProtectionLevel.cs" />
-    <Compile Include="Exceptions\ObjectValidationException.cs" />
-    <Compile Include="Exceptions\ObjectNotFoundException.cs" />
-    <Compile Include="Exceptions\ObjectException.cs" />
-    <Compile Include="Exceptions\BusinessSlotException.cs" />
-    <Compile Include="Exceptions\TypeFactoryException.cs" />
-    <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Objects\Base\DataListBase.cs" />
     <Compile Include="Objects\Base\DataObjectBase.cs" />
     <Compile Include="Objects\BusinessObject.cs" />
@@ -256,32 +215,11 @@
     <Compile Include="Exceptions\SchemaReaderException.cs" />
     <Compile Include="Schema\Usage\DataSchema.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="Utils\BdoHash.cs" />
     <Compile Include="Utils\BdoOnly\SlotEventQueuePRE.cs" />
     <Compile Include="Utils\BdoOnly\SlotEventManager.cs" />
     <Compile Include="Utils\BdoOnly\ReferenceManager.cs" />
     <Compile Include="Utils\BdoOnly\SlotEventQueuePOST.cs" />
-    <Compile Include="Utils\Encryption\RSA_AES_Encryptor.cs" />
-    <Compile Include="Utils\Encryption\CryptoSimpleAES.cs" />
-    <Compile Include="Utils\Encryption\ICryptoAlgo.cs" />
-    <Compile Include="Utils\Encryptor.cs" />
-    <Compile Include="Utils\FastSerializer.cs" />
-    <Compile Include="Utils\DictionaryMap.cs" />
-    <Compile Include="Utils\Hashing\External\CityHash.cs" />
-    <Compile Include="Utils\Hashing\External\IntHelpers.cs" />
-    <Compile Include="Utils\Hashing\External\MurmurHash3.cs" />
-    <Compile Include="Utils\Hashing\External\OldMurmurHash3.cs" />
-    <Compile Include="Utils\Hashing\IHashAlgo.cs" />
-    <Compile Include="Utils\Hashing\MyMurmurHash3.cs" />
-    <Compile Include="Utils\Hashing\MyCityHash.cs" />
     <Compile Include="Utils\JSONWriter.cs" />
-    <Compile Include="Utils\Mailer.cs" />
-    <Compile Include="Utils\PasswordGen.cs" />
-    <Compile Include="Utils\SimpleAES.cs" />
-    <Compile Include="Utils\SqlSelect.cs" />
-    <Compile Include="Utils\StringHelper.cs" />
-    <Compile Include="Utils\TypeHelper.cs" />
-    <Compile Include="Utils\XmlWrite.cs" />
     <Compile Include="Utils\BdoOnly\ObjectHelper.cs" />
     <Compile Include="Utils\BdoOnly\PropertyHelper.cs" />
   </ItemGroup>
@@ -324,7 +262,16 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Business.Data.Objects.Common\Business.Data.Objects.Common.csproj">
+      <Project>{eb27f2d8-ee5c-4497-88a7-f829aa244b24}</Project>
+      <Name>Business.Data.Objects.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Business.Data.Objects.Database\Business.Data.Objects.Database.csproj">
+      <Project>{85ed87a2-0c77-4811-b819-5b7d1add7751}</Project>
+      <Name>Business.Data.Objects.Database</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

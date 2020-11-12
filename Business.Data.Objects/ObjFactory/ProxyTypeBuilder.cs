@@ -9,7 +9,8 @@ using Bdo.Attributes;
 using Bdo.Schema;
 using Bdo.Schema.Definition;
 using Bdo.Utils;
-
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Common.Utils;
 
 namespace Bdo.ObjFactory
 {

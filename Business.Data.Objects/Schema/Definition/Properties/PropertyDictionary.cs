@@ -1,3 +1,4 @@
+using Business.Data.Objects.Common.Exceptions;
 using System;
 using System.Collections.Generic;
 
@@ -38,7 +39,7 @@ namespace Bdo.Schema.Definition
             Property oProp = null;
 
             if (!this.mDictionary.TryGetValue(propName, out oProp))
-                throw new Bdo.Objects.ObjectException(Resources.ObjectMessages.Base_PropertyNotExists, this.mSchema.ClassName, propName);
+                throw new ObjectException(Resources.ObjectMessages.Base_PropertyNotExists, this.mSchema.ClassName, propName);
 
             return oProp;
         }

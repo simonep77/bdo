@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection.Emit;
 using Bdo.Objects.Base;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Objects
 {
@@ -36,7 +37,7 @@ namespace Bdo.Objects
         {
             //Verifica che l'oggetto in input non sia nullo
             if (obj == null)
-                throw new ObjectException("{0} - L'oggetto fornito in input risulta nullo.", this.GetType().Name);
+                throw new ObjectException($"{this.GetType().Name} - L'oggetto fornito in input risulta nullo.");
 
             //Imposta oggetto
             this.mObject = obj;

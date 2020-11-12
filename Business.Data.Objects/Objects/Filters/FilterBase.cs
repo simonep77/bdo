@@ -6,6 +6,8 @@ using Bdo.Objects;
 using Bdo.Objects.Base;
 using Bdo.Schema.Definition;
 using System.Collections;
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Database;
 
 namespace Bdo.Objects
 {
@@ -220,7 +222,7 @@ namespace Bdo.Objects
                             DataObjectBase o = (DataObjectBase)this.mValue;
 
                             if (!o.mClassSchema.OriginalType.Equals(oProp.Type))
-                                throw new Bdo.Objects.ObjectException("{0} - Errore nella verifica del filtro: la proprieta' e' di tipo {1}, il valore del filtro e' di tipo {2}", oProp.Fullname, oProp.Type.Name, o.mClassSchema.OriginalType.Name);
+                                throw new ObjectException("{0} - Errore nella verifica del filtro: la proprieta' e' di tipo {1}, il valore del filtro e' di tipo {2}", oProp.Fullname, oProp.Type.Name, o.mClassSchema.OriginalType.Name);
                         }
                         else
                         { //NON E' UN DATAOBJECT: lo creo solo se non trattasi di una IN
@@ -324,7 +326,7 @@ namespace Bdo.Objects
         /// Appende la clausola generata (SQL + Parametri)
         /// </summary>
         /// <param name="db"></param>
-        public void AppendFilterSql(Bdo.Database.IDataBase db, StringBuilder sql, int paramIndex)
+        public void AppendFilterSql(IDataBase db, StringBuilder sql, int paramIndex)
         {
             object[] arrValues;
             DbParameter oParam;

@@ -5,6 +5,8 @@ using Bdo.Utils;
 using Bdo.Attributes;
 using Bdo.Objects;
 using Bdo.Objects.Base;
+using Business.Data.Objects.Common.Utils;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Schema.Definition
 {
@@ -117,7 +119,7 @@ namespace Bdo.Schema.Definition
                     }
 
                 }
-                catch (Bdo.Objects.ObjectException ex)
+                catch (ObjectException ex)
                 {
                     throw new SchemaReaderException(this, Resources.SchemaMessages.Prop_PropertyMapMustBeFirst, ex.Message);
                 }

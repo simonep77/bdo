@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Bdo.Database;
 using Bdo.Objects.Base;
 using Bdo.Objects;
 using Bdo.Attributes;
+using Business.Data.Objects.Database;
 
 namespace Bdo.Schema.Definition
 {

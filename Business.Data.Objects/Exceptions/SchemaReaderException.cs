@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Bdo.Objects;
 using Bdo.Schema.Definition;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Schema
 {

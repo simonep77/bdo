@@ -5,6 +5,7 @@ using System.Threading;
 using Bdo.Objects;
 using Bdo.Objects.Base;
 using Bdo.Schema.Definition;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.ObjFactory
 {
@@ -201,7 +202,7 @@ namespace Bdo.ObjFactory
             }
             catch (KeyNotFoundException)
             {
-                throw new TypeFactoryException("Tipo {0} non trovato. E' possibile che si siano verificati errori in fase di generazione schema.", type.Name);
+                throw new TypeFactoryException($"Tipo {type.Name} non trovato. E' possibile che si siano verificati errori in fase di generazione schema.");
             }
             catch (Exception ex)
             {

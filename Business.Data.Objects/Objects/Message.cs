@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Bdo.Utils;
+using Business.Data.Objects.Common;
+using Business.Data.Objects.Common.Utils;
 
 namespace Bdo.Objects
 {

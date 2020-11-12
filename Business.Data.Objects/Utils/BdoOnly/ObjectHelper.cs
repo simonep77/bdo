@@ -6,6 +6,7 @@ using Bdo.Objects.Base;
 using Bdo.Objects;
 using Bdo.Common;
 using Bdo.Schema.Definition;
+using Business.Data.Objects.Common;
 
 namespace Bdo.Utils
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Bdo.Objects.Base;
+using Business.Data.Objects.Database;
 
 namespace Bdo.Objects
 {
@@ -58,7 +59,7 @@ namespace Bdo.Objects
         /// <param name="db"></param>
         /// <param name="sql"></param>
         /// <param name="paramIndex"></param>
-        void AppendFilterSql(Bdo.Database.IDataBase db, StringBuilder sql, int paramIndex);
+        void AppendFilterSql(IDataBase db, StringBuilder sql, int paramIndex);
 
 
     }

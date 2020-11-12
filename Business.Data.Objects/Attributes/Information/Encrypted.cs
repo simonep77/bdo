@@ -8,6 +8,7 @@ using Bdo.Objects;
 using Bdo.Objects.Base;
 using Bdo.Utils;
 using Bdo.Utils.Encryption;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Attributes
 {

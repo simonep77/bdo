@@ -1,3 +1,4 @@
+using Business.Data.Objects.Common.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Bdo.Attributes
 
         public override object Modify(object value)
         {
-            return Bdo.Utils.StringHelper.RemoveAccents((string)value);
+            return StringHelper.RemoveAccents((string)value);
         }
 
     }

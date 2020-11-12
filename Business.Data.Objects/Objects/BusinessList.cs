@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Bdo.Objects.Base;
 using Bdo.ObjFactory;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Objects
 {

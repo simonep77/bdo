@@ -41,13 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BIZ\AnagraficaBiz.cs" />
-    <Compile Include="DAL\Anagrafica.cs" />
-    <Compile Include="DAL\AnagraficaLista.cs" />
-    <Compile Include="DAL\Ordine.cs" />
-    <Compile Include="DAL\OrdineLista.cs" />
-    <Compile Include="DAL\OrdineStato.cs" />
-    <Compile Include="DAL\OrdineStatoLista.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

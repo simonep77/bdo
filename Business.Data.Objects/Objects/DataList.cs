@@ -5,13 +5,13 @@ using System.Text.RegularExpressions;
 using System.Data;
 using System.Data.Common;
 using System.ComponentModel;
-using Bdo.Database;
 using Bdo.Schema;
 using Bdo.Schema.Definition;
 using Bdo.ObjFactory;
 using Bdo.Objects.Base;
 using Bdo.Utils;
-
+using Business.Data.Objects.Common.Utils;
+using Business.Data.Objects.Common.Exceptions;
 
 namespace Bdo.Objects
 {

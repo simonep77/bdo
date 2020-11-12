@@ -5,6 +5,9 @@ using Bdo.Utils;
 using Bdo.Attributes;
 using Bdo.Objects;
 using Bdo.Objects.Base;
+using Business.Data.Objects.Common.Utils;
+using Business.Data.Objects.Common.Exceptions;
+using Business.Data.Objects.Common;
 
 namespace Bdo.Schema.Definition
 {
@@ -168,7 +171,7 @@ namespace Bdo.Schema.Definition
             //Proprieta' criptata su DB
             else if (attr is Encrypted)
             {
-                if (!Utils.TypeHelper.IsString(this.Type))
+                if (!TypeHelper.IsString(this.Type))
                     throw new SchemaReaderException(this, Resources.SchemaMessages.Prop_Encryped_Only_String);
 
                 this.mEncAttr = (Encrypted)attr;

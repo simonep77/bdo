@@ -4,6 +4,7 @@ using System.Data;
 using Bdo.Utils;
 using Bdo.Attributes;
 using Bdo.Objects.Base;
+using Business.Data.Objects.Common.Utils;
 
 namespace Bdo.Schema.Definition
 {

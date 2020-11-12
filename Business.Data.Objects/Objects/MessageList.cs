@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Bdo.Utils;
+using Business.Data.Objects.Common;
+using Business.Data.Objects.Common.Utils;
 
 namespace Bdo.Objects
 {
@@ -8,10 +10,6 @@ namespace Bdo.Objects
     /// </summary>
     public class MessageList: List<Message>
     {
-        /// <summary>
-        /// Funzione di formattazione Xml custom utilizabile al posto della standard
-        /// </summary>
-        public BusinessSlot.MessageListXmlFunction XmlFunction;
 
         /// <summary>
         /// Indica se presenti messaggi di errore
@@ -61,27 +59,21 @@ namespace Bdo.Objects
         {
             using (XmlWrite xw = new XmlWrite()) 
             {
-                if (XmlFunction == null)
+
+                //Crea Xml Standard
+                xw.WriteStartElement("MESSAGELIST");
+                try
                 {
-                    //Crea Xml Standard
-                    xw.WriteStartElement("MESSAGELIST");
-                    try
+                    for (int i = 0; i < this.Count; i++)
                     {
-                        for (int i = 0; i < this.Count; i++)
-                        {
-                            xw.WriteRaw(this[i].ToXml());
-                        }
-                    }
-                    finally
-                    {
-                        xw.WriteEndElement();
+                        xw.WriteRaw(this[i].ToXml());
                     }
                 }
-                else
+                finally
                 {
-                    //Utilizza la funzione specificata
-                    XmlFunction(this, xw);
+                    xw.WriteEndElement();
                 }
+
 
                 return xw.ToString();
             }
