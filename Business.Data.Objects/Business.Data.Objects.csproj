@@ -100,7 +100,6 @@
     <Compile Include="Attributes\Automatic\AutoIncrement.cs" />
     <Compile Include="Attributes\Keys\SearchKey.cs" />
     <Compile Include="Attributes\XmlFormatString.cs" />
-    <Compile Include="Common\Runtime.cs" />
     <Compile Include="Objects\Base\BusinessObjectBase.cs" />
     <Compile Include="Objects\Base\DbPrefixDictionary.cs" />
     <Compile Include="Objects\Base\IBusinessObjFactory.cs" />
@@ -178,11 +177,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Resources\DatabaseMessages.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DatabaseMessages.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\ObjectMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -224,11 +218,6 @@
     <Compile Include="Utils\BdoOnly\PropertyHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\DatabaseMessages.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>DatabaseMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ObjectMessages.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -282,7 +271,7 @@
   -->
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildAction="ReBuild" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_StartDate="2010/12/1" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_StartDate="2010/12/1" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_BuildAction="ReBuild" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Bdo.Objects.Base;
 using Bdo.Objects;
-using Bdo.Common;
 using Bdo.Schema.Definition;
 
 namespace Bdo.Utils.BdoOnly

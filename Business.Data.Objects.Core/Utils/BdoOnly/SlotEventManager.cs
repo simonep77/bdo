@@ -1,11 +1,9 @@
+using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Cores.Utils.BdoOnly;
 using System;
-using System.Collections.Generic;
 using System.Text;
-using Bdo.Objects.Base;
-using Bdo.Objects;
-using Bdo.Schema.Definition;
 
-namespace Bdo.Utils.BdoOnly
+namespace Business.Data.Objects.Core.Utils.BdoOnly
 {
     /// <summary>
     /// Gestore Eventi associato allo Slot

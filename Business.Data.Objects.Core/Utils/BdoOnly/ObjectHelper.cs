@@ -1,13 +1,12 @@
+using Business.Data.Objects.Common;
+using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Schema.Definition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Bdo.Objects.Base;
-using Bdo.Objects;
-using Bdo.Schema.Definition;
-using Business.Data.Objects.Common;
 
-namespace Bdo.Utils
+namespace Business.Data.Objects.Core.Utils
 {
     /// <summary>
     /// Classe appoggio con metodi utili agli oggetti

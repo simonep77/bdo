@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Business.Data.Objects.Core;
+using Business.Data.Objects.Core.Base;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Bdo.Objects.Base;
-using Bdo.Objects;
-using Bdo.Schema.Definition;
 
-namespace Bdo.Utils.BdoOnly
+namespace Business.Data.Objects.Cores.Utils.BdoOnly
 {
 
     /// <summary>
-    /// Coda per la gestione degli eventi PRE
+    /// Coda per la gestione degli eventi POST
     /// </summary>
-    internal class SlotEventSimpleQueuePRE : List<BusinessSlot.BDEventPreHandler>
+    internal class SlotEventSimpleQueuePOST : List<BusinessSlot.BDEventPostHandler>
     {
         /// <summary>
-        /// Tipo Gestito
+        /// Tipo gestito
         /// </summary>
         internal Type HandledType;
 
@@ -22,11 +20,11 @@ namespace Bdo.Utils.BdoOnly
         /// Esegue tutti gli eventi
         /// </summary>
         /// <param name="value"></param>
-        internal void Run(DataObjectBase value, ref bool cancel)
+        internal void Run(DataObjectBase value)
         {
             for (int i = 0; i < this.Count; i++)
             {
-                this[i](value, ref cancel);
+                this[i](value);
             }
         }
 
@@ -36,7 +34,7 @@ namespace Bdo.Utils.BdoOnly
     /// <summary>
     /// Coda eventi  per tipo oggetto
     /// </summary>
-    internal class SlotEventForTypeQueuePRE: Dictionary<long, SlotEventSimpleQueuePRE>
+    internal class SlotEventForTypeQueuePOST : Dictionary<long, SlotEventSimpleQueuePOST>
     {
         /// <summary>
         /// Aggiunge Item
@@ -44,14 +42,14 @@ namespace Bdo.Utils.BdoOnly
         /// <param name="handler"></param>
         /// <param name="input"></param>
         /// <param name="output"></param>
-        internal void Add(Type t, BusinessSlot.BDEventPreHandler handler)
+        internal void Add(Type t, BusinessSlot.BDEventPostHandler handler)
         {
-            SlotEventSimpleQueuePRE q = null;
+            SlotEventSimpleQueuePOST q = null;
             long lKey = t.TypeHandle.Value.ToInt64();
 
             if (!this.TryGetValue(lKey, out q))
             {
-                q = new SlotEventSimpleQueuePRE();
+                q = new SlotEventSimpleQueuePOST();
                 q.HandledType = t;
                 this.Add(lKey, q);
             }
@@ -64,18 +62,18 @@ namespace Bdo.Utils.BdoOnly
         /// Esegue la coda
         /// </summary>
         /// <param name="value"></param>
-        internal void Run(Type t, DataObjectBase value, ref bool cancel)
+        internal void Run(Type t, DataObjectBase value)
         {
             if (value == null)
                 return;
 
-            SlotEventSimpleQueuePRE q = null;
-            
-            //Se non trovato esce
+            SlotEventSimpleQueuePOST q = null;
+
+            //Se non trovato nulla esce
             if (!this.TryGetValue(t.TypeHandle.Value.ToInt64(), out q))
                 return;
 
-            q.Run(value, ref cancel);
+            q.Run(value);
         }
 
     }
@@ -84,7 +82,7 @@ namespace Bdo.Utils.BdoOnly
     /// <summary>
     /// Gestore coda per tipo evento
     /// </summary>
-    internal class SlotEventMainQueuePRE : Dictionary<BusinessSlot.EObjectEvent, SlotEventForTypeQueuePRE>
+    internal class SlotEventMainQueuePOST : Dictionary<BusinessSlot.EObjectEvent, SlotEventForTypeQueuePOST>
     {
         /// <summary>
         /// Aggiunge Item
@@ -92,13 +90,13 @@ namespace Bdo.Utils.BdoOnly
         /// <param name="handler"></param>
         /// <param name="input"></param>
         /// <param name="output"></param>
-        internal void Add(BusinessSlot.EObjectEvent evt, Type t, BusinessSlot.BDEventPreHandler handler)
+        internal void Add(BusinessSlot.EObjectEvent evt, Type t, BusinessSlot.BDEventPostHandler handler)
         {
-            SlotEventForTypeQueuePRE q = null;
+            SlotEventForTypeQueuePOST q = null;
 
             if (!this.TryGetValue(evt, out q))
             {
-                q = new SlotEventForTypeQueuePRE();
+                q = new SlotEventForTypeQueuePOST();
                 this.Add(evt, q);
             }
 
@@ -110,14 +108,14 @@ namespace Bdo.Utils.BdoOnly
         /// </summary>
         /// <param name="evt"></param>
         /// <param name="value"></param>
-        internal void Run(BusinessSlot.EObjectEvent evt, Type t, DataObjectBase value, ref bool cancel)
+        internal void Run(BusinessSlot.EObjectEvent evt, Type t, DataObjectBase value)
         {
-            SlotEventForTypeQueuePRE q = null;
+            SlotEventForTypeQueuePOST q = null;
 
             if (!this.TryGetValue(evt, out q))
                 return;
 
-            q.Run(t, value, ref cancel);
+            q.Run(t, value);
         }
 
     }

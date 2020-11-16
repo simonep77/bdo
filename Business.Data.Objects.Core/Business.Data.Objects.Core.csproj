@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>5.0.1</Version>
+    <Authors>Simone Pelaia</Authors>
+    <Copyright>Simone Pelaia</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/simonep77/bdo</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Business.Data.Objects.Common\Business.Data.Objects.Common.csproj" />
+    <ProjectReference Include="..\Business.Data.Objects.Database\Business.Data.Objects.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Objects\Filters\Spec\FilterBETWEEN.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterDIFFERS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterEQUAL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterGREATER.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterGREATEREQ.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterIN.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterISNOTNULL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterISNULL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterLESS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterLESSEQ.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterLIKE.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Objects\Filters\Spec\FilterNOTLIKE.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
