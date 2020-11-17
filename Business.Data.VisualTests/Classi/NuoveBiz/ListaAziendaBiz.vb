@@ -1,4 +1,5 @@
-﻿Imports Bdo.Objects
+﻿Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
 
 Public Class ListaAziendaBiz
     Inherits BusinessList(Of ListaAziende, Azienda, AziendaBiz)

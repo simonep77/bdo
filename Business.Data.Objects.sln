@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86A44761-7591-4639-BC89-24E30EAAED20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Data.Objects", "Business.Data.Objects\Business.Data.Objects.csproj", "{EF756776-6B0F-4055-BD78-8F107D6C37A7}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Business.Data.VisualTests", "Business.Data.VisualTests\Business.Data.VisualTests.vbproj", "{7CCD617D-0D85-4F67-9D41-33E8454F5DDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Data.Objects.TestClass", "Business.Data.Objects.TestClass\Business.Data.Objects.TestClass.csproj", "{3A53CCEA-25DA-40D1-BD12-6E5F1E13E7AC}"
@@ -15,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Data.Objects.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Data.Objects.Database", "Business.Data.Objects.Database\Business.Data.Objects.Database.csproj", "{85ED87A2-0C77-4811-B819-5B7D1ADD7751}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Data.Objects.Core", "Business.Data.Objects.Core\Business.Data.Objects.Core.csproj", "{6A62D66B-1617-46DD-83E3-0B098881E8BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Data.Objects.Core", "Business.Data.Objects.Core\Business.Data.Objects.Core.csproj", "{6A62D66B-1617-46DD-83E3-0B098881E8BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +23,6 @@ Global
 		Signed|Any CPU = Signed|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Release 2.0|Any CPU.ActiveCfg = Release|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Release 2.0|Any CPU.Build.0 = Release|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Signed|Any CPU.ActiveCfg = Release|Any CPU
-		{EF756776-6B0F-4055-BD78-8F107D6C37A7}.Signed|Any CPU.Build.0 = Release|Any CPU
 		{7CCD617D-0D85-4F67-9D41-33E8454F5DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7CCD617D-0D85-4F67-9D41-33E8454F5DDC}.Release 2.0|Any CPU.ActiveCfg = Release|Any CPU
 		{7CCD617D-0D85-4F67-9D41-33E8454F5DDC}.Release 2.0|Any CPU.Build.0 = Release|Any CPU

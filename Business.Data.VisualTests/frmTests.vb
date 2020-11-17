@@ -1,11 +1,15 @@
-Imports BDO.Objects
+Imports Business.Data.Objects.Core
 Imports System.Reflection
 Imports System.Linq
 Imports System.Threading
 Imports Business.Data.Objects.TestClass.DAL
 Imports Business.Data.Objects.TestClass.BIZ
-
-
+Imports Business.Data.Objects.Common.Utils
+Imports Business.Data.Objects.Common
+Imports Business.Data.Objects.Common.Logging
+Imports Business.Data.Objects.Database
+Imports Business.Data.Objects.Core.Base
+Imports Business.Data.Objects.Common.Exceptions
 
 Public Class frmTests
 
@@ -37,7 +41,8 @@ Public Class frmTests
     End Function
 
     Private Function CreateSlotTest() As BusinessSlot
-        Return New BusinessSlot("LAVORO")
+        Dim cn = Configuration.ConfigurationManager.ConnectionStrings("TEST")
+        Return New BusinessSlot(cn.ProviderName, cn.ConnectionString)
     End Function
 
     Private Sub AvvioSessioneToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AvvioSessioneToolStripMenuItem.Click
@@ -53,17 +58,17 @@ Public Class frmTests
                 '    Me.WriteLog("{0}", az.RagioneSociale)
                 '    Me.WriteLog("{0}", az.Provincia.ToString())
                 '    Me.WriteLog("{0}", az.Provincia.Regione.ToString())
-                '    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                '    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 'Next
 
 
-                Dim lstAziende As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 100).OrderBy("RagioneSociale", Bdo.Objects.OrderVersus.Asc).CercaTutti()
+                Dim lstAziende As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 100).OrderBy("RagioneSociale", OrderVersus.Asc).CercaTutti()
                 'For Each az As Azienda In lstAziende
                 '    'Me.WriteLog("{0}", az.RagioneSociale)
                 '    'Me.WriteLog("{0}", az.Provincia.ToString())
                 '    'Me.WriteLog("{0}", az.Provincia.Regione.ToString())
-                '    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                '    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
                 'Next
 
                 'Me.dgv1.DataSource = lstAziende
@@ -96,7 +101,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 Me.WriteLog(ss1.PrintCacheDebug())
 
@@ -171,13 +176,13 @@ Public Class frmTests
                 'Dim lst As ListaDirigenti = ListaDirigenti.CreatePaged(1, 40)
 
                 'lst.CercaTutti()
-                'Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                'Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 'For Each ob As Dirigente In lst
                 '    ob.Save()
                 '    Me.WriteLog("{0} {1} {2} {2}", ob.IdDirigente, ob.Cognome, ob.Nome, ob.DataNascita.ToString("dd/MM/yyyy"))
                 '    Me.WriteLog("{0} {1}", ob.IdDirigente, ob.LetteraAttivazioneInviata)
-                '    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                '    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 'Next
 
@@ -188,7 +193,7 @@ Public Class frmTests
                 Me.WriteLog("{0} {1}", ob.IdDirigente, ob.LetteraAttivazioneInviata)
                 Me.WriteLog(ob.ToXml())
 
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 Dim ob1 As Dirigente = ss1.CreateObject(Of Dirigente)()
 
@@ -200,7 +205,7 @@ Public Class frmTests
 
                 Me.WriteLog("{0} {1}", ob1.IdDirigente, ob1.LetteraAttivazioneInviata)
 
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
 
             End Using
@@ -231,7 +236,7 @@ Public Class frmTests
 
 
 
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
 
 
@@ -283,7 +288,7 @@ Public Class frmTests
 
 
                 Me.WriteLog("Elapsed1: {0}", DateTime.Now.Subtract(dtStart))
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 'Me.dgv1.DataSource = lst
 
@@ -323,7 +328,7 @@ Public Class frmTests
                 Me.WriteLog("PROV2: {0}", pr.Descrizione)
 
 
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
 
             End Using
@@ -352,7 +357,7 @@ Public Class frmTests
             Dim oDiffList As DataDiffList = az.Diff(az2)
 
             Me.WriteLog("Elapsed1: {0}", DateTime.Now.Subtract(dtStart))
-            Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+            Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
 
 
@@ -469,7 +474,7 @@ Public Class frmTests
         Dim dtStart As DateTime
 
         dtStart = DateTime.Now
-        Using xw As New Bdo.Utils.XmlWrite()
+        Using xw As New XmlWrite()
             xw.WriteStartElement("root")
             For index As Integer = 1 To 100000
                 xw.WriteStartElement("iscritto")
@@ -548,14 +553,14 @@ Public Class frmTests
 
                 For index As Integer = 1 To 100
 
-                    Dim lstAziende As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 1000).OrderBy("RagioneSociale", Bdo.Objects.OrderVersus.Asc).CercaTutti()
+                    Dim lstAziende As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 1000).OrderBy("RagioneSociale", OrderVersus.Asc).CercaTutti()
                     For Each az As Azienda In lstAziende
                         s = az.RagioneSociale
                         s = az.Provincia.ToString()
                         s = az.Provincia.Regione.ToString()
                     Next
 
-                    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                    Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                     Me.WriteLog("Loop {0}, Memory: {1:N}", index, GC.GetTotalMemory(True) / 1024.0)
 
@@ -566,7 +571,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
 
             End Using
@@ -593,7 +598,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
 
@@ -609,7 +614,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
         Catch ex As Exception
@@ -636,7 +641,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
 
@@ -657,7 +662,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
         Catch ex As Exception
@@ -685,7 +690,7 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
 
@@ -744,7 +749,7 @@ Public Class frmTests
                 Me.WriteLog("Avg: " & dSum.ToString("N2"))
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
 
@@ -787,7 +792,7 @@ Public Class frmTests
 
                 'Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
 
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
 
@@ -800,17 +805,17 @@ Public Class frmTests
     End Sub
 
     Private Sub PasswordGeneratorToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasswordGeneratorToolStripMenuItem.Click
-        Dim sPass = Bdo.Utils.PasswordGen.Generate("UUNNSLLS")
+        Dim sPass = PasswordGen.Generate("UUNNSLLS")
         Me.WriteLog("Password: {0}", sPass)
-        sPass = Bdo.Utils.PasswordGen.Generate("UUUUU")
+        sPass = PasswordGen.Generate("UUUUU")
         Me.WriteLog("Password: {0}", sPass)
-        sPass = Bdo.Utils.PasswordGen.Generate("LLLLL")
+        sPass = PasswordGen.Generate("LLLLL")
         Me.WriteLog("Password: {0}", sPass)
-        sPass = Bdo.Utils.PasswordGen.Generate("NNLLNNSS")
+        sPass = PasswordGen.Generate("NNLLNNSS")
         Me.WriteLog("Password: {0}", sPass)
-        sPass = Bdo.Utils.PasswordGen.Generate("UUNNSLLS")
+        sPass = PasswordGen.Generate("UUNNSLLS")
         Me.WriteLog("Password: {0}", sPass)
-        sPass = Bdo.Utils.PasswordGen.Generate("ULAAAANN")
+        sPass = PasswordGen.Generate("ULAAAANN")
         Me.WriteLog("Password: {0}", sPass)
     End Sub
 
@@ -818,7 +823,7 @@ Public Class frmTests
     Private Sub InviEmailToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles InviEmailToolStripMenuItem.Click
         Try
 
-            Dim oMailer As New Bdo.Utils.Mailer("mail.sds.it", 5025, "simone.pelaia@sds.it", "volley2")
+            Dim oMailer As New Mailer("mail.sds.it", 5025, "simone.pelaia@sds.it", "volley2")
             oMailer.Send("", "simone.pelaia@sds.it", "", "", "Test mio", "Ciao", "", Nothing)
             Me.WriteLog("Mail inviata")
 
@@ -979,8 +984,8 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
-                Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
             End Using
         Catch ex As Exception
@@ -1017,8 +1022,8 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
-                Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
             End Using
         Catch ex As Exception
@@ -1105,7 +1110,7 @@ Public Class frmTests
                     sw.Stop()
 
                     Me.WriteLog("Elaps NUOVE: {0}", sw.ElapsedMilliseconds)
-                    Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                    Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
                 Next
 
                 Me.WriteLog(ss1.PrintInfo())
@@ -1132,7 +1137,7 @@ Public Class frmTests
                 dtStart = DateTime.Now
 
                 'Codice QUI
-                Dim oMap As New Bdo.Utils.DictionaryMap(Of String, Azienda)
+                Dim oMap As New DictionaryMap(Of String, Azienda)
 
                 oMap.Add("AAAA", Nothing)
                 oMap.Add("AAAA", Nothing)
@@ -1151,7 +1156,7 @@ Public Class frmTests
                 dtEnd = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
             End Using
         Catch ex As Exception
@@ -1201,7 +1206,7 @@ Public Class frmTests
                 Me.WriteLog("Prop Modificate: {0}", oListaRet4(0).GetCurrentChanges().Count)
 
                 Me.WriteLog("Elaps: {0}", Date.Now.Subtract(dtStart))
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
 
                 ss1.SaveAll(oListaRet4)
 
@@ -1230,8 +1235,8 @@ Public Class frmTests
                 Dim dtEnd As DateTime = DateTime.Now
 
                 Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Select))
-                Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Select))
+                Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
             End Using
         Catch ex As Exception
@@ -1256,7 +1261,7 @@ Public Class frmTests
             Dim dtEnd As DateTime = DateTime.Now
 
             Me.WriteLog("Elaps: {0}", dtEnd.Subtract(dtStart).TotalMilliseconds)
-            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
             Me.WriteLog(ss1.PrintCacheDebug())
 
@@ -1274,7 +1279,7 @@ Public Class frmTests
             Dim tab As DataTable = ss1.DB.Select(0, 12)
 
             Me.WriteLog("Elaps: {0}", DateTime.Now.Subtract(dtStart).TotalMilliseconds)
-            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
 
 
@@ -1324,7 +1329,7 @@ Public Class frmTests
             Me.WriteLog("Elaps PROC: {0}", tsProc)
             Me.WriteLog("Mem Init: {0}", iMemInit)
             Me.WriteLog("Mem End: {0}", Process.GetCurrentProcess().WorkingSet64)
-            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
         End Using
     End Sub
@@ -1345,7 +1350,7 @@ Public Class frmTests
             Me.WriteLog("Reference: {0}", Object.ReferenceEquals(az1, az2))
 
 
-            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
             Me.WriteLog(ss1.PrintCacheDebug())
 
@@ -1424,7 +1429,7 @@ Public Class frmTests
         End Using
     End Sub
 
-    Private Sub eventoAnyLOAD(o As Bdo.Objects.Base.DataObjectBase)
+    Private Sub eventoAnyLOAD(o As DataObjectBase)
         Me.WriteLog("***** Any Loaded:" & o.GetType().Name & " ******")
     End Sub
 
@@ -1699,7 +1704,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            ss1.DB.EnableTrace(New ConsoleLogger(), False)
 
             Dim oLst As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 100).SearchAllObjects()
 
@@ -1717,7 +1722,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            ss1.DB.EnableTrace(New ConsoleLogger(), False)
 
             ss1.DbPrefixKeys.Add("key1", "simonedb....")
             ss1.DbPrefixKeys.Add("key2", "simonedb3")
@@ -1745,7 +1750,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            'ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            'ss1.DB.EnableTrace(New ConsoleLogger(), False)
 
             Me.WriteLog("Begin")
 
@@ -1769,7 +1774,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            'ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            'ss1.DB.EnableTrace(New ConsoleLogger(), False)
 
             Dim pol As Polizza = ss1.CreateObject(Of Polizza)()
 
@@ -1791,7 +1796,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            'ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            'ss1.DB.EnableTrace(New ConsoleLogger(), False)
             Dim az As Azienda = ss1.CreateObject(Of Azienda)()
             Dim oAzBiz As AziendaBiz
 
@@ -1826,13 +1831,6 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            'ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
-            ss1.XmlDataPagerFunction = AddressOf pagerFunctionXml
-
-            Dim oLst As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 100).SearchAllObjects()
-
-
-            Me.WriteLog(oLst.Pager.ToXml())
 
 
 
@@ -1845,7 +1843,7 @@ Public Class frmTests
     End Sub
 
 
-    Private Shared Sub pagerFunctionXml(pager As Bdo.Common.DataPager, xw As Bdo.Utils.XmlWrite)
+    Private Shared Sub pagerFunctionXml(pager As DataPager, xw As XmlWrite)
         xw.WriteElementString("Prova", pager.Page.ToString())
     End Sub
 
@@ -1854,7 +1852,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            'ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            'ss1.DB.EnableTrace(New ConsoleLogger(), False)
 
             Dim oLst As ListaAziende = ss1.CreatePagedList(Of ListaAziende)(1, 100).SearchAllObjects()
 
@@ -1878,7 +1876,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlot()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
-            'ss1.DB.EnableTrace(New Bdo.Logging.ConsoleLogger(), False)
+            'ss1.DB.EnableTrace(New ConsoleLogger(), False)
 
             Dim azBiz As AziendaBiz = ss1.BizNewWithLoadOrNewByPK(Of AziendaBiz)("X1X1X!")
 
@@ -2002,16 +2000,7 @@ Public Class frmTests
             ss1.DB.AutoCloseConnection = True
             ss1.LiveTrackingEnabled = True
 
-            Dim oSql As New Bdo.Utils.SqlSelect()
-            oSql.Fields("a.Id", "b.Codice") _
-                .From("pippo a") _
-                .InnerJoin("pluto b") _
-                .On("b.Id=a.Codice") _
-                .And("b.Nome= 'aaa'") _
-                .Where("a.Num = 3") _
-                .And("b.Nome= 'aaa'")
-
-            Me.WriteLog(oSql.ToString())
+            Throw New NotImplementedException()
 
             Me.WriteLog("Elaps: {0}", ss1.GetCurrentElapsed())
             Me.WriteLog(ss1.PrintInfo())
@@ -2099,7 +2088,7 @@ Public Class frmTests
                 ss1.DB.RollbackTransaction()
             End Try
 
-            Me.WriteLog("Num Begin: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Begin))
+            Me.WriteLog("Num Begin: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Begin))
 
             ss1.DB.BeginTransaction()
             Try
@@ -2109,7 +2098,7 @@ Public Class frmTests
                 ss1.DB.RollbackTransaction()
             End Try
 
-            Me.WriteLog("Num Begin: {0}", ss1.DB.Stats.GetCounter(Bdo.Database.DBStats.EStatement.Begin))
+            Me.WriteLog("Num Begin: {0}", ss1.DB.Stats.GetCounter(DBStats.EStatement.Begin))
 
             Me.WriteLog("Elaps: {0}", ss1.GetCurrentElapsed())
             Me.WriteLog(ss1.PrintInfo())
@@ -2199,7 +2188,7 @@ Public Class frmTests
     End Sub
 
     Private Sub Mailer365ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles Mailer365ToolStripMenuItem.Click
-        Dim mailer As New Bdo.Utils.Mailer("smtp.office365.com", 587, "simone.pelaia@postewelfareservizi.it", "Volley99", True)
+        Dim mailer As New Mailer("smtp.office365.com", 587, "simone.pelaia@postewelfareservizi.it", "Volley99", True)
 
         mailer.SendAsync("simone.pelaia@postewelfareservizi.it", "simone.pelaia@postewelfareservizi.it", "", "", "subj", "body", Nothing, Nothing)
     End Sub
@@ -2309,7 +2298,7 @@ Public Class frmTests
 
             Me.WriteLog("Elaps: {0}", sw.Elapsed)
             Me.WriteLog("Elaps PROC: {0}", tsProc)
-            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(Bdo.Database.DBStats.EStatement.Select))
+            Me.WriteLog("Select: {0}", ss1.DbGetStatsAll().GetCounter(DBStats.EStatement.Select))
 
         End Using
     End Sub
@@ -2536,7 +2525,6 @@ Public Class frmTests
     Private Sub LoopMT1ToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LoopMT1ToolStripMenuItem.Click
 
         Const I_NUM_ITEMS As Integer = 1000
-        Const I_NUM_SLICE As Integer = 1000
 
         Using ss1 = Me.CreateSlotTest()
             ss1.DB.AutoCloseConnection = True
@@ -2546,8 +2534,9 @@ Public Class frmTests
 
             Dim oList = ss1.CreatePagedList(Of ListaAziende)(1, I_NUM_ITEMS).SearchAllObjects()
 
-            ss1.LoopMT(Of ListaAziende, Azienda)(oList, I_NUM_SLICE, 5, AddressOf elaboraBloccoLista)
+            ss1.LoopMT(Of ListaAziende, Azienda)(oList, 5, AddressOf elaboraBloccoLista)
 
+            Me.WriteLog(ss1.PrintInfo())
         End Using
 
 

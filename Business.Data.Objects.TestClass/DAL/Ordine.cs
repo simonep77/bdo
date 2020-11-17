@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bdo.Attributes;
-using Bdo.Objects;
+using Business.Data.Objects.Core;
+using Business.Data.Objects.Core.Attributes;
 
 namespace Business.Data.Objects.TestClass.DAL
 {

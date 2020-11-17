@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Bdo.Objects;
+using Business.Data.Objects.Core;
+using Business.Data.Objects.Core.Attributes;
 using Business.Data.Objects.TestClass.DAL;
 
 namespace Business.Data.Objects.TestClass.BIZ

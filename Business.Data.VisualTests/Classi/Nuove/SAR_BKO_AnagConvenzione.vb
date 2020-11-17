@@ -1,5 +1,5 @@
-Imports Bdo.Objects
-Imports Bdo.Attributes
+Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
 
 <Table("MF_BACKOFFICE_Preview.dbo.AnagraficaConvenzioni")>
 Public MustInherit Class SAR_BKO_AnagConvenzione

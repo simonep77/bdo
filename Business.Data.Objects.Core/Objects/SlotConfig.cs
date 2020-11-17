@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -12,16 +13,16 @@ namespace Business.Data.Objects.Core
     {
         internal class Defaults
         {
-            internal static string LogBaseDirectory = Assembly.GetExecutingAssembly().Location;
-            internal static bool LogDatabaseActivity = true;
-            internal static bool LogDatabaseOnlyErrors = true;
-            internal static int CacheGlobalSize = 8192;
-            internal static bool ObjectValidationUseMessageList = false;
-            internal static string XmlDefaultDateFormat = @"dd/MM/yyyy";
-            internal static string XmlDefaultDecimalFormat = "N2";
-            internal static bool LiveTrackingEnabled = false;
-            internal static bool ChangeTrackingEnabled = true;
-            internal static bool LoadFullObjects = true;
+            public static string LogBaseDirectory = string.Empty;
+            public static bool LogDatabaseActivity = true;
+            public static bool LogDatabaseOnlyErrors = true;
+            public static int CacheGlobalSize = 8192;
+            public static bool ObjectValidationUseMessageList = false;
+            public static string XmlDefaultDateFormat = @"dd/MM/yyyy";
+            public static string XmlDefaultDecimalFormat = "N2";
+            public static bool LiveTrackingEnabled = false;
+            public static bool ChangeTrackingEnabled = true;
+            public static bool LoadFullObjects = true;
 
         }
 

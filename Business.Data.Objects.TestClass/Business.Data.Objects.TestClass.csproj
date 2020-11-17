@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Business.Data.Object.TestClass</RootNamespace>
     <AssemblyName>Business.Data.Object.TestClass</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -37,18 +39,31 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BIZ\AnagraficaBiz.cs" />
+    <Compile Include="DAL\Anagrafica.cs" />
+    <Compile Include="DAL\AnagraficaLista.cs" />
+    <Compile Include="DAL\Ordine.cs" />
+    <Compile Include="DAL\OrdineLista.cs" />
+    <Compile Include="DAL\OrdineStato.cs" />
+    <Compile Include="DAL\OrdineStatoLista.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Business.Data.Objects\Business.Data.Objects.csproj">
-      <Project>{ef756776-6b0f-4055-bd78-8f107d6c37a7}</Project>
-      <Name>Business.Data.Objects</Name>
+    <ProjectReference Include="..\Business.Data.Objects.Common\Business.Data.Objects.Common.csproj">
+      <Project>{eb27f2d8-ee5c-4497-88a7-f829aa244b24}</Project>
+      <Name>Business.Data.Objects.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Business.Data.Objects.Core\Business.Data.Objects.Core.csproj">
+      <Project>{6a62d66b-1617-46dd-83e3-0b098881e8ba}</Project>
+      <Name>Business.Data.Objects.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Business.Data.Objects.Database\Business.Data.Objects.Database.csproj">
+      <Project>{85ed87a2-0c77-4811-b819-5b7d1add7751}</Project>
+      <Name>Business.Data.Objects.Database</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

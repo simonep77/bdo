@@ -1,4 +1,5 @@
-Imports BDO.Objects
+Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
 
 Public MustInherit Class ListaIscrittiPerPolizza
     Inherits DataList(Of ListaIscrittiPerPolizza, IscrittoPerPolizza)

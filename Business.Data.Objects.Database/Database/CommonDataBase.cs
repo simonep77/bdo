@@ -281,14 +281,9 @@ namespace Business.Data.Objects.Database
             this.ProviderFactory = this.GetDbFactory();
             this._connStr = connString;
             this._HashCode = BdoHash.Instance.Hash(connString);
-		}
 
-        public CommonDataBase(string connString, string assemblyName, string factoryFullame)
-            : this(connString)
-        {
-            //Carica
             this.InitByFactory();
-        }
+		}
 
         public CommonDataBase(DbConnection conn, DbTransaction tran)
             : this(conn.ConnectionString)
