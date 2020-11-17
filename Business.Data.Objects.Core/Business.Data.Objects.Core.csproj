@@ -8,6 +8,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/simonep77/bdo</PackageProjectUrl>
     <Description>Pacchetto base per ecosistema Businness.Data.Objects. Contiene ORM, BO e classe di orchestrazione.</Description>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>BDO_Signing_Key.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>

@@ -8,6 +8,9 @@
     <Copyright>Simone Pelaia</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/simonep77/bdo</PackageProjectUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>BDO_Signing_Key.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
