@@ -19,6 +19,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Business.Data.Objects.Core
@@ -64,7 +65,8 @@ namespace Business.Data.Objects.Core
         internal static CacheTimed<string, DataTable> _ListCache;
         private static LoggerBase _SharedLog;
         private static LoggerBase _DatabaseLog;
-        private static SlotConfig _Conf;
+        private static SlotConfig _StaticConf;
+        private static int _StaticConfCount = 0;
 
 
         #endregion
@@ -2575,44 +2577,69 @@ namespace Business.Data.Objects.Core
             InitConfigure(new SlotConfig());
         }
 
+        /// <summary>
+        /// Consente di impostare la configurazione statica base dello slot.
+        /// E' ammessa una sola chiamata per ciclo di vita dell'applicazione.
+        /// </summary>
+        /// <param name="conf"></param>
+        public static void StaticConfigure(SlotConfig conf)
+        {
+            //Test configurazione null
+            if (conf == null)
+                throw new ArgumentException("Configurazione nulla");
+            //E' consentita una unica configurazione statica
+            var iCount = Interlocked.Increment(ref _StaticConfCount);
+            if (iCount > 1)
+                throw new BusinessSlotException("Non e' possibile configurare staticamente lo slot piu' di una volta per applicazione");
+
+            //Riconfigura lo slot
+            InitConfigure(conf);
+        }
 
         /// <summary>
         /// Configura uno slot a partire da un'oggetto configurazione
         /// </summary>
         /// <param name="conf"></param>
-        static void InitConfigure(SlotConfig conf)
+        private static void InitConfigure(SlotConfig conf)
         {
             try
             {
                 //Imposta configurazione default
-                _Conf = conf;
+                _StaticConf = conf;
 
                 //Inizializza 
                 BusinessSlot._GlobalCache = new CacheSimple<string, DataSchema>(conf.CacheGlobalSize);
                 BusinessSlot._ListCache = new CacheTimed<string, DataTable>(conf.CacheGlobalSize / 2);
                
                 //Se impostata directory di log
-                if (string.IsNullOrEmpty(_Conf.LogBaseDirectory))
+                if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))
                 {
                     //Utilizza cartella di default dell'assembly
                     Uri uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-                    _Conf.LogBaseDirectory = System.IO.Path.GetDirectoryName(uri.LocalPath);
+                    _StaticConf.LogBaseDirectory = System.IO.Path.GetDirectoryName(uri.LocalPath);
                 }
 
                 //Si assicura dell'esistenza della directory
-                System.IO.Directory.CreateDirectory(_Conf.LogBaseDirectory);
+                System.IO.Directory.CreateDirectory(_StaticConf.LogBaseDirectory);
 
-                //Crea logger
-                _SharedLog = new FileStreamLogger(System.IO.Path.Combine(_Conf.LogBaseDirectory, string.Concat("SlotMainLog_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
+                //Chiude shared logger
+                if (_SharedLog != null)
+                    _SharedLog.Dispose();
+                //Apre shared logger
+                _SharedLog = new FileStreamLogger(System.IO.Path.Combine(_StaticConf.LogBaseDirectory, string.Concat("SlotMainLog_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
                 {
                     WriteThreadId = true
                 };
 
+                //Chiude log database se aperto
+                if (_DatabaseLog != null)
+                    _DatabaseLog.Dispose();
+
                 //Crea logger per DB
-                if (_Conf.LogDatabaseActivity)
+                if (_StaticConf.LogDatabaseActivity)
                 {
                     //Imposta trace su file specifico
-                    _DatabaseLog = new FileStreamLogger(System.IO.Path.Combine(_Conf.LogBaseDirectory, string.Concat("TraceSQL_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
+                    _DatabaseLog = new FileStreamLogger(System.IO.Path.Combine(_StaticConf.LogBaseDirectory, string.Concat("TraceSQL_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
                     {
                         WriteThreadId = true
                     };

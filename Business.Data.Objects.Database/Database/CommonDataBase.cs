@@ -1450,17 +1450,6 @@ namespace Business.Data.Objects.Database
         }
 
 
-        //protected DbProviderFactory GetDbFactoryByType(Type facType)
-        //{
-        //    //Il factory va cercato nel campo statico "Instance" del factory stesso
-        //    FieldInfo fieldInfo = facType.GetFields(BindingFlags.Static | BindingFlags.Public).Where(f => f.Name == @"Instance").FirstOrDefault();
-
-        //    if (fieldInfo == null)
-        //        throw new DataBaseException($"Non e' stato possibile recuperare l'istanza del provider {facType.FullName} dal suo campo statico 'Instance'");
-
-        //    return (DbProviderFactory)fieldInfo.GetValue(null);
-        //}
-
         /// <summary>
         /// Dato un tipo di factory ritorna una istanza valorizzata
         /// </summary>
@@ -1529,80 +1518,6 @@ namespace Business.Data.Objects.Database
             if (tran != null)
                 this._tranQ.Push(tran);
         }
-
-
-        ///// <summary>
-        ///// Esegue il solo caricamento dell'assembly/factory e lo inserisce nella lista (se necessario)
-        ///// </summary>
-        ///// <param name="nomeAssembly"></param>
-        ///// <param name="classeFactory"></param>
-        //private DbProviderFactory doGetAssemblyDbFactory(string nomeAssembly, string classeFactory)
-        //{
-        //    DbProviderFactory oFactory = null;
-
-        //    //Se esiste lo imposta ed esce senza complicazioni
-        //    if (CommonDataBase.AssFactoryDictionary.TryGetValue(nomeAssembly, out oFactory))
-        //        return oFactory;
-
-        //    //Cerca assembly già caricato
-        //    lock (CommonDataBase.AssFactoryDictionary)
-        //    {
-        //        //Se esiste lo imposta ed esce (questa ripetizione serve ad evitare un secondo caricamento in caso di concorrenza)
-        //        if (CommonDataBase.AssFactoryDictionary.TryGetValue(nomeAssembly, out oFactory))
-        //            return oFactory;
-
-        //        //Non trovato, carica assembly
-        //        //TODO Forse meglio mettere il nome del file??
-        //        Assembly assThis = Assembly.GetExecutingAssembly();
-        //        Assembly ass = null;
-        //        string sAssemblyDll = string.Concat(nomeAssembly, @".dll");
-        //        string sAsspath;
-             
-        //        //Carica dll a partire dal percorso di origine di BDO
-        //        if (Uri.IsWellFormedUriString(assThis.EscapedCodeBase, UriKind.Absolute))
-        //        {
-        //            Uri uri = new Uri(assThis.EscapedCodeBase);
-
-        //            if (uri.IsFile || uri.IsUnc)
-        //                sAsspath = Path.Combine(Path.GetDirectoryName(uri.LocalPath), sAssemblyDll);
-        //            else
-        //            {
-        //                //Se ad es. http lascia uri
-        //                string sNomeBdo = Path.GetFileName(uri.AbsoluteUri);
-        //                sAsspath = uri.AbsoluteUri.Replace(sNomeBdo, "") + sAssemblyDll;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            sAsspath = Path.Combine(assThis.CodeBase, sAssemblyDll);
-        //        }
-
-        //        //Carica
-        //        if (File.Exists(sAsspath))
-        //            ass = Assembly.LoadFrom(sAsspath);
-        //        else
-        //            throw new ApplicationException(string.Format(DatabaseMessages.Assembly_Not_Found, nomeAssembly));
-
-        //        //Crea Nuovo Factory
-        //        try
-        //        {
-        //            //Il factory va cercato nel campo statico "Instance" del factory stesso
-        //            var facType = ass.GetType(classeFactory, true, true);
-
-        //            //Trovato: ottiene istanza
-        //            oFactory = this.GetDbFactoryByType(facType);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw new ApplicationException(string.Format(DatabaseMessages.Assembly_Load_Error, ass.FullName, ex.Message));
-        //        }
-
-        //        //Aggiunge Factory a lista
-        //        CommonDataBase.AssFactoryDictionary.Add(nomeAssembly, oFactory);
-        //    }
-
-        //    return oFactory;
-        //}
 
 		#endregion
 	}

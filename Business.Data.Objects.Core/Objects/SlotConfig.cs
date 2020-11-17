@@ -36,12 +36,12 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Indica se attivo il logging delle operazioni database
         /// </summary>
-        public bool LogDatabaseActivity { get; } = Defaults.LogDatabaseActivity;
+        public bool LogDatabaseActivity { get; set; } = Defaults.LogDatabaseActivity;
 
         /// <summary>
         /// Indica se per il log db vanno loggati solo gli errori
         /// </summary>
-        public bool LogDatabaseOnlyErrors { get; } = Defaults.LogDatabaseOnlyErrors;
+        public bool LogDatabaseOnlyErrors { get; set; } = Defaults.LogDatabaseOnlyErrors;
        
         #endregion
 
@@ -50,7 +50,7 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Dimensione cache GLOBAL
         /// </summary>
-        public int CacheGlobalSize { get; } = Defaults.CacheGlobalSize;
+        public int CacheGlobalSize { get; set; } = Defaults.CacheGlobalSize;
 
         #endregion
 
