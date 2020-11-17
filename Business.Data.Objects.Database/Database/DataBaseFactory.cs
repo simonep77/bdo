@@ -38,12 +38,6 @@ namespace Business.Data.Objects.Database
                         return new MSSQLDataBase(connectionString);
                     case @"SQLITEDATABASE":
                         return new SQLITEDataBase(connectionString);
-                    //case @"PGSQLDATABASE":
-                    //    return new PGSQLDataBase(connectionString);
-                    //case @"FBDATABASE":
-                    //    return new FBDataBase(connectionString);
-                    //case @"ACCESSDATABASE":
-                    //    return new ACCESSDataBase(connectionString);
                     default:
                         throw new DataBaseException(DatabaseMessages.Provider_Unknown, tipoDataBase);
                 }

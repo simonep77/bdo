@@ -7,7 +7,6 @@
 using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 
 namespace Business.Data.Objects.Database
@@ -37,10 +36,8 @@ namespace Business.Data.Objects.Database
         /// <param name="conn"></param>
         /// <param name="tran"></param>
         public MSSQL2005DataBase(DbConnection conn, DbTransaction tran)
-            : base(conn.ConnectionString)
+            : base(conn, tran)
         {
-            //Carica
-            this.InitByADO(conn, tran, SqlClientFactory.Instance);
         }
 
         /// <summary>

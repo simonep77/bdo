@@ -20,9 +20,9 @@ namespace Business.Data.Objects.Database
     /// </summary>
     public class MYSQLDataBase : CommonDataBase
     {
-        private const string nomeAssembly = "MySql.Data";
-        private const string tipoFactory = "MySql.Data.MySqlClient.MySqlClientFactory";
-        private static DbProviderFactory _MyDbFactory;
+        protected override string ProviderAssembly => @"MySql.Data";
+        protected override string ProviderFactoryClass => @"MySql.Data.MySqlClient.MySqlClientFactory";
+
 
         private static Regex _PAGED_REGEX = new Regex(@"[\s]*(SELECT)[\s]+(?:(DISTINCT)[\s]+)?", System.Text.RegularExpressions.RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -42,18 +42,12 @@ namespace Business.Data.Objects.Database
         public MYSQLDataBase(string connString)
             : base(connString)
         {
-            //Carica
-            this.LoadAssemblyAndInitByFactory(nomeAssembly, tipoFactory);
         }
 
 
         public MYSQLDataBase(DbConnection conn, DbTransaction tran)
-            : base(conn.ConnectionString)
+            : base(conn, tran)
         {
-            if (_MyDbFactory == null)
-                _MyDbFactory = (DbProviderFactory)Activator.CreateInstance(conn.GetType().Assembly.GetType(tipoFactory, true, true));
-            //Carica
-            this.InitByADO(conn, tran, _MyDbFactory);
         }
 
 

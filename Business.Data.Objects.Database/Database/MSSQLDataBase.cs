@@ -7,7 +7,6 @@
 using System;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 
 namespace Business.Data.Objects.Database
 {
@@ -16,12 +15,22 @@ namespace Business.Data.Objects.Database
 	/// </summary>
 	public class MSSQLDataBase: CommonDataBase 
 	{
-		
-		public MSSQLDataBase(string connString):base(connString)
+        protected override string ProviderAssembly => @"System.Data.SqlClient";
+        protected override string ProviderFactoryClass => @"System.Data.SqlClient.SqlClientFactory";
+
+        public MSSQLDataBase(string connString):base(connString)
 		{	
-			//Init
-            this.InitByFactory(System.Data.SqlClient.SqlClientFactory.Instance);
 		}
+
+        /// <summary>
+        /// Costruttore specifico
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="tran"></param>
+        public MSSQLDataBase(DbConnection conn, DbTransaction tran)
+            : base(conn, tran)
+        {
+        }
 
 
         public override string LastAutoIdFunction

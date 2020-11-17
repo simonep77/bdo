@@ -18,14 +18,11 @@ namespace Business.Data.Objects.Database
 	public class SQLITEDataBase: CommonDataBase 
 	{
 
+        protected override string ProviderAssembly { get; } =  @"System.Data.SQLite";
+        protected override string ProviderFactoryClass => @"System.Data.SQLite.SQLiteFactory";
 
         public SQLITEDataBase(string connString): base(connString)
 		{
-			const string nomeAssembly = "System.Data.SQLite";			
-			const string tipoFactory = "System.Data.SQLite.SQLiteFactory";
-			
-			//Carica
-			this.LoadAssemblyAndInitByFactory(nomeAssembly, tipoFactory);
 		}
 		
 		#region "PUBLIC"

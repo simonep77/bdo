@@ -18,9 +18,14 @@ namespace Business.Data.Objects.Database
 	/// </summary>
 	public class PGSQLDataBase: CommonDataBase 
 	{
+        protected override string ProviderAssembly => @"Npgsql";
+        protected override string ProviderFactoryClass => @"Npgsql.NpgsqlFactory";
+
         private readonly string PARAM_CHAR = @":";
         private readonly string PARAM_REPLACE = @":$2";
         private readonly string PARAM_REGEX = @"(\B[@])([\w]*\b)";
+
+
 
         #region "PROPERTY"
 
@@ -42,11 +47,6 @@ namespace Business.Data.Objects.Database
 
         public PGSQLDataBase(string connString): base(connString)
 		{
-			const string nomeAssembly = "Npgsql";
-            const string tipoFactory = "Npgsql.NpgsqlFactory";
-			
-			//Carica
-			this.LoadAssemblyAndInitByFactory(nomeAssembly, tipoFactory);
         }
 
 

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.IO;
+using System.Linq;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Common.Logging;
 using Business.Data.Objects.Database.Resources;
@@ -26,16 +27,28 @@ namespace Business.Data.Objects.Database
 	/// </summary>
 	public abstract class CommonDataBase: IDataBase 
 	{
-		
-		
 		/// <summary>
-		/// Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
-		/// </summary>
-		private static Dictionary<string, DbProviderFactory > AssFactoryDictionary = new Dictionary<string, DbProviderFactory>();
+        /// Assembly di riferimento del provider
+        /// </summary>
+        protected abstract string ProviderAssembly { get; }
+        
+        /// <summary>
+        /// Classe del factory provider
+        /// </summary>
+        protected abstract string ProviderFactoryClass { get; }
+
+        /// <summary>
+        /// Istanza del factory corrente
+        /// </summary>
+        protected DbProviderFactory ProviderFactory { get; private set; }
+
+        /// <summary>
+        /// Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
+        /// </summary>
+        private static Dictionary<string, DbProviderFactory > AssFactoryDictionary = new Dictionary<string, DbProviderFactory>();
 
         protected const string TABLE_NAME = @"Table1";
 		private object _GlobalLock = new object(); //Utilizzato per condividere una unica connection
-		private DbProviderFactory _FactoryCorrente;
 		private DbConnection _dbconn;
 		private DbCommand	_command;
         private Stack _tranQ = new Stack(1);
@@ -265,9 +278,24 @@ namespace Business.Data.Objects.Database
         /// <param name="connString"></param>
 		public CommonDataBase(string connString)
 		{
-			this._connStr = connString;
+            this.ProviderFactory = this.GetDbFactory();
+            this._connStr = connString;
             this._HashCode = BdoHash.Instance.Hash(connString);
 		}
+
+        public CommonDataBase(string connString, string assemblyName, string factoryFullame)
+            : this(connString)
+        {
+            //Carica
+            this.InitByFactory();
+        }
+
+        public CommonDataBase(DbConnection conn, DbTransaction tran)
+            : this(conn.ConnectionString)
+        {
+            //Carica
+            this.InitByADO(conn, tran);
+        }
 
 
         /// <summary>
@@ -653,7 +681,7 @@ namespace Business.Data.Objects.Database
                     //Crea tab
                     DataTable oRetTab = new DataTable(TABLE_NAME);
 
-                    using (DbDataAdapter dA = this._FactoryCorrente.CreateDataAdapter())
+                    using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
                     {
                         //imposta adapter
                         dA.SelectCommand = this._command;
@@ -705,7 +733,7 @@ namespace Business.Data.Objects.Database
                     //Crea tab
                     var ds = new DataSet();
 
-                    using (DbDataAdapter dA = this._FactoryCorrente.CreateDataAdapter())
+                    using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
                     {
                         //imposta adapter
                         dA.SelectCommand = this._command;
@@ -764,7 +792,7 @@ namespace Business.Data.Objects.Database
                     this.OpenConnection();
 
                     DataTable oRetTab = new DataTable(TABLE_NAME);
-                    using (DbDataAdapter dA = this._FactoryCorrente.CreateDataAdapter())
+                    using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
                     {
                         //imposta adapter
                         dA.SelectCommand = this._command;
@@ -893,7 +921,7 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public virtual DbParameter CreateParameter(string name, object value, Type type)
         {
-            DbParameter param = this._FactoryCorrente.CreateParameter();
+            DbParameter param = this.ProviderFactory.CreateParameter();
             param.ParameterName = this.CreateParamName(name);
 
             //Se fornito un type allora lo decodifica
@@ -1224,54 +1252,6 @@ namespace Business.Data.Objects.Database
         }
 		
 		
-		/// <summary>
-		/// Dato un nome Assembly ed il nome della classe Factory se non è già caricata
-		/// esegue il caricamento, esegue caching del risultato e carica tutti i campi
-		/// Attenzione!! Da utilizzare solo nel costruttore delle classi derivate
-		/// </summary>
-		/// <param name="nomeAssembly"></param>
-		/// <param name="classeFactory"></param>
-		protected void LoadAssemblyAndInitByFactory(string nomeAssembly, string classeFactory)
-		{
-			//Carica...
-			DbProviderFactory oFactory = this.doGetAssemblyDbFactory(nomeAssembly, classeFactory);
-
-			//Imposta i Dati specifici per il tipo database definito
-            this.InitByFactory(oFactory);
-		}
-
-
-        /// <summary>
-        /// Carica impostazioni da factory corrente
-        /// </summary>
-        protected void InitByFactory(DbProviderFactory factory)
-        {
-            //Imposta i Dati specifici per il tipo database definito
-            this._FactoryCorrente = factory;
-            this._dbconn = factory.CreateConnection();
-            this._dbconn.ConnectionString = this._connStr;
-            this._command = this._dbconn.CreateCommand();
-        }
-
-
-        /// <summary>
-        /// Inizializza attraverso oggetti ADO
-        /// </summary>
-        /// <param name="conn"></param>
-        /// <param name="tran"></param>
-        /// <param name="factory"></param>
-        protected void InitByADO(DbConnection conn, DbTransaction tran, DbProviderFactory factory)
-        {
-            //Imposta i Dati specifici per il tipo database definito
-            this._FactoryCorrente = factory;
-            this._dbconn = conn;
-            this._command = this._dbconn.CreateCommand();
-
-            if (tran != null)
-                this._tranQ.Push(tran);
-        }
-
-		
 		
 		/// <summary>
 		/// Apre la connessione al database
@@ -1475,73 +1455,159 @@ namespace Business.Data.Objects.Database
         }
 
 
+        //protected DbProviderFactory GetDbFactoryByType(Type facType)
+        //{
+        //    //Il factory va cercato nel campo statico "Instance" del factory stesso
+        //    FieldInfo fieldInfo = facType.GetFields(BindingFlags.Static | BindingFlags.Public).Where(f => f.Name == @"Instance").FirstOrDefault();
+
+        //    if (fieldInfo == null)
+        //        throw new DataBaseException($"Non e' stato possibile recuperare l'istanza del provider {facType.FullName} dal suo campo statico 'Instance'");
+
+        //    return (DbProviderFactory)fieldInfo.GetValue(null);
+        //}
+
         /// <summary>
-        /// Esegue il solo caricamento dell'assembly/factory e lo inserisce nella lista (se necessario)
+        /// Dato un tipo di factory ritorna una istanza valorizzata
         /// </summary>
-        /// <param name="nomeAssembly"></param>
-        /// <param name="classeFactory"></param>
-        private DbProviderFactory doGetAssemblyDbFactory(string nomeAssembly, string classeFactory)
+        /// <param name="facType"></param>
+        /// <returns></returns>
+        private DbProviderFactory GetDbFactory()
         {
-            DbProviderFactory oFactory = null;
-            //Se esiste lo imposta ed esce senza complicazioni
-            if (CommonDataBase.AssFactoryDictionary.TryGetValue(nomeAssembly, out oFactory))
-                return oFactory;
+            DbProviderFactory fact;
 
-            //Cerca assembly già caricato
-            lock (CommonDataBase.AssFactoryDictionary)
+            if (!CommonDataBase.AssFactoryDictionary.TryGetValue(this.ProviderAssembly, out fact))
             {
-                //Se esiste lo imposta ed esce (questa ripetizione serve ad evitare un secondo caricamento in caso di concorrenza)
-                if (CommonDataBase.AssFactoryDictionary.TryGetValue(nomeAssembly, out oFactory))
-                    return oFactory;
-
-                //Non trovato, carica assembly
-                //TODO Forse meglio mettere il nome del file??
-                Assembly assThis = Assembly.GetExecutingAssembly();
-                Assembly ass = null;
-                string sAssemblyDll = string.Concat(nomeAssembly, @".dll");
-                string sAsspath;
-             
-                //Carica dll a partire dal percorso di origine di BDO
-                if (Uri.IsWellFormedUriString(assThis.EscapedCodeBase, UriKind.Absolute))
+                lock (_GlobalLock)
                 {
-                    Uri uri = new Uri(assThis.EscapedCodeBase);
+                    //Se qualcuno ha fatto prima!!
+                    if (CommonDataBase.AssFactoryDictionary.TryGetValue(this.ProviderAssembly, out fact))
+                        return fact;
 
-                    if (uri.IsFile || uri.IsUnc)
-                        sAsspath = Path.Combine(Path.GetDirectoryName(uri.LocalPath), sAssemblyDll);
-                    else
-                    {
-                        //Se ad es. http lascia uri
-                        string sNomeBdo = Path.GetFileName(uri.AbsoluteUri);
-                        sAsspath = uri.AbsoluteUri.Replace(sNomeBdo, "") + sAssemblyDll;
-                    }
-                }
-                else
-                {
-                    sAsspath = Path.Combine(assThis.CodeBase, sAssemblyDll);
+                    //Carica assembly e tipo
+                    var ass = AppDomain.CurrentDomain.Load(this.ProviderAssembly);
+                    var facType = ass.GetType(this.ProviderFactoryClass);
+
+                    //Il factory va cercato nel campo statico "Instance" del factory stesso
+                    FieldInfo fieldInfo = facType.GetFields(BindingFlags.Static | BindingFlags.Public).Where(f => f.Name == @"Instance").FirstOrDefault();
+
+                    if (fieldInfo == null)
+                        throw new DataBaseException($"Non e' stato possibile recuperare l'istanza del provider {facType.FullName} dal suo campo statico 'Instance'");
+
+                    fact = (DbProviderFactory)fieldInfo.GetValue(null);
+
+                    CommonDataBase.AssFactoryDictionary.Add(this.ProviderAssembly, fact);
+
                 }
 
-                //Carica
-                if (File.Exists(sAsspath))
-                    ass = Assembly.LoadFrom(sAsspath);
-                else
-                    throw new ApplicationException(string.Format(DatabaseMessages.Assembly_Not_Found, nomeAssembly));
-
-                //Crea Nuovo Factory
-                try
-                {
-                    oFactory = (DbProviderFactory)Activator.CreateInstance(ass.GetType(classeFactory, true, true));
-                }
-                catch (Exception ex)
-                {
-                    throw new ApplicationException(string.Format(DatabaseMessages.Assembly_Load_Error, ass.FullName, ex.Message));
-                }
-
-                //Aggiunge Factory a lista
-                CommonDataBase.AssFactoryDictionary.Add(nomeAssembly, oFactory);
             }
 
-            return oFactory;
+            return fact;
+
         }
+
+
+
+        /// <summary>
+        /// Carica impostazioni da factory corrente
+        /// </summary>
+        private void InitByFactory()
+        {
+            //Imposta i Dati specifici per il tipo database definito
+            this._dbconn = this.ProviderFactory.CreateConnection();
+            this._dbconn.ConnectionString = this._connStr;
+            this._command = this._dbconn.CreateCommand();
+        }
+
+
+        /// <summary>
+        /// Inizializza attraverso oggetti ADO
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="tran"></param>
+        /// <param name="factory"></param>
+        private void InitByADO(DbConnection conn, DbTransaction tran)
+        {
+            //Imposta i Dati specifici per il tipo database definito
+            this._dbconn = conn;
+            this._command = this._dbconn.CreateCommand();
+
+            if (tran != null)
+                this._tranQ.Push(tran);
+        }
+
+
+        ///// <summary>
+        ///// Esegue il solo caricamento dell'assembly/factory e lo inserisce nella lista (se necessario)
+        ///// </summary>
+        ///// <param name="nomeAssembly"></param>
+        ///// <param name="classeFactory"></param>
+        //private DbProviderFactory doGetAssemblyDbFactory(string nomeAssembly, string classeFactory)
+        //{
+        //    DbProviderFactory oFactory = null;
+
+        //    //Se esiste lo imposta ed esce senza complicazioni
+        //    if (CommonDataBase.AssFactoryDictionary.TryGetValue(nomeAssembly, out oFactory))
+        //        return oFactory;
+
+        //    //Cerca assembly già caricato
+        //    lock (CommonDataBase.AssFactoryDictionary)
+        //    {
+        //        //Se esiste lo imposta ed esce (questa ripetizione serve ad evitare un secondo caricamento in caso di concorrenza)
+        //        if (CommonDataBase.AssFactoryDictionary.TryGetValue(nomeAssembly, out oFactory))
+        //            return oFactory;
+
+        //        //Non trovato, carica assembly
+        //        //TODO Forse meglio mettere il nome del file??
+        //        Assembly assThis = Assembly.GetExecutingAssembly();
+        //        Assembly ass = null;
+        //        string sAssemblyDll = string.Concat(nomeAssembly, @".dll");
+        //        string sAsspath;
+             
+        //        //Carica dll a partire dal percorso di origine di BDO
+        //        if (Uri.IsWellFormedUriString(assThis.EscapedCodeBase, UriKind.Absolute))
+        //        {
+        //            Uri uri = new Uri(assThis.EscapedCodeBase);
+
+        //            if (uri.IsFile || uri.IsUnc)
+        //                sAsspath = Path.Combine(Path.GetDirectoryName(uri.LocalPath), sAssemblyDll);
+        //            else
+        //            {
+        //                //Se ad es. http lascia uri
+        //                string sNomeBdo = Path.GetFileName(uri.AbsoluteUri);
+        //                sAsspath = uri.AbsoluteUri.Replace(sNomeBdo, "") + sAssemblyDll;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            sAsspath = Path.Combine(assThis.CodeBase, sAssemblyDll);
+        //        }
+
+        //        //Carica
+        //        if (File.Exists(sAsspath))
+        //            ass = Assembly.LoadFrom(sAsspath);
+        //        else
+        //            throw new ApplicationException(string.Format(DatabaseMessages.Assembly_Not_Found, nomeAssembly));
+
+        //        //Crea Nuovo Factory
+        //        try
+        //        {
+        //            //Il factory va cercato nel campo statico "Instance" del factory stesso
+        //            var facType = ass.GetType(classeFactory, true, true);
+
+        //            //Trovato: ottiene istanza
+        //            oFactory = this.GetDbFactoryByType(facType);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw new ApplicationException(string.Format(DatabaseMessages.Assembly_Load_Error, ass.FullName, ex.Message));
+        //        }
+
+        //        //Aggiunge Factory a lista
+        //        CommonDataBase.AssFactoryDictionary.Add(nomeAssembly, oFactory);
+        //    }
+
+        //    return oFactory;
+        //}
 
 		#endregion
 	}
