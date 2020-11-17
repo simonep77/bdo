@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>5.0.1</Version>
+    <Authors>Simone Pelaia</Authors>
+    <Description>Pacchetto classi common per Business.Data.Objects</Description>
+    <Copyright>Simone Pelaia</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/simonep77/bdo</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

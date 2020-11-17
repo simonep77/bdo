@@ -2442,6 +2442,7 @@ Public Class frmTests
         Using ss1 = Me.CreateSlotTest()
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
+            ss1.Conf.LoadFullObjects = True
             ss1.ChangeTrackingEnabled = True
 
             Me.WriteLog("Avvio test LoadFullObjects")
@@ -2472,7 +2473,7 @@ Public Class frmTests
             ss1.DB.AutoCloseConnection = False
             ss1.LiveTrackingEnabled = True
             ss1.ChangeTrackingEnabled = True
-            ss1.Conf.LoadFullObjects = True
+            ss1.Conf.LoadFullObjects = False
 
 
             Me.WriteLog("Avvio test Standard")

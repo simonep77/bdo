@@ -7,6 +7,7 @@
     <Copyright>Simone Pelaia</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/simonep77/bdo</PackageProjectUrl>
+    <Description>Pacchetto base per ecosistema Businness.Data.Objects. Contiene ORM, BO e classe di orchestrazione.</Description>
   </PropertyGroup>
 
   <ItemGroup>
