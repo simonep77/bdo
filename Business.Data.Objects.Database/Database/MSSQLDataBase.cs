@@ -101,22 +101,5 @@ namespace Business.Data.Objects.Database
         }
 
 
-        public override DbParameter AddParameter(string name, object value, Type type)
-        {
-            var p = this.CreateParameter(name, value, type);
-            
-            //Fix per query conversioni varchar -> navarchar
-            if (p.DbType == System.Data.DbType.String && value != null)
-            {
-                string s = value as string;
-                if (s.Length < 8000)
-                    p.DbType = System.Data.DbType.AnsiString;
-            }
-
-            base.AddParameter(p);
-            return p;
-        }
-
-
     }
 }

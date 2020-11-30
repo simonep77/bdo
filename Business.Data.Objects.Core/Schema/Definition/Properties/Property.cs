@@ -126,9 +126,9 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 this.AcceptNull = true;
             }
             //DB Provider Type
-            else if (attr is DbDataType)
+            else if (attr is CustomDbType)
             {
-                this.CustomDbType = ((DbDataType)attr).Value;
+                this.CustomDbType = ((CustomDbType)attr).Value;
             }
             //ESCLUDE DA XML
             else if (attr is ExcludeFromXml)

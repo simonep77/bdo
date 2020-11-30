@@ -1,0 +1,2 @@
+﻿[30/11/2020] - 5.0.2 - Simone Pelaia
+Modificato il nome di attributo DbDataType -> CustomDbType

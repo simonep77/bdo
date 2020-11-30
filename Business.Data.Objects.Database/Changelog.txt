@@ -1,0 +1,2 @@
+﻿[30/11/2020] - 5.0.2 - Simone Pelaia
+Rimosso automatismo di utilizzo DbType.AnsiSring su driver MSSQL in caso di stringhe con lunghezza inferiore a 8000 caratteri
