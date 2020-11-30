@@ -6,7 +6,7 @@ namespace Business.Data.Objects.Core.Attributes
     /// <summary>
     /// Consente di impostare un tipo di dato specifico del provider da utilizzare nelle query
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class,AllowMultiple=false)]
+    [AttributeUsage(AttributeTargets.Property,AllowMultiple=false)]
     public class CustomDbType: BaseAttribute 
     {
         /// <summary>

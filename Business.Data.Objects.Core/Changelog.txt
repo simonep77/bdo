@@ -1,2 +1,5 @@
 ﻿[30/11/2020] - 5.0.2 - Simone Pelaia
 Modificato il nome di attributo DbDataType -> CustomDbType
+
+[30/11/2020] - 5.0.3 - Simone Pelaia
+Fix modificatore attributo CustomDbType che deve essere per property e non per classe
