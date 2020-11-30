@@ -3,3 +3,6 @@ Rimosso automatismo di utilizzo DbType.AnsiSring su driver MSSQL in caso di stri
 
 [30/11/2020] - 5.0.3 - Simone Pelaia
 Fix problema mancata applicazione del custom db type
+
+[30/11/2020] - 5.0.4 - Simone Pelaia
+Aggiornamento interfaccia db

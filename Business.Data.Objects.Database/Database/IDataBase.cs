@@ -204,12 +204,21 @@ namespace Business.Data.Objects.Database
         DbParameter AddParameter(string name, object value);
 
         /// <summary>
-        /// Aggiunge paramtro con nome, valore e tipo
+        /// Aggiunge paramtro con nome, valore e tipo .NET
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="type"></param>
         DbParameter AddParameter(string name, object value, Type type);
+
+        /// <summary>
+        /// Aggiunge paramtro con nome, valore e tipo DB (driver)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="dbtype"></param>
+        /// <returns></returns>
+        DbParameter AddParameter(string name, object value, DbType dbtype);
 
         /// <summary>
         /// Aggiunge parametro creato in precedenza
@@ -231,13 +240,22 @@ namespace Business.Data.Objects.Database
 
 
         /// <summary>
-        /// Crea paramtro con nome, valore e tipo senza aggiungerlo
+        /// Crea paramtro con nome, valore e tipo db senza aggiungerlo
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="type"></param>
         /// <returns></returns>
         DbParameter CreateParameter(string name, object value, Type type);
+
+        /// <summary>
+        /// Crea paramtro con nome, valore e tipo db (driver) senza aggiungerlo
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="dbtype"></param>
+        /// <returns></returns>
+        DbParameter CreateParameter(string name, object value, DbType dbtype);
 
         /// <summary>
         /// Ritorna nome parametro compatibile con il database specificato.
