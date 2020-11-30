@@ -9,6 +9,8 @@ namespace Business.Data.Objects.TestClass.DAL
     [Table(@"anagrafica")]
     public abstract class Anagrafica:DataObject<Anagrafica>
     {
+        public const string KEY_CF = @"KEY_CF";
+
         [PrimaryKey, AutoIncrement]
         public abstract uint Id { get; }
 
@@ -18,7 +20,7 @@ namespace Business.Data.Objects.TestClass.DAL
         [MaxLength(50)]
         public abstract string Cognome { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(20), SearchKey(KEY_CF), CustomDbType(System.Data.DbType.AnsiString)]
         public abstract string CodiceFiscale { get; set; }
 
         public abstract DateTime DataNascita { get; set; }

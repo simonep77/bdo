@@ -2513,6 +2513,8 @@ Public Class frmTests
             Dim oAz = ss1.LoadObjByPK(Of Business.Data.Objects.TestClass.DAL.Anagrafica)(5000)
             'Me.WriteLog(oAz.ToJSON().Replace("{", "{{").Replace("}", "}}"))
 
+            Dim oAn = ss1.LoadObjNullByKEY(Of Business.Data.Objects.TestClass.DAL.Anagrafica)(Anagrafica.KEY_CF, "BBBBBBBBBBBB")
+
             oAz.Nome = Nothing
             oAz.Nome = "Simone "
 

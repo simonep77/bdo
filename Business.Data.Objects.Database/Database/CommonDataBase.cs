@@ -864,7 +864,14 @@ namespace Business.Data.Objects.Database
         public virtual DbParameter AddParameter(string name, object value, Type type)
         {
             var p = this.CreateParameter(name, value, type);
-            this.AddParameter(this.CreateParameter(name, value, type));
+            this.AddParameter(p);
+            return p;
+        }
+
+        public virtual DbParameter AddParameter(string name, object value, DbType dbtype)
+        {
+            var p = this.CreateParameter(name, value, dbtype);
+            this.AddParameter(p);
             return p;
         }
 
@@ -908,7 +915,7 @@ namespace Business.Data.Objects.Database
 
 
         /// <summary>
-        /// Crea parametro per nome, valore e tipo
+        /// Crea parametro per nome, valore e tipo .NET
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
@@ -928,15 +935,35 @@ namespace Business.Data.Objects.Database
             return param;
         }
 
+        /// <summary>
+        /// Crea parametro per nome, valore e tipo del driver DB
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="dbtype"></param>
+        /// <returns></returns>
+        public virtual DbParameter CreateParameter(string name, object value, DbType dbtype)
+        {
+            DbParameter param = this.ProviderFactory.CreateParameter();
+            param.ParameterName = this.CreateParamName(name);
 
-        
-		
-		
+            //Se fornito un type allora lo decodifica
+            param.DbType = dbtype;
+
+            //Se fornito null imposta DBNULL
+            param.Value = (value != null) ? value : DBNull.Value;
+            return param;
+        }
+
+
+
+
+
         /// <summary>
         /// Chiude la connessione (se aperta)
         /// </summary>
         /// <param name="rollbackUnCommitted"></param>
-		public void CloseConnection(bool rollbackUnCommitted)
+        public void CloseConnection(bool rollbackUnCommitted)
 		{
             lock (this._GlobalLock)
             {
