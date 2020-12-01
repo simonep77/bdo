@@ -2510,6 +2510,9 @@ Public Class frmTests
             ss1.LiveTrackingEnabled = True
             ss1.ChangeTrackingEnabled = True
 
+            DbTypeMapper.ChangeStaticMap(GetType(String), DbType.AnsiString)
+            'ss1.DB.TypeMapper.ChangeCurrentMap(GetType(String), DbType.AnsiString)
+
             Dim oAz = ss1.LoadObjByPK(Of Business.Data.Objects.TestClass.DAL.Anagrafica)(5000)
             'Me.WriteLog(oAz.ToJSON().Replace("{", "{{").Replace("}", "}}"))
 

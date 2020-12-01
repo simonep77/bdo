@@ -6,3 +6,6 @@ Fix modificatore attributo CustomDbType che deve essere per property e non per c
 
 [30/11/2020] - 5.0.4 - Simone Pelaia
 Link a Db 5.0.4
+
+[01/12/2020] - 5.0.4 - Simone Pelaia
+Link a Db 5.0.5

@@ -76,6 +76,11 @@ namespace Business.Data.Objects.Database
         int ExecutionTimeout { get; set; }
 
         /// <summary>
+        /// Mappatore tipi .NET -> tipi DB
+        /// </summary>
+        DbTypeMapper TypeMapper { get; }
+
+        /// <summary>
         /// Clona Database
         /// </summary>
         IDataBase Clone();

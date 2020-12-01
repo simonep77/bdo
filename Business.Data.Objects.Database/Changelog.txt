@@ -6,3 +6,6 @@ Fix problema mancata applicazione del custom db type
 
 [30/11/2020] - 5.0.4 - Simone Pelaia
 Aggiornamento interfaccia db
+
+[01/12/2020] - 5.0.5 - Simone Pelaia
+Introdotto type mapper db modificabile a runtime

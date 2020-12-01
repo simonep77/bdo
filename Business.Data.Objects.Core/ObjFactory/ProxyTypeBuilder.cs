@@ -347,7 +347,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                 if (oProp is PropertySimple)
                 {
                     if (oProp.Column == null)
-                        oProp.Column = new Column(oProp.Name);
+                        oProp.Column = new Column(oProp.Name, oProp.Type);
                 }
 
                 //Gestisce una o più chiavi

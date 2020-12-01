@@ -43,6 +43,12 @@ namespace Business.Data.Objects.Database
         protected DbProviderFactory ProviderFactory { get; private set; }
 
         /// <summary>
+        /// Mappatore tipi .NET -> tipi DB
+        /// </summary>
+        public virtual DbTypeMapper TypeMapper { get; } = new DbTypeMapper();
+
+
+        /// <summary>
         /// Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
         /// </summary>
         private static Dictionary<string, DbProviderFactory > AssFactoryDictionary = new Dictionary<string, DbProviderFactory>();
@@ -928,7 +934,7 @@ namespace Business.Data.Objects.Database
 
             //Se fornito un type allora lo decodifica
             if (type != null)
-                param.DbType = this.TypeToDbType(type);
+                param.DbType = this.TypeMapper.GetDbTypeFor(type);
 
             //Se fornito null imposta DBNULL
             param.Value = (value != null) ? value : DBNull.Value;
@@ -1403,54 +1409,6 @@ namespace Business.Data.Objects.Database
             {
                 this._TraceLog.EndSafeWrite(); //Chiude Thread-safe
             }
-        }
-
-
-        /// <summary>
-        /// Converte tipo .Net in DbType
-        /// </summary>
-        /// <param name="T"></param>
-        /// <returns></returns>
-        protected virtual System.Data.DbType TypeToDbType(Type t)
-        {
-            switch (Type.GetTypeCode(t))
-            {
-                case TypeCode.String:
-                case TypeCode.Char:
-                    return System.Data.DbType.String;
-                case TypeCode.Decimal:
-                    return System.Data.DbType.Decimal;
-                case TypeCode.Double:
-                    return System.Data.DbType.Double;
-                case TypeCode.Int32:
-                    return System.Data.DbType.Int32;
-                case TypeCode.Int64:
-                    return System.Data.DbType.Int64;
-                case TypeCode.Int16:
-                    return System.Data.DbType.Int16;
-                case TypeCode.DateTime:
-                    return System.Data.DbType.DateTime;
-                case TypeCode.Boolean:
-                    return System.Data.DbType.Boolean;
-                case TypeCode.Single:
-                    return System.Data.DbType.Single;
-                case TypeCode.UInt16:
-                    return System.Data.DbType.UInt16;
-                case TypeCode.UInt32:
-                    return System.Data.DbType.UInt32;
-                case TypeCode.UInt64:
-                    return System.Data.DbType.UInt64;
-                case TypeCode.Byte:
-                    return System.Data.DbType.Byte;
-                case TypeCode.SByte:
-                    return System.Data.DbType.SByte;
-                default:
-                    if (t.IsArray && t.Equals(typeof(byte[])))
-                        return System.Data.DbType.Binary;
-
-                    return System.Data.DbType.Object;
-            }
-
         }
 
 
