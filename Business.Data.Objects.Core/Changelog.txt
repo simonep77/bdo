@@ -12,3 +12,6 @@ Link a Db 5.0.5
 
 [01/12/2020] - 5.0.6 - Simone Pelaia
 implemenatzione funzione facility di lazy load per oggetti su BusinessObject
+
+[028/12/2020] - 5.0.7 - Simone Pelaia
+Rinominato attributo "BaseAutomaticAttribute" in "AutomaticField". Può essere utilizzato per ricaricare i valori calcolati lato DB

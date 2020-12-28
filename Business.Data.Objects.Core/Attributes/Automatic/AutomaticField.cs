@@ -8,7 +8,7 @@ namespace Business.Data.Objects.Core.Attributes
     /// Indica che una proprieta' e' un campo con gestione automatica
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class BaseAutomaticAttribute: BaseAttribute 
+    public class AutomaticField: BaseAttribute 
     {
     }
 }

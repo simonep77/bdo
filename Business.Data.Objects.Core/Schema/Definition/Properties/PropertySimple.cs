@@ -100,7 +100,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 return true;
 
             //Check campi automatici
-            if (attr is BaseAutomaticAttribute)
+            if (attr is AutomaticField)
             {
                 if (this.IsAutomatic)
                     throw new SchemaReaderException(this, SchemaMessages.Prop_NoMultipleAutomatic);
