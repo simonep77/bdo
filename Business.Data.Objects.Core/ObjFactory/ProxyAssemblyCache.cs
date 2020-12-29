@@ -60,7 +60,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// <summary>
         /// Dizionario per la gestione dei proxy BIZ
         /// </summary>
-        internal class ProxyAssemblyBizDiz : Dictionary<long, ProxyAssemblyBiz>
+        internal class ProxyAssemblyBizDiz : Dictionary<string, ProxyAssemblyBiz>
         {
             public object WriteLock = new object();
             public ProxyAssemblyBizDiz(int capacity)
@@ -77,7 +77,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// </summary>
         internal class ProxyAssemblyBiz
         {
-            public long Key;
+            public string Key;
             public Assembly SrcAss;
             public ProxyEntryBizDic TypeBizEntries;
         }
@@ -274,7 +274,7 @@ namespace Business.Data.Objects.Core.ObjFactory
 
         public ProxyEntryBiz GetBizEntry(Type tBiz)
         {
-            long lKey = tBiz.Assembly.ManifestModule.MetadataToken;
+            var lKey = tBiz.Assembly.FullName;
             ProxyAssemblyBiz pxa = null;
 
             //Controlla presenza
