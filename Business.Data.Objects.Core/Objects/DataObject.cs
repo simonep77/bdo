@@ -6,6 +6,7 @@ using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using System.Collections.Generic;
+using System.Dynamic;
 
 namespace Business.Data.Objects.Core
 {
@@ -15,7 +16,6 @@ namespace Business.Data.Objects.Core
     /// <typeparam name="T"></typeparam>
     public abstract class DataObject<T>
         : DataObjectBase where T : DataObject<T>
-        
     {
 
         #region PUBLIC DELEGATES
@@ -31,6 +31,22 @@ namespace Business.Data.Objects.Core
         #endregion
 
         #region PUBLIC METHODS
+
+        //public DataObject()
+        //{
+        //    var t = typeof(T);
+        //    //Se la classe e' astratta significa che e' creata tramite slot, altrimenti tramite "new"
+        //    if (!t.IsAbstract)
+        //    {
+        //        //Crea istanza
+        //        ProxyEntryDAO oTypeEntry = ProxyAssemblyCache.Instance.GetDaoEntry(t);
+
+        //        //Imposta schema su oggetto
+        //        this.mClassSchema = oTypeEntry.ClassSchema;
+        //        this.ObjectRefId = ProxyAssemblyCache.Instance.NewObjeRefId();
+        //        this.mDataSchema = new Schema.Usage.DataSchema(this.mClassSchema.Properties.Count, this.mClassSchema.ObjCount);
+        //    }
+        //}
 
 
         /// <summary>
@@ -199,6 +215,41 @@ namespace Business.Data.Objects.Core
         {
             return (TL)ProxyAssemblyCache.Instance.CreateBizObj(ProxyAssemblyCache.Instance.GetBizEntry(typeof(TL)), this);
         }
+
+        ///// <summary>
+        ///// Ritorna un oggetto dinamico copiato dall'attuale
+        ///// </summary>
+        ///// <returns></returns>
+        //public dynamic ToDynamicObject()
+        //{
+        //    var o = new ExpandoObject();
+        //    var od = o as IDictionary<string, object>;
+        //    foreach (var prop in this.mClassSchema.Properties)
+        //    {
+        //        od[prop.Name] = prop.GetValue(this);
+        //    }
+        //    od[nameof(DataObjectBase.ObjectSource)] = this.mDataSchema.ObjectSource;
+        //    od[nameof(DataObjectBase.ObjectState)] = this.mDataSchema.ObjectState;
+
+        //    return o;
+        //}
+
+        ///// <summary>
+        ///// Carica i dati di un oggetto dinamico su quello corrente
+        ///// </summary>
+        ///// <param name="obj"></param>
+        //public void FromDynamicObject(dynamic obj)
+        //{
+        //    var od = obj as IDictionary<string, object>;
+
+        //    foreach (var prop in this.mClassSchema.Properties)
+        //    {
+        //        prop.SetValue(this, od[prop.Name]);
+        //    }
+
+        //    this.mDataSchema.ObjectSource = (EObjectSource)od[nameof(DataObjectBase.ObjectSource)];
+        //    this.mDataSchema.ObjectState = (EObjectState)od[nameof(DataObjectBase.ObjectState)];
+        //}
 
 
         #endregion

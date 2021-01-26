@@ -62,7 +62,6 @@ namespace Business.Data.Objects.Database
         private int _TotRecordQueryPaginata;
         private bool _AutoCloseConnection;
         private DBStats _Stats = new DBStats();
-        private bool _TraceOnlyErrors;
         private LoggerBase _TraceLog;
         private UInt32 _HashCode;
         private Dictionary<string, object> _LockAcquired; //Istanziato al primo utilizzo
@@ -189,13 +188,7 @@ namespace Business.Data.Objects.Database
         /// Se TraceON abilita il trace dei soli
         /// errori
         /// </summary>
-        public bool TraceOnlyErrors
-        {
-            get
-            {
-                return this._TraceOnlyErrors;
-            }
-        }
+        public bool TraceOnlyErrors { get; set; }
 
 
         /// <summary>
@@ -307,7 +300,7 @@ namespace Business.Data.Objects.Database
             IDataBase dbOut = DataBaseFactory.CreaDataBase(this.GetType().Name, this._connStr);
             dbOut.AutoCloseConnection = this.AutoCloseConnection;
             if (this.TraceON)
-                dbOut.EnableTrace(this._TraceLog, this._TraceOnlyErrors);
+                dbOut.EnableTrace(this._TraceLog, this.TraceOnlyErrors);
 
             return dbOut;
         }
@@ -321,7 +314,7 @@ namespace Business.Data.Objects.Database
         {
             //Crea nuovo log e apre
             this._TraceLog = logger;
-            this._TraceOnlyErrors = onlyErrors;
+            this.TraceOnlyErrors = onlyErrors;
         }
 
         /// <summary>
@@ -333,7 +326,7 @@ namespace Business.Data.Objects.Database
         {
             //Crea nuovo log e apre
             this._TraceLog = new FileStreamLogger(traceFilePath);
-            this._TraceOnlyErrors = onlyErrors;
+            this.TraceOnlyErrors = onlyErrors;
         }
 
         /// <summary>
@@ -1378,7 +1371,7 @@ namespace Business.Data.Objects.Database
         protected void TraceStatement(string position, Exception ex)
         {
             //Se non e' abilitato trace non scrive
-            if (this._TraceLog == null || (this._TraceOnlyErrors && ex == null))
+            if (this._TraceLog == null || (this.TraceOnlyErrors && ex == null))
                 return;
             
             //Scrive con lock comune

@@ -67,7 +67,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Abilita il trace dei soli errori
         /// </summary>
-        bool TraceOnlyErrors { get; }
+        bool TraceOnlyErrors { get; set; }
 
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Business.Data.Objects.Database
         IDataBase Clone();
 
         /// <summary>
-        /// Abilita il trace fornendo un file di log specifico
+        /// Abilita il trace fornendo un logger specifico
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="onlyErrors"></param>

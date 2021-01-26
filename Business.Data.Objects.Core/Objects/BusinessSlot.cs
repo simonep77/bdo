@@ -929,6 +929,19 @@ namespace Business.Data.Objects.Core
             }
         }
 
+        /// <summary>
+        /// Data una classe ed un nome di proprieta' ritorna il nome del campo DB. 
+        /// Utile quando differenti rispetto alla nomenclatura della classe
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public string DbPrefixGetColumn<T>(string propertyName)
+            where T : DataObject<T>
+        {
+            return ProxyAssemblyCache.Instance.GetClassSchema(typeof(T)).Properties.GetPropertyByName(propertyName).Column.Name;
+        }
+
 
         /// <summary>
         /// Ritorna il nome completo di tabella a partire da DbPrefixKey e nome tabella
@@ -1965,7 +1978,7 @@ namespace Business.Data.Objects.Core
             sb.Append("Shared Log: ");
             sb.AppendLine(BusinessSlot._SharedLog.LogPath);
             sb.Append("ObjeRefIdCounter: ");
-            sb.AppendLine(System.Threading.Interlocked.Read(ref ProxyAssemblyCache._ObjeRefIdCounter).ToString());
+            sb.AppendLine(System.Threading.Interlocked.Read(ref ProxyAssemblyCache.Instance.ObjeRefIdCounter).ToString());
              
 
             sb.AppendLine("** PROPERTIES **");
@@ -2371,7 +2384,7 @@ namespace Business.Data.Objects.Core
         {
 
             //Imposta una nuova istanza di configurazione specifica per questo slot
-            this.Conf = new SlotConfig();
+            this.Conf = _StaticConf.Clone();
 
             //Avvia stopwatch
             this.mStopWatch = System.Diagnostics.Stopwatch.StartNew();

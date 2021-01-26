@@ -2559,5 +2559,38 @@ Public Class frmTests
 
     End Sub
 
+    Private Sub ClassiNoAbstractToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClassiNoAbstractToolStripMenuItem.Click
+        Using ss1 = Me.CreateSlot()
+            ss1.DB.AutoCloseConnection = True
+            ss1.LiveTrackingEnabled = True
+            ss1.ChangeTrackingEnabled = True
 
+            Dim oAnag1 = ss1.CreateObject(Of Anagrafica2)()
+            Dim oAnag2 = New Anagrafica2()
+            oAnag2.SwitchToSlot(ss1)
+
+
+
+            Me.WriteLog(ss1.PrintInfo())
+        End Using
+    End Sub
+
+    Private Sub CaricamentiDinamiciToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CaricamentiDinamiciToolStripMenuItem.Click
+
+        Using ss1 = Me.CreateSlot()
+            ss1.DB.AutoCloseConnection = True
+            ss1.LiveTrackingEnabled = True
+            ss1.ChangeTrackingEnabled = True
+
+            Dim oAnag1 = ss1.CreateObject(Of Anagrafica2)()
+
+            'Dim o2 = oAnag1.ToDynamicObject()
+
+            'oAnag1.FillFrom(o2)
+
+            Me.WriteLog(o2)
+            Me.WriteLog(ss1.PrintInfo())
+        End Using
+
+    End Sub
 End Class

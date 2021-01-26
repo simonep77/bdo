@@ -22,7 +22,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// Singleton main instance
         /// </summary>
         internal readonly static ProxyAssemblyCache Instance = new ProxyAssemblyCache();
-        internal static Int64 _ObjeRefIdCounter = Int64.MinValue;
+        internal Int64 ObjeRefIdCounter = Int64.MinValue;
 
         #region INTERNAL CLASSES
 
@@ -83,6 +83,19 @@ namespace Business.Data.Objects.Core.ObjFactory
         }
 
         #endregion
+
+        #endregion
+
+        #region STATIC
+
+        /// <summary>
+        /// Ritorna un nuovo object reeference Id
+        /// </summary>
+        /// <returns></returns>
+        public long NewObjeRefId()
+        {
+            return Interlocked.Increment(ref this.ObjeRefIdCounter);
+        }
 
         #endregion
 
@@ -191,9 +204,9 @@ namespace Business.Data.Objects.Core.ObjFactory
 
                 //Imposta schema su oggetto
                 o.mClassSchema = oTypeEntry.ClassSchema;
-                o.ObjectRefId = Interlocked.Increment(ref _ObjeRefIdCounter);
+                o.ObjectRefId = this.NewObjeRefId();
 
-                if(withData)
+                if (withData)
                     o.mDataSchema = new Schema.Usage.DataSchema(o.mClassSchema.Properties.Count, o.mClassSchema.ObjCount);
 
                 //Ritorna

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BIZ\AnagraficaBiz.cs" />
+    <Compile Include="DAL\Anagrafica2.cs" />
     <Compile Include="DAL\Anagrafica.cs" />
     <Compile Include="DAL\AnagraficaLista.cs" />
     <Compile Include="DAL\Ordine.cs" />

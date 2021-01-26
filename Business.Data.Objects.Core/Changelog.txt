@@ -18,3 +18,8 @@ Rinominato attributo "BaseAutomaticAttribute" in "AutomaticField". Può essere u
 
 [29/12/2020] - 5.0.8 - Simone Pelaia
 Risolto bug che non consente il caricamento di biz objects su assembly multipli nella stessa applicazione (errata chiave di cache dell'assembly)
+
+[26/01/2020] - 5.0.9 - Simone Pelaia
+Introdotta funzione slot per tradurre i nomi proprieta' -> nomi colonne
+Resa pubblica proprieta' TraceOnlyErrors su database
+La configurazione di runtime dei nuovi slot viene clonata dalla statica

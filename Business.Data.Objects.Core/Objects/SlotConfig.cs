@@ -110,5 +110,30 @@ namespace Business.Data.Objects.Core
         public bool SimulateEnabled { get; set; } = false;
 
         #endregion
+
+        /// <summary>
+        /// Crea una versione clonata della configurazione
+        /// </summary>
+        /// <returns></returns>
+        public SlotConfig Clone()
+        {
+            var sc = new SlotConfig();
+
+            sc.LogBaseDirectory = this.LogBaseDirectory;
+            sc.LogDatabaseActivity = this.LogDatabaseActivity;
+            sc.LogDatabaseOnlyErrors = this.LogDatabaseOnlyErrors;
+            sc.CacheGlobalSize = this.CacheGlobalSize;
+            sc.ObjectValidationUseMessageList = this.ObjectValidationUseMessageList;
+            sc.XmlDefaultDateFormat = this.XmlDefaultDateFormat;
+            sc.XmlDefaultDecimalFormat = this.XmlDefaultDecimalFormat;
+            sc.LiveTrackingEnabled = this.LiveTrackingEnabled;
+            sc.ChangeTrackingEnabled = this.ChangeTrackingEnabled;
+            sc.LoadFullObjects = this.LoadFullObjects;
+            sc.EventManagerEnabled = this.EventManagerEnabled;
+            sc.CachingEnabled = this.CachingEnabled;
+            sc.SimulateEnabled = this.SimulateEnabled;
+
+            return sc;
+        }
     }
 }
