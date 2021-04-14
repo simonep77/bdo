@@ -222,4 +222,7 @@
   <data name="Prop_LogicalDeleteWrongType" xml:space="preserve">
     <value>{0}.{1} - La cancellazione logica necessita di una proprieta' di tipo intero (di qualunque dimensione byte, int16, int32, int64), booleano o datetime</value>
   </data>
+  <data name="Prop_MustBeReadOnlyForAttribute" xml:space="preserve">
+    <value>{0}.{1} - L'attributo {2} necessita che la proprieta' sia di sola lettura </value>
+  </data>
 </root>

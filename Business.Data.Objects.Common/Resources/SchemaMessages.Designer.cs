@@ -205,6 +205,15 @@ namespace Business.Data.Objects.Common.Resources {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a {0}.{1} - L&apos;attributo {2} necessita che la proprieta&apos; sia di sola lettura .
+        /// </summary>
+        public static string Prop_MustBeReadOnlyForAttribute {
+            get {
+                return ResourceManager.GetString("Prop_MustBeReadOnlyForAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a {0}.{1} - E&apos; consentito il solo array di tipo byte..
         /// </summary>
         public static string Prop_NoArrayBytes {

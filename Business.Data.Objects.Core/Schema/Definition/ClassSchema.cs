@@ -96,10 +96,17 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     throw new SchemaReaderException(this.PrimaryKey.Properties[i], SchemaMessages.Prop_PrimaryKey_SimpleType);
             }
 
+            //Attributo Username Readonly
+            if (this.Username != null && !this.Username.IsReadonly)
+                throw new SchemaReaderException(this.Username, SchemaMessages.Prop_MustBeReadOnlyForAttribute, nameof(Attributes.Username));
+
             //Cancellazione logica solo su campo int o datetime
             //Puo' essere interessante impostarlo come readonly????
             foreach (var ldProp in this.LogicalDeletes)
             {
+                if (!ldProp.IsReadonly)
+                    throw new SchemaReaderException(ldProp, SchemaMessages.Prop_MustBeReadOnlyForAttribute, nameof(Attributes.LogicalDelete));
+
                 if (!ldProp.Type.IsValueType)
                     throw new SchemaReaderException(ldProp, SchemaMessages.Prop_PrimaryKey_SimpleType);
 
@@ -128,7 +135,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     default:
                         throw new SchemaReaderException(ldProp, SchemaMessages.Prop_LogicalDeleteWrongType);
                 }
-
             }
             
         }
