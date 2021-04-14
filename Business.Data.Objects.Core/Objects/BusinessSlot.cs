@@ -2805,6 +2805,14 @@ namespace Business.Data.Objects.Core
                     }
                 }
 
+                if (this.OnUserInfoRequired != null)
+                {
+                    foreach (var item in this.OnUserInfoRequired.GetInvocationList())
+                    {
+                        this.OnUserInfoRequired -= (UserInfoRequestHandler)item;
+                    }
+                }
+
 
                 _SharedLog.Dispose();
             }

@@ -546,6 +546,26 @@ namespace Business.Data.Objects.Core
         }
 
 
+        /// <summary>
+        /// Ritorna una lista di business objects
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <returns></returns>
+        public List<TB> ToBizObjectList<TB>()
+            where TB : BusinessObject<T>
+        {
+            var lst = new List<TB>(this.Count);
+
+            foreach (var item in this)
+            {
+                lst.Add(item.ToBizObject<TB>());
+            }
+
+            return lst;
+        }
+
+
+
         #endregion
 
         #region PROTETTI

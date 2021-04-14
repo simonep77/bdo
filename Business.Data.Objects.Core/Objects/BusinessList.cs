@@ -37,7 +37,7 @@ namespace Business.Data.Objects.Core
             {
                 //Costruttore del BusinessObject
                 if (this.mBizList[index] == null)
-                    this.mBizList[index] = (TB)ProxyAssemblyCache.Instance.CreateBizObj(this.mBizCreator, this.mDataList[index]);
+                    this.mBizList[index] = this.mDataList[index].ToBizObject<TB>();
 
                 return this.mBizList[index];
             }
@@ -57,7 +57,7 @@ namespace Business.Data.Objects.Core
         /// Costruttore base
         /// </summary>
         /// <param name="list"></param>
-        protected BusinessList(TL list)
+        public BusinessList(TL list)
         {
             //Verifica che l'oggetto in input non sia nullo
             if (list == null)

@@ -32,3 +32,6 @@ Introdotto attributo LogicalDelete per eseguire la cancellazione logica dei data
   - modificato metodo Delete per consentire il bypass della cancellazione logica
 Introdotto evento OnDbConnectionRequired sullo slot per richiedere esternamente la connessione DB specifica se non gia' presente nello slot
   - se e' stata preventivamente aperta una transazione sull'intera lista anche il nuovo db caricato avviera' la transazione
+
+[14/04/2020] - 5.0.11 - Simone Pelaia
+Nuovo metodo ToBizObjectList sulla datalist
