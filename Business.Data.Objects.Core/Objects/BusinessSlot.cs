@@ -100,6 +100,28 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public event DbConnectionRequestHandler OnDbConnectionRequired;
 
+        /// <summary>
+        /// Delegato per ritornare il dato dell'utente da utilizzare con l'attributo "UserInfo"
+        /// </summary>
+        /// <returns></returns>
+        public delegate object UserInfoRequestHandler(BusinessSlot slot);
+
+
+        /// <summary>
+        /// Evento da agganciare per specificare il dato dell'utente da salvare nel campo identificato dall'attributo "Username"
+        /// </summary>
+        public event UserInfoRequestHandler OnUserInfoRequired;
+
+        /// <summary>
+        /// Ritorna le informazioni sull'utente (id o username o altro) dall'evento relativo o, se nullo, dal campo username dello slot
+        /// </summary>
+        /// <returns></returns>
+        internal object GetUserInfo()
+        {
+            return this.OnUserInfoRequired?.Invoke(this) ?? this.UserName;
+        }
+
+
         #endregion
 
 

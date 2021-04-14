@@ -2622,6 +2622,8 @@ Public Class frmTests
             ss1.ChangeTrackingEnabled = True
             ss1.UserName = "Simone"
 
+            AddHandler ss1.OnUserInfoRequired, AddressOf getUserInfoFromSlot
+
             ss1.DbBeginTransAll()
             Try
                 'cancellazione logica
@@ -2654,4 +2656,8 @@ Public Class frmTests
         End Using
 
     End Sub
+
+    Private Function getUserInfoFromSlot(slot As BusinessSlot) As Object
+        Return "pippo"
+    End Function
 End Class

@@ -169,9 +169,9 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
             }
             //Username automatico in salvataggio
-            else if (attr is Username) 
+            else if (attr is UserInfo) 
             {
-                this.Schema.Username = this;
+                this.Schema.UserInfo = this;
             }
             //Cancellazione logica
             else if (attr is LogicalDelete) 

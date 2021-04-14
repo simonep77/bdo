@@ -615,9 +615,8 @@ namespace Business.Data.Objects.Core.Base
 
             try
             {
-                //Se impostato uno username automatico e il campo e' in sola lettura allora lo imposta
-                if (this.mClassSchema.Username != null && this.mClassSchema.Username.IsReadonly)
-                    this.mClassSchema.Username.SetValue(this, this.Slot.UserName);
+                //Se prevista gestione UserInfo la avvia
+                this.mClassSchema.UserInfo?.SetValue(this, this.Slot.GetUserInfo());
 
                 //Inserisce campi
                 for (int iPropIndex = 0; iPropIndex < this.mClassSchema.Properties.Count; iPropIndex++)
@@ -755,13 +754,9 @@ namespace Business.Data.Objects.Core.Base
                     }
 
                     //Se username automatico allora prova ad impostarlo
-                    if (object.ReferenceEquals(oProp, this.mClassSchema.Username))
-                    {
-                        //solo se il campo e' in sola lettura, e' presente lo username nello slot ed e' realmente diverso da quello attulmente registrato
-                        if (this.mClassSchema.Username.IsReadonly && !string.IsNullOrWhiteSpace(this.Slot.UserName) && !this.Slot.UserName.Equals(oProp.GetValue(this)))
-                            oProp.SetValue(this, this.Slot.UserName);
-
-                    }
+                    //Gestione automatica delle info utente
+                    if (object.ReferenceEquals(oProp, this.mClassSchema.UserInfo))
+                        this.mClassSchema.UserInfo?.SetValue(this, this.Slot.GetUserInfo());
 
                     //PROPRIETA' 
                     if (!this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed))
@@ -786,7 +781,7 @@ namespace Business.Data.Objects.Core.Base
                 }
 
                 //NON C'È NULLA DA MODIFICARE ESCE (nessun campo modificato oppure )
-                if (lstIncludedProps.Count == 0 || (lstIncludedProps.Count == 1 && object.ReferenceEquals(lstIncludedProps[0], this.mClassSchema.Username)))
+                if (lstIncludedProps.Count == 0 || (lstIncludedProps.Count == 1 && object.ReferenceEquals(lstIncludedProps[0], this.mClassSchema.UserInfo)))
                     return ESaveResult.UnChanged;
 
                 //Rimuove ,

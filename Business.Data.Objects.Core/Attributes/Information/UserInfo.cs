@@ -5,10 +5,12 @@ using System.Text;
 namespace Business.Data.Objects.Core.Attributes
 {
     /// <summary>
-    /// Indica che una proprieta' e' un campo che viene aggiornato sempre con lo username impostato nello slot
+    /// Indica che la proprieta' deve essere gestita in automatico attribuendo il valore prelevato da
+    ///  - evento slot.OnUserInfoRequired
+    ///  - in alternativa da slot.Username
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class Username : BaseAttribute 
+    public class UserInfo : BaseAttribute 
     {
     }
 }

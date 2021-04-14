@@ -28,7 +28,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public bool AutoIncPk;
 
         public PropertyList LogicalDeletes = new PropertyList(1);
-        public Property Username;
+        public Property UserInfo;
 
         #endregion
 
@@ -97,8 +97,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
             }
 
             //Attributo Username Readonly
-            if (this.Username != null && !this.Username.IsReadonly)
-                throw new SchemaReaderException(this.Username, SchemaMessages.Prop_MustBeReadOnlyForAttribute, nameof(Attributes.Username));
+            if (this.UserInfo != null && !this.UserInfo.IsReadonly)
+                throw new SchemaReaderException(this.UserInfo, SchemaMessages.Prop_MustBeReadOnlyForAttribute, nameof(Attributes.UserInfo));
 
             //Cancellazione logica solo su campo int o datetime
             //Puo' essere interessante impostarlo come readonly????

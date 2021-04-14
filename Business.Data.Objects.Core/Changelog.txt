@@ -25,6 +25,10 @@ Resa pubblica proprieta' TraceOnlyErrors su database
 La configurazione di runtime dei nuovi slot viene clonata dalla statica
 
 [14/04/2020] - 5.0.10 - Simone Pelaia
-Introdotto attributo Username per impostarlo automaticamente da slot su dataobject
+Introdotto attributo UserInfo per impostare automaticamente l'identificazione dell'utente automaticamente su dataobject da:
+  - dato fornito attraverso la gestione dell'evento slot.OnUserInfoRequired
+  - oppure da slot.Username
 Introdotto attributo LogicalDelete per eseguire la cancellazione logica dei dataobject
+  - modificato metodo Delete per consentire il bypass della cancellazione logica
 Introdotto evento OnDbConnectionRequired sullo slot per richiedere esternamente la connessione DB specifica se non gia' presente nello slot
+  - se e' stata preventivamente aperta una transazione sull'intera lista anche il nuovo db caricato avviera' la transazione
