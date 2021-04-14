@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Business.Data.Objects.Database.Resources;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace Business.Data.Objects.Database
@@ -9,6 +11,10 @@ namespace Business.Data.Objects.Database
     /// </summary>
     public class DatabaseList: Dictionary<string, IDataBase>
     {
+
+        private bool IsInTransaction;
+        private IsolationLevel TransactionIsolation = IsolationLevel.Unspecified;
+
         public DatabaseList()
             :base(2)
         { }
@@ -18,6 +24,35 @@ namespace Business.Data.Objects.Database
         { }
 
         #region PUBLIC METHODS
+
+
+        private void transactionSetStart(IsolationLevel level)
+        {
+            this.IsInTransaction = true;
+            this.TransactionIsolation = level;
+        }
+
+        private void transactionSetStop()
+        {
+            this.IsInTransaction = false;
+            this.TransactionIsolation = IsolationLevel.Unspecified;
+        }
+
+
+        public new void Add(string key, IDataBase db)
+        {
+            base.Add(key, db);
+
+            if (this.IsInTransaction)
+            {
+                if (this.TransactionIsolation == IsolationLevel.Unspecified)
+                    db.BeginTransaction();
+                else
+                    db.BeginTransaction(this.TransactionIsolation);
+            }
+
+        }
+
 
         /// <summary>
         /// Apre tutte le connessioni (se non aperte)
@@ -43,15 +78,27 @@ namespace Business.Data.Objects.Database
 
 
         /// <summary>
-        /// Apre tutte le transazioni con un dato isolation level
+        /// Apre tutte le transazioni con un dato isolation level.
+        /// Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
         /// </summary>
         /// <param name="level"></param>
         public void BeginTransAll(System.Data.IsolationLevel level)
         {
+            if (this.IsInTransaction)
+                throw new DataBaseException(DatabaseMessages.Transaction_DbList_OnlyOne);
+
+            this.TransactionIsolation = level;
+
             foreach (var db in this.Values)
             {
-                db.BeginTransaction(level);
+                if (level == IsolationLevel.Unspecified)
+                    db.BeginTransaction();
+                else
+                    db.BeginTransaction(level);
+
             }
+
+            this.transactionSetStart(level);
         }
 
 
@@ -60,10 +107,7 @@ namespace Business.Data.Objects.Database
         /// </summary>
         public void BeginTransAll()
         {
-            foreach (var db in this.Values)
-            {
-                db.BeginTransaction();
-            }
+            this.BeginTransAll(IsolationLevel.Unspecified);
         }
 
 
@@ -79,6 +123,8 @@ namespace Business.Data.Objects.Database
                     db.CommitTransaction();
                 }
             }
+
+            this.transactionSetStop();
         }
 
 
@@ -102,6 +148,9 @@ namespace Business.Data.Objects.Database
                     }
                 }
             }
+
+            this.transactionSetStop();
+
         }
 
         /// <summary>

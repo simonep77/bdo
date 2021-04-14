@@ -63,6 +63,11 @@ namespace Business.Data.Objects.Database
         /// </summary>
         bool IsInTransaction { get; }
 
+        /// <summary>
+        /// Indica il livello di isolamento delle transazioni per il db
+        /// </summary>
+        IsolationLevel TransactionDefaultIsolation { get; set; }
+
 
         /// <summary>
         /// Abilita il trace dei soli errori

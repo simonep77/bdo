@@ -187,6 +187,15 @@ namespace Business.Data.Objects.Common.Resources {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a {0}.{1} - La cancellazione logica necessita di una proprieta&apos; di tipo intero (di qualunque dimensione byte, int16, int32, int64), booleano o datetime.
+        /// </summary>
+        public static string Prop_LogicalDeleteWrongType {
+            get {
+                return ResourceManager.GetString("Prop_LogicalDeleteWrongType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a {0}.{1} - La proprieta&apos; deve essere una lista.
         /// </summary>
         public static string Prop_Must_Be_List {

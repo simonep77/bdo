@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Assembly_Load_Error" xml:space="preserve">
     <value>Errore caricamento classe Factory da '{0}': {1}</value>
@@ -152,6 +152,9 @@
   </data>
   <data name="TraceLog_Return_OK" xml:space="preserve">
     <value>Esito: OK</value>
+  </data>
+  <data name="Transaction_DbList_OnlyOne" xml:space="preserve">
+    <value>Transazione gia' apera: e' possibile aprire un'unica transazione su una lista di DB</value>
   </data>
   <data name="Transaction_Not_Open" xml:space="preserve">
     <value>Transazione non aperta</value>

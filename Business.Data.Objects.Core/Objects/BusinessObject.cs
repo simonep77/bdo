@@ -56,21 +56,21 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="propertyName"></param>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="uniqueKey"></param>
         /// <param name="fn"></param>
         /// <returns></returns>
-        protected T GetLazy<T>(string propertyName, LazyLoadFunc fn)
+        protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc fn)
         {
             object obj;
 
-            if (!mDic.TryGetValue(propertyName, out obj))
+            if (!mDic.TryGetValue(uniqueKey, out obj))
             {
                 obj = fn();
-                mDic.Add(propertyName, obj);
+                mDic.Add(uniqueKey, obj);
             }
 
-            return (T)obj;
+            return (T1)obj;
         }
 
 

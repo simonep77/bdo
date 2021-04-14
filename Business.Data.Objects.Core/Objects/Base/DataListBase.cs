@@ -368,6 +368,24 @@ namespace Business.Data.Objects.Core.Base
                 sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_List), this.mObjSchema.TableDef.SQL_Select_List.Length + 300);
 
             sql.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
+
+            //Se presente gestione della cancellazione logica allora la include nella query
+            if (this.mObjSchema.LogicalDeletes.Count > 0)
+            {
+                foreach (var ldProp in this.mObjSchema.LogicalDeletes)
+                {
+                    IFilter ldfilter;
+
+                    if (ldProp.Type.Equals(typeof(DateTime)))
+                        //Se il filtro e' nullo 
+                        ldfilter = Filter.IsNull(ldProp.Column.Name);
+                    else
+                        ldfilter = Filter.Eq(ldProp.Column.Name, 0);
+                    //Reimposta il filtro aggiungendo o creandolo
+                    filter = filter?.And(ldfilter) ?? ldfilter;
+                }
+            }
+
             //Se fornito filtro
             if (filter != null)
             {
@@ -376,6 +394,8 @@ namespace Business.Data.Objects.Core.Base
                 filter.AppendFilterSql(db, sql, 0);
 
             }
+
+
 
             db.SQL = sql.ToString();
 

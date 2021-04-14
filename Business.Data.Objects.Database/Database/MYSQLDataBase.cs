@@ -29,13 +29,13 @@ namespace Business.Data.Objects.Database
         #region "PROPERTY"
 
 
-        public override string LastAutoIdFunction
-        {
-            get
-            {
-                return @"LAST_INSERT_ID()";
-            }
-        }
+        public override string LastAutoIdFunction { get; } = @"LAST_INSERT_ID()";
+
+        /// <summary>
+        /// Isolamento di default della transazione
+        /// </summary>
+        public override IsolationLevel TransactionDefaultIsolation { get; set; } = IsolationLevel.RepeatableRead;
+
 
         #endregion
 
@@ -202,14 +202,6 @@ namespace Business.Data.Objects.Database
             {
                 this.EndThreadSafeWork();
             }
-        }
-
-        /// <summary>
-        /// Di default su MySQL e' consigliabile repeatable read
-        /// </summary>
-        public override void BeginTransaction()
-        {
-            base.BeginTransaction(IsolationLevel.RepeatableRead);
         }
 
         #endregion

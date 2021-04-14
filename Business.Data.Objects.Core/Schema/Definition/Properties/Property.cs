@@ -115,10 +115,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //Colonne
             if (attr is Column)
             {
-
                 //Aggiunge un campo verificando l'ordinamento
                 this.Column = (Column)attr;
-
             }
             //ACCETTA NULL
             else if (attr is AcceptNull)

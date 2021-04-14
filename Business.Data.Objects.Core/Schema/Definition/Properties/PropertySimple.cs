@@ -168,6 +168,16 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
 
             }
+            //Username automatico in salvataggio
+            else if (attr is Username) 
+            {
+                this.Schema.Username = this;
+            }
+            //Cancellazione logica
+            else if (attr is LogicalDelete) 
+            {
+                this.Schema.LogicalDeletes.Add(this);
+            }
             //Proprieta' criptata su DB
             else if (attr is Encrypted)
             {

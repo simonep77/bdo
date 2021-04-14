@@ -169,6 +169,15 @@ namespace Business.Data.Objects.Database.Resources {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a Transazione gia&apos; apera: e&apos; possibile aprire un&apos;unica transazione su una lista di DB.
+        /// </summary>
+        internal static string Transaction_DbList_OnlyOne {
+            get {
+                return ResourceManager.GetString("Transaction_DbList_OnlyOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a Transazione non aperta.
         /// </summary>
         internal static string Transaction_Not_Open {

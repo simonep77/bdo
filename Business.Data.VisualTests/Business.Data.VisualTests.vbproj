@@ -215,6 +215,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classi\Entity\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Business.Data.Objects.Common\Business.Data.Objects.Common.csproj">
       <Project>{eb27f2d8-ee5c-4497-88a7-f829aa244b24}</Project>
       <Name>Business.Data.Objects.Common</Name>
@@ -231,12 +237,6 @@
       <Project>{3a53ccea-25da-40d1-bd12-6e5f1e13e7ac}</Project>
       <Name>Business.Data.Objects.TestClass</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Classi\Entity\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -266,16 +266,22 @@ namespace Business.Data.Objects.Database
         public UInt32 HashCode
         { get { return this._HashCode; } }
 
-		
-		#endregion
-		
-		#region "PUBLIC"
-		
+
+        /// <summary>
+        /// Isolamento di default della transazione
+        /// </summary>
+        public virtual IsolationLevel TransactionDefaultIsolation { get; set; } = IsolationLevel.ReadCommitted;
+
+
+        #endregion
+
+        #region "PUBLIC"
+
         /// <summary>
         /// Costruttore pubblico
         /// </summary>
         /// <param name="connString"></param>
-		public CommonDataBase(string connString)
+        public CommonDataBase(string connString)
 		{
             this.ProviderFactory = this.GetDbFactory();
             this._connStr = connString;
@@ -345,7 +351,7 @@ namespace Business.Data.Objects.Database
 		/// </summary>
 		public virtual void BeginTransaction()
 		{
-            this.BeginTransaction(IsolationLevel.ReadCommitted);
+            this.BeginTransaction(this.TransactionDefaultIsolation);
 		}
 
         /// <summary>

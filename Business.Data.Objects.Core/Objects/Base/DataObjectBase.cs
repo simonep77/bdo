@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using Business.Data.Objects.Core.Attributes;
 
 namespace Business.Data.Objects.Core.Base
 {
@@ -614,6 +615,10 @@ namespace Business.Data.Objects.Core.Base
 
             try
             {
+                //Se impostato uno username automatico e il campo e' in sola lettura allora lo imposta
+                if (this.mClassSchema.Username != null && this.mClassSchema.Username.IsReadonly)
+                    this.mClassSchema.Username.SetValue(this, this.Slot.UserName);
+
                 //Inserisce campi
                 for (int iPropIndex = 0; iPropIndex < this.mClassSchema.Properties.Count; iPropIndex++)
                 {
@@ -721,8 +726,7 @@ namespace Business.Data.Objects.Core.Base
             //Appoggio
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
             List<DbParameter> oDbParams = new List<DbParameter>(this.mClassSchema.Properties.Count);
-
-            int iNumChangedProps = 0;
+            List<Property> lstIncludedProps = new List<Property>();
             Property oProp;
 
             StringBuilder sbSQL = new StringBuilder(@"UPDATE ", 500);
@@ -750,9 +754,21 @@ namespace Business.Data.Objects.Core.Base
                         continue;
                     }
 
+                    //Se username automatico allora prova ad impostarlo
+                    if (object.ReferenceEquals(oProp, this.mClassSchema.Username))
+                    {
+                        //solo se il campo e' in sola lettura, e' presente lo username nello slot ed e' realmente diverso da quello attulmente registrato
+                        if (this.mClassSchema.Username.IsReadonly && !string.IsNullOrWhiteSpace(this.Slot.UserName) && !this.Slot.UserName.Equals(oProp.GetValue(this)))
+                            oProp.SetValue(this, this.Slot.UserName);
+
+                    }
+
                     //PROPRIETA' 
                     if (!this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed))
                         continue;
+
+                    //Incrementa lista di proprieta' incluse nell'update
+                    lstIncludedProps.Add(oProp);
 
                     var oValue = oProp.GetValueForDb(this);
 
@@ -765,14 +781,12 @@ namespace Business.Data.Objects.Core.Base
                     //Imposta valore
                     oDbParams.Add(db.CreateParameter(oProp.Column.ParamName, oValue, oProp.Column.DbType));
 
-                    //Aggiorna
-                    iNumChangedProps++;
                     //TODO: Attenzione impostando qui il flag, in caso di errore rimane l'oggetto sporco!!!!
                     this.mDataSchema.SetFlags(oProp.PropertyIndex, DataFlags.Changed, false);
                 }
 
-                //NON C'È NULLA DA MODIFICARE ESCE
-                if (iNumChangedProps == 0)
+                //NON C'È NULLA DA MODIFICARE ESCE (nessun campo modificato oppure )
+                if (lstIncludedProps.Count == 0 || (lstIncludedProps.Count == 1 && object.ReferenceEquals(lstIncludedProps[0], this.mClassSchema.Username)))
                     return ESaveResult.UnChanged;
 
                 //Rimuove ,

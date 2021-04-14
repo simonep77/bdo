@@ -27,6 +27,9 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public bool MustReload;
         public bool AutoIncPk;
 
+        public PropertyList LogicalDeletes = new PropertyList(1);
+        public Property Username;
+
         #endregion
 
         #region PROPERTIES
@@ -93,6 +96,41 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     throw new SchemaReaderException(this.PrimaryKey.Properties[i], SchemaMessages.Prop_PrimaryKey_SimpleType);
             }
 
+            //Cancellazione logica solo su campo int o datetime
+            //Puo' essere interessante impostarlo come readonly????
+            foreach (var ldProp in this.LogicalDeletes)
+            {
+                if (!ldProp.Type.IsValueType)
+                    throw new SchemaReaderException(ldProp, SchemaMessages.Prop_PrimaryKey_SimpleType);
+
+                switch (Type.GetTypeCode(ldProp.Type))
+                {
+                    case TypeCode.Boolean:
+                        break;
+                    case TypeCode.Byte:
+                        break;
+                    case TypeCode.DateTime:
+                        break;
+                    case TypeCode.Int16:
+                        break;
+                    case TypeCode.Int32:
+                        break;
+                    case TypeCode.Int64:
+                        break;
+                    case TypeCode.SByte:
+                        break;
+                    case TypeCode.UInt16:
+                        break;
+                    case TypeCode.UInt32:
+                        break;
+                    case TypeCode.UInt64:
+                        break;
+                    default:
+                        throw new SchemaReaderException(ldProp, SchemaMessages.Prop_LogicalDeleteWrongType);
+                }
+
+            }
+            
         }
 
         /// <summary>

@@ -23,3 +23,8 @@ Risolto bug che non consente il caricamento di biz objects su assembly multipli 
 Introdotta funzione slot per tradurre i nomi proprieta' -> nomi colonne
 Resa pubblica proprieta' TraceOnlyErrors su database
 La configurazione di runtime dei nuovi slot viene clonata dalla statica
+
+[14/04/2020] - 5.0.10 - Simone Pelaia
+Introdotto attributo Username per impostarlo automaticamente da slot su dataobject
+Introdotto attributo LogicalDelete per eseguire la cancellazione logica dei dataobject
+Introdotto evento OnDbConnectionRequired sullo slot per richiedere esternamente la connessione DB specifica se non gia' presente nello slot

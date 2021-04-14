@@ -88,6 +88,17 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public event LogDebugHandler OnLogDebugSent;
 
+        /// <summary>
+        /// Funzione che ritorna una connessione db a partire da un nome
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        public delegate IDataBase DbConnectionRequestHandler(string dbName);
+
+        /// <summary>
+        /// Evento scatenato dalla richiesta di un db non presente all'interno dello slot
+        /// </summary>
+        public event DbConnectionRequestHandler OnDbConnectionRequired;
 
         #endregion
 
@@ -747,15 +758,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         internal IDataBase DbGet(ClassSchema schema)
         {
-            //schema.DbContext
-            try
-            {
-                return (schema.IsDefaultDb ? this.mDB : this.mDbList[schema.DbConnDef.Name]);
-            }
-            catch (Exception)
-            {
-                throw new ObjectException(SessionMessages.DB_Not_Exist, schema.DbConnDef.Name);
-            }
+            return schema.IsDefaultDb ? this.mDB : this.DbGet(schema.DbConnDef.Name);
         }
 
         /// <summary>
@@ -769,7 +772,15 @@ namespace Business.Data.Objects.Core
             IDataBase db = null;
 
             if (!this.mDbList.TryGetValue(name, out db))
-                throw new ObjectException(SessionMessages.DB_Not_Exist, name);
+            {
+                //Se impostata esegue la richiesta della connessione specificata
+                db = this.OnDbConnectionRequired?.Invoke(name);
+
+                if (db == null)
+                    throw new ObjectException(SessionMessages.DB_Not_Exist, name);
+
+                this.DbAdd(name, db);
+            }
 
             return db;
         }
@@ -851,11 +862,12 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Apre transazione su tutti i database collegati
+        /// Apre transazione su tutti i database collegati.
+        /// Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
         /// </summary>
-        public void DbBeginTransAll()
+        public void DbBeginTransAll(IsolationLevel level = IsolationLevel.Unspecified)
         {
-            this.mDbList.BeginTransAll();
+            this.mDbList.BeginTransAll(level);
         }
 
         /// <summary>
@@ -1556,7 +1568,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
-        public void DeleteObject<T>(T obj) where T : DataObjectBase
+        public void DeleteObject<T>(T obj, bool bypassLogical = false) where T : DataObjectBase
         {
             //Se null errore
             if (obj == null)
@@ -1575,7 +1587,31 @@ namespace Business.Data.Objects.Core
                 return;
 
             //Infine esegue cancellazione db
-            obj.DoDelete();
+            //Se cancellazione logica allora imposta campo
+            if (obj.mClassSchema.LogicalDeletes.Count == 0 || bypassLogical)
+            {
+                //Elimina fisicamente
+                obj.DoDelete();
+
+            }
+            else
+            {
+                //Imposta valore a seconda del tipo
+                foreach (var ldProp in obj.mClassSchema.LogicalDeletes)
+                {
+                    if (ldProp.DefaultValue is DateTime)
+                        ldProp.SetValue(obj, DateTime.Now);
+                    else
+                        ldProp.SetValue(obj, 1);
+                }
+
+                //Esegue aggiornamento
+                this.SaveObject(obj);
+
+                //Forziamo indicazione di oggetto eliminato??
+                //Imposta stato eliminato
+                obj.mDataSchema.ObjectState = EObjectState.Deleted;
+            }
 
             //Se tracking lo salva
             if (this.LiveTrackingEnabled)
@@ -1625,7 +1661,7 @@ namespace Business.Data.Objects.Core
         /// Cancella tutti gli elementi di una lista. Al termine la lista risulta vuota
         /// </summary>
         /// <param name="list"></param>
-        public void DeleteAll<TL>(TL list)
+        public void DeleteAll<TL>(TL list, bool bypassLogical = false)
             where TL : DataListBase
         {
             //Se null errore
@@ -1640,7 +1676,7 @@ namespace Business.Data.Objects.Core
             //Salva
             foreach (DataObjectBase item in (IEnumerable)list)
             {
-                this.DeleteObject(item);
+                this.DeleteObject(item, bypassLogical);
             }
 
             //Svuota lista
@@ -2730,14 +2766,23 @@ namespace Business.Data.Objects.Core
                     db.Dispose();
                 }
 
-                //Rimuove eventuali eventi rimasti
+                //Rimuove eventuali eventi rimasti attaccati
                 if (this.OnLogDebugSent != null)
                 {
-                    Delegate[] dList = this.OnLogDebugSent.GetInvocationList();
-
-                    for (int i = 0; i < dList.Length; i++)
-                        this.OnLogDebugSent -= (LogDebugHandler)dList[i];
+                    foreach (var item in this.OnLogDebugSent.GetInvocationList())
+                    {
+                        this.OnLogDebugSent -= (LogDebugHandler)item;
+                    }
                 }
+
+                if (this.OnDbConnectionRequired != null)
+                {
+                    foreach (var item in this.OnDbConnectionRequired.GetInvocationList())
+                    {
+                        this.OnDbConnectionRequired -= (DbConnectionRequestHandler)item;
+                    }
+                }
+
 
                 _SharedLog.Dispose();
             }

@@ -2582,13 +2582,74 @@ Public Class frmTests
             ss1.LiveTrackingEnabled = True
             ss1.ChangeTrackingEnabled = True
 
-            Dim oAnag1 = ss1.CreateObject(Of Anagrafica2)()
+            ss1.DbBeginTransAll()
+            Try
+                Dim oAnag1 = ss1.CreateObject(Of Anagrafica2)()
+
+                AddHandler ss1.OnDbConnectionRequired, AddressOf caricaDbOnDemand
+
+
+
+                Dim db = ss1.DbGet("Pippo")
+                Dim db1 = ss1.DbGet("Pippo")
+            Finally
+                ss1.DbRollBackAll()
+            End Try
+
+
 
             'Dim o2 = oAnag1.ToDynamicObject()
 
             'oAnag1.FillFrom(o2)
 
-            Me.WriteLog(o2)
+            'Me.WriteLog(o2)
+            Me.WriteLog(ss1.PrintInfo())
+        End Using
+
+    End Sub
+
+    Private Function caricaDbOnDemand(dbName As String) As IDataBase
+
+        Return DataBaseFactory.CreaDataBase("MySqldatabase", "Server=xxxxx.email.it;port=3307;UserId=root;Password=root;Database=bdo_test_db")
+
+    End Function
+
+    Private Sub UsernameECancellazioneLogicaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UsernameECancellazioneLogicaToolStripMenuItem.Click
+
+        Using ss1 = Me.CreateSlot()
+            ss1.DB.AutoCloseConnection = True
+            ss1.LiveTrackingEnabled = True
+            ss1.ChangeTrackingEnabled = True
+            ss1.UserName = "Simone"
+
+            ss1.DbBeginTransAll()
+            Try
+                'cancellazione logica
+                Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).OrderBy("Id", OrderVersus.Asc).SearchAllObjects()
+
+                ss1.DeleteAll(lst)
+
+                'Cancellazione fisica
+                lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).OrderBy("Id", OrderVersus.Asc).SearchAllObjects()
+
+                For Each item In lst
+                    Me.WriteLog("Ordine " & item.Id.ToString())
+                Next
+
+                ss1.DeleteAll(lst, True)
+
+
+            Finally
+                ss1.DbCommitAll()
+            End Try
+
+
+
+            'Dim o2 = oAnag1.ToDynamicObject()
+
+            'oAnag1.FillFrom(o2)
+
+            'Me.WriteLog(o2)
             Me.WriteLog(ss1.PrintInfo())
         End Using
 

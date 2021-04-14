@@ -9,3 +9,7 @@ Aggiornamento interfaccia db
 
 [01/12/2020] - 5.0.5 - Simone Pelaia
 Introdotto type mapper db modificabile a runtime
+
+[14/04/2021] - 5.0.6 - Simone Pelaia
+Semplificata tipologia di default di isolationlevel
+Aggiunta possibilità di specificare l'isolationlevel su begintrans di lista db

@@ -114,11 +114,12 @@ Partial Class frmTests
         Me.ListeCachedToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListePrefetchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BenchmarkLoadFullObjectsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClassiNoAbstractToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckModificatoriStringheNULLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CaricamentiDinamiciToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.dgv1 = New System.Windows.Forms.DataGridView()
-        Me.ClassiNoAbstractToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CaricamentiDinamiciToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UsernameECancellazioneLogicaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsTest.SuspendLayout()
         CType(Me.dgv1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -665,7 +666,7 @@ Partial Class frmTests
         '
         'ToolStripSplitButton4
         '
-        Me.ToolStripSplitButton4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewPaginazioneMYSQLToolStripMenuItem, Me.ListeCachedToolStripMenuItem1, Me.ListePrefetchToolStripMenuItem, Me.BenchmarkLoadFullObjectsToolStripMenuItem, Me.ClassiNoAbstractToolStripMenuItem, Me.CheckModificatoriStringheNULLToolStripMenuItem, Me.CaricamentiDinamiciToolStripMenuItem})
+        Me.ToolStripSplitButton4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewPaginazioneMYSQLToolStripMenuItem, Me.ListeCachedToolStripMenuItem1, Me.ListePrefetchToolStripMenuItem, Me.BenchmarkLoadFullObjectsToolStripMenuItem, Me.ClassiNoAbstractToolStripMenuItem, Me.CheckModificatoriStringheNULLToolStripMenuItem, Me.CaricamentiDinamiciToolStripMenuItem, Me.UsernameECancellazioneLogicaToolStripMenuItem})
         Me.ToolStripSplitButton4.Image = CType(resources.GetObject("ToolStripSplitButton4.Image"), System.Drawing.Image)
         Me.ToolStripSplitButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton4.Name = "ToolStripSplitButton4"
@@ -696,11 +697,23 @@ Partial Class frmTests
         Me.BenchmarkLoadFullObjectsToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.BenchmarkLoadFullObjectsToolStripMenuItem.Text = "Benchmark LoadFullObjects"
         '
+        'ClassiNoAbstractToolStripMenuItem
+        '
+        Me.ClassiNoAbstractToolStripMenuItem.Name = "ClassiNoAbstractToolStripMenuItem"
+        Me.ClassiNoAbstractToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.ClassiNoAbstractToolStripMenuItem.Text = "Classi no abstract"
+        '
         'CheckModificatoriStringheNULLToolStripMenuItem
         '
         Me.CheckModificatoriStringheNULLToolStripMenuItem.Name = "CheckModificatoriStringheNULLToolStripMenuItem"
         Me.CheckModificatoriStringheNULLToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.CheckModificatoriStringheNULLToolStripMenuItem.Text = "Check Modificatori Stringhe (NULL)"
+        '
+        'CaricamentiDinamiciToolStripMenuItem
+        '
+        Me.CaricamentiDinamiciToolStripMenuItem.Name = "CaricamentiDinamiciToolStripMenuItem"
+        Me.CaricamentiDinamiciToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.CaricamentiDinamiciToolStripMenuItem.Text = "Caricamento DB On Demand"
         '
         'ToolStripButton1
         '
@@ -719,17 +732,11 @@ Partial Class frmTests
         Me.dgv1.Size = New System.Drawing.Size(783, 232)
         Me.dgv1.TabIndex = 2
         '
-        'ClassiNoAbstractToolStripMenuItem
+        'UsernameECancellazioneLogicaToolStripMenuItem
         '
-        Me.ClassiNoAbstractToolStripMenuItem.Name = "ClassiNoAbstractToolStripMenuItem"
-        Me.ClassiNoAbstractToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
-        Me.ClassiNoAbstractToolStripMenuItem.Text = "Classi no abstract"
-        '
-        'CaricamentiDinamiciToolStripMenuItem
-        '
-        Me.CaricamentiDinamiciToolStripMenuItem.Name = "CaricamentiDinamiciToolStripMenuItem"
-        Me.CaricamentiDinamiciToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
-        Me.CaricamentiDinamiciToolStripMenuItem.Text = "Caricamenti dinamici"
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Name = "UsernameECancellazioneLogicaToolStripMenuItem"
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Text = "Username e Cancellazione logica"
         '
         'frmTests
         '
@@ -845,4 +852,5 @@ Partial Class frmTests
     Friend WithEvents LoopMT1ToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ClassiNoAbstractToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CaricamentiDinamiciToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents UsernameECancellazioneLogicaToolStripMenuItem As ToolStripMenuItem
 End Class
