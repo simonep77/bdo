@@ -1,0 +1,4475 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Business.Data.Objects.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Business.Data.Objects.Core.Attributes.AutoIncrement">
+            <summary>
+            Indica che una proprieta' e' un campo con generazione automatica di ID
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.AutoInsertTimestamp">
+            <summary>
+            Indica che il valore della proprieta' viene generato in fase di inserimento.
+            E' possibile utilizzarlo su proprieta' semplici
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.AutomaticField">
+            <summary>
+            Indica che una proprieta' e' un campo con gestione automatica
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.AutoUpdateTimestamp">
+            <summary>
+            Indica che il valore della proprieta' (DateTime) viene generato in fase di inserimento ed aggiornato ad ogni update.
+            E' possibile utilizzarlo su proprieta' semplici
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.BaseAttribute">
+            <summary>
+            Attributo base da cui ereditare
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.DefaultValue">
+            <summary>
+            Consente di definire il valore utilizzato come default.
+            Note: 
+            in caso di data il formato e' dd/mm/yyyy ed opzionalmente hh:mm:ss.
+            in caso di numero decimale/double, ecc deve essere utilizzato il punto come separatore decimale. (es. 13.74)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.DefaultValue.Value">
+            <summary>
+            Valore impostato
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.DefaultValue.#ctor(System.String)">
+            <summary>
+            Costruttore
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.DefaultValue.ConvertTo(System.Type)">
+            <summary>
+            Converte il valore da stringa al tipo desiderato
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.AcceptNull">
+            <summary>
+            Indica che il campo accetta valore NULL (gestito come defaultvalue)
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.Encrypted">
+            <summary>
+            Identifica la proprieta' come criptata su db andando a codificare/decodificare il contenuto del campo DB.
+            Il parametro keyProperty del costruttore identifica il nome di proprieta' dello slot che DEVE contenere la chiave
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Encrypted.#ctor(System.String,System.Int32)">
+            <summary>
+            Viene richiesto il nome della Property dello slot che conterra' la chiave e la lunghezza del campo da verificare (per evtare che il dato piu' lungo possa essere troncato)
+            </summary>
+            <param name="slotEncDefinitionKey"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Encrypted.IsEncrypted(System.String)">
+            <summary>
+            Verifica se il testo criptato e' conforme allo standard
+            </summary>
+            <param name="encText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Encrypted.Encrypt(Business.Data.Objects.Core.BusinessSlot,Business.Data.Objects.Core.Schema.Definition.Property,System.String)">
+            <summary>
+            Cripta il testo fornito
+            </summary>
+            <param name="obj"></param>
+            <param name="clearText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Encrypted.Decrypt(Business.Data.Objects.Core.BusinessSlot,Business.Data.Objects.Core.Schema.Definition.Property,System.String)">
+            <summary>
+            Decripta il testo fornito
+            </summary>
+            <param name="obj"></param>
+            <param name="encText"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.ExcludeFromInsert">
+            <summary>
+            Indica se una proprieta' deve essere esclusa da operazione di INSERT (sul db)
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.ExcludeFromUpdate">
+            <summary>
+            Indica se una proprieta' deve essere esclusa da operazione di UPDATE (sul db)
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.ExcludeFromXml">
+            <summary>
+            Indica che il campo non deve essere incluso nell'output XML
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.GlobalCache">
+            <summary>
+            Attributo che indica se l'oggetto deve essere mantenuto nella cache della sessione
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.LoadOnAccess">
+            <summary>
+            Indica che il valore del campo va caricato dal db solo al primo accesso
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.LogicalDelete">
+            <summary>
+            Indica che una proprieta' e' un campo che viene aggiornato in caso di cancellazione dell'oggetto
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.ReadOnly">
+            <summary>
+            Imposta una classe come sola lettura impossibilitando accessi di tipo
+            Insert, Update, Delete
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.UserInfo">
+            <summary>
+            Indica che la proprieta' deve essere gestita in automatico attribuendo il valore prelevato da
+             - evento slot.OnUserInfoRequired
+             - in alternativa da slot.Username
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.PrimaryKey">
+            <summary>
+            Definizione di proprieta PrimaryKey
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.PrimaryKey.#ctor">
+            <summary>
+            Costruttore
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.SearchKey">
+            <summary>
+            Indica che una proprieta' fa parte di una chiave identificata dal nome fornito
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.SearchKey.KeyName">
+            <summary>
+            Nome della chiave
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.SearchKey.#ctor(System.String)">
+            <summary>
+            Imposta chiave di ricerca con nome fornito e operatore di default (=)
+            </summary>
+            <param name="keyName"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.ListMap">
+            <summary>
+            Consente di definire la dipendenza di una proprieta' rispetta ad una o piu'
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.ListMap.Names">
+            <summary>
+            Indica i nomi delle proprieta' mappate
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.ListMap.#ctor(System.String[])">
+            <summary>
+            Crea istanza di PropertyMap specificando Nome ed ordine
+            </summary>
+            <param name="propertyNames"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.PropertyMap">
+            <summary>
+            Consente di definire la dipendenza di una proprieta' rispetta ad una o piu'
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.PropertyMap.Names">
+            <summary>
+            Indica i nomi delle proprieta' mappate
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.PropertyMap.#ctor(System.String[])">
+            <summary>
+            Crea istanza di PropertyMap specificando Nome ed ordine
+            </summary>
+            <param name="propertyNames"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.BaseModifierAttribute">
+            <summary>
+            Attributo che non necessita di valore
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.BaseModifierAttribute.CanApplyToProperty(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Indica se applicabile alla proprieta' fornita
+            </summary>
+            <param name="propIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.BaseModifierAttribute.Modify(System.Object)">
+            <summary>
+            Esegue la modifica
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.BaseStringModifierAttribute">
+            <summary>
+            Attributo che non necessita di valore
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.BaseStringModifierAttribute.CanApplyToProperty(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Indica se applicabile alla proprieta' fornita
+            </summary>
+            <param name="propIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.LowerCase">
+            <summary>
+            Il campo viene impostato con caratteri minuscoli
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.LowerCase.Modify(System.Object)">
+            <summary>
+            Esegue modifica
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.PadLeft">
+            <summary>
+            Se la lunghezza supera quella impostata il dato viene troncato
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.PadRight">
+            <summary>
+            Se la lunghezza supera quella impostata il dato viene troncato
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.RemoveAccents">
+            <summary>
+            Indica che verranno rimossi i caratteri accentati
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.Trim">
+            <summary>
+            Indica il trim del campo
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Trim.Modify(System.Object)">
+            <summary>
+            Esegue modifica
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.Truncate">
+            <summary>
+            Se la lunghezza supera quella impostata il dato viene troncato
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.Column">
+            <summary>
+            Consente di definire più specificamente una colonna in tabella
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.Column.DbType">
+            <summary>
+            Tipo DB
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.Column.Name">
+            <summary>
+            Nome della colonna
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.Column.ParamName">
+            <summary>
+            Ritorna nome parametro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Column.#ctor(System.String)">
+            <summary>
+            Costruttore semplice con nome colonna
+            </summary>
+            <param name="columnName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Column.#ctor(System.String,System.Type)">
+            <summary>
+            Costruttore con nome colonna e tipo db
+            </summary>
+            <param name="columnName"></param>
+            <param name="dbType"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Column.#ctor(System.String,System.Type,System.String)">
+            <summary>
+            Costruttore completo con nome colonna, tipo db e nome parametro
+            </summary>
+            <param name="columnName"></param>
+            <param name="dbType"></param>
+            <param name="paramName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Column.GetKeyParamName">
+            <summary>
+            Ritorna il nome del parametro associato
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.CustomDbType">
+            <summary>
+            Consente di impostare un tipo di dato specifico del provider da utilizzare nelle query
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.CustomDbType.Value">
+            <summary>
+            Tipo di dato del provider
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.CustomDbType.#ctor(System.Data.DbType)">
+            <summary>
+            Imposta il tipo di dato forzato da utilizzare nelle query
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.DbConnection">
+            <summary>
+            Indica la connessione database all'interno del businessslot da utilizzare 
+            (Necessario in caso di mappature di oggetti su database differenti)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.DbConnection.#ctor(System.String)">
+            <summary>
+            Imposta nome standard di connessione
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Attributes.Table.IsSimpleTableName">
+            <summary>
+            Indica se il nome tabella e' utilizzabile da solo e non necessita di aggiunte di nomi db
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Table.#ctor(System.String)">
+            <summary>
+            Imposta nome standard di tabella
+            </summary>
+            <param name="tableName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Table.#ctor(System.String,System.String)">
+            <summary>
+            Imposta il nome della tabella ed il nome della chiave del prefisso db che andra' inserito nello slot a runtime
+            </summary>
+            <param name="tableName"></param>
+            <param name="dbPrefixKey"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.Table.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Imposta nome tabella, chiave prefisso db e chiave connessione
+            </summary>
+            <param name="tableName"></param>
+            <param name="dbPrefixKey"></param>
+            <param name="dbConnKey"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.BaseValidatorAttribute.CanApplyToProperty(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Indica se applicabile a proprieta' specificata
+            </summary>
+            <param name="propIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.BaseValidatorAttribute.Validate(Business.Data.Objects.Core.Schema.Definition.Property,System.Object)">
+            <summary>
+            Esegue la validazione
+            </summary>
+            <param name="propIn"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.DecimalRange">
+            <summary>
+            Range di valori per proprietà integer
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.DoubleRange">
+            <summary>
+            Range di valori per proprietà integer
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.IntRange">
+            <summary>
+            Range di valori per proprietà integer
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.MaxLength">
+            <summary>
+            Lunghezza massima consentita per il campo
+            (Verrà preconvertito a stringa)
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.MinLength">
+            <summary>
+            Lunghezza minima consentita per il campo
+            (Verrà preconvertito a stringa)
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.ValidateRegex">
+            <summary>
+            Imposta un'espressione regolare per la validazione del campo
+            (Verrà preconvertito a stringa)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Attributes.ValidateRegex.CanApplyToProperty(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Indica se applicabile alla proprieta'
+            </summary>
+            <param name="propIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.XmlFormatString">
+            <summary>
+            Imposta una stringa di formattazione con cui verrà formattato il valore nell'output Xml
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.SchemaReaderException">
+            <summary>
+            Eccezione da errore schema
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.ClassSchema">
+            <summary>
+            Definizione di Schema
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.ClassSchema.IsReadOnly">
+            <summary>
+            Indica se la classe e' in sola lettura
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.ClassSchema.IsDefaultDb">
+            <summary>
+            Indica se utilizza la connessione db di default
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.ClassSchema.Validate">
+            <summary>
+            Esegue validazione schema
+            </summary>
+            <param name="oSchema"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.ClassSchema.FillFromAttribute(System.Attribute)">
+            <summary>
+            Carica informazioni da attributo
+            </summary>
+            <param name="att"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.Key">
+            <summary>
+            Definizione di chiave
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Key.AddProperty(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Aggiunge proprietà a chiave
+            </summary>
+            <param name="oPropIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Key.FillKeyQueryWhereParams(Business.Data.Objects.Database.IDataBase,Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Imposta i parametri da utilizzare nella where utilizzando quanto gia' presente nell'oggetto di input
+            </summary>
+            <param name="dbIn"></param>
+            <param name="objIn"></param>
+            <returns>L'array contente i valori della key utilizzati</returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Key.FillKeyQueryWhereParams(Business.Data.Objects.Database.IDataBase,System.Object[])">
+            <summary>
+            Imposta i parametri da utilizzare nella where utilizzando l'array di input per i valori della key
+            </summary>
+            <param name="dbIn"></param>
+            <param name="keyValuesIn"></param>
+            <returns>L'array contente i valori della key utilizzati</returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Key.GetValues(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna array con dati
+            </summary>
+            <param name="obj"></param>
+            <param name="forDbIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Key.GetValuesForDb(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna array con dati per db
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.Property">
+            <summary>
+            Definizione di proprietà
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.Property.HasPropertyMaps">
+            <summary>
+            Indica se presenti property map
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.Property.IsSqlSelectExcluded">
+            <summary>
+            Indica se la proprieta' va inclusa nella query di selezione standard
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.Property.Fullname">
+            <summary>
+            Ritorna il nomeclasse.nomeproprieta'
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Property.ValidateDefinition">
+            <summary>
+            Esegue validazione formale di tutti i valori immessi
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Property.PerformValidation(System.Object)">
+            <summary>
+            Esegue la validazione secondo le regole impostate
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Property.FillFromAttribute(Business.Data.Objects.Core.Attributes.BaseAttribute)">
+            <summary>
+            Imposta valori a partire da attributo
+            </summary>
+            <param name="attr"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.Property.IsNull(System.Object)">
+            <summary>
+            Indica se il valore della proprieta' e' considerabile Null
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertyDataList">
+            <summary>
+            Definizione di proprietà
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.GetValue(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna il valore della proprieta'
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.SetValue(Business.Data.Objects.Core.Base.DataObjectBase,System.Object)">
+            <summary>
+            Metodo privato di impostazione proprietà
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.WriteXml(Business.Data.Objects.Common.Utils.XmlWrite,Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
+            <summary>
+             Crea rappresentazione Xml
+            </summary>
+            <param name="xw"></param>
+            <param name="obj"></param>
+            <param name="depth"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.WriteDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
+            <summary>
+            Scrive property nel DTO
+            </summary>
+            <param name="dto"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.ReadDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Legge DTO
+            </summary>
+            <param name="dto"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.SetValueFromReader(Business.Data.Objects.Core.Base.DataObjectBase,System.Data.IDataReader)">
+            <summary>
+            Carica valori proprieta' da datareader
+            </summary>
+            <param name="obj"></param>
+            <param name="dr"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertyDictionary">
+            <summary>
+            Elenco Proprietà
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDictionary.Add(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Aggiunge proprietà e crea indive
+            </summary>
+            <param name="prop"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDictionary.GetPropertyByName(System.String)">
+            <summary>
+            Cerca proprietà per nome
+            </summary>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDictionary.ContainsProperty(System.String)">
+            <summary>
+            Verifica esistenza proprieta per nome
+            </summary>
+            <param name="propName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDictionary.TryGetProperty(System.String,Business.Data.Objects.Core.Schema.Definition.Property@)">
+            <summary>
+            Verifica esistenza proprieta e ritorna valore
+            </summary>
+            <param name="propName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.DataFlags">
+            <summary>
+            Flag di gestione dati BDO
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertyList">
+            <summary>
+            Elenco Proprietà
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertyObject">
+            <summary>
+            Definizione di proprietà
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.GetValueForDb(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna il dato compatibile db
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.GetValue(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna il valore della proprieta'
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.SetValue(Business.Data.Objects.Core.Base.DataObjectBase,System.Object)">
+            <summary>
+            Metodo privato di impostazione proprietà
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.WriteXml(Business.Data.Objects.Common.Utils.XmlWrite,Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
+            <summary>
+             Crea rappresentazione Xml
+            </summary>
+            <param name="xw"></param>
+            <param name="obj"></param>
+            <param name="depth"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.WriteDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
+            <summary>
+            Scrive property nel DTO
+            </summary>
+            <param name="dto"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.ReadDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Legge DTO
+            </summary>
+            <param name="dto"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.SetValueFromReader(Business.Data.Objects.Core.Base.DataObjectBase,System.Data.IDataReader)">
+            <summary>
+            Carica valori proprieta' da datareader
+            </summary>
+            <param name="obj"></param>
+            <param name="dr"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertySimple">
+            <summary>
+            Definizione di proprietà
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.PropertySimple.HasValidators">
+            <summary>
+            Indica se presenti validatori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.PropertySimple.HasModifiers">
+            <summary>
+            Indica se presenti modificatori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.PropertySimple.IsSqlSelectExcluded">
+            <summary>
+            Indica se esclusa dal caricamento standard (query load)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.GetValue(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna il valore della proprieta'
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.GetValueForDb(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Ritorna il dato compatibile db
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.SetValue(Business.Data.Objects.Core.Base.DataObjectBase,System.Object)">
+            <summary>
+            Metodo privato di impostazione proprietà
+            </summary>
+            <param name="obj"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.PerformValidation(System.Object)">
+            <summary>
+            Esegue validazione
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.WriteXml(Business.Data.Objects.Common.Utils.XmlWrite,Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
+            <summary>
+            Scrive valore per Xml
+            </summary>
+            <param name="xw"></param>
+            <param name="obj"></param>
+            <param name="depth"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.WriteDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
+            <summary>
+             Scrive DTO
+            </summary>
+            <param name="dto"></param>
+            <param name="obj"></param>
+            <param name="depth"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.ReadDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Legge DTO
+            </summary>
+            <param name="dto"></param>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.SetValueFromReader(Business.Data.Objects.Core.Base.DataObjectBase,System.Data.IDataReader)">
+            <summary>
+            Carica valori proprieta' da datareader
+            </summary>
+            <param name="obj"></param>
+            <param name="dr"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Usage.DataSchema">
+            <summary>
+            Classe contenente i dati di un oggetto business
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.#ctor">
+            <summary>
+            Costruttore privato per gestire in autonomia la deserializzazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Crea dataschema a partire da class schema
+            </summary>
+            <param name="schema"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.GetFlagsAll(System.Int32,Business.Data.Objects.Core.Schema.Definition.DataFlags)">
+            <summary>
+            Ottien valore di uno o gruppo di flag
+            </summary>
+            <param name="index"></param>
+            <param name="flag"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.SetFlags(System.Int32,Business.Data.Objects.Core.Schema.Definition.DataFlags,System.Boolean)">
+            <summary>
+            Imposta valore flag
+            </summary>
+            <param name="index"></param>
+            <param name="flag"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.Clone(System.Boolean,System.Boolean)">
+            <summary>
+            Genera clone del dataschema (per valore)
+            </summary>
+            <param name="oSlotIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.ToString">
+            <summary>
+            Ritorna la rappresentazione in stringa
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.BinSerialize(Business.Data.Objects.Core.Schema.Usage.DataSchema)">
+            <summary>
+            Serializzazione dataschema
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.BinDeserialize(System.Byte[])">
+            <summary>
+            Deserializza dataschema
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.BusinessObjectBase">
+            <summary>
+            Classe base per oggetti Business
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.BusinessObjectBase.ToJSON">
+            <summary>
+            Ritorna rappresentazione JSON
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.DataListBase">
+            <summary>
+            Classe base per definizione liste
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataListBase.IsPaged">
+            <summary>
+            Indica se la lista e' paginata
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataListBase.Pager">
+            <summary>
+            Paginatore
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataListBase.Count">
+            <summary>
+            Numero elementi
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.fireListChanged(System.ComponentModel.ListChangedType,System.Int32)">
+            <summary>
+            Lancia evento se definito
+            </summary>
+            <param name="eventtype"></param>
+            <param name="index"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.fillListFromReader(System.Data.Common.DbDataReader)">
+            <summary>
+            Riempie la lista interna da reader
+            </summary>
+            <param name="reader"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.resetList">
+            <summary>
+            Resetta le liste interne
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.getItem(System.Int32)">
+            <summary>
+            Ritorna item dalla lista (caricandolo se necessario)
+            </summary>
+            <param name="index"></param>
+            <param name="dalType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.doSearch">
+            <summary>
+            Esegue la ricerca
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.getIndexOfByPK(System.Object[])">
+            <summary>
+            Trova un elemento fornendo valori PrimaryKey
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.searchByColumn(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ricerca attraverso un filtro di colonna
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.orderBy(System.String,Business.Data.Objects.Core.OrderVersus)">
+            <summary>
+            Imposta il campo di sort e la direzione di sort
+            Da utilizzare subito prima dell'esecuzione della ricerca.
+            </summary>
+            <param name="sortField"></param>
+            <param name="versus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.orderBy(Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Imposta Order By passando direttamente tutto l'oggetto orderby
+            </summary>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.GetPagingXml">
+            <summary>
+            Ritorna Xml per la gestione della paginazione
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.SwitchToSlot(Business.Data.Objects.Core.BusinessSlot)">
+            <summary>
+            Imposta uno slot sulla lista corrente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToDTO">
+            <summary>
+            Ritorna elenco oggetti in formato DTO con profondita' 0
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToDTO(System.Int32)">
+            <summary>
+            Ritorna elenco oggetti in formato DTO con profondita' specificata
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToJSON">
+            <summary>
+            Ritorna elenco oggetti in formato JSON
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToString">
+            <summary>
+            Override ToString
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToXml(System.Int32)">
+            <summary>
+            Scrive xml lista
+            </summary>
+            <param name="depht"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToXml">
+            <summary>
+            Rappresentazione XML
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.CountByFilter(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Esegue conteggio in base a filtro per proprieta'
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.GetExtraValue(System.Int32,System.String)">
+            <summary>
+            Ritorna un valore accessorio ripreso dalla query di caricamento lista.
+            Utile per ricerche che ritornano dati aggiuntivi rispetto agli oggetti stessi
+            </summary>
+            <param name="index"></param>
+            <param name="columnName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Sum(System.String)">
+            <summary>
+            Somma tutti i valori delle proprieta' degli elementi della lista
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Sum(System.String,Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Somma applicando un filtro
+            </summary>
+            <param name="propertyName"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Avg(System.String,Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ritorna la media dei valori delle proprieta' della lista con filtro
+            </summary>
+            <param name="propertyName"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Avg(System.String)">
+            <summary>
+            Ritorna la media dei valori delle proprieta' della lista
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Clear">
+            <summary>
+            Svuota la lista
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.toPagedList(System.Int32,System.Int32)">
+            <summary>
+            Data una lista ritorna una sottolista paginata
+            </summary>
+            <param name="page"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.DataObjectBase">
+            <summary>
+            Classe base per la gestione degli oggetti persistenti
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataObjectBase.ObjectRefId">
+            <summary>
+            Riferimento univoco assegnato all'istanza dell'oggetto
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataObjectBase.ObjectSource">
+            <summary>
+            Indica la provenienza dell'oggetto
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataObjectBase.ObjectState">
+            <summary>
+            Indica lo stato interno dell'oggetto
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.firePropertyChanged(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Esegue l'evento di property change del databindings
+            </summary>
+            <param name="propIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.SetProperty(System.Int32,System.Object)">
+            <summary>
+             Funzione per impostare il valore di proprietà
+            </summary>
+            <param name="propertyIndex"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetProperty(System.Int32)">
+            <summary>
+            Funzione interna per ottenere il valore di proprietà
+            </summary>
+            <param name="propertyIndex"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToString">
+            <summary>
+            Ritorna la rappresentazione in stringa dell'oggetto
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToXml">
+            <summary>
+            Ritorna una rappresentazione XML dell'oggetto senza navigazione nei sotto oggetti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToXml(System.Int32)">
+            <summary>
+            Ritorna rappresentazione Xml dell oggetto fornendo il livello di profondita' (navigazione sotto-oggetti)
+            0 indica non navigare nei sotto-oggetti
+            Prestare attenzione ad eventuali riferimenti circolari
+            </summary>
+            <param name="depth"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDTO">
+            <summary>
+            Ritorna rappresentazione in forma di coppie property=valore con
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDTO(System.Int32)">
+            <summary>
+            Ritorna rappresentazione in forma di coppie property=valore con specifica di profondita'
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToJSON">
+            <summary>
+            Ritorna rappresentazione  JSON dell'oggetto
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToXml(System.String[])">
+            <summary>
+            Ritorna Xml contenente i valori delle proprieta' in input
+            </summary>
+            <param name="propertyNames"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.IsDefaultValue(Business.Data.Objects.Core.Schema.Definition.Property)">
+            <summary>
+            Verifica se property nulla (Interna)
+            </summary>
+            <param name="prop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.IsNull(System.String)">
+            <summary>
+            Verifica se una proprietà ha valore considerato null
+            </summary>
+            <param name="propName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.IsChanged(System.String)">
+            <summary>
+            Indica se la proprieta' specificata e' stata modificata 
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetCurrentChanges">
+            <summary>
+            Ritorna elenco di proprieta' modificate
+            Attenzione! Dopo il salvataggio le proprieta' risultano non modificate!
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.Validate">
+            <summary>
+            Da implementare per eseguire la validazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.DoSave">
+            <summary>
+            Salva l'oggetto nel database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.DoDelete">
+            <summary>
+            Elimina l'oggetto dal database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetHashBaseString">
+            <summary>
+            Ritorna una stringa per calcolo di hash
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadPropertyFromDB(Business.Data.Objects.Core.Schema.Definition.PropertySimple)">
+            <summary>
+            Esegue caricamento singola property da DB
+            </summary>
+            <param name="prop"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ExecQueryAndLoadObj(Business.Data.Objects.Database.IDataBase)">
+            <summary>
+            Esegue la query impostata ed carica dati su oggetto
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadByFilter(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto a partire da un filtro custom
+            </summary>
+            <param name="filter"></param>
+            <param name="order"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadBySchemaKey(Business.Data.Objects.Core.Schema.Definition.Key,System.Object[])">
+            <summary>
+            Carica oggetto da chiave 
+            </summary>
+            <param name="keyIn"></param>
+            <param name="values"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.FillObjectFromReader(System.Data.IDataReader,System.Boolean)">
+            <summary>
+            Carica le proprietà standard dell'oggetto
+            </summary>
+            <param name="dr"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetPropertyDefinition(System.Int32)">
+            <summary>
+            Carica definizione di proprietà con controllo
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.validateProperties(System.Boolean)">
+            <summary>
+            Base properties validation (based on class definition)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.performDbInsert">
+            <summary>
+            Esegue la insert sul DB
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.performDbUpdate">
+            <summary>
+            Esegue update sul DB
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.performDbDelete">
+            <summary>
+            Perform database delete
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.Equals(System.Object)">
+            <summary>
+            Confronto tra due oggetti (viene confrontata Primary Key)
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.DbPrefixDictionary">
+            <summary>
+            Dizionario specifico per i nomi di db. I metodi add e this.set normalizzano il nome db aggiungendo il carattere . terminale
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DbPrefixDictionary.Item(System.String)">
+            <summary>
+            Get or set il dbname in base alla key specificata
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DbPrefixDictionary.Add(System.String,System.String)">
+            <summary>
+            Aggiunge Dbname identificato da chiave
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DbPrefixDictionary.dbNameNormalize(System.String)">
+            <summary>
+            Normalizza il nome DB
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.IBusinessObjFactory">
+            <summary>
+            Interfaccia per la definizione di factory personalizzati di BusinessObjects
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.IBusinessObjFactory.Create(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Crea business object a partire da un dal
+            </summary>
+            <param name="dalObj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.InnerDataList">
+            <summary>
+            Lista interna di gestione datalist
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.InnerDataListItem">
+            <summary>
+            Inner list item 
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.PkValues">
+            <summary>
+            Values of PK
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.PkHashCode">
+            <summary>
+            Eventual Hash of PK values
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.ExtraData">
+            <summary>
+            Other query values 
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.Object">
+            <summary>
+            Loaded inner object
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Base.SlotAwareObject">
+            <summary>
+            Classe base per oggetti dipendenti da slot
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.SlotAwareObject.Slot">
+            <summary>
+            Slot associato all'oggetto (interno)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.SetSlot(Business.Data.Objects.Core.BusinessSlot)">
+            <summary>
+            Imposta lo slot sull'oggetto
+            </summary>
+            <param name="slot"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.GetSlot">
+            <summary>
+            Slot associato all'oggetto
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.extraDataTouch">
+            <summary>
+            Se non presente extra data viene creato
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataExist(System.String)">
+            <summary>
+            Verifica se presenti dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataGet(System.String,System.Object)">
+            <summary>
+            Ritorna dati aggiuntivi memorizzati a livello di oggetto (singolo o lista)
+            individuati per chiave. Se non trovata la chiave ritorna il valore defult fornito
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataSet(System.String,System.Object)">
+            <summary>
+            Imposta dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataRemove(System.String)">
+            <summary>
+            Rimuove dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataCount">
+            <summary>
+            Ritorna il numero di elementi Extra
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataClear">
+            <summary>
+            Elimina tutti i dati extra
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataGetKeys">
+            <summary>
+            Ritorna tutte le chiavi registrate per l'oggetto
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataKeys">
+            <summary>
+            Ritorna collection di key extra data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataValues">
+            <summary>
+            Ritorna collection di valori extra data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.SwitchToSlot(Business.Data.Objects.Core.BusinessSlot)">
+            <summary>
+            Passa oggetto su Slot Fornito
+            </summary>
+            <param name="slotIn"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessList`3">
+            <summary>
+            Classe astratta per la definizione dei metodi di
+            business per una generica classe lista
+            </summary>
+            <typeparam name="TL"></typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessList`3.DataList">
+            <summary>
+            Oggetto dati associato
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessList`3.#ctor(`0)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessList`3.AddOrUpdate(`2)">
+            <summary>
+            Aggiunge l'oggetto o aggiorna l'istanza gia' presente con l'istanza fornita
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessObject`1">
+            <summary>
+            Classe astratta per la definizione dei metodi di
+            business per una generica classe
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessObject`1.DataObj">
+            <summary>
+            Oggetto dati associato
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.#ctor(`0)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessObject`1.LazyLoadFunc">
+            <summary>
+            Funzione di caricamento oggetto lazy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.GetLazy``1(System.String,Business.Data.Objects.Core.BusinessObject{`0}.LazyLoadFunc)">
+            <summary>
+            Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi
+            </summary>
+            <typeparam name="T1"></typeparam>
+            <param name="uniqueKey"></param>
+            <param name="fn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessObjFactory`1">
+            <summary>
+            Classe base per oggetti Business
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessObjFactory`1.BizType">
+            <summary>
+            Espone il tipo base del factory
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessSlot">
+            <summary>
+            Oggetto base che gestisce la vita degli altri oggetti di business
+            consentendo in primo luogo l'accesso ai dati
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessSlot.LogDebugHandler">
+            <summary>
+            Delegato per la cattura del debug log
+            </summary>
+            <param name="slot"></param>
+            <param name="level"></param>
+            <param name="message"></param>
+        </member>
+        <member name="E:Business.Data.Objects.Core.BusinessSlot.OnLogDebugSent">
+            <summary>
+            Evento scatenato dalle chiamate al metodo LogDebug() dello slot
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessSlot.DbConnectionRequestHandler">
+            <summary>
+            Funzione che ritorna una connessione db a partire da un nome
+            </summary>
+            <param name="dbName"></param>
+            <returns></returns>
+        </member>
+        <member name="E:Business.Data.Objects.Core.BusinessSlot.OnDbConnectionRequired">
+            <summary>
+            Evento scatenato dalla richiesta di un db non presente all'interno dello slot
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessSlot.UserInfoRequestHandler">
+            <summary>
+            Delegato per ritornare il dato dell'utente da utilizzare con l'attributo "UserInfo"
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="E:Business.Data.Objects.Core.BusinessSlot.OnUserInfoRequired">
+            <summary>
+            Evento da agganciare per specificare il dato dell'utente da salvare nel campo identificato dall'attributo "Username"
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.GetUserInfo">
+            <summary>
+            Ritorna le informazioni sull'utente (id o username o altro) dall'evento relativo o, se nullo, dal campo username dello slot
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.SlotId">
+            <summary>
+            ID Univoco Sessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.StartDate">
+            <summary>
+            Data/Ora inizio della sessione corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.ProtectionLevel">
+            <summary>
+            Livello di protezione applicato allo slot
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.Simulate">
+            <summary>
+            Se impostato disattiva procedure di manipolazione dati
+            degli oggetti: Save (Insert, update), Delete.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.EventManagerEnabled">
+            <summary>
+            Attiva/Disattiva tracciamento eventi su oggetto (che vanno comunque registrati attraverso le opportune funzioni di Register)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.EventManager">
+            <summary>
+            Gestore eventi associati allo slot.
+            Attenzione: se non impostato EventManagementEnabled=true l'oggetto risulta null
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.ChangeTrackingEnabled">
+            <summary>
+            Attiva/Disattiva verifica modifiche reali su proprieta' di oggetti
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.LiveTrackingEnabled">
+            <summary>
+            Indica se utilizzare il tracciamento degli oggetti: se un oggetto e' stato già caricato nella sessione di vita dello slot
+            ad ogni nuova richiesta dello stesso viene ritornata sempre la stessa istanza. Ciò implica che una modifica ad un oggetto
+            è IMMEDIATAMENTE ATTIVA su tutti gli oggetti che referenziano l'oggetto con la medesima chiave
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.LiveTrackingSize">
+            <summary>
+            Ritorna la dimensione del LiveTracking (numero di entry attualmente tracciate in memoria).
+            Attenzione: non è detto che questo sia il numero effettivo di oggetti in memoria in quanto i riferimenti
+            possono venir eliminati in qualsiasi momento dal GC (una entry potrebbe essere in lista ma con un riferimento ad oggetto nullo).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.LiveTrackingCurrentSize">
+            <summary>
+            Ritorna numero degli oggetti in memoria
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.Terminated">
+            <summary>
+            Indica che lo slot è stato terminato (Disposed())
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.DB">
+            <summary>
+            Istanza di database associata alla sessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.UserName">
+            <summary>
+            Indica l'utente associato alla sessione corrente
+            Solo ad uso applicativo.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.UserType">
+            <summary>
+            Indica il tipo di utente associato alla sessione.
+            Ad esclusivo uso applicativo.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.IsAuthenticated">
+            <summary>
+            Indica se la sessione è stata esplicitamente Autenticata.
+            Solo ad uso utente.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.CachingEnabled">
+            <summary>
+            Indica o imposta l'utilizzo o meno del caching
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.MessageList">
+            <summary>
+            Lista Messaggi pubblica
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.SharedLog">
+            <summary>
+            Il log utilizzabile per default
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.DBCount">
+            <summary>
+            Indica il numero di istanze database definite
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.ListCacheTimeoutMinuti">
+            <summary>
+            Ottiene/Imposta i minuti di timeout da utilizzare nella cache delle liste. La modifica impatta solo i nuovi oggetti
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessSlot.EObjectEvent">
+            <summary>
+            Indica l'evento che si vuole gestire
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.BusinessSlot.EObjectEvent.Load">
+            <summary>
+            Caricamento
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.BusinessSlot.EObjectEvent.Insert">
+            <summary>
+            Inserimento istanza
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.BusinessSlot.EObjectEvent.Update">
+            <summary>
+            Aggiornamento istanza
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.BusinessSlot.EObjectEvent.Delete">
+            <summary>
+            Eliminazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoopMT``2(``0,System.Int32,Business.Data.Objects.Core.BusinessSlot.WorkListSlice{``0})">
+            <summary>
+            Esegue un loop multithreading con attesa di completamento. Se si verificano errori all'interno dei thread lancia eccezione al completamento
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="numThreads"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyClear">
+            <summary>
+            Elimina tutte le proprieta'
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyRemove(System.String)">
+            <summary>
+            Elimina proprieta'
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertySet(System.String,System.Object)">
+            <summary>
+            Imposta proprieta'. Se gia' presente sostituisce il valore
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyExist(System.String)">
+            <summary>
+            Verifica esistenza proprieta'
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyGet(System.String)">
+            <summary>
+            Ritorna valore proprieta' con priorita' al settings. Se non presente ritorna eccezione
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyGet(System.String,System.Boolean)">
+            <summary>
+            Ritorna proprieta' impostandone la priorita' di ricerca
+            </summary>
+            <param name="key"></param>
+            <param name="settingFirst"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyGetWithDefault(System.String,System.Object)">
+            <summary>
+            Ritorna valore di proprieta' e, se inesistente, il valore di default
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyGetT``1(System.String)">
+            <summary>
+            Ritorna valore proprieta' con priorita' al settings. Se non presente ritorna eccezione
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyGetT``1(System.String,System.Boolean)">
+            <summary>
+            Ritorna proprieta' impostandone la priorita' di ricerca
+            </summary>
+            <param name="key"></param>
+            <param name="settingFirst"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyGetWithDefaultT``1(System.String,``0)">
+            <summary>
+            Ritorna valore di proprieta' e, se inesistente, il valore di default
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyCount">
+            <summary>
+            Ritorna numero di proprieta' definite + numero di chiavi ConfigurationManager.AppSettings
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyAllKeys">
+            <summary>
+            Ritorna tutte le chiavi di proprieta' + chiavi ConfigurationManager.AppSettings definite
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ResetListGlobal">
+            <summary>
+            Svuota cache globale delle liste
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ResetCacheGlobal">
+            <summary>
+            Pulisce il contenuto della cache globale
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.IsCacheable``1">
+            <summary>
+            Indica se un oggetto e' memorizzabile in una cache
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbGetNames">
+            <summary>
+            Ritorna elenco nomi database registrati
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbGet(Business.Data.Objects.Core.Schema.Definition.ClassSchema)">
+            <summary>
+            Ottiene istanza db associata allo schema
+            </summary>
+            <param name="schema"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbGet(System.String)">
+            <summary>
+            Ritorna il database identificato dal nome 
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbGet``1">
+            <summary>
+            Ritorna istanza database specifica per il tipo di oggetto
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbAdd(System.String,Business.Data.Objects.Database.IDataBase)">
+            <summary>
+            Aggiunge db a lista
+            </summary>
+            <param name="name"></param>
+            <param name="db"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbAdd(System.String,System.String,System.String)">
+            <summary>
+            Aggiunge allo slot un'altra istanza database identificata da un nome,
+            di tipo specificato e con connection string fornita
+            </summary>
+            <param name="name"></param>
+            <param name="dbType"></param>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbRemove(System.String,System.Boolean)">
+            <summary>
+            Rimuove database da elenco specificando se eventualmente eseguire rollback di transazioni appese
+            </summary>
+            <param name="name"></param>
+            <param name="rollbackUnCommited"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbGetStatsAll">
+            <summary>
+            Ritorna una statistica compelssiva di tutte le attività database
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbBeginTransAll(System.Data.IsolationLevel)">
+            <summary>
+            Apre transazione su tutti i database collegati.
+            Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbCommitAll">
+            <summary>
+            Esegue il commit su tutti i database collegati
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbRollBackAll">
+            <summary>
+            Esegue il rollback su tutti i database collegati
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.DbPrefixKeys">
+            <summary>
+            Dizionario contenente i nomi database (identificati da una chiave case sensitive) che verranno utilizzati nelle calssi che lo necessitano
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbPrefixGetTableName(Business.Data.Objects.Core.Attributes.Table)">
+            <summary>
+            Risolve il nome della tabella con eventuale aggiunta della componente DB
+            </summary>
+            <param name="schema"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbPrefixGetTableName``1">
+            <summary>
+            Dato un dataobject (tipo) ritorna il nome completo di tabella risolto eventualmente della componente DB
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbPrefixGetColumn``1(System.String)">
+            <summary>
+            Data una classe ed un nome di proprieta' ritorna il nome del campo DB. 
+            Utile quando differenti rispetto alla nomenclatura della classe
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbPrefixGetTableName(System.String,System.String)">
+            <summary>
+            Ritorna il nome completo di tabella a partire da DbPrefixKey e nome tabella
+            </summary>
+            <param name="prefixKey"></param>
+            <param name="tableName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebug(Business.Data.Objects.Core.DebugLevel,System.String,System.Object[])">
+            <summary>
+            Scrive LogDebug. per utilizzarlo è necessario agganciare l'evento OnLogDebugSent
+            </summary>
+            <param name="level"></param>
+            <param name="msgFmt"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebug(System.String,System.Object[])">
+            <summary>
+            Scrive LogDebug con livello default User_1
+            </summary>
+            <param name="msgFmt"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebugException(Business.Data.Objects.Core.DebugLevel,System.Exception)">
+            <summary>
+            Scrive LogDebugException
+            </summary>
+            <param name="level"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebugException(System.Exception)">
+            <summary>
+            Scrive LogDebugException con livello default Error_1
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByFILTER(System.Type,System.Boolean,Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto a partire da un filtro fornito
+            </summary>
+            <param name="origType"></param>
+            <param name="raiseNotFound"></param>
+            <param name="filter"></param>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByKEY(System.String,System.Type,System.Boolean,System.Object[])">
+            <summary>
+            Routine di caricamento oggetto con 
+            </summary>
+            <param name="keyName"></param>
+            <param name="origType"></param>
+            <param name="raiseNotFound"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewInternalByKEY(System.String,System.Type,System.Object[])">
+            <summary>
+            Carica oggetto da chiave definita e se non esiste ritorna nuovo oggetto precaricato con i valori utilizzando il type specificato
+            </summary>
+            <param name="keyName"></param>
+            <param name="origType"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByPK``1(System.Object[])">
+            <summary>
+            Carica Oggetto Da Chiave Primaria
+            Se oggetto non trovato viene lanciata eccezione
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByKEY``1(System.String,System.Object[])">
+            <summary>
+            Carica oggetto da chiave secondaria
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="keyName"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByFILTER``1(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Carica oggetto da filtro custom.
+            Se non trovato lancia eccezione.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto da filtro custom.
+            Se non trovato lancia eccezione.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByPK``1(System.Object[])">
+            <summary>
+            Carica oggetto da PK e se non esiste ritorna null
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByKEY``1(System.String,System.Object[])">
+            <summary>
+            Carica oggetto da chiave definita
+            </summary>
+            <param name="keyName">
+            Nome della chiave definita sull'oggetto
+            </param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByFILTER``1(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Carica oggetto da filtro custom.
+            Se non trovato ritorn NULL.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto da filtro custom.
+            Se non trovato ritorn NULL.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByPK``1(System.Object[])">
+            <summary>
+            Carica oggetto da PK e se non esiste ritorna nuovo oggetto precaricato con i valori
+            richiesti
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByKEY``1(System.String,System.Object[])">
+            <summary>
+            Carica oggetto da chiave definita e se non esiste ritorna nuovo oggetto precaricato con i valori
+            richiesti
+            </summary>
+            <param name="keyName">
+            Nome della chiave definita sull'oggetto
+            </param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByFILTER``1(Business.Data.Objects.Core.IFilter)">
+            <summary>
+             Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CreateObjectByType(System.Type)">
+            <summary>
+            Crea nuova istanza di oggetto non tipizzato
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CreateObject``1">
+            <summary>
+            Crea nuova istanza di oggetto
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CreateList``1">
+            <summary>
+            Crea una lista non paginata
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CreatePagedList``1(System.Int32,System.Int32)">
+            <summary>
+            Crea una lista paginata
+            </summary>
+            <param name="page"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.SaveObject``1(``0)">
+            <summary>
+            Salva l'oggetto in input utilizzando questa sessione
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DeleteObject``1(``0,System.Boolean)">
+            <summary>
+            Elimina oggetto utilizzando questa sessione
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.SaveAll``1(``0)">
+            <summary>
+            Salva tutti gli oggetti della lista
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TL"></typeparam>
+            <param name="list"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DeleteAll``1(``0,System.Boolean)">
+            <summary>
+            Cancella tutti gli elementi di una lista. Al termine la lista risulta vuota
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CloneObject``1(``0)">
+            <summary>
+            Ritorna copia esatta dell'oggetto su nuova istanza
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CloneList``2(Business.Data.Objects.Core.DataList{``0,``1})">
+            <summary>
+            Ritorna una lista identica a quella in input
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CloneObjectForNew``1(``0)">
+            <summary>
+            Ritorna copia dell'oggetto su nuova istanza azzerando la chiave primaria
+            e impostando lo stato a nuovo
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.RefreshObject``1(``0,System.Boolean)">
+            <summary>
+            Esegue nuovamente il caricamento dalla sorgente (cache, db)
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataExist(Business.Data.Objects.Core.Base.SlotAwareObject,System.String)">
+            <summary>
+            Verifica se presenti dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
+            </summary>
+            <param name="obj"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataGet``1(Business.Data.Objects.Core.Base.SlotAwareObject,System.String,``0)">
+            <summary>
+            Ritorna dati aggiuntivi memorizzati a livello di oggetto (singolo o lista)
+            individuati per chiave. Se non trovata la chiave ritorna il valore defult fornito
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataSet``1(Business.Data.Objects.Core.Base.SlotAwareObject,System.String,``0)">
+            <summary>
+            Imposta dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataRemove(Business.Data.Objects.Core.Base.SlotAwareObject,System.String)">
+            <summary>
+            Rimuove dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="key"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataClear(Business.Data.Objects.Core.Base.SlotAwareObject)">
+            <summary>
+            Elimina tutti i dati extra
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataGetKeys(Business.Data.Objects.Core.Base.SlotAwareObject)">
+            <summary>
+            Ritorna tutte le chiavi registrate per l'oggetto
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExtraDataCount(Business.Data.Objects.Core.Base.SlotAwareObject)">
+            <summary>
+            Ritorna tutte le chiavi registrate per l'oggetto
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DebugObjectDump``1(``0)">
+            <summary>
+            Esegue il dump stampabile di un oggetto
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.GetCurrentElapsed">
+            <summary>
+            Ritorna misurazione di quanto trascorso dalla creazione dello slot
+            Utile per calcolare performance/altro
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PrintInfo">
+            <summary>
+            Stampa Informazioni Relative
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PrintCacheDebug">
+            <summary>
+            Ritorna testo con dump della cache
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.PrintLiveTrackingDebug">
+            <summary>
+            Ritorna testo con dump del live tracking
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LiveTrackingClear">
+            <summary>
+            Svuota la cache interna di tracking
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LiveTrackingDeadScan(System.Boolean)">
+            <summary>
+            Se attivo object live tracking allora rimuove tutte le entry i cui oggetti risultano morti (gc-ed)
+            </summary>
+            <param name="issync"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BinSerialize``1(``0)">
+            <summary>
+            Esegue serializzazione binaria oggetto. Per deserializzare utilizzare BinDeserialize
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BinDeserialize``1(System.Byte[])">
+            <summary>
+            Deserializza oggetto serializzato con BinSerialize
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithCreateObj``1">
+            <summary>
+            Crea un business object con un oggetto dal vuoto
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadByPK``1(System.Object[])">
+            <summary>
+            Crea una biz con LoadByKEY
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadByKEY``1(System.String,System.Object[])">
+            <summary>
+            Crea una biz con LoadByKEY
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="keyName"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadOrNewByPK``1(System.Object[])">
+            <summary>
+            Crea una biz con LoadOrNewByPK
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadOrNewByKEY``1(System.String,System.Object[])">
+            <summary>
+            Crea una biz con LoadOrNewByKEY
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="keyName"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.FromDTO_AsNew``1(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Carica un oggetto da DTO by tipo e dto e lo rappresenta come nuovo
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.FromDTO_AsLoaded``1(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+             Carica un oggetto da DTO by tipo e dto e lo rappresenta come caricato
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="dto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ToString">
+            <summary>
+            Ritorna rappresentazione in stringa
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.Clone">
+            <summary>
+            Dato uno slot crea una copia conforme:
+            Viene generato un nuovo id ed una nuova connessione db
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.#ctor(Business.Data.Objects.Database.IDataBase)">
+            <summary>
+            Crea istanza a partire da una classe database
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Crea istanza a partire da oggetti ADO
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.#ctor(System.String,System.String)">
+            <summary>
+            Crea nuovo slot fornendo il Tipo Database e la connectionstring
+            </summary>
+            <param name="dbType">
+            Tipo Database utilizzabile: MSSQLDataBase, MYSQLDataBase,
+            FBDataBase, ACCESSDataBase, SQLITEDataBase
+            </param>
+            <param name="connectionString">
+            La stringa di connessione da utilizzare
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.InitSlot(Business.Data.Objects.Database.IDataBase)">
+            <summary>
+            Inizializza dati vari slot
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.CacheSetAny(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            dato un oggetto prova ad inserirlo nelle varie cache previste
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.IsCacheable(Business.Data.Objects.Core.Schema.Definition.ClassSchema)">
+            <summary>
+            Indica se possibile inserire/leggere un oggetto in cache
+            </summary>
+            <param name="sc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.IsCacheable(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            indica se oggetto inseribile in cache
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.cacheGetPipeline(System.String,Business.Data.Objects.Core.Schema.Definition.ClassSchema)">
+            <summary>
+            Ottiene schema da cache in cascata
+            </summary>
+            <param name="uniqueKey"></param>
+            <param name="sc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.cacheSetPipeline(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Se possibile salva oggetto in cache
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.liveTrackingActivation(System.Boolean)">
+            <summary>
+            Attiva o disattiva tracking
+            </summary>
+            <param name="active"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.liveTrackingSet(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Imposta oggetto nello store del tracking
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.liveTrackingRemove(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Rimuove oggetto dallo store del tracking
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.liveTrackingGet(System.String)">
+            <summary>
+            Ritorna oggetto dallo store del tracking
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.#cctor">
+            <summary>
+            Costruttore statico che esegue configurazione base
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticConfigure(Business.Data.Objects.Core.SlotConfig)">
+            <summary>
+            Consente di impostare la configurazione statica base dello slot.
+            E' ammessa una sola chiamata per ciclo di vita dell'applicazione.
+            </summary>
+            <param name="conf"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.InitConfigure(Business.Data.Objects.Core.SlotConfig)">
+            <summary>
+            Configura uno slot a partire da un'oggetto configurazione
+            </summary>
+            <param name="conf"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.Dispose">
+            <summary>
+            Libera risorse associate
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataDiff">
+            <summary>
+            Classe che identifica una differenza di campo db tra
+            due oggetti
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.DataDiff.FieldName">
+            <summary>
+            Nome Campo Modificato
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.DataDiff.SourceValue">
+            <summary>
+            Valore dell'oggetto di cui si richiede la verifica
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.DataDiff.OtherValue">
+            <summary>
+            Valore dell'oggetto di raffronto
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataDiffList">
+            <summary>
+            Lista di differenze tra oggetti
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjectTest`1">
+            <summary>
+            Delegato per definizione routine di test oggetto
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataList`2">
+            <summary>
+            Classe astratta da utilizzare per gestione Liste
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Core.DataList`2.Item(System.Int32)">
+            <summary>
+            Ritorna oggetto alla posizione specificata
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataList`2.XmlFunction">
+            <summary>
+            Delegato per la gestione dell' Xml del singolo oggetto della lista
+            </summary>
+            <param name="value"></param>
+            <param name="writer"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.#ctor">
+            <summary>
+            Costruttore
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.FindByPK(System.Object[])">
+            <summary>
+            Cerca per chiave primaria tra gli elementi della lista.
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.CacheResult">
+            <summary>
+            La ricerca effettuata dopo questa istruzione verifica la presenza di una eventuale risultato precedente
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.LoadFullObjects">
+            <summary>
+            Indica che gli oggetti vanno precaricati attraverso il risultato della query di lista
+            Attenzione! Al momento integrato direttamente solo sulle SearcBDO. Le query custom non possono eseguire il LoadFullObjects
+            in quanto andrebbero manipolate senza garanzia del risultato
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.OrderByReset">
+            <summary>
+            Resetta campi orderBy
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.OrderBy(System.String,Business.Data.Objects.Core.OrderVersus)">
+            <summary>
+            Imposta il campo di sort e la direzione di sort
+            Da utilizzare subito prima dell'esecuzione della ricerca.
+            </summary>
+            <param name="sortField"></param>
+            <param name="versus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.OrderBy(System.String)">
+            <summary>
+            Order By Field ascending
+            </summary>
+            <param name="sortField"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.OrderBy(Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Imposta Order By passando direttamente tutto l'oggetto orderby
+            </summary>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SearchAllObjects">
+            <summary>
+            Esegue ricerca semplice di tutti gli oggetti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SearchByColumn(System.String,Business.Data.Objects.Core.EOperator,System.Object)">
+            <summary>
+            Esegue ricerca oggetti a partire da un valore di colonna applicando l'operatore impostato
+            </summary>
+            <param name="columnName"></param>
+            <param name="op">Se [IsNull, IsNotNull] il valore non viene considerato</param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SearchByColumn(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ricerca attraverso un filtro di colonna
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToArray">
+            <summary>
+            Ritorna array con oggetti caricati
+            Vengono copiati solo i riferimenti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.GetFirst">
+            <summary>
+            Ritorna primo elemento della lista 
+            oppure null se vuota
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.GetLast">
+            <summary>
+            Ritorna ultimo elemento della lista 
+            oppure null se vuota
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Max(System.String)">
+            <summary>
+            Ritorna l'oggetto che ha il valore massimo della proprieta'
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Max(System.String,Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ritorna l'oggetto che ha il valore massimo della proprieta' applicando un ulteriore filtro
+            </summary>
+            <param name="propertyName"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Min(System.String)">
+            <summary>
+            Ritorna oggetto con valore minimo della proprieta' fornita
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Min(System.String,Business.Data.Objects.Core.IFilter)">
+            <summary>
+             Ritorna oggetto con valore minimo della proprieta' fornita applicando ulteriore filtro
+            </summary>
+            <param name="propertyName"></param>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.getMinMax(System.String,Business.Data.Objects.Core.IFilter,System.Boolean)">
+            <summary>
+            Metodo privato unico per calcolo min e max
+            </summary>
+            <param name="propertyName"></param>
+            <param name="filter"></param>
+            <param name="isMin"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToXml(Business.Data.Objects.Core.DataList{`0,`1}.XmlFunction,System.Boolean,System.Object[])">
+            <summary>
+            Ritorna Xml con dati oggetti. E' possibile specificare un delegato per poter manipolare
+            l'xml di ogni oggetto con altri dati. Utilizzando rewriteAll viene soppresso l'output Xml standard 
+            dell'oggetto
+            </summary>
+            <param name="function">
+            Delegato ad una funzione (e.s. AggiornaXmlUtente(Utente ut, Xmlwrite xw)) per la manipolazione dell'xml
+            </param>
+            <param name="rewriteAll">
+            Impostato a true disabilita l'output xml standard dell'oggetto
+            </param>
+            <param name="args">
+            Dati esterni da inviare alla funzione di scrittura xml
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Union(`0)">
+            <summary>
+            Ritorna nuova lista come unione di elementi con la lista in input.
+            Oggetti con la medesima PK vengono riportati una sola volta.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Clone">
+            <summary>
+            Ritorna un clone della lista corrente
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.UnionAll(`0)">
+            <summary>
+            Ritorna nuova lista come unione di tutti gli elementi con la lista in input.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Diff(`0)">
+            <summary>
+            Ritorna tutti gli elementi presenti nella lista che non sono presenti nella lista in input.
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.GroupByProperty(System.String)">
+            <summary>
+            Ritorna dizionario di valori raggruppati con associata la lista di elementi
+            </summary>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToPagedList(System.Int32,System.Int32)">
+            <summary>
+            Data una lista ritorna una sottolista paginata
+            </summary>
+            <param name="page"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToBizObjectList``1">
+            <summary>
+            Ritorna una lista di business objects
+            </summary>
+            <typeparam name="TB"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Dispose">
+            <summary>
+             Crea una lista paginata
+            </summary>
+            <param name="slotIn"></param>
+            <param name="page"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.AddRange(System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            Aggiunge un set di elementi alla lista
+            </summary>
+            <param name="items"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Add(`1)">
+            <summary>
+            Aggiunge un elemento alla lista
+            </summary>
+            <param name="item"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.AddOrUpdate(`1)">
+            <summary>
+            Aggiunge un elemento alla lista se non gia' presente
+            </summary>
+            <param name="item"></param>
+            <returns> true se ha effettuato l'aggiunta, false se l'aggiornamento </returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Contains(`1)">
+            <summary>
+            Verifica se la lista contiene l'elemento fornito (by PK)
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.CopyTo(`1[],System.Int32)">
+            <summary>
+            Copia gli elementi su array
+            </summary>
+            <param name="array"></param>
+            <param name="arrayIndex"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.RemoveRange(System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            rimuove un set di elementi alla lista
+            </summary>
+            <param name="items"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Remove(`1)">
+            <summary>
+            Rimuove oggetto
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.GetExtraValue(`1,System.String)">
+            <summary>
+            Ritorna un valore accessorio ripreso dalla query di caricamento lista.
+            Utile per ricerche che ritornano dati aggiuntivi rispetto agli oggetti stessi
+            </summary>
+            <param name="item"></param>
+            <param name="columnName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.IndexOf(`1)">
+            <summary>
+            Ricerca Indice Oggetto
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.IndexOfByPK(System.Object[])">
+            <summary>
+            Ritorna il primo indice di oggetto per PK
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.Insert(System.Int32,`1)">
+            <summary>
+            Inserisce elemento nella posizione indicata
+            </summary>
+            <param name="index"></param>
+            <param name="item"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.RemoveAt(System.Int32)">
+            <summary>
+            Rimuove elemento alla posizione indicata
+            </summary>
+            <param name="index"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SortByProperty(System.String,System.Boolean)">
+            <summary>
+            Ritorna lista ordinata
+            </summary>
+            <param name="propertyName"></param>
+            <param name="ascending"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.FindAllByDelegate(Business.Data.Objects.Core.ObjectTest{`1})">
+            <summary>
+            Ritorna una lista di oggetti che rispondono true al delegato passato in input
+            </summary>
+            <param name="testFunc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.FindFirstByPropertyFilter(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ricerca primo oggetto che ha la proprietà fornita con il valore specificato
+            </summary>
+            <param name="propertyName">Nome della proprietà per cui si vuole cercare (case sensitive)</param>
+            <param name="value">valore da testare</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.FindLastByPropertyFilter(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ricerca ultimo oggetto che ha la proprietà fornita con il valore specificato
+            </summary>
+            <param name="propertyName">Nome della proprietà per cui si vuole cercare (case sensitive)</param>
+            <param name="value">valore da testare</param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.FindAllByPropertyFilter(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Ricerca tutti gli oggetti che hanno la proprietà fornita con il valore che rientra nel filtro
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassive(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Esegue aggiornamento di più proprietà contemporaneamente
+            </summary>
+            <param name="propertyValues"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassive(System.String,System.Object)">
+            <summary>
+            Imposta una proprieta' in maniera massiva su tutti gli oggetti
+            </summary>
+            <param name="propertyName"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassiveByFilter(System.String,System.Object,Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Imposta massivamente le proprietà di oggetti che corrispondono al filtro impostato.
+            RItorna il numero di oggetti modificati
+            </summary>
+            <param name="propertyName"></param>
+            <param name="value"></param>
+            <param name="filter"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataObject`1">
+            <summary>
+            Classe da cui ereditare tutti gli oggetti di business con accesso a database
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataObject`1.XmlFunction">
+            <summary>
+            Delegato per la gestione dell' Xml del singolo oggetto della lista
+            </summary>
+            <param name="value"></param>
+            <param name="writer"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.EqualsDeep(`0)">
+            <summary>
+            Verifica se due oggetti sono uguali in tutte le proprietà mappate su DB
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.DiffSource">
+            <summary>
+            Ritorna l'elenco di modifiche tra la versione corrente (gia' salvata)
+            ed il corrispondente oggetto caricato dal sorgente (cache, database)
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.Diff(`0)">
+            <summary>
+            Dati due oggetti ritorna elenco differenze
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.ToXml(Business.Data.Objects.Core.DataObject{`0}.XmlFunction,System.Boolean,System.Object[])">
+            <summary>
+            Scrive Xml con possibilita' di integrazione dati attraverso la specifica di una funzione
+            di manipolazione
+            </summary>
+            <param name="function"></param>
+            <param name="rewriteAll">
+            Se true allora non emette l'Xml standard dell'oggetto
+            </param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.ToList``1">
+            <summary>
+            Ritorna una lista contenente l'elemento selezionato
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.ToListFromEnumerable``1(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'enumerabile in input
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <param name="others"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.ToListFromArray``1(`0[])">
+            <summary>
+            Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'array in input
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <param name="others"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataObject`1.ToBizObject``1">
+            <summary>
+            Dato un DataObject ritorna il corrispondente business object
+            </summary>
+            <typeparam name="TL"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DataUtil">
+            <summary>
+            Classe astratta per la definizione dei metodi di
+            business per una generica classe
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataUtil.#ctor(Business.Data.Objects.Core.BusinessSlot)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="slotIn"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.DebugLevel">
+            <summary>
+            Indica il livello di debug dell'informazione trasmessa
+            per convenzione i livelli più bassi indicano informazioni più di basso livello
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.User_1">
+            <summary>
+            Debug di dettagli utente 1
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.User_2">
+            <summary>
+            Debug di dettagli utente 2
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.User_3">
+            <summary>
+            Debug di dettagli utente 3
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.User_4">
+            <summary>
+            Debug di dettagli utente 4
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.User_5">
+            <summary>
+            Debug di dettagli utente 5
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Technical_1">
+            <summary>
+            Debug di dettagli tecnici 1
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Technical_2">
+            <summary>
+            Debug di dettagli tecnici 2
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Technical_3">
+            <summary>
+            Debug di dettagli tecnici 3
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Technical_4">
+            <summary>
+            Debug di dettagli tecnici 4
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Technical_5">
+            <summary>
+            Debug di dettagli tecnici 5
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Debug_1">
+            <summary>
+            Livello debug 1
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Debug_2">
+            <summary>
+            Livello debug 2
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Debug_3">
+            <summary>
+            Livello debug 3
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Info_1">
+            <summary>
+            Livello Info 1
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Info_2">
+            <summary>
+            Livello Info 2
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Info_3">
+            <summary>
+            Livello Info 3
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Warn_1">
+            <summary>
+            Livello Warning 1
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Warn_2">
+            <summary>
+            Livello Warning 2
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Warn_3">
+            <summary>
+            Livello Warning 3
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Error_1">
+            <summary>
+            Livello Error 1
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Error_2">
+            <summary>
+            Livello Error 2
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.DebugLevel.Error_3">
+            <summary>
+            Livello Error 3
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.EOperator">
+            <summary>
+            Indica il tipo di confronto da effettuare
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.Equal">
+            <summary>
+            Operatore =
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "F:Business.Data.Objects.Core.EOperator.Differs" -->
+        <member name="F:Business.Data.Objects.Core.EOperator.GreaterThan">
+            <summary>
+            Operatore >
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.GreaterEquals">
+            <summary>
+            Operatore >=
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.LessThan">
+            <summary>
+            Operatore &lt;
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.LessEquals">
+            <summary>
+            Operatore &lt;=
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.Like">
+            <summary>
+            Operatore LIKE
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.NotLike">
+            <summary>
+            Operatore NOT LIKE
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.IsNull">
+            <summary>
+            Operatore IS NULL
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.IsNotNull">
+            <summary>
+            Operatore IS NOT NULL
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.Between">
+            <summary>
+            Operatore BETWEEN
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.EOperator.In">
+            <summary>
+            Operatore IN
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Filter">
+            <summary>
+            Classe base da utilizzare per applicare/verificare filtri
+            sia a livello di oggetto (Proprieta') che direttamente su query
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.#ctor(System.String,Business.Data.Objects.Core.EOperator,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Eq(System.String,System.Object)">
+            <summary>
+            Crea un filtro EQUAL
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Lt(System.String,System.Object)">
+            <summary>
+            Crea un filtro LessThen
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Lte(System.String,System.Object)">
+            <summary>
+            Crea un filtro LessThenEqual
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Neq(System.String,System.Object)">
+            <summary>
+            Crea filtro differs
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Gt(System.String,System.Object)">
+            <summary>
+            Crea filtro Greater
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Gte(System.String,System.Object)">
+            <summary>
+            Crea filtro GreaterEQ
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Betw(System.String,System.Object,System.Object)">
+            <summary>
+            Crea filtro Between
+            </summary>
+            <param name="fieldName"></param>
+            <param name="valueA"></param>
+            <param name="valueB"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.IsNull(System.String)">
+            <summary>
+            Crea Filtro IsNull
+            </summary>
+            <param name="fieldName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.NotNull(System.String)">
+            <summary>
+            Crea filtro IsNotNull
+            </summary>
+            <param name="fieldName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.Like(System.String,System.Object)">
+            <summary>
+            Crea filtro Like
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.NotLike(System.String,System.Object)">
+            <summary>
+            Crea filtro NotLike
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <param name="value5"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <param name="value5"></param>
+            <param name="value6"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <param name="value5"></param>
+            <param name="value6"></param>
+            <param name="value7"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <param name="value5"></param>
+            <param name="value6"></param>
+            <param name="value7"></param>
+            <param name="value8"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <param name="value5"></param>
+            <param name="value6"></param>
+            <param name="value7"></param>
+            <param name="value8"></param>
+            <param name="value9"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="value1"></param>
+            <param name="value2"></param>
+            <param name="value3"></param>
+            <param name="value4"></param>
+            <param name="value5"></param>
+            <param name="value6"></param>
+            <param name="value7"></param>
+            <param name="value8"></param>
+            <param name="value9"></param>
+            <param name="value10"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Array)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Collections.IEnumerable)">
+            <summary>
+            Crea filtro IN
+            </summary>
+            <param name="fieldName"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterBase">
+            <summary>
+            Classe astratta di Filter
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.checkValueArray(System.String,System.Object[],System.Int32,System.Int32)">
+            <summary>
+            Controllo array
+            </summary>
+            <param name="filterName"></param>
+            <param name="values"></param>
+            <param name="minLen"></param>
+            <param name="maxLen"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.checkValueNull(System.String,System.Object)">
+            <summary>
+            Verifica parametro NULL
+            </summary>
+            <param name="filterName"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.checkValueNotNull(System.String,System.Object)">
+            <summary>
+            Verifica valore
+            </summary>
+            <param name="filterName"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.#ctor(System.String,Business.Data.Objects.Core.EOperator,System.Object)">
+            <summary>
+            Base constructor
+            </summary>
+            <param name="name"></param>
+            <param name="op"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:Business.Data.Objects.Core.FilterBase.Name">
+            <summary>
+            Filter field name
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.FilterBase.Operator">
+            <summary>
+            Filter oPerator
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.FilterBase.Value">
+            <summary>
+            Valore del filtro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.And(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Filter AND
+            </summary>
+            <param name="f"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.And(System.String,Business.Data.Objects.Core.EOperator,System.Object)">
+            <summary>
+            Filter AND con parametri espliciti
+            </summary>
+            <param name="name"></param>
+            <param name="op"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.Or(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Filter OR
+            </summary>
+            <param name="f"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.Or(System.String,Business.Data.Objects.Core.EOperator,System.Object)">
+            <summary>
+            Filtro OR con parametri espliciti
+            </summary>
+            <param name="name"></param>
+            <param name="op"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.PropertyTest(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Esegue test di confronto su oggetto
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.AppendFilterSql(Business.Data.Objects.Database.IDataBase,System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Appende la clausola generata (SQL + Parametri)
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ChainItem">
+            <summary>
+            Classe per la gestione della catena di filtri
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.IFilter">
+            <summary>
+            Interfaccia filtro
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.IFilter.Name">
+            <summary>
+            Filter Field Name
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.IFilter.Operator">
+            <summary>
+            Filter Inner operator
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.IFilter.Value">
+            <summary>
+            Valore RAW del filtro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.IFilter.And(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Operatore AND
+            </summary>
+            <param name="??"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.IFilter.Or(Business.Data.Objects.Core.IFilter)">
+            <summary>
+            Operatore OR
+            </summary>
+            <param name="??"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.IFilter.PropertyTest(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Testa la proprieta' di un oggetto
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.IFilter.AppendFilterSql(Business.Data.Objects.Database.IDataBase,System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Appende la traduzione SQL del filtro
+            </summary>
+            <param name="db"></param>
+            <param name="sql"></param>
+            <param name="paramIndex"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterBETWEEN">
+            <summary>
+            Filtro BETWEEN
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBETWEEN.#ctor(System.String,System.Object,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterDIFFERS">
+            <summary>
+            Filtro DIFFERS
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterDIFFERS.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterEQUAL">
+            <summary>
+            Filtro EQUAL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterEQUAL.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterGREATER">
+            <summary>
+            Filtro GREATER
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterGREATER.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterGREATEREQ">
+            <summary>
+            Filtro GREATER EQUAL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterGREATEREQ.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterIN">
+            <summary>
+            Filtro IN
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Array)">
+            <summary>
+            Crea un filtro in a partire da un qualunque tipo di array definito
+            </summary>
+            <param name="fieldName"></param>
+            <param name="values"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Collections.IEnumerable)">
+            <summary>
+            Crea filtro in a partire da qualunque enumerabile
+            </summary>
+            <param name="fieldName"></param>
+            <param name="values"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object)">
+            <summary>
+            FiltroIN con 1 valore
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 2 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 3 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 4 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 5 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+            <param name="val5"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 6 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+            <param name="val5"></param>
+            <param name="val6"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+             FiltroIN con 7 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+            <param name="val5"></param>
+            <param name="val6"></param>
+            <param name="val7"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 8 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+            <param name="val5"></param>
+            <param name="val6"></param>
+            <param name="val7"></param>
+            <param name="val8"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 9 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+            <param name="val5"></param>
+            <param name="val6"></param>
+            <param name="val7"></param>
+            <param name="val8"></param>
+            <param name="val9"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
+            <summary>
+            FiltroIN con 10 valori
+            </summary>
+            <param name="fieldName"></param>
+            <param name="val1"></param>
+            <param name="val2"></param>
+            <param name="val3"></param>
+            <param name="val4"></param>
+            <param name="val5"></param>
+            <param name="val6"></param>
+            <param name="val7"></param>
+            <param name="val8"></param>
+            <param name="val9"></param>
+            <param name="val10"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterISNOTNULL">
+            <summary>
+            Filtro ISNOTNULL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterISNOTNULL.#ctor(System.String)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterISNULL">
+            <summary>
+            Filtro ISNULL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterISNULL.#ctor(System.String)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterLESS">
+            <summary>
+            Filtro LESS
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterLESS.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterLESSEQ">
+            <summary>
+            Filtro LESS EQUAL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterLESSEQ.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterLIKE">
+            <summary>
+            Filtro LIKE
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterLIKE.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.FilterNOTLIKE">
+            <summary>
+            Filtro NOTLIKE
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterNOTLIKE.#ctor(System.String,System.Object)">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="propName"></param>
+            <param name="op"></param>
+            <param name="propValue"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.GroupByResult`1">
+            <summary>
+            Classe risultato di operazione group by su lista
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:Business.Data.Objects.Core.OrderVersus">
+            <summary>
+            Definizione verso ordinamento
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.OrderBy">
+            <summary>
+            Classe per la gestione dell'ordinamento
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.OrderBy.OrderByItem">
+            <summary>
+            Classe interna di gestione orderBy
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.#ctor">
+            <summary>
+            Costruttore vuoto
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.#ctor(System.String,Business.Data.Objects.Core.OrderVersus)">
+            <summary>
+            Costruttore standard
+            </summary>
+            <param name="field"></param>
+            <param name="versus"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.#ctor(System.String)">
+            <summary>
+            Crea orderby con verso default ascendente
+            </summary>
+            <param name="field"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.Add(System.String,Business.Data.Objects.Core.OrderVersus)">
+            <summary>
+            Aggiunge ulteriore clausola
+            </summary>
+            <param name="field"></param>
+            <param name="versus"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.Add(System.String)">
+            <summary>
+            Aggiunge clausola con verso default Ascendente
+            </summary>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.ToString">
+            <summary>
+            Ritorna lo statement di order by completo
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.OrderBy.Clear">
+            <summary>
+            Svuota clausola
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.PropertyManager">
+            <summary>
+            Classe per la gestione di proprieta'
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.PropertyIdentifier">
+            <summary>
+            Classe che identifica una Chiave di proprieta'
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.SlotConfig">
+            <summary>
+            Impostazioni Businessslot - Default da .config
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.LogBaseDirectory">
+            <summary>
+            Directory base per il logging
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.LogDatabaseActivity">
+            <summary>
+            Indica se attivo il logging delle operazioni database
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.LogDatabaseOnlyErrors">
+            <summary>
+            Indica se per il log db vanno loggati solo gli errori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.CacheGlobalSize">
+            <summary>
+            Dimensione cache GLOBAL
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.ObjectValidationUseMessageList">
+            <summary>
+            Indica se i messaggi di validazione devono essere singolarmente immessi nella lista messaggi dello slot
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.XmlDefaultDateFormat">
+            <summary>
+            Indica il tipo di formattazione XML per le date
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.XmlDefaultDecimalFormat">
+            <summary>
+            Indica il tipo di formattazione XML dei decimal
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.LiveTrackingEnabled">
+            <summary>
+            Indica se attivo il live tracking
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.ChangeTrackingEnabled">
+            <summary>
+            Indica se attivo il change tracking
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.LoadFullObjects">
+            <summary>
+            Indica se attivo il caricamento completo degli oggetti nelle liste
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.EventManagerEnabled">
+            <summary>
+            Indica se attivo l'event manager
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.CachingEnabled">
+            <summary>
+            Indica se attivo il caching (globale)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.SlotConfig.SimulateEnabled">
+            <summary>
+            Indica se attiva la modalita' simulazione (no write)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.SlotConfig.Clone">
+            <summary>
+            Crea una versione clonata della configurazione
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache">
+            <summary>
+            Classe per la gestione sicura dei caricamenti delle classi proxy e della loro gestione
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.Instance">
+            <summary>
+            Singleton main instance
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyDaoDiz">
+            <summary>
+            Dizionario per la gestione dei proxy DAO
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyDao">
+            <summary>
+            Classe per la gestione interna dei lookup DAO
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyBizDiz">
+            <summary>
+            Dizionario per la gestione dei proxy BIZ
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyBiz">
+            <summary>
+            Classe per la gestione interna dei lookup BIZ
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.NewObjeRefId">
+            <summary>
+            Ritorna un nuovo object reeference Id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.Domain_Proxy_Resolver(System.Object,System.ResolveEventArgs)">
+            <summary>
+            Risoluzione assembly
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.GetDaoEntry(System.Type)">
+            <summary>
+            Get Entry
+            </summary>
+            <param name="entryType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateDaoObj(System.Type)">
+            <summary>
+            Crea oggetto senza dataschema
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateDaoObj(System.Type,System.Boolean)">
+            <summary>
+            Crea un oggetto specificando se valorizzare o meno il dataschema
+            </summary>
+            <param name="type"></param>
+            <param name="withData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateDaoNoSchemaObj(System.Type)">
+            <summary>
+            Crea oggetto del tipo definito senza schema (es. tipo lista)
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.GetClassSchema(System.Type)">
+            <summary>
+            Ritorna schema associato a tipo
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateBizObj(System.Type,Business.Data.Objects.Core.BusinessSlot,System.Boolean,System.String,System.Object[])">
+            <summary>
+            Crea istanza di BusinessObject utilizzando un costruttore dinamico
+            </summary>
+            <param name="tBiz"></param>
+            <param name="slot"></param>
+            <param name="keyName"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateBizObj(Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz,Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Istanzia Biz object da una entry
+            </summary>
+            <param name="entry"></param>
+            <param name="dalObj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz">
+            <summary>
+            Classe interna per la gestione dei costruttori degli oggetti business
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz.FastCreateBizObj">
+            <summary>
+            Definizione del delegato per la creazione del business object
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz.TypeKey">
+            <summary>
+            Chiave univoca del tipo
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz.DalType">
+            <summary>
+            Tipo di riferimento del DAL
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz.Create">
+            <summary>
+            Metodo
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryBiz.Factory">
+            <summary>
+            Factory da utilizzare
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyEntryBizDic">
+            <summary>
+            Identifica un dizionario di ProxyEntryBiz
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyEntryDAO">
+            <summary>
+            Identifica una entry con tutte le informazioni necessarie per
+            la gestione del nuovo tipo
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyEntryDAO.FastConstructor">
+            <summary>
+            Definizione del delegato costruttore
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryDAO.ProxyType">
+            <summary>
+            Il nuovo tipo generato
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryDAO.ClassSchema">
+            <summary>
+            Lo schema associato che descrive la mappatura
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.ObjFactory.ProxyEntryDAO.Create">
+            <summary>
+            Il costruttore da chiamare per creare un istanza
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyEntryDaoDic">
+            <summary>
+            Identifica un dizionario di TypeEntry
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder">
+            <summary>
+            Classe statica che crea le classi dinamiche costruite a partire da quelle dichiarate
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.DynAssemblyProxy">
+            <summary>
+            Work class
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.initProxyAssembly(System.Reflection.Assembly)">
+            <summary>
+            Inizializza l'assembly dinamico che contiene gli oggetti BDO
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.BuildDaoProxyFromAssembly(Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyDao)">
+            <summary>
+            Crea i tipi modificati per l'assembly specificato
+            </summary>
+            <param name="outProxy"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.createFastConstructor(System.Type,System.Reflection.Emit.ModuleBuilder)">
+            <summary>
+            Crea un delegato (puntatore a funzione) per il costruttore dell'oggetto
+            </summary>
+            <param name="aType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.readClassSchemaWithSQL(System.Type,System.Int64,System.Reflection.PropertyInfo[])">
+            <summary>
+            Legge il tipo e ritorna lo schema pronto
+            </summary>
+            <param name="originalType"></param>
+            <param name="InternalID"></param>
+            <param name="properties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.fillKeyAttribute(Business.Data.Objects.Core.Schema.Definition.ClassSchema,Business.Data.Objects.Core.Schema.Definition.Property,Business.Data.Objects.Core.Attributes.SearchKey)">
+            <summary>
+            Gestione chiavi
+            </summary>
+            <param name="oSchema"></param>
+            <param name="oProp"></param>
+            <param name="oAttrKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.BuildBizProxyFromAssembly(Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyBiz)">
+            <summary>
+            Ritorna proxy create per business object
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.buildBizProxyEntry(System.Type,Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.ProxyAssemblyBiz)">
+            <summary>
+            Ritorna proxy create per business object
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.ObjectHelper">
+            <summary>
+            Classe appoggio con metodi utili agli oggetti
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.OperatorToString(Business.Data.Objects.Core.EOperator)">
+            <summary>
+            Ritorna stringa con stringa operatore
+            </summary>
+            <param name="op"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.ObjectEnumerableToString(System.Collections.IEnumerable)">
+            <summary>
+            Dato un array ritorna una rappresentazione in stringa tipo v1, v2
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.ObjectArrayToStringRecursive(System.Array)">
+            <summary>
+            Versione che va in ricorsione in presenza di sotto array
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.GetObjectHashString(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Crea un codice hash in formato stringa a partire da oggetto DAL
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.GetObjectHashString(Business.Data.Objects.Core.BusinessSlot,Business.Data.Objects.Core.Schema.Definition.ClassSchema,System.Object[])">
+            <summary>
+            Crea un codice hash in formato stringa leggibile
+            </summary>
+            <param name="slot"></param>
+            <param name="schema"></param>
+            <param name="pkvalues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.JoinString(System.String,System.Collections.IEnumerable)">
+            <summary>
+            Concatena array di oggetti con separatore specificato
+            </summary>
+            <param name="sep"></param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.ToObjectArray(System.Array)">
+            <summary>
+            Crea un array di object a partire da un qualunque tipo di array
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ObjectHelper.ToObjectArray(System.Collections.IEnumerable)">
+            <summary>
+            Crea un array di object a partire da un qualunque tipo di enumerabile
+            </summary>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.PropertyHelper">
+            <summary>
+            Classe con funzioni di utilita' per Proprieta'
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.PropertyHelper.GetDefaultValue(System.Type)">
+            <summary>
+            Ritorna il valore base di un tipo.
+            Attenzione!!! Vengono valorizzari solo i tipi numerici, string e DateTime.
+            Tutto il resto torna null
+            </summary>
+            <param name="aType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.ReferenceManager`2">
+            <summary>
+            Classe per il mantenimento di riferimenti di oggetti
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.ReferenceManager`2.InnerReference">
+            <summary>
+            Classe di contenimento del riferimento anche multiplo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Utils.ReferenceManager`2.IsActive">
+            <summary>
+            Indica se Tracking Attivo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Utils.ReferenceManager`2.Count">
+            <summary>
+            Ritorna numero elementi
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.#ctor(System.Int32)">
+            <summary>
+            Costruttore
+            </summary>
+            <param name="capacity"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.Lock">
+            <summary>
+            Acquisisce il lock del reference manager per eseguire più operazioni in modalità atomica
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.Unlock">
+            <summary>
+            Libera il lock acquisito
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.Clear">
+            <summary>
+            Elimina tutti i riferimenti
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.Remove(`0)">
+            <summary>
+            Rimuove chiave singola
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.Set(`0,`1)">
+            <summary>
+            imposta oggetto con chiave
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.Get(`0)">
+            <summary>
+            Cerca oggetto
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.CleanDeadEntries(System.Boolean)">
+            <summary>
+            Esegue pulizia entry non più referenziate
+            </summary>
+            <param name="issync"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.PrintDebug">
+            <summary>
+            Ritorna dump "basico" con quanto presente nello Store
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.ReferenceManager`2.performCleanDeadEntries">
+            <summary>
+            esegue pulizia dei riferimenti non più attivi
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager">
+            <summary>
+            Gestore Eventi associato allo Slot
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.PostEventQ">
+            <summary>
+            Ritorna coda POST
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.PreEventQ">
+            <summary>
+            Coda di PRE
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.Clear">
+            <summary>
+            Elimina tutti gli eventi associati
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.RegisterPostEventHandlerForAny(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,Business.Data.Objects.Core.BusinessSlot.BDEventPostHandler)">
+            <summary>
+            Registra evento per qualunque tipo
+            </summary>
+            <param name="evt"></param>
+            <param name="func"></param>
+            <param name="inputData"></param>
+            <param name="outputData"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.RegisterPostEventHandler``1(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,Business.Data.Objects.Core.BusinessSlot.BDEventPostHandler)">
+            <summary>
+            Registra evento per tipo su coda
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="evt"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.RunPostEventHandlerQueue(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Esegue la coda di eventi. Attenzione! eccezioni non gestite interrompono la coda di esecuzione
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="evt"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.RegisterPreEventHandlerForAny(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,Business.Data.Objects.Core.BusinessSlot.BDEventPreHandler)">
+            <summary>
+            Registra evento per qualunque tipo
+            </summary>
+            <param name="evt"></param>
+            <param name="func"></param>
+            <param name="inputData"></param>
+            <param name="outputData"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.RegisterPreEventHandler``1(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,Business.Data.Objects.Core.BusinessSlot.BDEventPreHandler)">
+            <summary>
+            Registra evento per tipo su coda
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="evt"></param>
+            <param name="func"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventManager.RunPreEventHandlerQueue(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,Business.Data.Objects.Core.Base.DataObjectBase,System.Boolean@)">
+            <summary>
+            Esegue la coda di eventi. Attenzione! eccezioni non gestite interrompono la coda di esecuzione
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="evt"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventSimpleQueuePRE">
+            <summary>
+            Coda per la gestione degli eventi PRE
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventSimpleQueuePRE.HandledType">
+            <summary>
+            Tipo Gestito
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventSimpleQueuePRE.Run(Business.Data.Objects.Core.Base.DataObjectBase,System.Boolean@)">
+            <summary>
+            Esegue tutti gli eventi
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventForTypeQueuePRE">
+            <summary>
+            Coda eventi  per tipo oggetto
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventForTypeQueuePRE.Add(System.Type,Business.Data.Objects.Core.BusinessSlot.BDEventPreHandler)">
+            <summary>
+            Aggiunge Item
+            </summary>
+            <param name="handler"></param>
+            <param name="input"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventForTypeQueuePRE.Run(System.Type,Business.Data.Objects.Core.Base.DataObjectBase,System.Boolean@)">
+            <summary>
+            Esegue la coda
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventMainQueuePRE">
+            <summary>
+            Gestore coda per tipo evento
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventMainQueuePRE.Add(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,System.Type,Business.Data.Objects.Core.BusinessSlot.BDEventPreHandler)">
+            <summary>
+            Aggiunge Item
+            </summary>
+            <param name="handler"></param>
+            <param name="input"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Utils.BdoOnly.SlotEventMainQueuePRE.Run(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,System.Type,Business.Data.Objects.Core.Base.DataObjectBase,System.Boolean@)">
+            <summary>
+            Esegue coda per tipo evento
+            </summary>
+            <param name="evt"></param>
+            <param name="value"></param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:Business.Data.Objects.Core.Utils.JSONWriter" -->
+        <member name="T:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventSimpleQueuePOST">
+            <summary>
+            Coda per la gestione degli eventi POST
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventSimpleQueuePOST.HandledType">
+            <summary>
+            Tipo gestito
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventSimpleQueuePOST.Run(Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Esegue tutti gli eventi
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventForTypeQueuePOST">
+            <summary>
+            Coda eventi  per tipo oggetto
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventForTypeQueuePOST.Add(System.Type,Business.Data.Objects.Core.BusinessSlot.BDEventPostHandler)">
+            <summary>
+            Aggiunge Item
+            </summary>
+            <param name="handler"></param>
+            <param name="input"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventForTypeQueuePOST.Run(System.Type,Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Esegue la coda
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventMainQueuePOST">
+            <summary>
+            Gestore coda per tipo evento
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventMainQueuePOST.Add(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,System.Type,Business.Data.Objects.Core.BusinessSlot.BDEventPostHandler)">
+            <summary>
+            Aggiunge Item
+            </summary>
+            <param name="handler"></param>
+            <param name="input"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventMainQueuePOST.Run(Business.Data.Objects.Core.BusinessSlot.EObjectEvent,System.Type,Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Esegue coda per tipo evento
+            </summary>
+            <param name="evt"></param>
+            <param name="value"></param>
+        </member>
+    </members>
+</doc>

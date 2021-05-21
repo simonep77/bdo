@@ -2376,7 +2376,7 @@ Public Class frmTests
 
             oList = ss1.CreateList(Of OrdineStatoLista)().CacheResult().SearchByColumn(Filter.Neq(NameOf(OrdineStato.Id), 1000))
 
-            oList = ss1.CreateList(Of OrdineStatoLista)().CacheResult().SearchByColumn(Filter.Neq(NameOf(OrdineStato.Id), 1000))
+            oList = ss1.CreateList(Of OrdineStatoLista)().CacheResult().SearchByColumn(Filter.Neq(NameOf(OrdineStato.Id), 1000).FieldRight())
 
 
             oList = ss1.CreateList(Of OrdineStatoLista)().CacheResult().SearchByColumn(Filter.Neq(NameOf(OrdineStato.Id), 500))

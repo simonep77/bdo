@@ -378,9 +378,9 @@ namespace Business.Data.Objects.Core.Base
 
                     if (ldProp.Type.Equals(typeof(DateTime)))
                         //Se il filtro e' nullo 
-                        ldfilter = Filter.IsNull(ldProp.Column.Name);
+                        ldfilter = Filter.IsNull(ldProp.Name);
                     else
-                        ldfilter = Filter.Eq(ldProp.Column.Name, 0);
+                        ldfilter = Filter.Eq(ldProp.Name, 0);
                     //Reimposta il filtro aggiungendo o creandolo
                     filter = filter?.And(ldfilter) ?? ldfilter;
                 }
@@ -391,7 +391,7 @@ namespace Business.Data.Objects.Core.Base
             {
                 //Imposta SQL filtro
                 sql.Append(@" WHERE ");
-                filter.AppendFilterSql(db, sql, 0);
+                (filter as FilterBase)?.appendFilterSqlInternal(db, this.Slot, this.mObjSchema, sql, 0);
 
             }
 

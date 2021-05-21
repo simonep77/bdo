@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Database;
 
 namespace Business.Data.Objects.Core
@@ -61,6 +62,16 @@ namespace Business.Data.Objects.Core
         /// <param name="paramIndex"></param>
         void AppendFilterSql(IDataBase db, StringBuilder sql, int paramIndex);
 
+        /// <summary>
+        /// Inverte la produzione della query: valore <operatore> Campo
+        /// </summary>
+        /// <returns></returns>
+        IFilter FieldRight();
 
+        /// <summary>
+        /// Default.  Ripristina il default
+        /// </summary>
+        /// <returns></returns>
+        IFilter FieldLeft();
     }
 }

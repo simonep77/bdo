@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.0.2</Version>
+    <Version>5.0.3</Version>
     <Authors>Simone Pelaia</Authors>
     <Description>Pacchetto classi common per Business.Data.Objects</Description>
     <Copyright>Simone Pelaia</Copyright>
@@ -11,6 +11,10 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>BDO_Signing_Key.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\simone.pelaia\source\repos\simonep77\bdo\Business.Data.Objects.Common\Business.Data.Objects.Common.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

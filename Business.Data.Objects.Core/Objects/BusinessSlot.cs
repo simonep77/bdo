@@ -973,7 +973,20 @@ namespace Business.Data.Objects.Core
         public string DbPrefixGetColumn<T>(string propertyName)
             where T : DataObject<T>
         {
-            return ProxyAssemblyCache.Instance.GetClassSchema(typeof(T)).Properties.GetPropertyByName(propertyName).Column.Name;
+            return DbPrefixGetColumn(typeof(T), propertyName);
+        }
+
+
+        /// <summary>
+        /// Data una classe ed un nome di proprieta' ritorna il nome del campo DB. 
+        /// Utile quando differenti rispetto alla nomenclatura della classe
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        internal string DbPrefixGetColumn(Type type, string propertyName)
+        {
+            return ProxyAssemblyCache.Instance.GetClassSchema(type).Properties.GetPropertyByName(propertyName).Column.Name;
         }
 
 
@@ -2378,6 +2391,11 @@ namespace Business.Data.Objects.Core
             {
                 oCloned.DbPrefixKeys.Add(item.Key, item.Value);
             }
+
+            //Imposta eventi
+            oCloned.OnLogDebugSent = this.OnLogDebugSent;
+            oCloned.OnDbConnectionRequired = this.OnDbConnectionRequired;
+            oCloned.OnUserInfoRequired = this.OnUserInfoRequired;
 
             return oCloned;
 

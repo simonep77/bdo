@@ -1,0 +1,1296 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Business.Data.Objects.Database</name>
+    </assembly>
+    <members>
+        <member name="T:Business.Data.Objects.Database.CommonDataBase">
+            <summary>
+            Classe Astratta da cui derivano quelle specializzate: gran parte delle proprietà
+            e dei Metodi risiedono qui
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ProviderAssembly">
+            <summary>
+            Assembly di riferimento del provider
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ProviderFactoryClass">
+            <summary>
+            Classe del factory provider
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ProviderFactory">
+            <summary>
+            Istanza del factory corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TypeMapper">
+            <summary>
+            Mappatore tipi .NET -> tipi DB
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.CommonDataBase.AssFactoryDictionary">
+            <summary>
+            Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.LastAutoIdFunction">
+            <summary>
+            Ritorna il nome della funzione per la cattura dell'ultimo Id inserito automaticamente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.Stats">
+            <summary>
+            Statistiche di utilizzo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.DbType">
+            <summary>
+            Ritorna tipo database
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ConnectionString">
+            <summary>
+            Ritorna connection string utilizzata
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ExecutionTimeout">
+            <summary>
+            Ritorna o imposta il timeout di esecuzione query (secondi)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.CommandType">
+            <summary>
+            Ottiene o imposta la tipologia di comando che si vuole eseguire:
+            - Sql standard
+            - Stored Procedure
+            - Tabella diretta
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.AutoCloseConnection">
+            <summary>
+            ottiene o imposta il comportamento della connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.SQL">
+            <summary>
+            SQL da eseguire (o eseguito)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TotRecordQueryPaginata">
+            <summary>
+            Numero Totale Records calcolati dopo l'ultima OpenQuery paginata
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TraceON">
+            <summary>
+            Abilita o disabilita la registrazione dei dati di esecuzione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TraceOnlyErrors">
+            <summary>
+            Se TraceON abilita il trace dei soli
+            errori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.IsInTransaction">
+            <summary>
+            Indica se si e' in un contesto transazionale
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.HasAcquiredLocks">
+            <summary>
+            Indica se presenti lock in atto
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.IsPendingTransaction">
+            <summary>
+            Indica se e' stato richiesto avvio transazione ma effettivamente ancora non e' stata aperta in quanto non eseguita la connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.IsConnectionOpen">
+            <summary>
+            Indica se la connessione e' attiva
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.CanAutoCloseConnection">
+            <summary>
+            Indica se possibile chiudere la connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.HashCode">
+            <summary>
+            Codice hash della connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TransactionDefaultIsolation">
+            <summary>
+            Isolamento di default della transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.#ctor(System.String)">
+            <summary>
+            Costruttore pubblico
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Clone">
+            <summary>
+            Clona una connessione DB
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.EnableTrace(Business.Data.Objects.Common.Logging.LoggerBase,System.Boolean)">
+            <summary>
+            Abilita logging fornendo un filelogger specifico
+            </summary>
+            <param name="logger"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.EnableTrace(System.String,System.Boolean)">
+            <summary>
+            Abilita il trace degli statement SQL su file
+            </summary>
+            <param name="traceFilePath"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.DisableTrace">
+            <summary>
+            Disabilita trace degli statement SQl
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginTransaction">
+            <summary>
+            Inizia nuova transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Inizia nuova transazione con specifica dell'isolation level
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CommitTransaction">
+            <summary>
+            Esegue Commit
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.RollbackTransaction">
+            <summary>
+            Esegue rollback
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetNewGeneratorId(System.String)">
+            <summary>
+            Ritorna un nuovo id ottenuto attraverso un generatore
+            </summary>
+            <param name="generatorName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecQuery">
+            <summary>
+            esegue una query non di selezione (INSERT, UPDATE, DELETE, DDL, ..)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecScalar">
+            <summary>
+            esegue una query selezione tornando solo la prima colonna della prima riga (oppure null)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecReader">
+            <summary>
+            esegue una query selezione tornando un DbDataReader
+            </summary>
+            <returns>
+            DataReader Associato ai dati
+            </returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecReaderPaged(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata con output datareader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Select">
+            <summary>
+            Esegue una select e ritorna la datatable con i dati
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.SelectM">
+            <summary>
+            Esgue query di selezione e ritorna un dataset. Utile per query concatenate che ritornano set di dati multipli 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue una query e ritorna parte del risultato su dataset come da specifiche
+            E' possibile eseguire l'override nelle classi specializzate per utilizzare
+            costrutti propri del db (vedi Mysql)
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParamName(System.String)">
+            <summary>
+            Ritorna nome parametro compatibile a partire da una stringa
+            </summary>
+            <param name="baseName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameter(System.String,System.Object)">
+            <summary>
+            Aggiunge parametro con nome e valore
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Aggiunge parametro con nome e valore e tipo
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameter(System.Data.Common.DbParameter)">
+            <summary>
+            Aggiunge parametro
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameters(System.Collections.Generic.IList{System.Data.Common.DbParameter})">
+            <summary>
+            Aggiunge elenco parametri
+            </summary>
+            <param name="paramlist"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ClearParameters">
+            <summary>
+            Elimina tutti i parametri
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Crea parametro per nome, valore e tipo .NET
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParameter(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Crea parametro per nome, valore e tipo del driver DB
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbtype"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CloseConnection(System.Boolean)">
+            <summary>
+            Chiude la connessione (se aperta)
+            </summary>
+            <param name="rollbackUnCommitted"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginThreadSafeWork">
+            <summary>
+            Inizia una sessione Atomica di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.EndThreadSafeWork">
+            <summary>
+            Termina una sessione atomica di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene un lock globale a livello di applicazione
+            per una risorsa identificata da un nome
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeoutsec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia un lock globale precedentemente
+            acquisito
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Reset">
+            <summary>
+            Resetta contesto di esecuzione db
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetCurrentQueryHashString(System.Int32,System.Int32)">
+            <summary>
+            Ritorna un codice hash rappresentativo della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetCurrentQueryHashCode(System.Int32,System.Int32)">
+            <summary>
+            Ritorna un codice hash rappresentativo della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetAdoConnection">
+            <summary>
+            Ritorna connessione ADO sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetAdoTransaction">
+            <summary>
+            Ritorna transazione ADO sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.LockedTransactionBegin(System.String,System.Int32)">
+            <summary>
+            Richiede lock ed avvia transazione
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeOutSec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.LockedTransactionCommit(System.String)">
+            <summary>
+            Committa e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.LockedTransactionRollback(System.String)">
+            <summary>
+            Rollback e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Dispose">
+            <summary>
+            Rilascio Finale delle risorse con rollback eventuali transazioni non committed
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.registerLock(System.String)">
+            <summary>
+            Registra il lock nella classe database in modo da tenerne traccia
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.unregisterLock(System.String)">
+            <summary>
+            Deregistra lock
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.updateStatsFromSQL(System.String)">
+            <summary>
+            Data una stringa sql aggiorna le statistiche in base al tipo
+            </summary>
+            <param name="sqlIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.OpenConnection">
+            <summary>
+            Apre la connessione al database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.checkAutoCloseConnection">
+            <summary>
+            Se impostata autochiusura e possibile chiudere allora esegue chiusura
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.clearCommand">
+            <summary>
+            Pulizia comando
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.setTotPagedRecords(System.Int32)">
+            <summary>
+            Imposta numero record query paginata
+            </summary>
+            <param name="numRecords"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.createNewTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Crea nuova transazione
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.getNextTransaction">
+            <summary>
+            Ritorna la successiva Transazione altrimenti null
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.TraceLog(System.String,System.Object[])">
+            <summary>
+            Scrive Riga Su File di Trace
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.TraceStatement(System.String,System.Exception)">
+            <summary>
+            Esegue il trace di uno statement
+            </summary>
+            <param name="position"></param>
+            <param name="ex"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.pendingTransReset">
+            <summary>
+            Resetta l'indicatore di transazione pendente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.pendingTransSet(System.Data.IsolationLevel)">
+            <summary>
+            Imposta indicatore transazione pendente
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetDbFactory">
+            <summary>
+            Dato un tipo di factory ritorna una istanza valorizzata
+            </summary>
+            <param name="facType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.InitByFactory">
+            <summary>
+            Carica impostazioni da factory corrente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.InitByADO(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Inizializza attraverso oggetti ADO
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+            <param name="factory"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DataBaseException">
+            <summary>
+            Description of DataBaseException.
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DataBaseFactory">
+            <summary>
+            Description of DataBaseFactory.
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DataBaseFactory.CreaDataBase(System.String,System.String)">
+            <summary>
+            Istanzia un oggetto IDataBase dato il nome della classe e la relativa connection string
+            </summary>
+            <param name="tipoDataBase"></param>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DataBaseFactory.CreaDataBaseFromADO(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Crea istanza db partendo da connection
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DatabaseList">
+            <summary>
+            Classe lista database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.OpenAll">
+            <summary>
+            Apre tutte le connessioni (se non aperte)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.CloseAll(System.Boolean)">
+            <summary>
+            Chiude tutte le connessioni
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.BeginTransAll(System.Data.IsolationLevel)">
+            <summary>
+            Apre tutte le transazioni con un dato isolation level.
+            Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.BeginTransAll">
+            <summary>
+            Apre transazione su tutti i db
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.CommitAll">
+            <summary>
+            Esegue Commit su tutti i database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.RollbackAll">
+            <summary>
+            Esegue il rollback su tutti i database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.GetAllStats">
+            <summary>
+            Statistiche unificate
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DBStats">
+            <summary>
+            Classe per statistiche di accesso al DB
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DBStats.EStatement">
+            <summary>
+            Identifica lo statement eseguito
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DBStats.StatementRecord">
+            <summary>
+            Identifica un contatore di singolo statement
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.Reset">
+            <summary>
+            Azzera contatori
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.GetCounter(Business.Data.Objects.Database.DBStats.EStatement)">
+            <summary>
+            Ritorna conteggio per statement
+            </summary>
+            <param name="statement"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.Sum(Business.Data.Objects.Database.DBStats)">
+            <summary>
+            Aggrega statistiche
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.ToXml">
+            <summary>
+            Ritorna Xml che rappresenta le statistiche
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.ToString">
+            <summary>
+            Ritorna rappresentazione in stringa
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DbTypeMapper">
+            <summary>
+            Casse per la mappatura dei tipi NET -> DB
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.DbTypeMapper.StaticMap">
+            <summary>
+            Espone la mappa di associazione statica e immutabile
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.DbTypeMapper.CurrentMap">
+            <summary>
+            Espone la mappa di associazione dell'istanza corrente. Se non vengono richieste modifiche coincide con la StaticMap
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeCurrentMap(System.Type,System.Data.DbType)">
+            <summary>
+            Modifica la mappatura dell'istanza corrente. Attenzione: la modifica di un mapping comporta la clonazione del mapping di default solo per il database per cui è richiesto
+            </summary>
+            <param name="t"></param>
+            <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeCurrentMap``1(System.Data.DbType)">
+            <summary>
+            Modifica il mapping corrente per questa istanza con tipo esplicito
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeStaticMap(System.Type,System.Data.DbType)">
+            <summary>
+            Modifica la mappatura statica. la modifica ha effetto su tutti i db instanziati che non hanno modificato la mappatura
+            La chiamata va inserita in un metodo statico
+            </summary>
+            <param name="t"></param>
+            <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeStaticMap``1(System.Data.DbType)">
+             <summary>
+            Modifica mappatura statica con tipo esplicito
+             </summary>
+             <typeparam name="T"></typeparam>
+             <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.GetDbTypeFor(System.Type)">
+            <summary>
+            Dato un type ritorna il corrispondente dbtype
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.cloneStaticMap">
+            <summary>
+            Ritorna una copia clonata dello static Map
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.IDataBase">
+            <summary>
+            Interfaccia IDataBase.
+            Fornisce i metodi e le proprietà per accedere ad un database, a prescindere dal tipo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.LastAutoIdFunction">
+            <summary>
+            Nome funzione che ritorna ultimo Id inserito automaticamente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.HashCode">
+            <summary>
+            Codice hash relativo alla connessi db (connectionstring)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.AutoCloseConnection">
+            <summary>
+            Indica se la connessione può essere chiusa quando necessario
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.SQL">
+            <summary>
+            SQL da eseguire
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.CommandType">
+            <summary>
+            Indica il tipo di comando da eseguire
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.DbType">
+            <summary>
+            Tipo Database
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.ConnectionString">
+            <summary>
+            Stringa di connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.Stats">
+            <summary>
+            Statistiche di utilizzo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.IsInTransaction">
+            <summary>
+            Indica se ci si trova in un contesto transazionale
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TransactionDefaultIsolation">
+            <summary>
+            Indica il livello di isolamento delle transazioni per il db
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TraceOnlyErrors">
+            <summary>
+            Abilita il trace dei soli errori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.ExecutionTimeout">
+            <summary>
+            Ritorna o imposta il tempo massimo di attesa esecuzione statement (secondi)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TypeMapper">
+            <summary>
+            Mappatore tipi .NET -> tipi DB
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Clone">
+            <summary>
+            Clona Database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.EnableTrace(Business.Data.Objects.Common.Logging.LoggerBase,System.Boolean)">
+            <summary>
+            Abilita il trace fornendo un logger specifico
+            </summary>
+            <param name="logger"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.EnableTrace(System.String,System.Boolean)">
+            <summary>
+            Abilita trace degli statement SQL su file
+            </summary>
+            <param name="traceFilePath"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.DisableTrace">
+            <summary>
+            Disabilita trace degli statement SQL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetCurrentQueryHashCode(System.Int32,System.Int32)">
+            <summary>
+            Ritorna un codice hash rappresentativo della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetCurrentQueryHashString(System.Int32,System.Int32)">
+            <summary>
+            Ritorna una string rappresentativa della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TotRecordQueryPaginata">
+            <summary>
+            Numero Totale Record calcolati nell'ultima OpenQuery paginata
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetNewGeneratorId(System.String)">
+            <summary>
+            Ritorna un nuovo id ottenuto attraverso un generatore
+            </summary>
+            <param name="generatorName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.BeginTransaction">
+            <summary>
+            Inizia una transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Inizia una transazione con un dato IsolationLevel
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CommitTransaction">
+            <summary>
+            Commit Transazione in corso
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.RollbackTransaction">
+            <summary>
+            Rollback Transazione corrente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ExecQuery">
+            <summary>
+            Esegue statement SQL impostato senza tornare dati
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ExecScalar">
+            <summary>
+            Esegue statement SQL tornando solo la prima colonna della prima riga (altrimenti NULL)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ExecReader">
+            <summary>
+            Esegue statement SQL tornando un Oggetto DbDataReader
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Select">
+            <summary>
+            Esegue statement SQL impostato e ritorna dati su datatable
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue statement SQL impostato e ritorna la parte dati richiesta su datatable
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object)">
+            <summary>
+            Aggiunge paramtro con nome, valore e tipo
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Aggiunge paramtro con nome, valore e tipo .NET
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Aggiunge paramtro con nome, valore e tipo DB (driver)
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbtype"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.Data.Common.DbParameter)">
+            <summary>
+            Aggiunge parametro creato in precedenza
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameters(System.Collections.Generic.IList{System.Data.Common.DbParameter})">
+            <summary>
+            Aggiunge lista di parametri
+            </summary>
+            <param name="paramlist"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ClearParameters">
+            <summary>
+            Elimina tutti i parametri correnti
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CreateParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Crea paramtro con nome, valore e tipo db senza aggiungerlo
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CreateParameter(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Crea paramtro con nome, valore e tipo db (driver) senza aggiungerlo
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbtype"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CreateParamName(System.String)">
+            <summary>
+            Ritorna nome parametro compatibile con il database specificato.
+            </summary>
+            <param name="baseName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CloseConnection(System.Boolean)">
+            <summary>
+            Forza la chiusura della connessione
+            </summary>
+            <param name="rollbackUnCommitted">
+            Specifica se bisogna eseguire il RollBack (oppure il Commit) della transazione eventualmente aperta
+            </param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.OpenConnection">
+            <summary>
+            Forza apertura connessione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.BeginThreadSafeWork">
+            <summary>
+            Inizia una sessione thread-safe di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.EndThreadSafeWork">
+            <summary>
+            Termina una sessione thread-safe di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene un lock globale a livello di applicazione
+            per una risorsa identificata da un nome
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeoutsec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia un lock globale precedentemente
+            acquisito
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.HasLock(System.String)">
+            <summary>
+            Indica se presente un lock con nome
+            </summary>
+            <param name="lockName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Reset">
+            <summary>
+            Resetta lo stato di esecuzione del database
+            In particolare elimina eventuali parametri
+            mai utilizzati
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetAdoConnection">
+            <summary>
+            Ritorna connessione sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetAdoTransaction">
+            <summary>
+            Ritorna transazione sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.LockedTransactionBegin(System.String,System.Int32)">
+            <summary>
+            Richiede lock ed avvia transazione
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeOutSec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.LockedTransactionCommit(System.String)">
+            <summary>
+             Committa e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.LockedTransactionRollback(System.String)">
+            <summary>
+             Rollback e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQL2005DataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.MSSQL2005DataBase._PAGED_REGEX">
+            <summary>
+            Regex per cercare primo statement di selct che puo' avere o meno distinct e top
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.preparePagedQuery(System.Int32,System.Int32)">
+            <summary>
+            Imposta query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.ExecReaderPaged(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata con reader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQL2012DataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.MSSQL2012DataBase._PAGED_REGEX">
+            <summary>
+            Regex per cercare primo statement di select che puo' avere o meno distinct e top
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.preparePagedQuery(System.Int32,System.Int32)">
+            <summary>
+            Imposta query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQLDataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene il lock di una risorsa con nome
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia lock precedentemente acquisito
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MYSQLDataBase">
+            <summary>
+            Description of MYSQLDataBase.
+            
+            La connection string deve essere del tipo: DataSource=server;database=db;user=xxx;password=xxx
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.MYSQLDataBase.TransactionDefaultIsolation">
+            <summary>
+            Isolamento di default della transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene lock su risorsa
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia lock su risorsa
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue una query e ritorna parte del risultato su dataset come da specifiche
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.ExecReaderPaged(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata ritornando un DataReader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.PGSQLDataBase">
+            <summary>
+            Classe di gestione Database PostgrsSQL - PGSQLDataBase.
+            
+            La connection string deve essere del tipo: DataSource=server;database=db;user=xxx;password=xxx
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.PGSQLDataBase.SQL">
+            <summary>
+            Eseguito override per convertire il nome parametro @ con ?
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.PGSQLDataBase.AddParameter(System.String,System.Object)">
+            <summary>
+            Eseguito override per convertire il nome parametro @ con ?
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.PGSQLDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.PGSQLDataBase.GetNewGeneratorId(System.String)">
+            <summary>
+            Ritorna un nuovo id ottenuto attraverso un generatore
+            </summary>
+            <param name="generatorName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.SQLITEDataBase">
+            <summary>
+            Description of SQLITEDataBase.
+            
+            La connection string deve essere del tipo: DataSource=server;database=db;user=xxx;password=xxx
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.SQLITEDataBase.LastAutoIdFunction">
+            <summary>
+            Ritorna nome funzione per ultimo id inserito
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.SQLITEDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.SQLITEDataBase.clearCommand">
+            <summary>
+            Pulizia comando - SQLITE ritorna errore se si modifica un commandtext
+            a datareader aperto
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.Resources.DatabaseMessages">
+            <summary>
+              Classe di risorse fortemente tipizzata per la ricerca di stringhe localizzate e così via.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.ResourceManager">
+            <summary>
+              Restituisce l'istanza di ResourceManager nella cache utilizzata da questa classe.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Culture">
+            <summary>
+              Esegue l'override della proprietà CurrentUICulture del thread corrente per tutte le
+              ricerche di risorse eseguite utilizzando questa classe di risorse fortemente tipizzata.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Assembly_Load_Error">
+            <summary>
+              Cerca una stringa localizzata simile a Errore caricamento classe Factory da &apos;{0}&apos;: {1}.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Assembly_Not_Found">
+            <summary>
+              Cerca una stringa localizzata simile a Assembly {0} non trovato.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Cannot_Get_lock">
+            <summary>
+              Cerca una stringa localizzata simile a Impossibile acquisire il lock richiesto ({0}).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Cannot_Release_Lock">
+            <summary>
+              Cerca una stringa localizzata simile a Impossibile rilasciare il lock richiesto ({0}) poiche&apos; ottenuto da altro chiamante.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.ConnKey_NotFound">
+            <summary>
+              Cerca una stringa localizzata simile a La Chiave di ConnectionString fornita &quot;{0}&quot; non esiste nel web.config/app.config.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Lock_Not_Acquired">
+            <summary>
+              Cerca una stringa localizzata simile a Il lock {0} non e&apos; acquisito.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Lock_Reference_Null">
+            <summary>
+              Cerca una stringa localizzata simile a Il lock richiesto non risulta registrato su questa istanza di database.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Not_Implemented">
+            <summary>
+              Cerca una stringa localizzata simile a Il database corrente ({0}) non supporta la funzionalita&apos; richiesta.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Provider_Unknown">
+            <summary>
+              Cerca una stringa localizzata simile a Il provider {0} non e&apos; riconosciuto. Le possibili opzioni sono: MSSQLDataBase, MSSQL2005DataBase, MYSQLDataBase, SQLITEDataBase.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Query_Empty">
+            <summary>
+              Cerca una stringa localizzata simile a Lo statement SQL non e&apos; valorizzato. Attenzione: dopo ciascuna esecuzione viene cancellato sia lo statement SQL che i parametri..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.TraceLog_Return_ERR">
+            <summary>
+              Cerca una stringa localizzata simile a Esito: ERROR.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.TraceLog_Return_OK">
+            <summary>
+              Cerca una stringa localizzata simile a Esito: OK.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Transaction_DbList_OnlyOne">
+            <summary>
+              Cerca una stringa localizzata simile a Transazione gia&apos; apera: e&apos; possibile aprire un&apos;unica transazione su una lista di DB.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.Resources.DatabaseMessages.Transaction_Not_Open">
+            <summary>
+              Cerca una stringa localizzata simile a Transazione non aperta.
+            </summary>
+        </member>
+    </members>
+</doc>

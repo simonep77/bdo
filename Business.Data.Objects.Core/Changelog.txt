@@ -35,3 +35,10 @@ Introdotto evento OnDbConnectionRequired sullo slot per richiedere esternamente 
 
 [14/04/2020] - 5.0.11 - Simone Pelaia
 Nuovo metodo ToBizObjectList sulla datalist
+
+[21/04/2020] - 5.0.12 - Simone Pelaia
+Clone Businesslot - Vengono riattribuiti gli eventi dello slot principale
+Reinclusa documentazione nei pacchetti
+
+[21/05/2020] - 5.0.13 - Simone Pelaia
+Possibile specificare la posizione del campo nel filtro: sx (default), dx rispetto all'operatore
