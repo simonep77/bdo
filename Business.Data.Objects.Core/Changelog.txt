@@ -42,3 +42,9 @@ Reinclusa documentazione nei pacchetti
 
 [21/05/2020] - 5.0.13 - Simone Pelaia
 Possibile specificare la posizione del campo nel filtro: sx (default), dx rispetto all'operatore
+
+[21/05/2020] - 5.0.14 - Simone Pelaia
+Reincluso Xml di documentazione
+
+[15/06/2020] - 5.0.15 - Simone Pelaia
+Possibilita' di eseguire query su lista tramite espressione LINQ (SearchByLinq)

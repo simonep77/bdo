@@ -407,6 +407,64 @@ namespace Business.Data.Objects.Core.Base
         }
 
 
+
+        /// <summary>
+        /// Ricerca attraverso un filtro di colonna
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        internal protected DataListBase searchByCustomWhere(string where)
+        {
+            //Imposta sql
+            IDataBase db = this.Slot.DbGet(this.mObjSchema);
+            //Inizia a preparare SQL
+            StringBuilder sql = null;
+
+            if (this.mLoadFullObjects)
+                sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_Item), this.mObjSchema.TableDef.SQL_Select_Item.Length + 300);
+            else
+                sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_List), this.mObjSchema.TableDef.SQL_Select_List.Length + 300);
+
+            sql.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
+            sql.Append(@" WHERE ");
+            sql.Append(where);
+
+            //Se presente gestione della cancellazione logica allora la include nella query
+            if (this.mObjSchema.LogicalDeletes.Count > 0)
+            {
+                IFilter filter = null;
+
+                foreach (var ldProp in this.mObjSchema.LogicalDeletes)
+                {
+                    IFilter ldfilter;
+
+                    if (ldProp.Type.Equals(typeof(DateTime)))
+                        //Se il filtro e' nullo 
+                        ldfilter = Filter.IsNull(ldProp.Name);
+                    else
+                        ldfilter = Filter.Eq(ldProp.Name, 0);
+
+                    //Reimposta il filtro aggiungendo o creandolo
+                    filter = filter?.And(ldfilter) ?? ldfilter;
+                }
+
+                //Imposta SQL filtro
+                sql.Append(@" AND ");
+                (filter as FilterBase)?.appendFilterSqlInternal(db, this.Slot, this.mObjSchema, sql, 0);
+            }
+
+            db.SQL = sql.ToString();
+
+            //Imposta provenienza ricerca
+            this.mIsSearch = true;
+
+            //Esegue e Ritorna se stesso
+            return this.doSearch();
+        }
+
+
+
+
         /// <summary>
         /// Imposta il campo di sort e la direzione di sort
         /// Da utilizzare subito prima dell'esecuzione della ricerca.

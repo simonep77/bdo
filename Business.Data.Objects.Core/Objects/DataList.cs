@@ -2,11 +2,13 @@ using Business.Data.Objects.Common.Exceptions;
 using Business.Data.Objects.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Objects;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq.Expressions;
 
 namespace Business.Data.Objects.Core
 {
@@ -200,6 +202,20 @@ namespace Business.Data.Objects.Core
         {
             return (TL)this.searchByColumn(filter);
         }
+
+
+        /// <summary>
+        /// Ricerca attraverso un'espressione linq.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public TL SearchByLinq(Expression<Func<T, bool>> predicate)
+        {
+            var t = new LinqQueryTranslator<T>(this.Slot);
+
+            return (TL)this.searchByCustomWhere(t.Translate(predicate));
+        }
+
 
 
         /// <summary>

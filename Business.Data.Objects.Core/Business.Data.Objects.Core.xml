@@ -1852,6 +1852,15 @@
             <param name="propertyName"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbPrefixGetColumn(System.Type,System.String)">
+            <summary>
+            Data una classe ed un nome di proprieta' ritorna il nome del campo DB. 
+            Utile quando differenti rispetto alla nomenclatura della classe
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="propertyName"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.DbPrefixGetTableName(System.String,System.String)">
             <summary>
             Ritorna il nome completo di tabella a partire da DbPrefixKey e nome tabella
@@ -3382,6 +3391,19 @@
             Valore del filtro
             </summary>
         </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.FieldRight">
+            <summary>
+            Indica che il nome di proprieta' deve essere impostato a dx dello statement.
+            Non vale per tutti gli statement
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.FieldLeft">
+            <summary>
+            Indica che il nome di proprieta' deve essere impostato a sx dello statement (DEFAULT)
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.FilterBase.And(Business.Data.Objects.Core.IFilter)">
             <summary>
             Filter AND
@@ -3424,6 +3446,12 @@
         <member name="M:Business.Data.Objects.Core.FilterBase.AppendFilterSql(Business.Data.Objects.Database.IDataBase,System.Text.StringBuilder,System.Int32)">
             <summary>
             Appende la clausola generata (SQL + Parametri)
+            </summary>
+            <param name="db"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.FilterBase.appendFilterSqlInternal(Business.Data.Objects.Database.IDataBase,Business.Data.Objects.Core.BusinessSlot,Business.Data.Objects.Core.Schema.Definition.ClassSchema,System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Appende la clausola generata (SQL + Parametri) con traduzione Proprieta -> Colonne
             </summary>
             <param name="db"></param>
         </member>
@@ -3480,6 +3508,13 @@
             <param name="db"></param>
             <param name="sql"></param>
             <param name="paramIndex"></param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Business.Data.Objects.Core.IFilter.FieldRight" -->
+        <member name="M:Business.Data.Objects.Core.IFilter.FieldLeft">
+            <summary>
+            Default.  Ripristina il default
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Business.Data.Objects.Core.FilterBETWEEN">
             <summary>

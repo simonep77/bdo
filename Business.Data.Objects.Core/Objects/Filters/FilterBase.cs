@@ -136,7 +136,8 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Indica che il nome di proprieta' deve essere impostato a dx dello statement
+        /// Indica che il nome di proprieta' deve essere impostato a dx dello statement.
+        /// Non vale per tutti gli statement
         /// </summary>
         /// <returns></returns>
         public IFilter FieldRight()
@@ -360,8 +361,6 @@ namespace Business.Data.Objects.Core
             //Aertura filtro
             sql.Append(@"(");
 
-            sql.Append(this.mName);
-            sql.Append(Utils.ObjectHelper.OperatorToString(this.mOperator));
             //Se nome a sx
             if (!this.mIsFieldRight)
             {

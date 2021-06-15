@@ -2660,4 +2660,33 @@ Public Class frmTests
     Private Function getUserInfoFromSlot(slot As BusinessSlot) As Object
         Return "pippo"
     End Function
+
+    Private Sub LinqToSQLToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LinqToSQLToolStripMenuItem.Click
+
+
+        Using ss1 = Me.CreateSlot()
+            ss1.DB.AutoCloseConnection = True
+            ss1.LiveTrackingEnabled = True
+            ss1.ChangeTrackingEnabled = True
+            ss1.UserName = "Simone"
+
+            AddHandler ss1.OnUserInfoRequired, AddressOf getUserInfoFromSlot
+
+
+            'cancellazione logica
+            Dim dtOgg = DateTime.Now
+            Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.Stato.Id = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
+
+            WriteLog(lst.ToXml())
+
+            'Dim o2 = oAnag1.ToDynamicObject()
+
+            'oAnag1.FillFrom(o2)
+
+            'Me.WriteLog(o2)
+            Me.WriteLog(ss1.PrintInfo())
+        End Using
+
+
+    End Sub
 End Class

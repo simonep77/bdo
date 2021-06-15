@@ -117,9 +117,10 @@ Partial Class frmTests
         Me.ClassiNoAbstractToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckModificatoriStringheNULLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaricamentiDinamiciToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UsernameECancellazioneLogicaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.dgv1 = New System.Windows.Forms.DataGridView()
-        Me.UsernameECancellazioneLogicaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LinqToSQLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsTest.SuspendLayout()
         CType(Me.dgv1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -666,7 +667,7 @@ Partial Class frmTests
         '
         'ToolStripSplitButton4
         '
-        Me.ToolStripSplitButton4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewPaginazioneMYSQLToolStripMenuItem, Me.ListeCachedToolStripMenuItem1, Me.ListePrefetchToolStripMenuItem, Me.BenchmarkLoadFullObjectsToolStripMenuItem, Me.ClassiNoAbstractToolStripMenuItem, Me.CheckModificatoriStringheNULLToolStripMenuItem, Me.CaricamentiDinamiciToolStripMenuItem, Me.UsernameECancellazioneLogicaToolStripMenuItem})
+        Me.ToolStripSplitButton4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewPaginazioneMYSQLToolStripMenuItem, Me.ListeCachedToolStripMenuItem1, Me.ListePrefetchToolStripMenuItem, Me.BenchmarkLoadFullObjectsToolStripMenuItem, Me.ClassiNoAbstractToolStripMenuItem, Me.CheckModificatoriStringheNULLToolStripMenuItem, Me.CaricamentiDinamiciToolStripMenuItem, Me.LinqToSQLToolStripMenuItem, Me.UsernameECancellazioneLogicaToolStripMenuItem})
         Me.ToolStripSplitButton4.Image = CType(resources.GetObject("ToolStripSplitButton4.Image"), System.Drawing.Image)
         Me.ToolStripSplitButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton4.Name = "ToolStripSplitButton4"
@@ -715,6 +716,12 @@ Partial Class frmTests
         Me.CaricamentiDinamiciToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.CaricamentiDinamiciToolStripMenuItem.Text = "Caricamento DB On Demand"
         '
+        'UsernameECancellazioneLogicaToolStripMenuItem
+        '
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Name = "UsernameECancellazioneLogicaToolStripMenuItem"
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Text = "Username e Cancellazione logica"
+        '
         'ToolStripButton1
         '
         Me.ToolStripButton1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
@@ -732,11 +739,11 @@ Partial Class frmTests
         Me.dgv1.Size = New System.Drawing.Size(783, 232)
         Me.dgv1.TabIndex = 2
         '
-        'UsernameECancellazioneLogicaToolStripMenuItem
+        'LinqToSQLToolStripMenuItem
         '
-        Me.UsernameECancellazioneLogicaToolStripMenuItem.Name = "UsernameECancellazioneLogicaToolStripMenuItem"
-        Me.UsernameECancellazioneLogicaToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
-        Me.UsernameECancellazioneLogicaToolStripMenuItem.Text = "Username e Cancellazione logica"
+        Me.LinqToSQLToolStripMenuItem.Name = "LinqToSQLToolStripMenuItem"
+        Me.LinqToSQLToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.LinqToSQLToolStripMenuItem.Text = "Linq To SQL"
         '
         'frmTests
         '
@@ -853,4 +860,5 @@ Partial Class frmTests
     Friend WithEvents ClassiNoAbstractToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CaricamentiDinamiciToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents UsernameECancellazioneLogicaToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LinqToSQLToolStripMenuItem As ToolStripMenuItem
 End Class

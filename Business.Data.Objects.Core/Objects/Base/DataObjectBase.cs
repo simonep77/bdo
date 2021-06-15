@@ -439,7 +439,7 @@ namespace Business.Data.Objects.Core.Base
             sb.Append(@" WHERE ");
 
             //Imposta parametri WHERE
-            filter.AppendFilterSql(db, sb, 0);
+            ((FilterBase)filter).appendFilterSqlInternal(db, this.Slot, this.mClassSchema, sb, 0);
 
             //Se valorizzato include l'order by
             if (order != null)
