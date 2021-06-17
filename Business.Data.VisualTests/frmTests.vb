@@ -2675,9 +2675,34 @@ Public Class frmTests
 
             'cancellazione logica
             Dim dtOgg = DateTime.Now
-            Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.Stato.Id = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
+            'Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
+            'Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
+            Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.In(Convert.ToInt32("1"), 1000) And o.Utente = "".PadLeft(3, "0"))
 
             WriteLog(lst.ToXml())
+
+            lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.DataInserimento.Between(New Date(2000, 1, 1), Date.Today))
+            WriteLog(lst.ToXml())
+
+            lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Utente.Like("aaa%"))
+            WriteLog(lst.ToXml())
+
+            Dim aa = (Function(o) o.ToString() = "Object")
+
+            'lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq((Function(o) o.Id > 10).AndAlso(Function(o) o.Id > 10))
+            'WriteLog(lst.ToXml())
+
+            Dim oo = ss1.LoadObjByLINQ(Of Ordine)(Function(o) o.Id = 150)
+
+            WriteLog("Utente: {0}", oo.DataInserimento)
+
+            Dim oo2 = ss1.LoadObjNullByLINQ(Of Ordine)(Function(o) o.Id = 150000000)
+
+            WriteLog("Utente: {0}", oo2)
+
+            Dim oo3 = ss1.LoadObjOrNewByLINQ(Of Ordine)(Function(o) o.Id = 150000000)
+
+            WriteLog("Utente: {0}", oo3)
 
             'Dim o2 = oAnag1.ToDynamicObject()
 

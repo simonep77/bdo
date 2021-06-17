@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Data.Objects.Datab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business.Data.Objects.Core", "Business.Data.Objects.Core\Business.Data.Objects.Core.csproj", "{6A62D66B-1617-46DD-83E3-0B098881E8BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business.Data.WinFormTest", "Business.Data.WinFormTest\Business.Data.WinFormTest.csproj", "{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{6A62D66B-1617-46DD-83E3-0B098881E8BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A62D66B-1617-46DD-83E3-0B098881E8BA}.Signed|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A62D66B-1617-46DD-83E3-0B098881E8BA}.Signed|Any CPU.Build.0 = Debug|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Release 2.0|Any CPU.ActiveCfg = Release|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Release 2.0|Any CPU.Build.0 = Release|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Signed|Any CPU.ActiveCfg = Debug|Any CPU
+		{901BEAF7-F2DF-4FF2-B79A-EF47AA9D6886}.Signed|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

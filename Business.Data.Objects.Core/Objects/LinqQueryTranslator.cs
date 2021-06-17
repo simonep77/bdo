@@ -1,4 +1,5 @@
-﻿using Business.Data.Objects.Core.Base;
+﻿using Business.Data.Objects.Common.Utils;
+using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Database;
@@ -11,20 +12,17 @@ using System.Text;
 
 namespace Business.Data.Objects.Core.Objects
 {
-    public class LinqQueryTranslator<T> : ExpressionVisitor
-        where T: DataObject<T>
+    public class LinqQueryTranslator<T> : ExpressionVisitor, IDisposable
+        where T : DataObject<T>
     {
         private StringBuilder sb;
         private string _orderBy = string.Empty;
-        private int? _skip = null;
-        private int? _take = null;
-        private string _whereClause = string.Empty;
 
         private ClassSchema _schema;
         private BusinessSlot _slot;
         private IDataBase _db;
         private int _parIndex;
-        
+
 
         public LinqQueryTranslator(BusinessSlot slot)
         {
@@ -37,7 +35,7 @@ namespace Business.Data.Objects.Core.Objects
         {
             this.sb = new StringBuilder();
             this.Visit(expression);
-      
+
             return this.sb.ToString();
         }
 
@@ -52,33 +50,68 @@ namespace Business.Data.Objects.Core.Objects
 
         protected override Expression VisitMethodCall(MethodCallExpression m)
         {
-            if (m.Method.Name == "CompareString")
+
+            if (m.Method.Name == "CompareString") //Solo VB
             {
                 return this.Visit(m.Arguments[0]);
             }
-            else if (m.Method.DeclaringType == typeof(Queryable) && m.Method.Name == "Where")
+            else if (m.Method.Name == nameof(Extensions.In))
             {
+                this.sb.Append(@"(");
                 this.Visit(m.Arguments[0]);
-                LambdaExpression lambda = (LambdaExpression)StripQuotes(m.Arguments[1]);
-                this.Visit(lambda.Body);
+                this.sb.Append(@" IN (");
+
+                var ee = m.Arguments[1] as NewArrayExpression;
+                foreach (var item in ee.Expressions)
+                {
+                    this.Visit(item);
+                    this.sb.Append(@",");
+                }
+                this.sb.Remove(this.sb.Length - 1, 1);
+                this.sb.Append(@")");
+                this.sb.Append(@")");
+
                 return m;
             }
-            else if (m.Method.Name == "Take")
+            else if (m.Method.Name == nameof(Extensions.Between))
             {
-                if (this.ParseTakeExpression(m))
-                {
-                    Expression nextExpression = m.Arguments[0];
-                    return this.Visit(nextExpression);
-                }
+                this.sb.Append(@"(");
+                this.Visit(m.Arguments[0]);
+                this.sb.Append(@" BETWEEN ");
+
+                this.Visit(m.Arguments[1]);
+                this.sb.Append(@" AND ");
+                this.Visit(m.Arguments[2]);
+                this.sb.Append(@")");
+
+                return m;
             }
-            else if (m.Method.Name == "Skip")
+            else if (m.Method.Name == nameof(Extensions.Like))
             {
-                if (this.ParseSkipExpression(m))
-                {
-                    Expression nextExpression = m.Arguments[0];
-                    return this.Visit(nextExpression);
-                }
+                this.sb.Append(@"(");
+                this.Visit(m.Arguments[0]);
+                this.sb.Append(@" LIKE ");
+                this.Visit(m.Arguments[1]);
+                this.sb.Append(@")");
+
+                return m;
             }
+            //else if (m.Method.Name == "Take")
+            //{
+            //    if (this.ParseTakeExpression(m))
+            //    {
+            //        Expression nextExpression = m.Arguments[0];
+            //        return this.Visit(nextExpression);
+            //    }
+            //}
+            //else if (m.Method.Name == "Skip")
+            //{
+            //    if (this.ParseSkipExpression(m))
+            //    {
+            //        Expression nextExpression = m.Arguments[0];
+            //        return this.Visit(nextExpression);
+            //    }
+            //}
             else if (m.Method.Name == "OrderBy")
             {
                 if (this.ParseOrderByExpression(m, "ASC"))
@@ -96,9 +129,21 @@ namespace Business.Data.Objects.Core.Objects
                 }
             }
 
-
-            throw new NotSupportedException(string.Format("The method '{0}' is not supported", m.Method.Name));
+            this.runExpression(m);
+            return m;
         }
+
+        public override Expression Visit(Expression node)
+        {
+            if (node.NodeType == ExpressionType.New)
+            {
+                this.runExpression(node);
+                return node;
+            }
+
+            return base.Visit(node);
+        }
+
 
         protected override Expression VisitUnary(UnaryExpression u)
         {
@@ -216,23 +261,36 @@ namespace Business.Data.Objects.Core.Objects
             return c;
         }
 
-
-
-        protected override Expression VisitMember(MemberExpression m)
+        /// <summary>
+        /// Compila ed esegue uno statement
+        /// </summary>
+        /// <param name="m"></param>
+        private void runExpression(Expression m)
         {
-           
-            if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter)
-            {
-                    sb.Append(this._slot.DbPrefixGetColumn(this._schema.OriginalType, m.Member.Name));
-            }
-            else
+            try
             {
                 var lnq = Expression.Lambda(m).Compile();
 
                 _parIndex++;
                 sb.Append($"@pa_{_parIndex}");
                 this._db.AddParameter($"@pa_{_parIndex}", lnq.DynamicInvoke());
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"Non e' stato possibile risolvere correttamente l'espressione LINQ '{m}'", e);
+            }
+        }
 
+        protected override Expression VisitMember(MemberExpression m)
+        {
+
+            if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter)
+            {
+                sb.Append(this._slot.DbPrefixGetColumn(this._schema.OriginalType, m.Member.Name));
+            }
+            else
+            {
+                this.runExpression(m);
             }
 
             return m;
@@ -269,32 +327,60 @@ namespace Business.Data.Objects.Core.Objects
             return false;
         }
 
-        private bool ParseTakeExpression(MethodCallExpression expression)
+        //private bool ParseTakeExpression(MethodCallExpression expression)
+        //{
+        //    ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
+
+        //    int size;
+        //    if (int.TryParse(sizeExpression.Value.ToString(), out size))
+        //    {
+        //        _take = size;
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
+        //private bool ParseSkipExpression(MethodCallExpression expression)
+        //{
+        //    ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
+
+        //    int size;
+        //    if (int.TryParse(sizeExpression.Value.ToString(), out size))
+        //    {
+        //        _skip = size;
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
+
+        public void Dispose()
         {
-            ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
-
-            int size;
-            if (int.TryParse(sizeExpression.Value.ToString(), out size))
-            {
-                _take = size;
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool ParseSkipExpression(MethodCallExpression expression)
-        {
-            ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
-
-            int size;
-            if (int.TryParse(sizeExpression.Value.ToString(), out size))
-            {
-                _skip = size;
-                return true;
-            }
-
-            return false;
+            sb.Clear();
         }
     }
+
+
+    public static class LinqExt
+    {
+
+
+        public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> expression, Expression<Func<T, bool>> other)
+        {
+            var a = Expression.AndAlso(expression, other);
+            return (Expression<Func<T, bool>>)(Expression.Lambda(a, null));
+        }
+
+        public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> expression, Expression<Func<T, bool>> other)
+        {
+            var a =Expression.OrElse(expression, other);
+            return (Expression<Func<T, bool>>)(Expression.Lambda(a, null));
+        }
+
+
+    }
+
+
+
 }

@@ -5,6 +5,7 @@ using Business.Data.Objects.Common.Logging;
 using Business.Data.Objects.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Objects;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Core.Schema.Usage;
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -1119,7 +1121,87 @@ namespace Business.Data.Objects.Core
         #region LOADING OBJECTS
 
         /// <summary>
-        /// Carica oggetto a partire da un filtro fornito
+        /// Finalizza il caricamento. Se ritorna false significa che l'oggetto non e' stato caricato
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="raiseNotFound"></param>
+        /// <param name="raiseMessage"></param>
+        /// <returns></returns>
+        private bool loadObjectComplete(DataObjectBase obj, bool raiseNotFound, string raiseMessage)
+        {
+            //Se lo stato risulta non caricato gestisce casistica
+            if (obj.ObjectState != EObjectState.Loaded)
+            {
+                if (raiseNotFound)
+                    //Richiesta eccezione
+                    throw new ObjectNotFoundException(raiseMessage, obj.mClassSchema.ClassName);
+                else
+                    //Richiesto valore null
+                    return false;
+            }
+
+            //Imposta source
+            obj.mDataSchema.ObjectSource = EObjectSource.Database;
+
+            //Prova ad inserire nelle cache
+            this.CacheSetAny(obj);
+
+            //Gestione evento Load
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, obj);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Carica da espressione linq. Se raiseNotFound=false e non trovato ritorna un nuovo oggetto
+        /// </summary>
+        /// <param name="origType"></param>
+        /// <param name="raiseNotFound"></param>
+        /// <param name="where"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        internal DataObjectBase LoadObjectInternalByCustomWhere(Type origType, bool raiseNotFound, string where, OrderBy order)
+        {
+
+            //Verifica dati passati
+            if (string.IsNullOrWhiteSpace(where))
+                throw new BusinessSlotException(SessionMessages.LoadObj_Filter_Null);
+
+            //Crea oggetto vuoto
+            DataObjectBase oNewObj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(origType, true);
+
+            //Imposta slot
+            oNewObj.SetSlot(this);
+
+            //carica
+            oNewObj.LoadByCustomWhere(where, order);
+
+            //Se lo stato risulta non caricato gestisce casistica
+            if (oNewObj.ObjectState != EObjectState.Loaded)
+            {
+                if (raiseNotFound)
+                    //Richiesta eccezione
+                    throw new ObjectNotFoundException(ObjectMessages.Base_Record_Filter_NotFound, oNewObj.mClassSchema.ClassName);
+                else
+                    //Richiesto valore null
+                    return null;
+            }
+
+            //Imposta source
+            oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
+
+            //Prova ad inserire nelle cache
+            this.CacheSetAny(oNewObj);
+
+            //Gestione evento Load
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
+
+            //Ritorna
+            return oNewObj;
+        }
+
+        /// <summary>
+        /// Carica oggetto a partire da un filtro fornito. Se non trovato lancia eccesione se raiseNotFound è true oppure ritorna oggetto nuovo
         /// </summary>
         /// <param name="origType"></param>
         /// <param name="raiseNotFound"></param>
@@ -1160,10 +1242,9 @@ namespace Business.Data.Objects.Core
             this.CacheSetAny(oNewObj);
 
             //Gestione evento Load
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
-            //Ritorna oggetto creato
+            //Ritorna
             return oNewObj;
         }
 
@@ -1224,6 +1305,7 @@ namespace Business.Data.Objects.Core
             //Deve caricare oggetto
             if (oNewObj.mDataSchema == null)
             {
+
                 //Crea dataschema 
                 oNewObj.mDataSchema = new DataSchema(oNewObj.mClassSchema.Properties.Count, oNewObj.mClassSchema.ObjCount);
 
@@ -1261,8 +1343,7 @@ namespace Business.Data.Objects.Core
 
 
             //Gestione evento Load
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
             //Ritorna oggetto creato
             return oNewObj;
@@ -1304,41 +1385,6 @@ namespace Business.Data.Objects.Core
         }
 
 
-        internal DataObjectBase LoadObjOrNewInternalByFILTER(Type origType, IFilter filter, OrderBy order)
-        {
-            var obj = this.LoadObjectInternalByFILTER(origType, false, filter, order);
-
-            if (obj == null)
-            {
-                //Crea istanza
-                obj = this.CreateObjectByType(origType);
-
-
-                foreach (var filt in filter)
-                {
-                    if (filt.Operator != EOperator.Equal)
-                        continue;
-
-                    foreach (var prop in obj.mClassSchema.Properties)
-                    {
-                        if (!prop.IsAutomatic &&
-                           filt.Name.ToUpper() == prop.Name.ToUpper())
-
-                        {
-                            //Imposta proprieta'
-                            prop.SetValue(obj, filt.Value);
-                            break; //Esce da ciclo proprieta'
-                        }
-                    }
-                }
-
-            }
-
-            //Ritorna
-            return obj;
-        }
-
-
         /// <summary>
         /// Carica Oggetto Da Chiave Primaria
         /// Se oggetto non trovato viene lanciata eccezione
@@ -1362,31 +1408,6 @@ namespace Business.Data.Objects.Core
         public T LoadObjByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), true, values);
-        }
-
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato lancia eccezione.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjByFILTER<T>(IFilter filter) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, null);
-        }
-
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato lancia eccezione.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        public T LoadObjByFILTER<T>(IFilter filter, OrderBy order) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
         }
 
         /// <summary>
@@ -1414,30 +1435,8 @@ namespace Business.Data.Objects.Core
             return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), false, values);
         }
 
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato ritorn NULL.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjNullByFILTER<T>(IFilter filter) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, null);
-        }
 
 
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato ritorn NULL.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
-        }
 
         /// <summary>
         /// Carica oggetto da PK e se non esiste ritorna nuovo oggetto precaricato con i valori
@@ -1466,28 +1465,72 @@ namespace Business.Data.Objects.Core
             return (T)this.LoadObjOrNewInternalByKEY(keyName, typeof(T), values);
         }
 
-        /// <summary>
-        ///  Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjOrNewByFILTER<T>(IFilter filter) where T : DataObjectBase
-        {
-            return (T)this.LoadObjOrNewInternalByFILTER(typeof(T), filter, null);
-        }
+
+
+        #region LOADBYFILTER
 
         /// <summary>
-        /// Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
+        /// Carica oggetto da filtro custom.
+        /// Se non trovato lancia eccezione.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="filter"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order) where T : DataObjectBase
+        public T LoadObjByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
         {
-            return (T)this.LoadObjOrNewInternalByFILTER(typeof(T), filter, order);
+            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
         }
+
+        /// <summary>
+        /// Carica oggetto da filtro custom.
+        /// Se non trovato ritorn NULL.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        {
+            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
+        }
+
+        /// <summary>
+        /// Carica oggetto da filtro custom e se non esiste ritorna un nuovo oggetto vuoto
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        {
+            return LoadObjNullByFILTER<T>(filter, order) ?? this.CreateObject<T>();
+        }
+
+        #endregion
+
+        #region LOADBYLINQ
+
+        public T LoadObjByLINQ<T>(Expression<Func<T, bool>> expression, OrderBy order = null) where T : DataObject<T>
+        {
+            var lt = new LinqQueryTranslator<T>(this);
+
+            return (T)this.LoadObjectInternalByCustomWhere(typeof(T), true, lt.Translate(expression), order);
+        }
+
+
+        public T LoadObjNullByLINQ<T>(Expression<Func<T, bool>> expression, OrderBy order = null) where T : DataObject<T>
+        {
+            var lt = new LinqQueryTranslator<T>(this);
+            return (T)this.LoadObjectInternalByCustomWhere(typeof(T), false, lt.Translate(expression), order);
+        }
+
+        public T LoadObjOrNewByLINQ<T>(Expression<Func<T, bool>> expression, OrderBy order = null) where T : DataObject<T>
+        {
+            return LoadObjNullByLINQ(expression, order) ?? this.CreateObject<T>();
+        }
+
+
+        #endregion
 
 
         #endregion
@@ -1574,8 +1617,7 @@ namespace Business.Data.Objects.Core
             bool bCancel = false;
 
             //Richiama evento pre salvataggio
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPreEventHandlerQueue((obj.ObjectState == EObjectState.New) ? EObjectEvent.Insert : EObjectEvent.Update, obj, ref bCancel);
+            this.EventManager?.RunPreEventHandlerQueue((obj.ObjectState == EObjectState.New) ? EObjectEvent.Insert : EObjectEvent.Update, obj, ref bCancel);
 
 
             //Se simulazione non esegue
@@ -1594,8 +1636,7 @@ namespace Business.Data.Objects.Core
                 this.liveTrackingSet(obj);
 
             //Richiama evento post salvataggio
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue((obj.ObjectSource == EObjectSource.None) ? EObjectEvent.Insert : EObjectEvent.Update, obj);
+            this.EventManager?.RunPostEventHandlerQueue((obj.ObjectSource == EObjectSource.None) ? EObjectEvent.Insert : EObjectEvent.Update, obj);
         }
 
         /// <summary>
@@ -1614,8 +1655,7 @@ namespace Business.Data.Objects.Core
 
             bool bCancel = false;
             //Richiama evento pre cancellazione
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPreEventHandlerQueue(EObjectEvent.Delete, obj, ref bCancel);
+            this.EventManager?.RunPreEventHandlerQueue(EObjectEvent.Delete, obj, ref bCancel);
 
             //Se simulazione non esegue
             if (bCancel || this.Simulate)
@@ -1653,8 +1693,7 @@ namespace Business.Data.Objects.Core
                 this.liveTrackingRemove(obj);
 
             //Richiama evento se presente
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue(EObjectEvent.Delete, obj);
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Delete, obj);
         }
 
 
@@ -2287,7 +2326,6 @@ namespace Business.Data.Objects.Core
         }
 
 
-
         #endregion
 
         #region MISC
@@ -2402,7 +2440,6 @@ namespace Business.Data.Objects.Core
         }
 
         #endregion
-
 
         #region XML
 
@@ -2522,7 +2559,7 @@ namespace Business.Data.Objects.Core
         internal bool IsCacheable(DataObjectBase obj)
         {
             //Default
-            return this.IsCacheable(obj.mClassSchema);
+            return this.IsCacheable(obj.mClassSchema) && obj.mDataSchema.ObjectSource == EObjectSource.Database;
         }
 
         /// <summary>

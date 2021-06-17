@@ -452,6 +452,36 @@ namespace Business.Data.Objects.Core.Base
             this.ExecQueryAndLoadObj(db);
         }
 
+
+        /// <summary>
+        /// Carica oggetto a partire da uno statement where custom
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="order"></param>
+        internal void LoadByCustomWhere(string where, OrderBy order)
+        {
+            IDataBase db = this.Slot.DbGet(this.mClassSchema);
+
+            //SQL DIRETTO
+            var sb = new StringBuilder(this.mClassSchema.TableDef.SQL_Select_Item);
+            sb.Append(this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef));
+            sb.Append(@" WHERE ");
+
+            //Imposta parametri WHERE
+            sb.Append(where);
+
+            //Se valorizzato include l'order by
+            if (order != null)
+                sb.Append(order.ToString());
+
+            //imposta query
+            db.SQL = sb.ToString();
+
+            //Imposta dati dopo query
+            this.ExecQueryAndLoadObj(db);
+        }
+
+
         /// <summary>
         /// Carica oggetto da chiave 
         /// </summary>
