@@ -911,6 +911,13 @@
             <param name="filter"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.searchByCustomWhere(System.String)">
+            <summary>
+            Ricerca attraverso un filtro di colonna
+            </summary>
+            <param name="filter"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataListBase.orderBy(System.String,Business.Data.Objects.Core.OrderVersus)">
             <summary>
             Imposta il campo di sort e la direzione di sort
@@ -1183,6 +1190,13 @@
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadByFilter(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
             <summary>
             Carica oggetto a partire da un filtro custom
+            </summary>
+            <param name="filter"></param>
+            <param name="order"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadByCustomWhere(System.String,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto a partire da uno statement where custom
             </summary>
             <param name="filter"></param>
             <param name="order"></param>
@@ -1897,9 +1911,28 @@
             </summary>
             <param name="e"></param>
         </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.loadObjectComplete(Business.Data.Objects.Core.Base.DataObjectBase,System.Boolean,System.String)">
+            <summary>
+            Finalizza il caricamento. Se ritorna false significa che l'oggetto non e' stato caricato
+            </summary>
+            <param name="obj"></param>
+            <param name="raiseNotFound"></param>
+            <param name="raiseMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByCustomWhere(System.Type,System.Boolean,System.String,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica da espressione linq. Se raiseNotFound=false e non trovato ritorna un nuovo oggetto
+            </summary>
+            <param name="origType"></param>
+            <param name="raiseNotFound"></param>
+            <param name="where"></param>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByFILTER(System.Type,System.Boolean,Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
             <summary>
-            Carica oggetto a partire da un filtro fornito
+            Carica oggetto a partire da un filtro fornito. Se non trovato lancia eccesione se raiseNotFound è true oppure ritorna oggetto nuovo
             </summary>
             <param name="origType"></param>
             <param name="raiseNotFound"></param>
@@ -1944,25 +1977,6 @@
             <param name="values"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByFILTER``1(Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Carica oggetto da filtro custom.
-            Se non trovato lancia eccezione.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto da filtro custom.
-            Se non trovato lancia eccezione.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
-            <param name="order"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByPK``1(System.Object[])">
             <summary>
             Carica oggetto da PK e se non esiste ritorna null
@@ -1979,24 +1993,6 @@
             Nome della chiave definita sull'oggetto
             </param>
             <param name="values"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByFILTER``1(Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Carica oggetto da filtro custom.
-            Se non trovato ritorn NULL.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto da filtro custom.
-            Se non trovato ritorn NULL.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByPK``1(System.Object[])">
@@ -2019,9 +2015,20 @@
             <param name="values"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByFILTER``1(Business.Data.Objects.Core.IFilter)">
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
             <summary>
-             Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
+            Carica oggetto da filtro custom.
+            Se non trovato lancia eccezione.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="filter"></param>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
+            <summary>
+            Carica oggetto da filtro custom.
+            Se non trovato ritorn NULL.
             </summary>
             <typeparam name="T"></typeparam>
             <param name="filter"></param>
@@ -2029,7 +2036,7 @@
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
             <summary>
-            Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
+            Carica oggetto da filtro custom e se non esiste ritorna un nuovo oggetto vuoto
             </summary>
             <typeparam name="T"></typeparam>
             <param name="filter"></param>
@@ -2551,6 +2558,13 @@
             Ricerca attraverso un filtro di colonna
             </summary>
             <param name="filter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.SearchByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            Ricerca attraverso un'espressione linq.
+            </summary>
+            <param name="predicate"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.ToArray">
@@ -3798,6 +3812,19 @@
             Classe risultato di operazione group by su lista
             </summary>
             <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Objects.LinqQueryTranslator`1.VisitBinary(System.Linq.Expressions.BinaryExpression)">
+            <summary>
+            
+            </summary>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Objects.LinqQueryTranslator`1.runExpression(System.Linq.Expressions.Expression)">
+            <summary>
+            Compila ed esegue uno statement
+            </summary>
+            <param name="m"></param>
         </member>
         <member name="T:Business.Data.Objects.Core.OrderVersus">
             <summary>

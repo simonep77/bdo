@@ -1485,6 +1485,38 @@
             <param name="encdata"></param>
             <returns></returns>
         </member>
+        <member name="T:Business.Data.Objects.Common.Utils.Extensions">
+            <summary>
+            Extension method di utility per vari tipi
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.In``1(``0,``0[])">
+            <summary>
+            Operatore IN
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.Between``1(``0,``0,``0)">
+            <summary>
+            Operatore BEETWEEN
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="argLow"></param>
+            <param name="argHigh"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.Like(System.String,System.String)">
+            <summary>
+            Esegue un confronto con espressione regolare. Se usato in linq SQL valgono solo i wildcard del db di destinazione
+            </summary>
+            <param name="obj"></param>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
         <member name="T:Business.Data.Objects.Common.Utils.ObjType">
             <summary>
             Enumerazione Che identifica i tipi di dato supportati
