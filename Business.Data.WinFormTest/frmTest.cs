@@ -97,6 +97,29 @@ namespace Business.Data.WinFormTest
 
                 // Dim o2 = oAnag1.ToDynamicObject()
 
+                var count = 500;
+
+                WriteLog("Elabrazione FILTER");
+                var el3 = ss1.GetCurrentElapsed();
+                for (int i = 0; i < count; i++)
+                {
+                    var l1 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByColumn(Filter.In(nameof(Ordine.StatoId), 1, 3).And(Filter.Betw(nameof(Ordine.DataInserimento), new DateTime(2000, 1, 1), DateTime.Today)));
+                }
+                var el4 = ss1.GetCurrentElapsed();
+                this.WriteLog(el4.Subtract(el3).TotalMilliseconds.ToString());
+
+
+                WriteLog("Elabrazione LINQ");
+                var el1 = ss1.GetCurrentElapsed();
+                for (int i = 0; i < count; i++)
+                {
+                    var l1 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.StatoId.In(1, 3) && o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
+                }
+                var el2 = ss1.GetCurrentElapsed();
+                this.WriteLog(el2.Subtract(el1).TotalMilliseconds.ToString());
+
+  
+
                 // oAnag1.FillFrom(o2)
 
                 // Me.WriteLog(o2)

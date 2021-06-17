@@ -28,6 +28,14 @@ namespace Business.Data.Objects.Common.Utils
             return args.Contains(obj);
         }
 
+        public static bool In(this IComparable obj, params IComparable[] args)
+        {
+            if (args == null || args.Length == 0)
+                return false;
+
+            return args.Contains(obj);
+        }
+
         /// <summary>
         /// Operatore BEETWEEN
         /// </summary>
@@ -50,6 +58,22 @@ namespace Business.Data.Objects.Common.Utils
 
             return true;
         }
+
+
+        public static bool Between(this IComparable obj, IComparable argLow, IComparable argHigh)
+        {
+            if (argLow == null || argHigh == null)
+                return false;
+
+            if (obj.CompareTo(argLow) < 0)
+                return false;
+
+            if (obj.CompareTo(argHigh) > 0)
+                return false;
+
+            return true;
+        }
+
 
         /// <summary>
         /// Esegue un confronto con espressione regolare. Se usato in linq SQL valgono solo i wildcard del db di destinazione
