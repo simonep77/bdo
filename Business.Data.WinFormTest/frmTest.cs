@@ -80,7 +80,7 @@ namespace Business.Data.WinFormTest
                 WriteLog(lst.ToXml());
 
 
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq((o => o.Id > 10));
+                lst = ss1.CreatePagedList<OrdineLista>(1, 10).OrderByLinq(o=> o.AnagraficaId).OrderByLinqDesc(o=>o.Id).SearchByLinq((o => o.Id > 10));
                 WriteLog(lst.ToXml());
 
                 var oo = ss1.LoadObjByLINQ<Ordine>(o => o.Id == 150);

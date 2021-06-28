@@ -2567,6 +2567,22 @@
             <param name="predicate"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.OrderByLinq``1(System.Linq.Expressions.Expression{System.Func{`1,``0}})">
+            <summary>
+            Esegue ordinamento tramite selezione del campo. Modalita' ASC
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.OrderByLinqDesc``1(System.Linq.Expressions.Expression{System.Func{`1,``0}})">
+            <summary>
+            Esegue ordinamento tramite selezione del campo. Modalita' DESC
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.ToArray">
             <summary>
             Ritorna array con oggetti caricati

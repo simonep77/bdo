@@ -1,5 +1,6 @@
 ﻿using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Schema.Definition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -89,6 +90,10 @@ namespace Business.Data.Objects.Core.Utils
                 var obj = item as DataObjectBase;
                 foreach (var oProp in obj.mClassSchema.Properties)
                 {
+                    //Skip complex property
+                    if (!(oProp is PropertySimple))
+                        continue;
+
                     if (isFirst)
                         isFirst = false;
                     else

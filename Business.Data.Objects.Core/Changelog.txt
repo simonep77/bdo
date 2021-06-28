@@ -48,3 +48,7 @@ Reincluso Xml di documentazione
 
 [15/06/2020] - 5.0.15 - Simone Pelaia
 Possibilita' di eseguire query su lista tramite espressione LINQ (SearchByLinq)
+
+[28/06/2020] - 5.0.16 - Simone Pelaia
+Serializzazione JSON solo per propriet semplici. No navigazione
+Ordinamento SQL Liste tramite espressione LINQ

@@ -39,6 +39,14 @@ namespace Business.Data.Objects.Core.Objects
             return this.sb.ToString();
         }
 
+        public string TranslateKey<TKey>(Expression<Func<T, TKey>> expression)
+        {
+            this.sb = new StringBuilder();
+            this.Visit(expression);
+
+            return this.sb.ToString();
+        }
+
         private static Expression StripQuotes(Expression e)
         {
             while (e.NodeType == ExpressionType.Quote)

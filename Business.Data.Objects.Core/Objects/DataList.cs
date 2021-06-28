@@ -216,6 +216,40 @@ namespace Business.Data.Objects.Core
             return (TL)this.searchByCustomWhere(t.Translate(predicate));
         }
 
+        /// <summary>
+        /// Esegue ordinamento tramite selezione del campo. Modalita' ASC
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public TL OrderByLinq<TKey>(Expression<Func<T, TKey>> predicate)
+        {
+            var t = new LinqQueryTranslator<T>(this.Slot);
+
+            var f = t.TranslateKey(predicate);
+
+            this.orderBy(f, OrderVersus.Asc);
+
+            return (TL)this;
+        }
+
+        /// <summary>
+        /// Esegue ordinamento tramite selezione del campo. Modalita' DESC
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public TL OrderByLinqDesc<TKey>(Expression<Func<T, TKey>> predicate)
+        {
+            var t = new LinqQueryTranslator<T>(this.Slot);
+
+            var f = t.TranslateKey(predicate);
+
+            this.orderBy(f, OrderVersus.Desc);
+
+            return (TL)this;
+        }
+
 
 
         /// <summary>
