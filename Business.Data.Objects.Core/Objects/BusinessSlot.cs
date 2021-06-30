@@ -889,9 +889,17 @@ namespace Business.Data.Objects.Core
         /// Apre transazione su tutti i database collegati.
         /// Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
         /// </summary>
-        public void DbBeginTransAll(IsolationLevel level = IsolationLevel.Unspecified)
+        public void DbBeginTransAll(IsolationLevel level)
         {
             this.mDbList.BeginTransAll(level);
+        }
+
+        /// <summary>
+        /// Apre transazione su tutti i db utilizzando l'isolamento di default per ciascuno
+        /// </summary>
+        public void DbBeginTransAll()
+        {
+            this.mDbList.BeginTransAll(IsolationLevel.Unspecified);
         }
 
         /// <summary>

@@ -52,3 +52,6 @@ Possibilita' di eseguire query su lista tramite espressione LINQ (SearchByLinq)
 [28/06/2020] - 5.0.16 - Simone Pelaia
 Serializzazione JSON solo per propriet semplici. No navigazione
 Ordinamento SQL Liste tramite espressione LINQ
+
+[30/06/2020] - 5.0.1/ - Simone Pelaia
+Ripristino DBBeginTransAll senza parametri

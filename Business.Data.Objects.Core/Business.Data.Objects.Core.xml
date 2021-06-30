@@ -1828,6 +1828,11 @@
             Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
             </summary>
         </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.DbBeginTransAll">
+            <summary>
+            Apre transazione su tutti i db utilizzando l'isolamento di default per ciascuno
+            </summary>
+        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.DbCommitAll">
             <summary>
             Esegue il commit su tutti i database collegati
