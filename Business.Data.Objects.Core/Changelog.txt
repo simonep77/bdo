@@ -53,5 +53,8 @@ Possibilita' di eseguire query su lista tramite espressione LINQ (SearchByLinq)
 Serializzazione JSON solo per propriet semplici. No navigazione
 Ordinamento SQL Liste tramite espressione LINQ
 
-[30/06/2020] - 5.0.1/ - Simone Pelaia
+[30/06/2020] - 5.0.17 - Simone Pelaia
 Ripristino DBBeginTransAll senza parametri
+
+[01/07/2020] - 5.0.18 - Simone Pelaia
+Metodo IncludeDeleted su lista per rimuovere il filtro automatico sui record cancellati logicamente. Vale solo per l'istruzione query successiva

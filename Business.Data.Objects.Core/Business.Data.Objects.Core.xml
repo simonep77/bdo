@@ -918,6 +918,13 @@
             <param name="filter"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataListBase.setLogicalDelete(Business.Data.Objects.Database.IDataBase,System.Text.StringBuilder,System.Boolean)">
+            <summary>
+            Imposta l'eventale query per escludere le cancellazioni logiche
+            </summary>
+            <param name="db"></param>
+            <param name="sql"></param>
+        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataListBase.orderBy(System.String,Business.Data.Objects.Core.OrderVersus)">
             <summary>
             Imposta il campo di sort e la direzione di sort
@@ -2512,6 +2519,12 @@
             Indica che gli oggetti vanno precaricati attraverso il risultato della query di lista
             Attenzione! Al momento integrato direttamente solo sulle SearcBDO. Le query custom non possono eseguire il LoadFullObjects
             in quanto andrebbero manipolate senza garanzia del risultato
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.IncludeDeleted">
+            <summary>
+            Istruisce la query successiva ad includere gli oggetti eliminati logicamente
             </summary>
             <returns></returns>
         </member>

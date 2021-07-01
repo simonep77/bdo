@@ -126,6 +126,17 @@ namespace Business.Data.Objects.Core
             return (TL)this;
         }
 
+        /// <summary>
+        /// Istruisce la query successiva ad includere gli oggetti eliminati logicamente
+        /// </summary>
+        /// <returns></returns>
+        public TL IncludeDeleted()
+        {
+            base.mIncludeDeleted = true;
+
+            return (TL)this;
+        }
+
 
 
         /// <summary>

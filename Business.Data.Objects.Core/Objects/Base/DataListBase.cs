@@ -27,6 +27,7 @@ namespace Business.Data.Objects.Core.Base
         internal protected bool mIsSearch;
         internal protected bool mCacheResult;
         internal protected bool mLoadFullObjects = true;
+        internal protected bool mIncludeDeleted;
 
         #region PROPERTY
 
@@ -296,6 +297,7 @@ namespace Business.Data.Objects.Core.Base
                 //Resetta comunque le variabili di esecuzione contesto
                 this.mCacheResult = false;
                 this.mLoadFullObjects = true;
+                this.mIncludeDeleted = false;
                 this.mIsSearch = false;
             }
 
@@ -369,23 +371,6 @@ namespace Business.Data.Objects.Core.Base
 
             sql.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
 
-            //Se presente gestione della cancellazione logica allora la include nella query
-            if (this.mObjSchema.LogicalDeletes.Count > 0)
-            {
-                foreach (var ldProp in this.mObjSchema.LogicalDeletes)
-                {
-                    IFilter ldfilter;
-
-                    if (ldProp.Type.Equals(typeof(DateTime)))
-                        //Se il filtro e' nullo 
-                        ldfilter = Filter.IsNull(ldProp.Name);
-                    else
-                        ldfilter = Filter.Eq(ldProp.Name, 0);
-                    //Reimposta il filtro aggiungendo o creandolo
-                    filter = filter?.And(ldfilter) ?? ldfilter;
-                }
-            }
-
             //Se fornito filtro
             if (filter != null)
             {
@@ -395,6 +380,8 @@ namespace Business.Data.Objects.Core.Base
 
             }
 
+            //Se presente gestione della cancellazione logica allora la include nella query
+            this.setLogicalDelete(db, sql, (filter == null));
 
 
             db.SQL = sql.ToString();
@@ -430,8 +417,32 @@ namespace Business.Data.Objects.Core.Base
             sql.Append(where);
 
             //Se presente gestione della cancellazione logica allora la include nella query
+            this.setLogicalDelete(db, sql, false);
+
+            db.SQL = sql.ToString();
+
+            //Imposta provenienza ricerca
+            this.mIsSearch = true;
+
+            //Esegue e Ritorna se stesso
+            return this.doSearch();
+        }
+
+
+        /// <summary>
+        /// Imposta l'eventale query per escludere le cancellazioni logiche
+        /// </summary>
+        /// <param name="db"></param>
+        /// <param name="sql"></param>
+        private void setLogicalDelete(IDataBase db, StringBuilder sql, bool writeWhere)
+        {
+            //Se presente gestione della cancellazione logica allora la include nella query
             if (this.mObjSchema.LogicalDeletes.Count > 0)
             {
+                //Verifica se richiesta incusione dei cancellati
+                if (this.mIncludeDeleted)
+                    return;
+
                 IFilter filter = null;
 
                 foreach (var ldProp in this.mObjSchema.LogicalDeletes)
@@ -449,20 +460,14 @@ namespace Business.Data.Objects.Core.Base
                 }
 
                 //Imposta SQL filtro
-                sql.Append(@" AND ");
+                if (writeWhere)
+                    sql.Append(@" WHERE ");
+                else
+                    sql.Append(@" AND ");
+
                 (filter as FilterBase)?.appendFilterSqlInternal(db, this.Slot, this.mObjSchema, sql, 0);
             }
-
-            db.SQL = sql.ToString();
-
-            //Imposta provenienza ricerca
-            this.mIsSearch = true;
-
-            //Esegue e Ritorna se stesso
-            return this.doSearch();
         }
-
-
 
 
         /// <summary>
