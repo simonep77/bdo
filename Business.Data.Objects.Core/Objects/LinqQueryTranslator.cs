@@ -70,12 +70,24 @@ namespace Business.Data.Objects.Core.Objects
                 this.sb.Append(@" IN (");
 
                 var ee = m.Arguments[1] as NewArrayExpression;
+
+                if (ee == null)
+                {
+                    var obj = ((Array)this.execExpression(m.Arguments[1])).Cast<object>();
+
+                    ee = Expression.NewArrayInit(obj.First().GetType(), obj.Select(c => Expression.Constant(c)));
+
+                }
+
                 foreach (var item in ee.Expressions)
                 {
                     this.Visit(item);
                     this.sb.Append(@",");
                 }
+
+
                 this.sb.Remove(this.sb.Length - 1, 1);
+                
                 this.sb.Append(@")");
                 this.sb.Append(@")");
 
@@ -269,6 +281,27 @@ namespace Business.Data.Objects.Core.Objects
             return c;
         }
 
+
+        /// <summary>
+        /// Esegue espressione e ritorna output
+        /// </summary>
+        /// <param name="m"></param>
+        /// <returns></returns>
+        private object execExpression(Expression m)
+        {
+            try
+            {
+                var lnq = Expression.Lambda(m).Compile();
+
+                return lnq.DynamicInvoke();
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException($"Non e' stato possibile risolvere correttamente l'espressione LINQ '{m}'", e);
+            }
+        }
+
+
         /// <summary>
         /// Compila ed esegue uno statement
         /// </summary>
@@ -277,11 +310,9 @@ namespace Business.Data.Objects.Core.Objects
         {
             try
             {
-                var lnq = Expression.Lambda(m).Compile();
-
-                _parIndex++;
+                this._parIndex++;
                 sb.Append($"@pa_{_parIndex}");
-                this._db.AddParameter($"@pa_{_parIndex}", lnq.DynamicInvoke());
+                this._db.AddParameter($"@pa_{_parIndex}", this.execExpression(m));
             }
             catch (Exception e)
             {

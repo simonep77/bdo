@@ -3854,6 +3854,13 @@
             <param name="b"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Core.Objects.LinqQueryTranslator`1.execExpression(System.Linq.Expressions.Expression)">
+            <summary>
+            Esegue espressione e ritorna output
+            </summary>
+            <param name="m"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.Objects.LinqQueryTranslator`1.runExpression(System.Linq.Expressions.Expression)">
             <summary>
             Compila ed esegue uno statement

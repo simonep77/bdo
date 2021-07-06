@@ -58,3 +58,6 @@ Ripristino DBBeginTransAll senza parametri
 
 [01/07/2020] - 5.0.18 - Simone Pelaia
 Metodo IncludeDeleted su lista per rimuovere il filtro automatico sui record cancellati logicamente. Vale solo per l'istruzione query successiva
+
+[06/07/2020] - 5.0.19 - Simone Pelaia
+Fix su traduzione Linq dell'estensione "In" in caso di array non esplicitato fornito in input

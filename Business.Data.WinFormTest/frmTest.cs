@@ -73,6 +73,13 @@ namespace Business.Data.WinFormTest
 
                 WriteLog(lst.ToXml());
 
+                var aa = new uint[] { 1, 7, 4, 55 };
+                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa));
+                WriteLog(lst.ToXml());
+
+                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa.ToList().ToArray()));
+                WriteLog(lst.ToXml());
+
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
                 WriteLog(lst.ToXml());
 
