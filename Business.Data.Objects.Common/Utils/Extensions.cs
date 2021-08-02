@@ -60,6 +60,13 @@ namespace Business.Data.Objects.Common.Utils
         }
 
 
+        /// <summary>
+        /// Verifica se un valore è ricompreso in un intervallo, estremi inclusi
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="argLow"></param>
+        /// <param name="argHigh"></param>
+        /// <returns></returns>
         public static bool Between(this IComparable obj, IComparable argLow, IComparable argHigh)
         {
             if (argLow == null || argHigh == null)
@@ -71,6 +78,28 @@ namespace Business.Data.Objects.Common.Utils
             if (obj.CompareTo(argHigh) > 0)
                 return false;
 
+            return true;
+        }
+
+        /// <summary>
+        /// Estensione fake per consentire query con NULL tramite linq su proprieta' di tipo valore.
+        /// Non usare nel codice poichè ritorna sempre FALSE
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool IsNull(this IComparable obj)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Estensione fake per consentire query con NULL tramite linq su proprieta' di tipo valore
+        /// Non usare nel codice poichè ritorna sempre TRUE
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool IsNotNull(this IComparable obj)
+        {
             return true;
         }
 

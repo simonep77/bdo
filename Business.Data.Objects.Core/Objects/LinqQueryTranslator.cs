@@ -5,6 +5,7 @@ using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Database;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -21,6 +22,7 @@ namespace Business.Data.Objects.Core.Objects
         private ClassSchema _schema;
         private BusinessSlot _slot;
         private IDataBase _db;
+        private List<DbParameter> _paramList = new List<DbParameter>();
         private int _parIndex;
 
 
@@ -36,6 +38,8 @@ namespace Business.Data.Objects.Core.Objects
             this.sb = new StringBuilder();
             this.Visit(expression);
 
+            this._db.AddParameters(this._paramList);
+
             return this.sb.ToString();
         }
 
@@ -43,6 +47,9 @@ namespace Business.Data.Objects.Core.Objects
         {
             this.sb = new StringBuilder();
             this.Visit(expression);
+
+            if (this._paramList.Count > 0)
+                this._db.AddParameters(this._paramList);
 
             return this.sb.ToString();
         }
@@ -112,6 +119,24 @@ namespace Business.Data.Objects.Core.Objects
                 this.Visit(m.Arguments[0]);
                 this.sb.Append(@" LIKE ");
                 this.Visit(m.Arguments[1]);
+                this.sb.Append(@")");
+
+                return m;
+            }
+            else if (m.Method.Name == nameof(Extensions.IsNull))
+            {
+                this.sb.Append(@"(");
+                this.Visit(m.Arguments[0]);
+                this.sb.Append(@" IS NULL ");
+                this.sb.Append(@")");
+
+                return m;
+            }
+            else if (m.Method.Name == nameof(Extensions.IsNotNull))
+            {
+                this.sb.Append(@"(");
+                this.Visit(m.Arguments[0]);
+                this.sb.Append(@" IS NOT NULL ");
                 this.sb.Append(@")");
 
                 return m;
@@ -274,7 +299,8 @@ namespace Business.Data.Objects.Core.Objects
             {
                 _parIndex++;
                 sb.Append($"@pa_{_parIndex}");
-                this._db.AddParameter($"@pa_{_parIndex}", c.Value);
+                this._paramList.Add(this._db.CreateParameter($"@pa_{_parIndex}", c.Value, c.Value.GetType()));
+                //this._db.AddParameter($"@pa_{_parIndex}", c.Value);
 
             }
 
@@ -312,7 +338,10 @@ namespace Business.Data.Objects.Core.Objects
             {
                 this._parIndex++;
                 sb.Append($"@pa_{_parIndex}");
-                this._db.AddParameter($"@pa_{_parIndex}", this.execExpression(m));
+
+                this._paramList.Add(this._db.CreateParameter($"@pa_{_parIndex}", this.execExpression(m), m.Type));
+
+                //this._db.AddParameter($"@pa_{_parIndex}", this.execExpression(m));
             }
             catch (Exception e)
             {

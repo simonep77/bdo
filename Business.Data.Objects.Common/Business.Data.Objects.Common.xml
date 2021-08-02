@@ -1509,6 +1509,31 @@
             <param name="argHigh"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.Between(System.IComparable,System.IComparable,System.IComparable)">
+            <summary>
+            Verifica se un valore è ricompreso in un intervallo, estremi inclusi
+            </summary>
+            <param name="obj"></param>
+            <param name="argLow"></param>
+            <param name="argHigh"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.IsNull(System.IComparable)">
+            <summary>
+            Estensione fake per consentire query con NULL tramite linq su proprieta' di tipo valore.
+            Non usare nel codice poichè ritorna sempre FALSE
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.IsNotNull(System.IComparable)">
+            <summary>
+            Estensione fake per consentire query con NULL tramite linq su proprieta' di tipo valore
+            Non usare nel codice poichè ritorna sempre TRUE
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Common.Utils.Extensions.Like(System.String,System.String)">
             <summary>
             Esegue un confronto con espressione regolare. Se usato in linq SQL valgono solo i wildcard del db di destinazione
