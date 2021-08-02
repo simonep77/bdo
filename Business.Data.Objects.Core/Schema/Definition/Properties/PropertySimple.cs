@@ -1,6 +1,6 @@
 using Business.Data.Objects.Common;
 using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Attributes;
 using Business.Data.Objects.Core.Base;

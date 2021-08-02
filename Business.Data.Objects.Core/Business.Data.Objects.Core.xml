@@ -433,6 +433,640 @@
             Imposta una stringa di formattazione con cui verrà formattato il valore nell'output Xml
             </summary>
         </member>
+        <member name="T:Business.Data.Objects.Core.Common.Resources.ObjectMessages">
+            <summary>
+              Classe di risorse fortemente tipizzata per la ricerca di stringhe localizzate e così via.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.ResourceManager">
+            <summary>
+              Restituisce l'istanza di ResourceManager nella cache utilizzata da questa classe.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Culture">
+            <summary>
+              Esegue l'override della proprietà CurrentUICulture del thread corrente per tutte le
+              ricerche di risorse eseguite utilizzando questa classe di risorse fortemente tipizzata.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_CloneDisabledTracking">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Impossibile eseguire un Clone dell&apos;oggetto in quanto e&apos; attivo l&apos;Object Reference Tracking.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_Delete_Null">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Impossibile eseguire eliminare un oggetto nullo..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_DiffSourceNotLoaded">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eseguire il confronto con il sorgente (database) poiche&apos; l&apos;oggetto non risulta caricato (non salvato)..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_IndexOutOfBounds">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - L&apos;indice fornito ({1}) non appartiene alla lista.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_InvalidProperty">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non puo&apos; essere utilizzata per l&apos;operazione richiesta..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_KeyNotFound">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La chiave {1} non e&apos; definita..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_KeyValuesLessThanFields">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il numero di valori forniti in input per la Chiave {1} e&apos; minore del numero di campi da valorizzare..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_KeyValuesMoreThanFields">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il numero di valori forniti in input per la Chiave {1} e&apos; maggiore del numero di campi da valorizzare..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_KeyValuesNoMatch">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il numero di valori forniti in input per la Chiave {1} differisce dal numero di campi da valorizzare ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_NoDbPrefixDefined">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La definizione della classe prevede che nello Slot sia specificato un DbPrefixKey con chiave &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_NoValueForKey">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato specificato alcun valore per la Chiave {1}..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_Null_Input">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - L&apos;operazione non e&apos; consentita su un oggetto nullo..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_OperatorUnknown">
+            <summary>
+              Cerca una stringa localizzata simile a Operatore non riconosciuto.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_OperatorUnsupportedOnProperty">
+            <summary>
+              Cerca una stringa localizzata simile a Operatore non supportato su proprieta&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_ProcMethodBadArg">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il metodo &quot;{1}&quot; definito per la proprieta&apos; {2} deve avere un solo parametro dello stesso tipo della proprieta&apos;..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_ProcMethodNotFound">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il metodo &quot;{1}&quot; definito per la proprieta&apos; {2} non esiste..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_PropertyNotComparable">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non consente comparazioni..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_PropertyNotExists">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non esiste alcuna proprieta&apos; {1}..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_PropLoadObjectLoaded">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Per eseguire il caricamento sul primo accesso della proprieta&apos; {1} e&apos; necessario che l&apos;oggetto sia in stato caricato..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_Record_Filter_NotFound">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato trovato alcun record per il filtro specificato..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_RecordKeyMultiple">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Esistono piu&apos; record con Chiave {1} ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_RecordKeyNotFound">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato trovato alcun record per Chiave {1} = ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_Save_Null">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Impossibile salvare un oggetto nullo..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_SwithToNullSession">
+            <summary>
+              Cerca una stringa localizzata simile a Lo slot che si sta impostando risulta essere nullo o gia&apos; terminato..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Base_XmlNodeNotFound">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - L&apos;XML fornito non contiene alcun nodo &apos;{1}&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Deleted_CannotGetProperty">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile accedere alle proprieta&apos; di un oggetto eliminato..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Deleted_CannotSetProperty">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile impostare proprieta&apos; di un oggetto eliminato..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Deleted_MultipleRecords">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Sono stati eliminati piu&apos; record con Chiave {1} ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Deleted_NoAction">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eseguire operazioni su un oggetto eliminato.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Deleted_NoRecord">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato eliminato alcun record con Chiave {1} ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Diff_Null">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eseguire un confronto con un oggetto nullo..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Diff_WrongType">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eseguire un confronto con un oggetto di tipo differente ({1})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Edit_MultipleRecords">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Sono stati aggiornati piu&apos; record con Chiave {1} ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Edit_NoRecord">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato possibile eseguire l&apos;aggiornamento poiche&apos; non trovato il record per Chiave {1} ({2})..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Enc_Decrypt_Failure">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non puo&apos; essere decriptata: {2}.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Enc_Encrypt_Failure">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non puo&apos; essere criptata: {2}.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.List_CannotAddUnsavedObjects">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile aggiungere oggetti nulli o non salvati.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.List_CannotAggregateNonNumeric">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eseguire operazioni di aggregazione sulla proprieta&apos; &apos;{1}&apos; non numerica.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.List_CannotBuildIndex">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Indicizzazione fallita. Sono presenti oggetti &apos;{1}&apos; con medesima Primary Key &apos;{2}&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.List_CannotSetCacheResult">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile attivare la cache dei risultati in quanto non configurata la cache esterna oppure transazione in atto..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.List_NullDelegate">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il delegato fornito in input non puo&apos; essere NULL..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.List_UnknownColumn">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La colonna {1} esiste. E&apos; necessario che la query di caricamento lista contenga tale nome..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.New_CannotDelete">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eliminare un oggetto non salvato in precedenza..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.New_NoRecord">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato inserito alcun record..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.New_NullNotAllowed">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stato impostato alcun valore per la proprieta&apos; {1}..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.OperationFail_SaveOrDelete">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; possibile eseguire l&apos;operazione poiche&apos; esplicitamente disabilitata in fase di progettazione (READONLY)..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Prop_Enc_Wrong_Length">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La codifica del valore della proprieta&apos; eccede la massima dimensione del campo specificata ({1}).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Property_Cannot_Set">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non puo&apos; essere impostata poiche&apos; in sola lettura oppure gestita automaticamente..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Validate_IntRange">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il valore della proprieta&apos; {1} non rientra nell&apos;intervallo imposto {2}-{3}..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Validate_MaxLength">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La lunghezza della proprieta&apos; {1} e&apos; superiore al vincolo imposto di {2} caratteri..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Validate_MinLength">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La lunghezza della proprieta&apos; {1} non supera il vincolo imposto di almeno {2} caratteri..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Validate_PrimaryKeyModified">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} e&apos; o fa parte della PrimaryKey: la modifica non e&apos; ammessa..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Validate_Regex">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non rispetta l&apos;espressione di validazione impostata..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.ValidateProperties_Failure">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La validazione base delle proprieta&apos; e&apos; fallita. La lista messaggi contiene i dettagli sugli errori..
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Common.Resources.SchemaMessages">
+            <summary>
+              Classe di risorse fortemente tipizzata per la ricerca di stringhe localizzate e così via.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.ResourceManager">
+            <summary>
+              Restituisce l'istanza di ResourceManager nella cache utilizzata da questa classe.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Culture">
+            <summary>
+              Esegue l'override della proprietà CurrentUICulture del thread corrente per tutte le
+              ricerche di risorse eseguite utilizzando questa classe di risorse fortemente tipizzata.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Attr_MultipleDefinition">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Non e&apos; permessa la definizione multipla dell&apos;attributo {2} sulla stessa proprieta&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Case_OnlyOne">
+            <summary>
+              Cerca una stringa localizzata simile a E&apos; permessa una sola modalita&apos; di trasformazione stringhe tra UpperCase e LowerCase.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Column_SameOrder">
+            <summary>
+              Cerca una stringa localizzata simile a Impossibile mappare colonna {0} con ordine {1} poiche&apos; lo stesso ordine appartiene alla colonna {2}..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.DbConnectionAlreadyDefined">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - La connessione DB puo&apos; essere definita a livello di attributo Table o attributo DbConnection ma non su entrambi.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.DBType_NotFound">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Il tipo fornito per il database (&apos;{2}&apos;) non esiste..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.ExtraFeature_OnlyOne">
+            <summary>
+              Cerca una stringa localizzata simile a E&apos; permessa una sola funzionalita&apos; tra: AutoIncrement, AutoInsertTimestamp, AutoUpdateTimestamp.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.PrimaryKey_Mismatch">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - La Primary Key non corrisponde a quella dell&apos;oggetto in input..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.PrimaryKey_NotSet">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Non e&apos; stata definita alcuna PrimaryKey.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_AutoInc_32_Bit">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - La proprieta&apos; di tipo AutoIncrement deve essere di tipo intero di almeno 32 bit.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_AutoIncAcceptNull">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Una proprietà con attributo AutoIncrement non puo&apos; avere attributo AcceptNull..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_AutoIncOnlySimple">
+            <summary>
+              Cerca una stringa localizzata simile a ..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_Encryped_Only_String">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - E&apos; possibile definire criptata solo una proprieta&apos; di tipo &quot;string&quot;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_ErrorTimestamp">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Non e&apos; possibile definire contemporaneamente gli attributi InsertTimestamp che UpdateTimestamp..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_KeyNeedValueQuery">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - L&apos;appartenenza ad una chiave necessita che la proprieta&apos; sia valorizzata nella query standard.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_LogicalDeleteWrongType">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - La cancellazione logica necessita di una proprieta&apos; di tipo intero (di qualunque dimensione byte, int16, int32, int64), booleano o datetime.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_Must_Be_List">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - La proprieta&apos; deve essere una lista.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_MustBeReadOnlyForAttribute">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - L&apos;attributo {2} necessita che la proprieta&apos; sia di sola lettura .
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_NoArrayBytes">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - E&apos; consentito il solo array di tipo byte..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_NoLowerUpperCase">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Non e&apos; possibile definire una proprieta&apos; come LowerCase e UpperCase contemporaneamente.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_NoMultipleAutomatic">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Non e&apos; possibile definire una proprieta&apos; con più attributi automatici (AutoIncrement, AutoInsertTimestamp, AutoUpdateTimestamp, ConcurrencyControl).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_ObjectSpecifyColumns">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Una proprietà mappata su oggetto deve contenere almeno una definizione Column..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_ObjectSpecifyOrder">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - E&apos; necessario specificare un Order dato per l&apos;attributo Column in quanto presenti piu&apos; attributi Column. Il sistema non e&apos; in grado di garantire l&apos;ordinamento specificato in fase di definizione (gli attributi possono venire letti al contrario!).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_ObjectSpecifySubType">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - E&apos; necessario specificare un tipo dato per l&apos;attributo Column..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_PrimaryKey_SimpleType">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - E&apos; possibile definire una PrimaryKey solo su proprieta&apos; non mappate..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_PropertyMapMissingNames">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Il PropertyMap necessita la specifica di almeno 1 nome proprieta&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_PropertyMapMustBeFirst">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Il PropertyMap e&apos; necessita che la proprieta&apos; puntata esista e che venga definita prima (nel codice) rispetta alla proprieta&apos; che la mappa. ({2}).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_PropertyMapReadonly">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Il PropertyMap e&apos; consentito su una proprieta&apos; di tipo oggetto BDO in sola lettura e non ammette la definizione di attributi Column.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_PropertyMapToSimple">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Il PropertyMap e&apos; necessita che la proprieta&apos; puntata deve essere di tipo semplice.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_StoredProcedure_First">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Il nome della stored procedure associata ad una chiave multipla va specificato solo sulla prima proprieta&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Prop_XmlTagUnused">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - L&apos;attributo XmlTag e&apos; valido solo se non fornita una definizione per la colonna (dove e&apos; gia&apos; possibile specificarlo)..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Property_OnlyOneColumn">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - Non e&apos; possibile definire piu&apos; colonne su una proprietà di tipo semplice..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Schema_AlreadyExists">
+            <summary>
+              Cerca una stringa localizzata simile a Non e&apos; possibile caricare lo schema per la classe &apos;{0}&apos; poiche&apos; gia&apos; esistente..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Schema_NoPrimaryKey">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - E&apos; necessario definire una PrimaryKey..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Schema_NoProperties">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - E&apos; necessario definire almeno una proprieta&apos;..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Schema_NotFound">
+            <summary>
+              Cerca una stringa localizzata simile a Lo schema per il tipo &apos;{0}&apos; non risulta essere caricato..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SchemaMessages.Type_NotApplicable">
+            <summary>
+              Cerca una stringa localizzata simile a {0}.{1} - L&apos;attributo {2} e&apos; valido solo per proprieta&apos; di tipo &quot;string&quot;..
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Common.Resources.SessionMessages">
+            <summary>
+              Classe di risorse fortemente tipizzata per la ricerca di stringhe localizzate e così via.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.ResourceManager">
+            <summary>
+              Restituisce l'istanza di ResourceManager nella cache utilizzata da questa classe.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.Culture">
+            <summary>
+              Esegue l'override della proprietà CurrentUICulture del thread corrente per tutte le
+              ricerche di risorse eseguite utilizzando questa classe di risorse fortemente tipizzata.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.CacheSizeNotValid">
+            <summary>
+              Cerca una stringa localizzata simile a La dimensione di cache fornita &apos;{0}&apos; non e&apos; valida. Il valore consentito è tra 1 e 10000..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.Cannot_Delete_Default_DB">
+            <summary>
+              Cerca una stringa localizzata simile a Non e&apos; possibile eliminare il database di default.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.CannotChangeCacheSizeNoEmpty">
+            <summary>
+              Cerca una stringa localizzata simile a E&apos; possibile variare la dimensione della cache della sessione solo se vuota..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.Clone_LiveTrack_Not_Allowed">
+            <summary>
+              Cerca una stringa localizzata simile a Impossibile clonare un oggetto in quanto e&apos; attivo il Live Tracking.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.Compare_Null">
+            <summary>
+              Cerca una stringa localizzata simile a Non e&apos; possibile comparare sessioni nulle..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.CustomLog_Not_Initialized">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - Il custom log va inizializzato chiamando il metodo InitCustomLog(filename).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.DB_Not_Exist">
+            <summary>
+              Cerca una stringa localizzata simile a Non esiste alcun database registrato con nome &apos;{0}&apos;.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.Initialization_Error">
+            <summary>
+              Cerca una stringa localizzata simile a Errore nella inizializzazione dell&apos;ambiente: {0}.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.LoadObj_Filter_Null">
+            <summary>
+              Cerca una stringa localizzata simile a La ricerca per filtro necessita di un filtro valorizzato.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.SessionMessages.LoadObj_Key_NoValue">
+            <summary>
+              Cerca una stringa localizzata simile a La ricerca per chiave &apos;{0}&apos; deve contenere almeno un parametro di ricerca.
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Database.Resources.DatabaseMessages">
+            <summary>
+              Classe di risorse fortemente tipizzata per la ricerca di stringhe localizzate e così via.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.ResourceManager">
+            <summary>
+              Restituisce l'istanza di ResourceManager nella cache utilizzata da questa classe.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Culture">
+            <summary>
+              Esegue l'override della proprietà CurrentUICulture del thread corrente per tutte le
+              ricerche di risorse eseguite utilizzando questa classe di risorse fortemente tipizzata.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Assembly_Load_Error">
+            <summary>
+              Cerca una stringa localizzata simile a Errore caricamento classe Factory da &apos;{0}&apos;: {1}.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Assembly_Not_Found">
+            <summary>
+              Cerca una stringa localizzata simile a Assembly {0} non trovato.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Cannot_Get_lock">
+            <summary>
+              Cerca una stringa localizzata simile a Impossibile acquisire il lock richiesto ({0}).
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Cannot_Release_Lock">
+            <summary>
+              Cerca una stringa localizzata simile a Impossibile rilasciare il lock richiesto ({0}) poiche&apos; ottenuto da altro chiamante.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.ConnKey_NotFound">
+            <summary>
+              Cerca una stringa localizzata simile a La Chiave di ConnectionString fornita &quot;{0}&quot; non esiste nel web.config/app.config.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Lock_Not_Acquired">
+            <summary>
+              Cerca una stringa localizzata simile a Il lock {0} non e&apos; acquisito.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Lock_Reference_Null">
+            <summary>
+              Cerca una stringa localizzata simile a Il lock richiesto non risulta registrato su questa istanza di database.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Not_Implemented">
+            <summary>
+              Cerca una stringa localizzata simile a Il database corrente ({0}) non supporta la funzionalita&apos; richiesta.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Provider_Unknown">
+            <summary>
+              Cerca una stringa localizzata simile a Il provider {0} non e&apos; riconosciuto. Le possibili opzioni sono: MSSQLDataBase, MSSQL2005DataBase, MYSQLDataBase, SQLITEDataBase.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Query_Empty">
+            <summary>
+              Cerca una stringa localizzata simile a Lo statement SQL non e&apos; valorizzato. Attenzione: dopo ciascuna esecuzione viene cancellato sia lo statement SQL che i parametri..
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.TraceLog_Return_ERR">
+            <summary>
+              Cerca una stringa localizzata simile a Esito: ERROR.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.TraceLog_Return_OK">
+            <summary>
+              Cerca una stringa localizzata simile a Esito: OK.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Transaction_DbList_OnlyOne">
+            <summary>
+              Cerca una stringa localizzata simile a Transazione gia&apos; apera: e&apos; possibile aprire un&apos;unica transazione su una lista di DB.
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Database.Resources.DatabaseMessages.Transaction_Not_Open">
+            <summary>
+              Cerca una stringa localizzata simile a Transazione non aperta.
+            </summary>
+        </member>
         <member name="T:Business.Data.Objects.Core.Schema.SchemaReaderException">
             <summary>
             Eccezione da errore schema
@@ -4519,6 +5153,2686 @@
             <param name="value"></param>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Business.Data.Objects.Core.Utils.JSONWriter" -->
+        <member name="T:Business.Data.Objects.Common.Cache.CacheBase`2.CacheItem`2">
+            <summary>
+            Oggetto mantenuto in cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.Reset">
+            <summary>
+            Svuota completamente cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.AddAlternateKey(`0,`0)">
+            <summary>
+            Aggiunge un'altra chiave di riferimento per un oggetto gia' in cache
+            </summary>
+            <param name="keyBase"></param>
+            <param name="keyNew"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.SetObject(`0,`1)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.GetObject(`0)">
+            <summary>
+            Ritorna Oggetto
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.RemoveObject(`0)">
+            <summary>
+            Elimina oggetto da Cache se presente
+            </summary>
+            <param name="key"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.ContainsObject(`0)">
+            <summary>
+            Verifica se oggetto già presente in cache
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.Print">
+            <summary>
+            Ritorna stringa con rappresentazione dei dati contenuti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheBase`2.FreeCacheSlots(System.Int32)">
+            <summary>
+            Se la cache ha raggiunto il massimo inizia ad eliminare elementi
+            E' possibile specificare il numero di elementi da liberare
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheFIFO`2.SetObject(`0,`1)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheFIFO`2.GetObject(`0)">
+            <summary>
+            Ritorna Oggetto
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Cache.CacheSimple`2.CacheItem`2">
+            <summary>
+            Oggetto mantenuto in cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.Reset">
+            <summary>
+            Svuota completamente cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.AddAlternateKey(`0,`0)">
+            <summary>
+            Aggiunge un'altra chiave di riferimento per un oggetto gia' in cache
+            </summary>
+            <param name="keyBase"></param>
+            <param name="keyNew"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.SetObject(`0,`1)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.GetObject(`0)">
+            <summary>
+            Ritorna Oggetto
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.RemoveObject(`0)">
+            <summary>
+            Elimina oggetto da Cache se presente
+            </summary>
+            <param name="key"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.ContainsObject(`0)">
+            <summary>
+            Verifica se oggetto già presente in cache
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.Print">
+            <summary>
+            Ritorna stringa con rappresentazione dei dati contenuti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.FreeCacheSlots(System.Int32)">
+            <summary>
+            Se la cache ha raggiunto il massimo inizia ad eliminare elementi
+            E' possibile specificare il numero di elementi da liberare
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Cache.CacheTimed`2.CacheItem`2">
+            <summary>
+            Oggetto mantenuto in cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.Reset">
+            <summary>
+            Svuota completamente cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.SetObject(`0,`1)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.SetObject(`0,`1,System.TimeSpan)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="span"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.GetObject(`0)">
+            <summary>
+            Ritorna Oggetto
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.RemoveObject(`0)">
+            <summary>
+            Elimina oggetto da Cache se presente
+            </summary>
+            <param name="key"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.ContainsObject(`0)">
+            <summary>
+            Verifica se oggetto già presente in cache
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.Print">
+            <summary>
+            Ritorna stringa con rappresentazione dei dati contenuti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.FreeByDate(System.DateTime)">
+            <summary>
+            Se la cache ha raggiunto il massimo inizia ad eliminare elementi
+            E' possibile specificare il numero di elementi da liberare
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Cache.ICache`2">
+            <summary>
+            Interfaccia per cache
+            </summary>
+            <typeparam name="TKey">Chiave di ricerca</typeparam>
+            <typeparam name="T">Oggetto in cache</typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.ICache`2.CurrentSize">
+            <summary>
+            Dimensione attuale
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.ICache`2.MaxSize">
+            <summary>
+            Dimensione massima
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.Reset">
+            <summary>
+            Svuota Cache
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.SetObject(`0,`1)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.AddAlternateKey(`0,`0)">
+            <summary>
+            Aggiunge una chiave alternativa ad un oggetto gia' in cache
+            </summary>
+            <param name="keyBase"></param>
+            <param name="keyNew"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.ContainsObject(`0)">
+            <summary>
+            Verifica se oggetto è già presente in cache 
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.GetObject(`0)">
+            <summary>
+            Ritorna Oggetto
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.RemoveObject(`0)">
+            <summary>
+            Elimina oggetto da Cache se presente
+            </summary>
+            <param name="key"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.Print">
+            <summary>
+            Ritorna stringa con rappresentazione contenuto cache
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Constants">
+            <summary>
+            Costanti applicazione
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.Constants.STR_LIB_NAME">
+            <summary>
+            Nome libreria
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.Constants.STR_DB_DEFAULT">
+            <summary>
+            Stringa che identifica il contesto Database di default
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.Constants.ARR_DEFAULT_SPLIT_CHARS">
+            <summary>
+            Array di caratteri da utilizzare come split per stringhe (, e ;)
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.Constants.LOG_SEPARATOR">
+            <summary>
+            Separatore LOG
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.DataPager">
+            <summary>
+            Dati di paginazione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.DataPager.Position">
+            <summary>
+            Posizione (se lista paginata)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.DataPager.Offset">
+            <summary>
+            Numero max elementi
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.DataPager.Page">
+            <summary>
+            Pagina corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.DataPager.TotRecords">
+            <summary>
+            Totale record
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.DataPager.TotPages">
+            <summary>
+            Totale pagine
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.DataPager.#ctor">
+            <summary>
+            Costruttore base
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.DataPager.ToXml">
+            <summary>
+            Ritorna rappresentazione Xml del pager
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.EObjectSource">
+            <summary>
+            Enumerazione provenienza oggetto
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.EObjectSource.None">
+            <summary>
+            Oggetto nuovo
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.EObjectSource.Database">
+            <summary>
+            Caricato da database
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.EObjectSource.GlobalCache">
+            <summary>
+            Caricato da cache globale
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.EObjectSource.ExternalCache">
+            <summary>
+            Caricato da cache esterna
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.EObjectSource.DTO">
+            <summary>
+            Caricato da DTO
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.EObjectState">
+            <summary>
+            Enumerazione stati interni oggetto
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.EProtectionLevel">
+            <summary>
+            Definisce un livello di protezione testabile all'interno degli oggetti
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.ESaveResult">
+            <summary>
+            Definisce il livello di severità di un messaggio
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESaveResult.Unset">
+            <summary>
+            Risultato non noto
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESaveResult.SaveDone">
+            <summary>
+            Eseguito salvataggio
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESaveResult.UnChanged">
+            <summary>
+            Salvataggio non effettuato per oggetto non modificato
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.ESeverity">
+            <summary>
+            Definisce il livello di severità di un messaggio
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESeverity.Debug">
+            <summary>
+            Solo a scopo di debug
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESeverity.Info">
+            <summary>
+            Informazione
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESeverity.Warn">
+            <summary>
+            Warning
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Common.ESeverity.Error">
+            <summary>
+            Errore
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.BdoBaseException">
+            <summary>
+            Eccezione base BDO
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.BusinessSlotException">
+            <summary>
+            Eccezione da errore slot
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Exceptions.BusinessSlotException.#ctor(System.String,System.Object[])">
+            <summary>
+            Costruttore base
+            </summary>
+            <param name="className"></param>
+            <param name="msgFormat"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.ConfigException">
+            <summary>
+            Eccezione da errore schema
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.FilterException">
+            <summary>
+            Eccezione da errore Filter
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.ObjectException">
+            <summary>
+            Eccezioni generate dall'oggetto
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.ObjectNotFoundException">
+            <summary>
+            Eccezioni generata se l'oggetto richiesto non è stato trovato
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.ObjectValidationException">
+            <summary>
+            Eccezioni generata se la validazione non è corretta
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Exceptions.TypeFactoryException">
+            <summary>
+            Eccezione da errore schema
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Logging.AsyncFileLogger">
+            <summary>
+            Classe per log su file di testo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.AsyncFileLogger.LogPath">
+            <summary>
+            Path completo file
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.AsyncFileLogger.WriteIntervalMsec">
+            <summary>
+            Millisecondi dopo i quali viene effettuata la scrittura
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.#ctor(System.String)">
+            <summary>
+            Crea logger su file fornito in modalità append e apre lo stream
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.StartLog">
+            <summary>
+            Avvio del log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.StopLog">
+            <summary>
+            Ferma istanza log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.LogMessage(System.String,System.Object[])">
+            <summary>
+            Scrive Messaggio Log
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.LogException(System.Exception,System.Boolean)">
+            <summary>
+            Scrive informazioni su eccezione
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.appendLogData(System.String@)">
+            <summary>
+            Esegue l'accodamento del log 
+            </summary>
+            <param name="logmsg"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.saveLogData">
+            <summary>
+            Esegue salvataggio del log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.AsyncFileLogger.asyncWriteRun">
+            <summary>
+            Esecuzione scrittura asincrona
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Logging.ConsoleLogger">
+            <summary>
+            Classe per log su file di testo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.ConsoleLogger.LogPath">
+            <summary>
+            Path completo file
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.ConsoleLogger.LogMessage(System.String,System.Object[])">
+            <summary>
+            Scrive Messaggio Log
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.ConsoleLogger.LogException(System.Exception,System.Boolean)">
+            <summary>
+            Scrive informazioni su eccezione
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.ConsoleLogger.StartLog">
+            <summary>
+            Avvia istanza log (la new lo esegue in automatico)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.ConsoleLogger.StopLog">
+            <summary>
+            Ferma istanza log
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Logging.CustomLogger">
+            <summary>
+            Classe per log su file di testo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.CustomLogger.LogPath">
+            <summary>
+            Path completo file
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.CustomLogger.LogMessage(System.String,System.Object[])">
+            <summary>
+            Scrive Messaggio Log
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.CustomLogger.LogException(System.Exception,System.Boolean)">
+            <summary>
+            Scrive informazioni su eccezione
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.CustomLogger.StartLog">
+            <summary>
+            Avvia istanza log (la new lo esegue in automatico)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.CustomLogger.StopLog">
+            <summary>
+            Ferma istanza log
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Logging.FileLogger">
+            <summary>
+            Classe per log su file di testo
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileLogger.#ctor(System.String)">
+            <summary>
+            Crea logger su file fornito in modalità append fornita e attivo specificato
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.FileLogger.LogPath">
+            <summary>
+            Path completo file
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileLogger.LogMessage(System.String,System.Object[])">
+            <summary>
+            Scrive Messaggio Log
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileLogger.LogException(System.Exception,System.Boolean)">
+            <summary>
+            Scrive informazioni su eccezione
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileLogger.StartLog">
+            <summary>
+            Avvia istanza log (la new lo esegue in automatico)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileLogger.StopLog">
+            <summary>
+            Ferma istanza log
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Logging.FileStreamLogger">
+            <summary>
+            Classe per log su file di testo
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileStreamLogger.#ctor(System.String)">
+            <summary>
+            Crea logger su file fornito in modalità append e apre lo stream
+            </summary>
+            <param name="filePath"></param>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.FileStreamLogger.LogPath">
+            <summary>
+            Path completo file
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileStreamLogger.LogMessage(System.String,System.Object[])">
+            <summary>
+            Scrive Messaggio Log
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileStreamLogger.LogException(System.Exception,System.Boolean)">
+            <summary>
+            Scrive informazioni su eccezione
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileStreamLogger.StartLog">
+            <summary>
+            Avvio del log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileStreamLogger.StopLog">
+            <summary>
+            Ferma istanza log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.FileStreamLogger.writeDataToFile(System.String)">
+            <summary>
+            Scrive su file
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Logging.LoggerBase">
+            <summary>
+            Classe per log su file di testo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.LoggerBase.LogPath">
+            <summary>
+            Path completo log
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.LoggerBase.DateFormat">
+            <summary>
+            Formato data
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Logging.LoggerBase.WriteThreadId">
+            <summary>
+            Indica se scrivere nel log l'id del thread
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.LogMessage(System.String,System.Object[])">
+            <summary>
+            Log messaggio
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.LogException(System.Exception,System.Boolean)">
+            <summary>
+            Log eccezione
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.FormatLogTextMessage(System.String,System.Boolean,System.String,System.Object[])">
+            <summary>
+            Formatta una messaggio per scrittura log con la specifica del formato data e scrittura thread
+            </summary>
+            <param name="dateFromat"></param>
+            <param name="writeThreadId"></param>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.FormatLogTextMessage(System.String,System.Object[])">
+            <summary>
+            Formatta una messaggio per scrittura log con default data dd/MM/yyyy HH:mm:ss e scrittura thread
+            </summary>
+            <param name="msgIn"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.FormatLogTextException(System.String,System.Boolean,System.Exception,System.Boolean)">
+            <summary>
+            Ritorna testo log per eccezione con la specifica del formato data e scrittura thread
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+            <param name="dateFromat"></param>
+            <param name="writeThreadId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.FormatLogTextException(System.Exception,System.Boolean)">
+            <summary>
+            Ritorna testo log per eccezione con default data dd/MM/yyyy HH:mm:ss e scrittura thread
+            </summary>
+            <param name="e"></param>
+            <param name="includeStack"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.BeginSafeWrite">
+            <summary>
+            Entra in modalita' scrittura esclusiva (thread-safe)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.EndSafeWrite">
+            <summary>
+            Esce dalla modalita' scrittura esclusiva (thread-safe)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.StartLog">
+            <summary>
+            Ferma flusso log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.StopLog">
+            <summary>
+            Avvia/riavvia flusso log
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Logging.LoggerBase.Dispose">
+            <summary>
+            Libera risorse
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.BdoHash">
+            <summary>
+            Hashing globale BDO
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.DictionaryMap`2">
+            <summary>
+            Calsse dizionario con valori multipli
+            </summary>
+            <typeparam name="TKEY"></typeparam>
+            <typeparam name="TVALUE"></typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Utils.DictionaryMap`2.Item(`0)">
+            <summary>
+            Ritorna il primo valore trovato per la chiave
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Utils.DictionaryMap`2.Count">
+            <summary>
+            Ritorna numero chiavi presenti
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Utils.DictionaryMap`2.Keys">
+            <summary>
+            Ritorna enumeratore di chiavi
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.#ctor">
+            <summary>
+            Costruttore default
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.#ctor(System.Int32)">
+            <summary>
+            Costruttore
+            </summary>
+            <param name="capacity"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.ContainsKey(`0)">
+            <summary>
+            Verifica se chiave presente
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.GetAt(`0,System.Int32)">
+            <summary>
+            Ritorna valore alla posizione specificata
+            </summary>
+            <param name="key"></param>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.GetValuesEnumerator(`0)">
+            <summary>
+            Enumeratore dei valori di una chiave
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.CountValues(`0)">
+            <summary>
+            Ritorna numero valori
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.Add(`0,`1)">
+            <summary>
+            Aggiunge coppia chiave/valore
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.RemoveAll(`0)">
+            <summary>
+            Rimuove chiave (con tutti i valori associati)
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.RemoveAt(`0,System.Int32)">
+            <summary>
+            Rimuove un valore. Se non presenti ulteriori valori elimina totalmente la chiave
+            </summary>
+            <param name="key"></param>
+            <param name="index"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.Clear">
+            <summary>
+            Elimina tutte le chiavi e gli oggetti
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.TryGetValue(`0,System.Int32,`1@)">
+            <summary>
+            Prova a ottenere il valore per la chiave specificata ed alla posizione fornita (0 -> N).
+            Se viene trovato ritorna true altrimenti false
+            </summary>
+            <param name="key"></param>
+            <param name="index"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.TryGetFirstValue(`0,`1@)">
+            <summary>
+            Prova ad ottenere il primo valore della chiave fornita. Se trovato ritorna true altrimenti false
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.TryGetLastValue(`0,`1@)">
+            <summary>
+            Ritorna ultimo valore trovato
+            </summary>
+            <param name="key"></param>
+            <param name="index"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.Encryption.ICryptoAlgo">
+            <summary>
+            Interfaccia di Crypt/Decrypt
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.ICryptoAlgo.EncryptData(System.Byte[])">
+            <summary>
+            Ritorna dati criptati in formato stringa base64
+            </summary>
+            <param name="cleardata"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.ICryptoAlgo.EncryptString(System.String)">
+            <summary>
+            Ritorna stringa criptata in formato stringa base64
+            </summary>
+            <param name="cleardata"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.ICryptoAlgo.DecryptData(System.String)">
+            <summary>
+            Ritorna dati decriptati da testo codificato ed in base64
+            </summary>
+            <param name="encdata"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.ICryptoAlgo.DecryptString(System.String)">
+            <summary>
+            Ritorna stringa decriptata da testo codificato ed in base64
+            </summary>
+            <param name="encdata"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.Extensions">
+            <summary>
+            Extension method di utility per vari tipi
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.In``1(``0,``0[])">
+            <summary>
+            Operatore IN
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.Between``1(``0,``0,``0)">
+            <summary>
+            Operatore BEETWEEN
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <param name="argLow"></param>
+            <param name="argHigh"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.Between(System.IComparable,System.IComparable,System.IComparable)">
+            <summary>
+            Verifica se un valore è ricompreso in un intervallo, estremi inclusi
+            </summary>
+            <param name="obj"></param>
+            <param name="argLow"></param>
+            <param name="argHigh"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.IsNull(System.IComparable)">
+            <summary>
+            Estensione fake per consentire query con NULL tramite linq su proprieta' di tipo valore.
+            Non usare nel codice poichè ritorna sempre FALSE
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.IsNotNull(System.IComparable)">
+            <summary>
+            Estensione fake per consentire query con NULL tramite linq su proprieta' di tipo valore
+            Non usare nel codice poichè ritorna sempre TRUE
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.Like(System.String,System.String)">
+            <summary>
+            Esegue un confronto con espressione regolare. Se usato in linq SQL valgono solo i wildcard del db di destinazione
+            </summary>
+            <param name="obj"></param>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.ObjType">
+            <summary>
+            Enumerazione Che identifica i tipi di dato supportati
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.SerializationWriter">
+            <summary>
+            Serializzatore semplice, rapido, con output non voluminoso
+            Basato su quello di Tim Haynes, May 2006
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeObjType(Business.Data.Objects.Common.Utils.ObjType)">
+            <summary>
+            Scrive tipo oggetto
+            </summary>
+            <param name="ot"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeByteArray(System.Byte[])">
+            <summary>
+            scrive byte array
+            </summary>
+            <param name="b"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeCharArray(System.Char[])">
+            <summary>
+            Scrive array di caratteri
+            </summary>
+            <param name="c"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeObjArray(System.Object[])">
+            <summary>
+            Scrive nel flusso un array di oggetti
+            </summary>
+            <param name="o"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.WriteObject(System.Object)">
+            <summary>
+            Scrive oggetto nel flusso di serializzazione
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.SerializationReader">
+            <summary>
+            Classe per Deserializzazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.readByteArray">
+            <summary>
+            Legge array di byte
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.readCharArray">
+            <summary>
+            Legge array di caratteri
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.readObjectArray">
+            <summary>
+            Legge dal flusso un array di oggetti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.ReadObject">
+            <summary>
+            Legge oggetto
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.Mailer">
+            <summary>
+            Classe per l'invio email generico
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.#ctor">
+            <summary>
+            Crea mailer utilizzando i settaggi standard del file di configurazione
+            (System.Net)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.#ctor(System.String,System.Int32)">
+            <summary>
+            Crea Mailer fornendo specificamente le informazioni smtp
+            senza utilizzo di autenticazione
+            </summary>
+            <param name="smtpServer"></param>
+            <param name="smtpPort"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.#ctor(System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Crea Mailer fornendo specificamente le informazioni smtp
+            e le credenziali di autenticazione senza utilizzo di SSL 
+            </summary>
+            <param name="smtpServer"></param>
+            <param name="smtpPort"></param>
+            <param name="user"></param>
+            <param name="pass"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.#ctor(System.String,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>
+            Crea Mailer fornendo specificamente le informazioni smtp
+            e le credenziali di autenticazione
+            </summary>
+            <param name="smtpServer"></param>
+            <param name="smtpPort"></param>
+            <param name="user"></param>
+            <param name="pass"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.Send(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Esegue invio email fornendo tutti i parametri disponibili
+            </summary>
+            <param name="from">
+            Se non fornito utilizza configurazione system.net
+            </param>
+            <param name="to">
+            Destinatari
+            </param>
+            <param name="cc">
+            Destinatari in copia conoscenza
+            </param>
+            <param name="bcc">
+            Destinatari in copia nascosta
+            </param>
+            <param name="subject">
+            Oggetto
+            </param>
+            <param name="htmlbody">
+            Body html
+            </param>
+            <param name="attachments">
+            Lista di nomi file separati da , o ;
+            </param>
+            <param name="headers">
+            Collezione di coppie Nome->Valore da utilizzare nell'header
+            </param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.SendAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Esegue invio asincrono (su thread separato)
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="cc"></param>
+            <param name="bcc"></param>
+            <param name="subject"></param>
+            <param name="htmlbody"></param>
+            <param name="attachments"></param>
+            <param name="headers"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Mailer.normalizeAddresses(System.String)">
+            <summary>
+            normalizza elenco indirizzi email su unica stringa
+            </summary>
+            <param name="addressesIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.Message">
+            <summary>
+            Identifica un messaggio di esecuzione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Message.ToXml">
+            <summary>
+            Rappresentazione XML del messaggio
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.MessageList">
+            <summary>
+            Classe di tipo elenco messaggi
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Utils.MessageList.HasErrors">
+            <summary>
+            Indica se presenti messaggi di errore
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.CountForSeverity(Business.Data.Objects.Common.ESeverity)">
+            <summary>
+            Ritorna il numero di messaggi di una certa severità
+            </summary>
+            <param name="severity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.ToXml">
+            <summary>
+            Ritorna la rappresentazione Xml.
+            </summary>
+            <param name="function"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.Add(System.Int32,System.String,Business.Data.Objects.Common.ESeverity,System.String)">
+            <summary>
+            Aggiunge messaggio di tipo impostabile
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <param name="severity"></param>
+            <param name="uifiled"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.Add(System.Int32,System.String,Business.Data.Objects.Common.ESeverity)">
+            <summary>
+            Aggiunge messaggio di tipo impostabile senza nome campo UI
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <param name="severity"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddError(System.Int32,System.String,System.String)">
+            <summary>
+            Aggiunge messaggio errore
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <param name="uifield"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddError(System.Int32,System.String)">
+            <summary>
+            Aggiunge messaggio errore senza campo UI assosciato
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddError(System.String)">
+            <summary>
+            Aggiunge messaggio errore solo testuale
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddInfo(System.Int32,System.String,System.String)">
+            <summary>
+            Aggiunge messaggio info
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <param name="uifield"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddInfo(System.Int32,System.String)">
+            <summary>
+            Aggiunge messaggio info senza campo UI associato
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddInfo(System.String)">
+            <summary>
+            Aggiunge messaggio info solo testuale
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddWarn(System.Int32,System.String,System.String)">
+            <summary>
+            Aggiunge messaggio warning
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+            <param name="uifield"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddWarn(System.Int32,System.String)">
+            <summary>
+            Aggiunge messaggio warning senza campo UI associato
+            </summary>
+            <param name="code"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddWarn(System.String)">
+            <summary>
+            Aggiunge messaggio solo testuale
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddFormat(System.Int32,Business.Data.Objects.Common.ESeverity,System.String,System.Object[])">
+            <summary>
+            Aggiunge messaggio con codice, sevarita' e messaggio in notazione String.Format
+            </summary>
+            <param name="code"></param>
+            <param name="severity"></param>
+            <param name="messageFmt"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.PasswordGen">
+            <summary>
+            Classe per la generazione di password
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.PasswordGen.Generate(System.String)">
+            <summary>
+            Genera password fornendo una maschera di generazione.
+            Ammessi: [A]ny, [L]ower, [U]pper, [N]umber, [S]pecial
+            </summary>
+            <param name="mask"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.SimpleAes">
+            <summary>
+            Simple encryption/decryption using a random initialization vector
+            and prepending it to the crypto text.
+            </summary>
+            <remarks>Based on multiple answers in http://stackoverflow.com/questions/165808/simple-two-way-encryption-for-c-sharp </remarks>
+        </member>
+        <member name="F:Business.Data.Objects.Common.Utils.SimpleAes.IvBytes">
+            <summary>
+                Initialization vector length in bytes.
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SimpleAes.Dispose">
+            <summary>
+            Pulizia
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SimpleAes.Decrypt(System.String)">
+            <summary>
+            Decripta stringa in notazione Base64
+            </summary>
+            <param name="encrypted"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.SimpleAes.Encrypt(System.String)">
+            <summary>
+            Cripta stringa e ritorna notazione Base64
+            </summary>
+            <param name="unencrypted"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.StringHelper">
+            <summary>
+            Classe con metodi comuni relativi alle stringhe
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.StringHelper.RemoveAccents(System.String)">
+            <summary>
+            Rimuove eventuali accenti e sostituisce con apici
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.StringHelper.RemoveDiacritics(System.String)">
+            <summary>
+            Routine di rimozione e riconduzione caratteri strani
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.StringHelper.TruncateMaxChar(System.String,System.Int32)">
+            <summary>
+            Tronca una stringa alla dimensione fornita se piu' lunga
+            </summary>
+            <param name="value"></param>
+            <param name="maxChars"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.StringHelper.SplitSize(System.String,System.Int32)">
+            <summary>
+            Suddivide la stringa originale in N sottostringhe di dimensioni uguali a size (tranne l'ultima)
+            </summary>
+            <param name="value"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.StringHelper.Reverse(System.String)">
+            <summary>
+            Data una string ritorna la stessa inversa
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.TypeHelper">
+            <summary>
+            Contiene metodi statici di supporto alla gestione dei tipi 
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsNumericType(System.Type)">
+            <summary>
+            Verifica se trattasi di tipo numerico
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsString(System.Type)">
+            <summary>
+            Indica se tipo stringa
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsDate(System.Type)">
+            <summary>
+            Indica se il tipo e' una data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsDecimalType(System.Type)">
+            <summary>
+            Indica se tipo decimale (decimal, float, double)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsIntegerType(System.Type)">
+            <summary>
+            Indica se tipo intero (byte, int16, int32, int64, ...)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IntegerSize(System.Type)">
+            <summary>
+            Dato un tipo intero ritorna la dimensione
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsByteArray(System.Type)">
+            <summary>
+            Indica se trattasi di array di byte
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.XmlWrite">
+            <summary>
+            Classe utility per scrivere xml con un solo oggetto
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.Reset">
+            <summary>
+            Resetta contenuto
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteStartElement(System.String)">
+            <summary>
+            Scrive elemento iniziale
+            </summary>
+            <param name="nomeElemento"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteEndElement">
+            <summary>
+            Scrive elemento finale
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteElementString(System.String,System.String)">
+            <summary>
+            Scrive elemento con valore
+            </summary>
+            <param name="nomeElemento"></param>
+            <param name="valore"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteRaw(System.String)">
+            <summary>
+            Scrive XML senza controllo
+            </summary>
+            <param name="rawXml"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteValue(System.Object)">
+            <summary>
+            Scrive valore all'interno del tag
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteAttributeString(System.String,System.String)">
+            <summary>
+            Scrive attributo
+            </summary>
+            <param name="nome"></param>
+            <param name="valore"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteBase64(System.Byte[])">
+            <summary>
+            Scrive dati in base64
+            </summary>
+            <param name="buffer"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteCData(System.String)">
+            <summary>
+            Scrive CDATA
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.WriteComment(System.String)">
+            <summary>
+            Scrive commento
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.XmlWrite.ToString">
+            <summary>
+            Ritorna Output Xml
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.CommonDataBase">
+            <summary>
+            Classe Astratta da cui derivano quelle specializzate: gran parte delle proprietà
+            e dei Metodi risiedono qui
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ProviderAssembly">
+            <summary>
+            Assembly di riferimento del provider
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ProviderFactoryClass">
+            <summary>
+            Classe del factory provider
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ProviderFactory">
+            <summary>
+            Istanza del factory corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TypeMapper">
+            <summary>
+            Mappatore tipi .NET -> tipi DB
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.CommonDataBase.AssFactoryDictionary">
+            <summary>
+            Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.LastAutoIdFunction">
+            <summary>
+            Ritorna il nome della funzione per la cattura dell'ultimo Id inserito automaticamente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.Stats">
+            <summary>
+            Statistiche di utilizzo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.DbType">
+            <summary>
+            Ritorna tipo database
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ConnectionString">
+            <summary>
+            Ritorna connection string utilizzata
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.ExecutionTimeout">
+            <summary>
+            Ritorna o imposta il timeout di esecuzione query (secondi)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.CommandType">
+            <summary>
+            Ottiene o imposta la tipologia di comando che si vuole eseguire:
+            - Sql standard
+            - Stored Procedure
+            - Tabella diretta
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.AutoCloseConnection">
+            <summary>
+            ottiene o imposta il comportamento della connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.SQL">
+            <summary>
+            SQL da eseguire (o eseguito)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TotRecordQueryPaginata">
+            <summary>
+            Numero Totale Records calcolati dopo l'ultima OpenQuery paginata
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TraceON">
+            <summary>
+            Abilita o disabilita la registrazione dei dati di esecuzione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TraceOnlyErrors">
+            <summary>
+            Se TraceON abilita il trace dei soli
+            errori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.IsInTransaction">
+            <summary>
+            Indica se si e' in un contesto transazionale
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.HasAcquiredLocks">
+            <summary>
+            Indica se presenti lock in atto
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.IsPendingTransaction">
+            <summary>
+            Indica se e' stato richiesto avvio transazione ma effettivamente ancora non e' stata aperta in quanto non eseguita la connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.IsConnectionOpen">
+            <summary>
+            Indica se la connessione e' attiva
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.CanAutoCloseConnection">
+            <summary>
+            Indica se possibile chiudere la connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.HashCode">
+            <summary>
+            Codice hash della connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.TransactionDefaultIsolation">
+            <summary>
+            Isolamento di default della transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.#ctor(System.String)">
+            <summary>
+            Costruttore pubblico
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Clone">
+            <summary>
+            Clona una connessione DB
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.EnableTrace(Business.Data.Objects.Common.Logging.LoggerBase,System.Boolean)">
+            <summary>
+            Abilita logging fornendo un filelogger specifico
+            </summary>
+            <param name="logger"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.EnableTrace(System.String,System.Boolean)">
+            <summary>
+            Abilita il trace degli statement SQL su file
+            </summary>
+            <param name="traceFilePath"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.DisableTrace">
+            <summary>
+            Disabilita trace degli statement SQl
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginTransaction">
+            <summary>
+            Inizia nuova transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Inizia nuova transazione con specifica dell'isolation level
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CommitTransaction">
+            <summary>
+            Esegue Commit
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.RollbackTransaction">
+            <summary>
+            Esegue rollback
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetNewGeneratorId(System.String)">
+            <summary>
+            Ritorna un nuovo id ottenuto attraverso un generatore
+            </summary>
+            <param name="generatorName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecQuery">
+            <summary>
+            esegue una query non di selezione (INSERT, UPDATE, DELETE, DDL, ..)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecScalar">
+            <summary>
+            esegue una query selezione tornando solo la prima colonna della prima riga (oppure null)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecReader">
+            <summary>
+            esegue una query selezione tornando un DbDataReader
+            </summary>
+            <returns>
+            DataReader Associato ai dati
+            </returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ExecReaderPaged(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata con output datareader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Select">
+            <summary>
+            Esegue una select e ritorna la datatable con i dati
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.SelectM">
+            <summary>
+            Esgue query di selezione e ritorna un dataset. Utile per query concatenate che ritornano set di dati multipli 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue una query e ritorna parte del risultato su dataset come da specifiche
+            E' possibile eseguire l'override nelle classi specializzate per utilizzare
+            costrutti propri del db (vedi Mysql)
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParamName(System.String)">
+            <summary>
+            Ritorna nome parametro compatibile a partire da una stringa
+            </summary>
+            <param name="baseName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameter(System.String,System.Object)">
+            <summary>
+            Aggiunge parametro con nome e valore
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Aggiunge parametro con nome e valore e tipo
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameter(System.Data.Common.DbParameter)">
+            <summary>
+            Aggiunge parametro
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.AddParameters(System.Collections.Generic.IList{System.Data.Common.DbParameter})">
+            <summary>
+            Aggiunge elenco parametri
+            </summary>
+            <param name="paramlist"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ClearParameters">
+            <summary>
+            Elimina tutti i parametri
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Crea parametro per nome, valore e tipo .NET
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParameter(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Crea parametro per nome, valore e tipo del driver DB
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbtype"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.CloseConnection(System.Boolean)">
+            <summary>
+            Chiude la connessione (se aperta)
+            </summary>
+            <param name="rollbackUnCommitted"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginThreadSafeWork">
+            <summary>
+            Inizia una sessione Atomica di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.EndThreadSafeWork">
+            <summary>
+            Termina una sessione atomica di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene un lock globale a livello di applicazione
+            per una risorsa identificata da un nome
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeoutsec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia un lock globale precedentemente
+            acquisito
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Reset">
+            <summary>
+            Resetta contesto di esecuzione db
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetCurrentQueryHashString(System.Int32,System.Int32)">
+            <summary>
+            Ritorna un codice hash rappresentativo della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetCurrentQueryHashCode(System.Int32,System.Int32)">
+            <summary>
+            Ritorna un codice hash rappresentativo della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetAdoConnection">
+            <summary>
+            Ritorna connessione ADO sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetAdoTransaction">
+            <summary>
+            Ritorna transazione ADO sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.LockedTransactionBegin(System.String,System.Int32)">
+            <summary>
+            Richiede lock ed avvia transazione
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeOutSec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.LockedTransactionCommit(System.String)">
+            <summary>
+            Committa e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.LockedTransactionRollback(System.String)">
+            <summary>
+            Rollback e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Dispose">
+            <summary>
+            Rilascio Finale delle risorse con rollback eventuali transazioni non committed
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.registerLock(System.String)">
+            <summary>
+            Registra il lock nella classe database in modo da tenerne traccia
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.unregisterLock(System.String)">
+            <summary>
+            Deregistra lock
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.updateStatsFromSQL(System.String)">
+            <summary>
+            Data una stringa sql aggiorna le statistiche in base al tipo
+            </summary>
+            <param name="sqlIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.OpenConnection">
+            <summary>
+            Apre la connessione al database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.checkAutoCloseConnection">
+            <summary>
+            Se impostata autochiusura e possibile chiudere allora esegue chiusura
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.clearCommand">
+            <summary>
+            Pulizia comando
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.setTotPagedRecords(System.Int32)">
+            <summary>
+            Imposta numero record query paginata
+            </summary>
+            <param name="numRecords"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.createNewTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Crea nuova transazione
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.getNextTransaction">
+            <summary>
+            Ritorna la successiva Transazione altrimenti null
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.TraceLog(System.String,System.Object[])">
+            <summary>
+            Scrive Riga Su File di Trace
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.TraceStatement(System.String,System.Exception)">
+            <summary>
+            Esegue il trace di uno statement
+            </summary>
+            <param name="position"></param>
+            <param name="ex"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.pendingTransReset">
+            <summary>
+            Resetta l'indicatore di transazione pendente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.pendingTransSet(System.Data.IsolationLevel)">
+            <summary>
+            Imposta indicatore transazione pendente
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.GetDbFactory">
+            <summary>
+            Dato un tipo di factory ritorna una istanza valorizzata
+            </summary>
+            <param name="facType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.InitByFactory">
+            <summary>
+            Carica impostazioni da factory corrente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.InitByADO(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Inizializza attraverso oggetti ADO
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+            <param name="factory"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DataBaseException">
+            <summary>
+            Description of DataBaseException.
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DataBaseFactory">
+            <summary>
+            Description of DataBaseFactory.
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DataBaseFactory.CreaDataBase(System.String,System.String)">
+            <summary>
+            Istanzia un oggetto IDataBase dato il nome della classe e la relativa connection string
+            </summary>
+            <param name="tipoDataBase"></param>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DataBaseFactory.CreaDataBaseFromADO(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Crea istanza db partendo da connection
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DatabaseList">
+            <summary>
+            Classe lista database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.OpenAll">
+            <summary>
+            Apre tutte le connessioni (se non aperte)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.CloseAll(System.Boolean)">
+            <summary>
+            Chiude tutte le connessioni
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.BeginTransAll(System.Data.IsolationLevel)">
+            <summary>
+            Apre tutte le transazioni con un dato isolation level.
+            Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.BeginTransAll">
+            <summary>
+            Apre transazione su tutti i db
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.CommitAll">
+            <summary>
+            Esegue Commit su tutti i database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.RollbackAll">
+            <summary>
+            Esegue il rollback su tutti i database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DatabaseList.GetAllStats">
+            <summary>
+            Statistiche unificate
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DBStats">
+            <summary>
+            Classe per statistiche di accesso al DB
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DBStats.EStatement">
+            <summary>
+            Identifica lo statement eseguito
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DBStats.StatementRecord">
+            <summary>
+            Identifica un contatore di singolo statement
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.Reset">
+            <summary>
+            Azzera contatori
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.GetCounter(Business.Data.Objects.Database.DBStats.EStatement)">
+            <summary>
+            Ritorna conteggio per statement
+            </summary>
+            <param name="statement"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.Sum(Business.Data.Objects.Database.DBStats)">
+            <summary>
+            Aggrega statistiche
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.ToXml">
+            <summary>
+            Ritorna Xml che rappresenta le statistiche
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DBStats.ToString">
+            <summary>
+            Ritorna rappresentazione in stringa
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.DbTypeMapper">
+            <summary>
+            Casse per la mappatura dei tipi NET -> DB
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.DbTypeMapper.StaticMap">
+            <summary>
+            Espone la mappa di associazione statica e immutabile
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.DbTypeMapper.CurrentMap">
+            <summary>
+            Espone la mappa di associazione dell'istanza corrente. Se non vengono richieste modifiche coincide con la StaticMap
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeCurrentMap(System.Type,System.Data.DbType)">
+            <summary>
+            Modifica la mappatura dell'istanza corrente. Attenzione: la modifica di un mapping comporta la clonazione del mapping di default solo per il database per cui è richiesto
+            </summary>
+            <param name="t"></param>
+            <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeCurrentMap``1(System.Data.DbType)">
+            <summary>
+            Modifica il mapping corrente per questa istanza con tipo esplicito
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeStaticMap(System.Type,System.Data.DbType)">
+            <summary>
+            Modifica la mappatura statica. la modifica ha effetto su tutti i db instanziati che non hanno modificato la mappatura
+            La chiamata va inserita in un metodo statico
+            </summary>
+            <param name="t"></param>
+            <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.ChangeStaticMap``1(System.Data.DbType)">
+             <summary>
+            Modifica mappatura statica con tipo esplicito
+             </summary>
+             <typeparam name="T"></typeparam>
+             <param name="dbt"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.GetDbTypeFor(System.Type)">
+            <summary>
+            Dato un type ritorna il corrispondente dbtype
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.DbTypeMapper.cloneStaticMap">
+            <summary>
+            Ritorna una copia clonata dello static Map
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.IDataBase">
+            <summary>
+            Interfaccia IDataBase.
+            Fornisce i metodi e le proprietà per accedere ad un database, a prescindere dal tipo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.LastAutoIdFunction">
+            <summary>
+            Nome funzione che ritorna ultimo Id inserito automaticamente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.HashCode">
+            <summary>
+            Codice hash relativo alla connessi db (connectionstring)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.AutoCloseConnection">
+            <summary>
+            Indica se la connessione può essere chiusa quando necessario
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.SQL">
+            <summary>
+            SQL da eseguire
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.CommandType">
+            <summary>
+            Indica il tipo di comando da eseguire
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.DbType">
+            <summary>
+            Tipo Database
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.ConnectionString">
+            <summary>
+            Stringa di connessione
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.Stats">
+            <summary>
+            Statistiche di utilizzo
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.IsInTransaction">
+            <summary>
+            Indica se ci si trova in un contesto transazionale
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TransactionDefaultIsolation">
+            <summary>
+            Indica il livello di isolamento delle transazioni per il db
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TraceOnlyErrors">
+            <summary>
+            Abilita il trace dei soli errori
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.ExecutionTimeout">
+            <summary>
+            Ritorna o imposta il tempo massimo di attesa esecuzione statement (secondi)
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TypeMapper">
+            <summary>
+            Mappatore tipi .NET -> tipi DB
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Clone">
+            <summary>
+            Clona Database
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.EnableTrace(Business.Data.Objects.Common.Logging.LoggerBase,System.Boolean)">
+            <summary>
+            Abilita il trace fornendo un logger specifico
+            </summary>
+            <param name="logger"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.EnableTrace(System.String,System.Boolean)">
+            <summary>
+            Abilita trace degli statement SQL su file
+            </summary>
+            <param name="traceFilePath"></param>
+            <param name="onlyErrors"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.DisableTrace">
+            <summary>
+            Disabilita trace degli statement SQL
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetCurrentQueryHashCode(System.Int32,System.Int32)">
+            <summary>
+            Ritorna un codice hash rappresentativo della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetCurrentQueryHashString(System.Int32,System.Int32)">
+            <summary>
+            Ritorna una string rappresentativa della query che si sta per eseguire
+            </summary>
+            <param name="pos"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.TotRecordQueryPaginata">
+            <summary>
+            Numero Totale Record calcolati nell'ultima OpenQuery paginata
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetNewGeneratorId(System.String)">
+            <summary>
+            Ritorna un nuovo id ottenuto attraverso un generatore
+            </summary>
+            <param name="generatorName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.BeginTransaction">
+            <summary>
+            Inizia una transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            Inizia una transazione con un dato IsolationLevel
+            </summary>
+            <param name="level"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CommitTransaction">
+            <summary>
+            Commit Transazione in corso
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.RollbackTransaction">
+            <summary>
+            Rollback Transazione corrente
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ExecQuery">
+            <summary>
+            Esegue statement SQL impostato senza tornare dati
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ExecScalar">
+            <summary>
+            Esegue statement SQL tornando solo la prima colonna della prima riga (altrimenti NULL)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ExecReader">
+            <summary>
+            Esegue statement SQL tornando un Oggetto DbDataReader
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Select">
+            <summary>
+            Esegue statement SQL impostato e ritorna dati su datatable
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue statement SQL impostato e ritorna la parte dati richiesta su datatable
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object)">
+            <summary>
+            Aggiunge paramtro con nome, valore e tipo
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Aggiunge paramtro con nome, valore e tipo .NET
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Aggiunge paramtro con nome, valore e tipo DB (driver)
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbtype"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.Data.Common.DbParameter)">
+            <summary>
+            Aggiunge parametro creato in precedenza
+            </summary>
+            <param name="parameter"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.AddParameters(System.Collections.Generic.IList{System.Data.Common.DbParameter})">
+            <summary>
+            Aggiunge lista di parametri
+            </summary>
+            <param name="paramlist"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ClearParameters">
+            <summary>
+            Elimina tutti i parametri correnti
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CreateParameter(System.String,System.Object,System.Type)">
+            <summary>
+            Crea paramtro con nome, valore e tipo db senza aggiungerlo
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CreateParameter(System.String,System.Object,System.Data.DbType)">
+            <summary>
+            Crea paramtro con nome, valore e tipo db (driver) senza aggiungerlo
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+            <param name="dbtype"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CreateParamName(System.String)">
+            <summary>
+            Ritorna nome parametro compatibile con il database specificato.
+            </summary>
+            <param name="baseName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.CloseConnection(System.Boolean)">
+            <summary>
+            Forza la chiusura della connessione
+            </summary>
+            <param name="rollbackUnCommitted">
+            Specifica se bisogna eseguire il RollBack (oppure il Commit) della transazione eventualmente aperta
+            </param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.OpenConnection">
+            <summary>
+            Forza apertura connessione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.BeginThreadSafeWork">
+            <summary>
+            Inizia una sessione thread-safe di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.EndThreadSafeWork">
+            <summary>
+            Termina una sessione thread-safe di lavoro
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene un lock globale a livello di applicazione
+            per una risorsa identificata da un nome
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeoutsec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia un lock globale precedentemente
+            acquisito
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.HasLock(System.String)">
+            <summary>
+            Indica se presente un lock con nome
+            </summary>
+            <param name="lockName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Reset">
+            <summary>
+            Resetta lo stato di esecuzione del database
+            In particolare elimina eventuali parametri
+            mai utilizzati
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetAdoConnection">
+            <summary>
+            Ritorna connessione sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.GetAdoTransaction">
+            <summary>
+            Ritorna transazione sottostante
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.LockedTransactionBegin(System.String,System.Int32)">
+            <summary>
+            Richiede lock ed avvia transazione
+            </summary>
+            <param name="lockName"></param>
+            <param name="timeOutSec"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.LockedTransactionCommit(System.String)">
+            <summary>
+             Committa e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.LockedTransactionRollback(System.String)">
+            <summary>
+             Rollback e rilascia il lock. In caso di eccezione della transazione rilascia comunque il lock e propaga l'eccezione
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQL2005DataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.MSSQL2005DataBase._PAGED_REGEX">
+            <summary>
+            Regex per cercare primo statement di selct che puo' avere o meno distinct e top
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.preparePagedQuery(System.Int32,System.Int32)">
+            <summary>
+            Imposta query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.ExecReaderPaged(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata con reader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQL2012DataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.MSSQL2012DataBase._PAGED_REGEX">
+            <summary>
+            Regex per cercare primo statement di select che puo' avere o meno distinct e top
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.preparePagedQuery(System.Int32,System.Int32)">
+            <summary>
+            Imposta query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQLDataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene il lock di una risorsa con nome
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia lock precedentemente acquisito
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MYSQLDataBase">
+            <summary>
+            Description of MYSQLDataBase.
+            
+            La connection string deve essere del tipo: DataSource=server;database=db;user=xxx;password=xxx
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.MYSQLDataBase.TransactionDefaultIsolation">
+            <summary>
+            Isolamento di default della transazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.GetLock(System.String,System.Int32)">
+            <summary>
+            Ottiene lock su risorsa
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.ReleaseLock(System.String)">
+            <summary>
+            Rilascia lock su risorsa
+            </summary>
+            <param name="lockName"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue una query e ritorna parte del risultato su dataset come da specifiche
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.ExecReaderPaged(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata ritornando un DataReader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.PGSQLDataBase">
+            <summary>
+            Classe di gestione Database PostgrsSQL - PGSQLDataBase.
+            
+            La connection string deve essere del tipo: DataSource=server;database=db;user=xxx;password=xxx
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.PGSQLDataBase.SQL">
+            <summary>
+            Eseguito override per convertire il nome parametro @ con ?
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.PGSQLDataBase.AddParameter(System.String,System.Object)">
+            <summary>
+            Eseguito override per convertire il nome parametro @ con ?
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.PGSQLDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.PGSQLDataBase.GetNewGeneratorId(System.String)">
+            <summary>
+            Ritorna un nuovo id ottenuto attraverso un generatore
+            </summary>
+            <param name="generatorName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.SQLITEDataBase">
+            <summary>
+            Description of SQLITEDataBase.
+            
+            La connection string deve essere del tipo: DataSource=server;database=db;user=xxx;password=xxx
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.SQLITEDataBase.LastAutoIdFunction">
+            <summary>
+            Ritorna nome funzione per ultimo id inserito
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.SQLITEDataBase.GetLastAutoId">
+            <summary>
+            Ritorna l'Ultimo ID Autoincrement/Identity inserito
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.SQLITEDataBase.clearCommand">
+            <summary>
+            Pulizia comando - SQLITE ritorna errore se si modifica un commandtext
+            a datareader aperto
+            </summary>
+        </member>
         <member name="T:Business.Data.Objects.Cores.Utils.BdoOnly.SlotEventSimpleQueuePOST">
             <summary>
             Coda per la gestione degli eventi POST
@@ -4573,6 +7887,400 @@
             </summary>
             <param name="evt"></param>
             <param name="value"></param>
+        </member>
+        <member name="T:Bdo.Utils.Encryption.RSA_AES_Encryptor">
+            <summary>
+            Classe per la codifica/decodifica di dati tramite RSA (chiavi) e AES (per i dati)
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.createRijandelAES256">
+            <summary>
+            Crea istanza Rijandel (AES) con parametri base AES 256
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.createRijandelAES256(System.String)">
+            <summary>
+            Crea istanza Rijandel (AES) con parametri base AES 256 da chiave
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_AES_Encrypt(System.Security.Cryptography.RSA,System.Byte[],System.IO.Stream)">
+            <summary>
+            Cripta tramite chiave RSA un buffer su altro stream
+            </summary>
+            <param name="key"></param>
+            <param name="data"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_AES_Decrypt(System.Security.Cryptography.RSA,System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Decripta tramite chiave RSA uno stream su altro stream
+            </summary>
+            <param name="key"></param>
+            <param name="encInput"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
+            <summary>
+            Cripta tramite chiave RSA un buffer
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
+            <summary>
+            Decripta tramite chiave RSA
+            </summary>
+            <param name="key"></param>
+            <param name="encData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt_B64(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
+            <summary>
+            Cripta buffer e ritorna un testo base 64
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt_B64(System.Security.Cryptography.RSACryptoServiceProvider,System.String)">
+            <summary>
+            Decripta un testo codificato ed in base 64 e ritorna un buffer
+            </summary>
+            <param name="key"></param>
+            <param name="encData64"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt_B64_Text(System.Security.Cryptography.RSACryptoServiceProvider,System.String,System.Text.Encoding)">
+            <summary>
+            Cripta un testo (fornendo encoding) e ritorna testo codificato ed in base 64
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt_B64_Text(System.Security.Cryptography.RSACryptoServiceProvider,System.String,System.Text.Encoding)">
+            <summary>
+            Decripta un testo codificato ed in base 64 e ritorna un testo nell'encoding specificato
+            </summary>
+            <param name="key"></param>
+            <param name="encData64"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Encrypt(System.Byte[],System.String)">
+            <summary>
+            Cripta AES
+            </summary>
+            <param name="clearData"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Decrypt(System.Byte[],System.String)">
+            <summary>
+            Decripta tramite chiave RSA
+            </summary>
+            <param name="key"></param>
+            <param name="encData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Encrypt_B64_Text(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Cripta un testo (fornendo encoding) e ritorna testo codificato ed in base 64
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Decrypt_B64_Text(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Decripta un testo codificato ed in base 64 e ritorna un testo nell'encoding specificato
+            </summary>
+            <param name="key"></param>
+            <param name="encData64"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Bdo.Utils.Hashing.External.CityHash">
+            <summary>
+            CityHash provides hash functions for strings. The functions mix the
+            input bits thoroughly but are not suitable for cryptography.
+            </summary>
+            <remarks>
+            This class can be inherited and it exposes some internal functions (if you want to have fun). 
+            More info at the project site: <see href="https://github.com/knuppe/cityhash"/>
+            </remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.Donate">
+            <summary>
+            Opens a link to donation to the author of the CityHash C# port.
+            </summary>
+            <remarks>
+            It is beautiful to see the code running, but this code almost drove me nuts!! 
+            I would really appreciate any support ;-)
+            </remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.FMix(System.UInt32)">
+            <summary>
+            A 32-bit to 32-bit integer hash copied from Murmur3.
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.Rotate(System.UInt64,System.Int32)">
+            <summary>
+            Bitwise right rotate. 
+            Normally this will compile to a single instruction, especially if the shift is a manifest constant.
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.Fetch32(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 32-bit unsigned integer converted from four bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="index">The starting position within value.</param>
+            <returns>A 32-bit unsigned integer formed by four bytes beginning at <paramref name="index"/>.</returns>       
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.Fetch32(System.Byte[],System.UInt32)">
+            <summary>
+            Returns a 32-bit unsigned integer converted from four bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="index">The starting position within value.</param>
+            <returns>A 32-bit unsigned integer formed by four bytes beginning at <paramref name="index"/>.</returns>        
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.Fetch64(System.Byte[],System.Int32)">
+            <summary>
+            Returns a 64-bit unsigned integer converted from eight bytes at a specified position in a byte array.
+            </summary>
+            <param name="value">An array of bytes.</param>
+            <param name="index">The starting position within <paramref name="value"/>.</param>
+            <returns>A 64-bit unsigned integer formed by the eight bytes beginning at <paramref name="index"/>.</returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityMurmur(System.Byte[],Bdo.Utils.Hashing.External.uint128,System.Int32)">
+            <summary>
+            A subroutine for CityHash128().  Returns a decent 128-bit hash for strings
+            of any length representable in signed long.  Based on City and Murmur.
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash32(System.String)">
+            <summary>
+            Computes a 32-bit city hash for the specified string.
+            </summary>
+            <param name="value">The string value.</param>
+            <returns>A 32-bit city hash.</returns>
+            <remarks>This function encodes the string using the unicode block (ISO/IEC 8859-1).</remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash32(System.Byte[])">
+            <summary>
+            Computes a 32-bit city hash for the given encoded string.
+            </summary>
+            <param name="value">The string value.</param>
+            <returns>A 32-bit city hash.</returns>
+            <exception cref="T:System.ArgumentNullException">value</exception>
+            <remarks>
+            The city hash is designed to compute hash for STRINGs only! 
+            The city hash "works" with other types of data, but keep in mind it was not built for it.
+            </remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash64(System.String)">
+            <summary>
+            Computes the 64-bit city hash for the specified string.
+            </summary>
+            <param name="value">The string value.</param>
+            <returns>The 64-bit city hash.</returns>
+            <remarks>This function encodes the string using the unicode block (ISO/IEC 8859-1).</remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash64(System.Byte[])">
+            <summary>
+            Computes the 64-bit city hash for the encoded string.
+            </summary>
+            <param name="value">The encoded string.</param>
+            <returns>The 64-bit city hash.</returns>
+            <remarks>
+            The city hash is designed to compute hash for STRINGs only! 
+            The city hash "works" with other types of data, but keep in mind it was not built for it.
+            </remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash64(System.String,System.UInt64)">
+            <summary>
+            Computes the 64-bit city hash for the specified string and seed.
+            </summary>
+            <param name="value">The string value.</param>
+            <param name="seed">The seed used by the algorithm.</param>
+            <returns>The 64-bit city hash.</returns>
+            <remarks>This function encodes the string using the unicode block (ISO/IEC 8859-1).</remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash64(System.String,System.UInt64,System.UInt64)">
+            <summary>
+            Computes the 64-bit city hash for the specified string and seed.
+            </summary>
+            <param name="value">The string value.</param>
+            <param name="seed0">The low-order 64-bits seed used by the algorithm.</param>
+            <param name="seed1">The high-order 64-bits seed used by the algorithm.</param>
+            <returns>The 64-bit city hash.</returns>
+            <remarks>This function encodes the string using the unicode block (ISO/IEC 8859-1).</remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash64(System.Byte[],System.UInt64)">
+            <summary>
+            Computes the 64-bit city hash for the specified string and seed.
+            </summary>
+            <param name="value">The encoded string.</param>
+            <param name="seed">The seed used by the algorithm.</param>
+            <returns>The 64-bit city hash.</returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash64(System.Byte[],System.UInt64,System.UInt64)">
+            <summary>
+            Computes the 64-bit city hash for the specified string and seed.
+            </summary>
+            <param name="value">The encoded string.</param>
+            <param name="seed0">The low-order 64-bits seed used by the algorithm.</param>
+            <param name="seed1">The high-order 64-bits seed used by the algorithm.</param>
+            <returns>The 64-bit city hash.</returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash128(System.String)">
+            <summary>
+            Computes the 128-bit city hash and are tuned for strings of at least a few hundred bytes.
+            </summary>
+            <param name="value">The string value.</param>
+            <returns>The 128-bit city hash.</returns>
+            <remarks>This function encodes the string using the unicode block (ISO/IEC 8859-1).</remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash128(System.String,Bdo.Utils.Hashing.External.uint128)">
+            <summary>
+            Computes the 128-bit city hash and are tuned for strings of at least a few hundred bytes using 
+            the specified <paramref name="seed"/>.
+            </summary>
+            <param name="value">The string value.</param>
+            <param name="seed">The seed used by the city hash algorithm.</param>
+            <returns>The 128-bit city hash.</returns>
+            <remarks>This function encodes the string using the unicode block (ISO/IEC 8859-1).</remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash128(System.Byte[])">
+            <summary>
+            Computes a 128-bit city hash for the given encoded string.
+            </summary>
+            <param name="value">The encoded string.</param>
+            <returns>The 128-bit city hash.</returns>
+            <remarks>
+            The city hash is designed to compute hash for STRINGs only! 
+            The city hash "works" with other types of data, but keep in mind it was not built for it.
+            </remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.CityHash128(System.Byte[],Bdo.Utils.Hashing.External.uint128,System.Int32)">
+            <summary>
+            Computes the 128-bit city hash and are tuned for strings of at least a few hundred bytes using 
+            the specified <paramref name="seed"/> starting at a <paramref name="offset"/> position.
+            </summary>
+            <param name="value">The encoded string.</param>
+            <param name="seed">The seed used by the hash alrorithm.</param>
+            <param name="offset">The offset position in the byte array.</param>
+            <returns>The 128-bit city hash.</returns>
+            <remarks>
+            The city hash is designed to compute hash for STRINGs only! 
+            The city hash "works" with other types of data, but keep in mind it was not built for it.
+            </remarks>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.HashLen17to32(System.Byte[])">
+            <summary>
+            This probably works well for 16-byte strings as well, but it may be overkill in that case.
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.HashLen33to64(System.Byte[])">
+            <summary>
+            Return an 8-byte hash for 33 to 64 bytes.
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.CityHash.WeakHashLen32WithSeeds(System.UInt64,System.UInt64,System.UInt64,System.UInt64,System.UInt64,System.UInt64)">
+            <summary>
+            Return a 16-byte hash for 48 bytes. Quick and dirty.
+            Callers do best to use "random-looking" values for a and b.
+            </summary>
+        </member>
+        <member name="T:Bdo.Utils.Hashing.External.uint128">
+            <summary>
+            Represents a 128-bit unsigned integer.
+            </summary>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.uint128.#ctor(System.UInt64,System.UInt64)">
+            <summary>
+            Initializes a new instance of the <see cref="T:uint128"/> struct.
+            </summary>
+        </member>
+        <member name="P:Bdo.Utils.Hashing.External.uint128.Low">
+            <summary>
+            Gets or sets the low-order 64-bits.
+            </summary>
+            <value>The low-order 64-bits.</value>
+        </member>
+        <member name="P:Bdo.Utils.Hashing.External.uint128.High">
+            <summary>
+            Gets or sets the high-order 64-bits.
+            </summary>
+            <value>The high-order 64-bits.</value>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.uint128.Equals(Bdo.Utils.Hashing.External.uint128)">
+            <summary>
+            Indicates whether the current object is equal to another object of the same type.
+            </summary>
+            <returns>
+            true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+            </returns>
+            <param name="other">An object to compare with this object.</param>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.uint128.Equals(System.Object)">
+            <summary>
+            Indicates whether this instance and a specified object are equal.
+            </summary>
+            <returns>
+            true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
+            </returns>
+            <param name="obj">Another object to compare to. </param>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.uint128.GetHashCode">
+            <summary>
+            Returns the hash code for this instance.
+            </summary>
+            <returns>
+            A 32-bit signed integer that is the hash code for this instance.
+            </returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.External.OldMurmurHash3.Hash(System.String)">
+            <summary>
+            Hash di una stringa
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.IHashAlgo.Hash(System.String)">
+            <summary>
+            Hash di dati arbitrari
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.IHashAlgo.Hash(System.Byte[])">
+            <summary>
+            Hash di una stringa
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.IHashAlgo.Hash64(System.String)">
+            <summary>
+            Hash 64 di dati arbitrari
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Bdo.Utils.Hashing.IHashAlgo.Hash64(System.Byte[])">
+            <summary>
+            Hash 64 di una stringa
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>

@@ -53,17 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Business.Data.Objects.Common\Business.Data.Objects.Common.csproj">
-      <Project>{eb27f2d8-ee5c-4497-88a7-f829aa244b24}</Project>
-      <Name>Business.Data.Objects.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Business.Data.Objects.Core\Business.Data.Objects.Core.csproj">
       <Project>{6a62d66b-1617-46dd-83e3-0b098881e8ba}</Project>
       <Name>Business.Data.Objects.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Business.Data.Objects.Database\Business.Data.Objects.Database.csproj">
-      <Project>{85ed87a2-0c77-4811-b819-5b7d1add7751}</Project>
-      <Name>Business.Data.Objects.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

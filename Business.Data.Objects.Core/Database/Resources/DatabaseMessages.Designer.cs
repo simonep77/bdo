@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Business.Data.Objects.Database.Resources {
+namespace Business.Data.Objects.Core.Database.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Business.Data.Objects.Database.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Business.Data.Objects.Database.Resources.DatabaseMessages", typeof(DatabaseMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Business.Data.Objects.Core.Database.Resources.DatabaseMessages", typeof(DatabaseMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

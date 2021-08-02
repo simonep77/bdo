@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.0.21</Version>
+    <Version>5.0.22</Version>
     <Authors>Simone Pelaia</Authors>
     <Copyright>Simone Pelaia</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -24,11 +24,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Business.Data.Objects.Common\Business.Data.Objects.Common.csproj" />
-    <ProjectReference Include="..\Business.Data.Objects.Database\Business.Data.Objects.Database.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Compile Update="Common\Resources\ObjectMessages.Designer.cs">
+      <DependentUpon>ObjectMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Resources\SchemaMessages.Designer.cs">
+      <DependentUpon>SchemaMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Common\Resources\SessionMessages.Designer.cs">
+      <DependentUpon>SessionMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Database\Resources\DatabaseMessages.Designer.cs">
+      <DependentUpon>DatabaseMessages.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Objects\Filters\Spec\FilterBETWEEN.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -65,6 +80,29 @@
     <Compile Update="Objects\Filters\Spec\FilterNOTLIKE.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Common\Resources\ObjectMessages.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>ObjectMessages.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Resources\SchemaMessages.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>SchemaMessages.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Common\Resources\SessionMessages.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>SessionMessages.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Database\Resources\DatabaseMessages.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>DatabaseMessages.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

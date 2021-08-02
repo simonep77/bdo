@@ -1,4 +1,4 @@
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Core.Attributes;
 using System;
 

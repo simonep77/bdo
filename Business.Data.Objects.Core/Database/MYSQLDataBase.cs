@@ -9,7 +9,7 @@ using System.Data;
 using System.Data.Common;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using Business.Data.Objects.Database.Resources;
+using Business.Data.Objects.Core.Database.Resources;
 
 namespace Business.Data.Objects.Database
 {

@@ -67,3 +67,6 @@ Introdotte estensioni fake IsNull e IsNotNull per forzare la relativa query tram
 
 [06/07/2021] - 5.0.21 - Simone Pelaia
 Fix bug che impedisce di utilizzare una SearchByLinq all'interno di un'altra
+
+[02/08/2021] - 5.0.22 - Simone Pelaia
+Reintegrate tutte le librerie nell'unica Business.Data.Objects.Core

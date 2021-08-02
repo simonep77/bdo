@@ -1,4 +1,4 @@
-﻿using Business.Data.Objects.Database.Resources;
+﻿using Business.Data.Objects.Core.Database.Resources;
 using System;
 using System.Collections.Generic;
 using System.Data;

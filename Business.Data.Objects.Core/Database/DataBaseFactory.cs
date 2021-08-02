@@ -2,7 +2,7 @@ using System;
 using System.Configuration;
 using System.Reflection;
 using System.Data.Common;
-using Business.Data.Objects.Database.Resources;
+using Business.Data.Objects.Core.Database.Resources;
 
 namespace Business.Data.Objects.Database
 {

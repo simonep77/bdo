@@ -17,7 +17,7 @@ using System.IO;
 using System.Linq;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Common.Logging;
-using Business.Data.Objects.Database.Resources;
+using Business.Data.Objects.Core.Database.Resources;
 
 namespace Business.Data.Objects.Database
 {

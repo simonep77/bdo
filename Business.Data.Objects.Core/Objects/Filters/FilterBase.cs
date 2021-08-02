@@ -1,5 +1,5 @@
 ﻿using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Database;
