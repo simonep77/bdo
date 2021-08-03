@@ -70,3 +70,9 @@ Fix bug che impedisce di utilizzare una SearchByLinq all'interno di un'altra
 
 [02/08/2021] - 5.0.22 - Simone Pelaia
 Reintegrate tutte le librerie nell'unica Business.Data.Objects.Core
+
+[03/08/2021] - 5.0.23 - Simone Pelaia
+Esposta la lista dei parametri db
+
+[03/08/2021] - 5.0.24 - Simone Pelaia
+Esposta la proprietà che indica se possibile chiudere o meno la connessione db dopo uno statement

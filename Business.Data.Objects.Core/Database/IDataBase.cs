@@ -33,10 +33,20 @@ namespace Business.Data.Objects.Database
         /// </summary>
         bool AutoCloseConnection { get; set; }
 
-		/// <summary>
-		/// SQL da eseguire
-		/// </summary>
+        /// <summary>
+        /// Indica se possibile chiudere la connessione al termine dello statement
+        /// </summary>
+        bool CanAutoCloseConnection { get; }
+
+        /// <summary>
+        /// SQL da eseguire
+        /// </summary>
         string SQL { get; set;}
+
+        /// <summary>
+        /// Lista dei parametri attualmente impostati
+        /// </summary>
+        DbParameterCollection Parameters { get; }
 
         /// <summary>
         /// Indica il tipo di comando da eseguire

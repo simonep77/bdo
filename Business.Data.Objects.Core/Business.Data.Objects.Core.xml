@@ -6700,6 +6700,11 @@
             ottiene o imposta il comportamento della connessione
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.Parameters">
+            <summary>
+            Lista dei parametri attualmente presenti
+            </summary>
+        </member>
         <member name="P:Business.Data.Objects.Database.CommonDataBase.SQL">
             <summary>
             SQL da eseguire (o eseguito)
@@ -7305,6 +7310,11 @@
         <member name="P:Business.Data.Objects.Database.IDataBase.SQL">
             <summary>
             SQL da eseguire
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.Parameters">
+            <summary>
+            Lista dei parametri attualmente impostati
             </summary>
         </member>
         <member name="P:Business.Data.Objects.Database.IDataBase.CommandType">

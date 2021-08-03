@@ -139,11 +139,26 @@ namespace Business.Data.Objects.Database
                 this._AutoCloseConnection = value;
             }
         }
-		
-		/// <summary>
-		/// SQL da eseguire (o eseguito)
-		/// </summary>
-		public virtual string SQL
+
+
+        /// <summary>
+        /// Lista dei parametri attualmente presenti
+        /// </summary>
+        public DbParameterCollection Parameters
+        {
+            get
+            {
+                lock (this._GlobalLock)
+                {
+                    return this._command.Parameters;
+                }
+            }
+        }
+
+        /// <summary>
+        /// SQL da eseguire (o eseguito)
+        /// </summary>
+        public virtual string SQL
 		{
 			get{
                 lock (this._GlobalLock)
@@ -631,7 +646,6 @@ namespace Business.Data.Objects.Database
 
                     //Ritorna
                     return dr;
-
                 }
                 catch (Exception ex)
                 {
@@ -713,7 +727,7 @@ namespace Business.Data.Objects.Database
 
 
         /// <summary>
-        /// Esgue query di selezione e ritorna un dataset. Utile per query concatenate che ritornano set di dati multipli 
+        /// Esegue query di selezione e ritorna un dataset. Utile per query concatenate che ritornano set di dati multipli 
         /// </summary>
         /// <returns></returns>
         public virtual DataSet SelectM()
