@@ -76,3 +76,6 @@ Esposta la lista dei parametri db
 
 [03/08/2021] - 5.0.24 - Simone Pelaia
 Esposta la proprietà che indica se possibile chiudere o meno la connessione db dopo uno statement
+
+[03/08/2021] - 5.0.25 - Simone Pelaia
+Aggiunto metodo su oggetto "FromJson" per deserializzazione. Attenzione: presuppone la serializzazione con "ToJson"

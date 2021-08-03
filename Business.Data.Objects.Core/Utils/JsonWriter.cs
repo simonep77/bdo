@@ -58,13 +58,11 @@ namespace Business.Data.Objects.Core.Utils
                 stringBuilder.Append('\"');
 
                 if (dt != DateTime.MinValue)
-                { 
+                {
                     //Se non presente la parte oraria
-                    if (dt.Equals(dt.Date))
-                        stringBuilder.Append(dt.ToString("dd/MM/yyyy"));
-                    else
-                        stringBuilder.Append(dt.ToString("dd/MM/yyyy HH:mm:ss"));
+                    stringBuilder.Append(dt.ToString("O"));
                 }
+                //"2019-09-26T07:58:30.996+0200"
 
                 stringBuilder.Append('\"');
             }

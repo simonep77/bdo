@@ -202,6 +202,14 @@ namespace Business.Data.Objects.Core.Base
         }
 
 
+        public virtual void FromJSON(string json)
+        {
+            JSONParser.FillFromJson(this, json);
+            this.mDataSchema.ObjectSource = EObjectSource.DTO;
+            this.mDataSchema.ObjectState = EObjectState.Loaded;
+        }
+
+
         /// <summary>
         /// Ritorna Xml contenente i valori delle proprieta' in input
         /// </summary>

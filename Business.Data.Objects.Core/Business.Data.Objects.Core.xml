@@ -6862,7 +6862,7 @@
         </member>
         <member name="M:Business.Data.Objects.Database.CommonDataBase.SelectM">
             <summary>
-            Esgue query di selezione e ritorna un dataset. Utile per query concatenate che ritornano set di dati multipli 
+            Esegue query di selezione e ritorna un dataset. Utile per query concatenate che ritornano set di dati multipli 
             </summary>
             <returns></returns>
         </member>
@@ -7305,6 +7305,11 @@
         <member name="P:Business.Data.Objects.Database.IDataBase.AutoCloseConnection">
             <summary>
             Indica se la connessione può essere chiusa quando necessario
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.CanAutoCloseConnection">
+            <summary>
+            Indica se possibile chiudere la connessione al termine dello statement
             </summary>
         </member>
         <member name="P:Business.Data.Objects.Database.IDataBase.SQL">

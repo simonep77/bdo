@@ -31,9 +31,10 @@ namespace Business.Data.WinFormTest
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmTest));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.lINQ2SQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.jSONTOEFROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,6 +47,25 @@ namespace Business.Data.WinFormTest
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lINQ2SQLToolStripMenuItem,
+            this.jSONTOEFROMToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            // 
+            // lINQ2SQLToolStripMenuItem
+            // 
+            this.lINQ2SQLToolStripMenuItem.Name = "lINQ2SQLToolStripMenuItem";
+            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lINQ2SQLToolStripMenuItem.Text = "LINQ 2 SQL";
+            this.lINQ2SQLToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLToolStripMenuItem_Click);
             // 
             // txtLog
             // 
@@ -60,23 +80,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // toolStripDropDownButton1
+            // jSONTOEFROMToolStripMenuItem
             // 
-            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lINQ2SQLToolStripMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
-            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
-            // 
-            // lINQ2SQLToolStripMenuItem
-            // 
-            this.lINQ2SQLToolStripMenuItem.Name = "lINQ2SQLToolStripMenuItem";
-            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.lINQ2SQLToolStripMenuItem.Text = "LINQ 2 SQL";
-            this.lINQ2SQLToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLToolStripMenuItem_Click);
+            this.jSONTOEFROMToolStripMenuItem.Name = "jSONTOEFROMToolStripMenuItem";
+            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.jSONTOEFROMToolStripMenuItem.Text = "JSON TO e FROM";
+            this.jSONTOEFROMToolStripMenuItem.Click += new System.EventHandler(this.jSONTOEFROMToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -100,5 +109,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem jSONTOEFROMToolStripMenuItem;
     }
 }

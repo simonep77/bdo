@@ -22,20 +22,16 @@ namespace Business.Data.WinFormTest
         }
 
 
-        /// <summary>
-        ///     ''' Scrive log a video
-        ///     ''' </summary>
-        ///     ''' <param name="msgFmt"></param>
-        ///     ''' <param name="args"></param>
-        ///     ''' <remarks></remarks>
-        private void WriteLog(string msgFmt, params object[] args)
+        private void WriteLog(string msg)
         {
-            string msg = string.Format(msgFmt, args);
+            
 
             if (this.InvokeRequired)
                 this.Invoke(new Action(() => WriteLog(msg)));
 
-            this.txtLog.AppendText(string.Format("{0}  {1}{2}", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), msg, Environment.NewLine));
+            this.txtLog.AppendText($"{DateTime.Now:dd/MM/yyyy HH:mm:ss}  ");
+            this.txtLog.AppendText(msg);
+            this.txtLog.AppendText(Environment.NewLine);
         }
 
         /// <summary>
@@ -92,15 +88,15 @@ namespace Business.Data.WinFormTest
 
                 var oo = ss1.LoadObjByLINQ<Ordine>(o => o.Id == 150);
 
-                WriteLog("Utente: {0}", oo.DataInserimento);
+                WriteLog($"Utente: {oo.DataInserimento}");
 
                 var oo2 = ss1.LoadObjNullByLINQ<Ordine>(o => o.Id == 150000000);
 
-                WriteLog("Utente: {0}", oo2);
+                WriteLog($"Utente: {oo2}");
 
                 var oo3 = ss1.LoadObjOrNewByLINQ<Ordine>(o => o.Id == 150000000);
 
-                WriteLog("Utente: {0}", oo3);
+                WriteLog($"Utente: {oo3}");
 
                 // Dim o2 = oAnag1.ToDynamicObject()
 
@@ -126,6 +122,43 @@ namespace Business.Data.WinFormTest
                 this.WriteLog(el2.Subtract(el1).TotalMilliseconds.ToString());
 
   
+
+                // oAnag1.FillFrom(o2)
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
+
+        private void jSONTOEFROMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+
+
+                // cancellazione logica
+                var dtOgg = DateTime.Now;
+                // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
+                // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
+                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
+
+                foreach (var item in lst)
+                {
+                    this.WriteLog(item.ToJSON());
+
+                    var aa = ss1.CreateObject<Ordine>();
+
+                    aa.FromJSON(item.ToJSON());
+
+                    this.WriteLog(aa.Id.ToString());
+
+                }
 
                 // oAnag1.FillFrom(o2)
 
