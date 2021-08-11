@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace Bdo.Utils.Encryption
+namespace Business.Data.Objects.Common.Utils.Encryption
 {
     /// <summary>
     /// Classe per la codifica/decodifica di dati tramite RSA (chiavi) e AES (per i dati)

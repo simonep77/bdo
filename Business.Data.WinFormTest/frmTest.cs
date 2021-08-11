@@ -1,4 +1,5 @@
 ﻿using Business.Data.Objects.Core;
+using Business.Data.Objects.Core.Objects;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.TestClass.DAL;
 using System;
@@ -121,7 +122,13 @@ namespace Business.Data.WinFormTest
                 var el2 = ss1.GetCurrentElapsed();
                 this.WriteLog(el2.Subtract(el1).TotalMilliseconds.ToString());
 
-  
+                var filter = new LinqFilter<Ordine>();
+                filter.And(o => o.StatoId.In(1, 3));
+                filter.And(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
+
+                var l3 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(filter.Result);
+                this.WriteLog($"Espressione combinata. Count: {l3.Count}");
+
 
                 // oAnag1.FillFrom(o2)
 

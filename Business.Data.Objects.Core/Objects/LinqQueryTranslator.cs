@@ -430,25 +430,4 @@ namespace Business.Data.Objects.Core.Objects
     }
 
 
-    public static class LinqExt
-    {
-
-
-        public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> expression, Expression<Func<T, bool>> other)
-        {
-            var a = Expression.AndAlso(expression, other);
-            return (Expression<Func<T, bool>>)(Expression.Lambda(a, null));
-        }
-
-        public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> expression, Expression<Func<T, bool>> other)
-        {
-            var a =Expression.OrElse(expression, other);
-            return (Expression<Func<T, bool>>)(Expression.Lambda(a, null));
-        }
-
-
-    }
-
-
-
 }

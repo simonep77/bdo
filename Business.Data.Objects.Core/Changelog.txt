@@ -79,3 +79,6 @@ Esposta la proprietà che indica se possibile chiudere o meno la connessione db 
 
 [03/08/2021] - 5.0.25 - Simone Pelaia
 Aggiunto metodo su oggetto "FromJson" per deserializzazione. Attenzione: presuppone la serializzazione con "ToJson"
+
+[11/08/2021] - 5.0.26 - Simone Pelaia
+Aggiunta classe LinqFilter per combinare dinamicamente più statement LINQ. utile nelle ricerche con parametri multipli opzionali
