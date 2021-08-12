@@ -5937,122 +5937,6 @@
             Hashing globale BDO
             </summary>
         </member>
-        <member name="T:Business.Data.Objects.Common.Utils.DictionaryMap`2">
-            <summary>
-            Calsse dizionario con valori multipli
-            </summary>
-            <typeparam name="TKEY"></typeparam>
-            <typeparam name="TVALUE"></typeparam>
-        </member>
-        <member name="P:Business.Data.Objects.Common.Utils.DictionaryMap`2.Item(`0)">
-            <summary>
-            Ritorna il primo valore trovato per la chiave
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="P:Business.Data.Objects.Common.Utils.DictionaryMap`2.Count">
-            <summary>
-            Ritorna numero chiavi presenti
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Common.Utils.DictionaryMap`2.Keys">
-            <summary>
-            Ritorna enumeratore di chiavi
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.#ctor">
-            <summary>
-            Costruttore default
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.#ctor(System.Int32)">
-            <summary>
-            Costruttore
-            </summary>
-            <param name="capacity"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.ContainsKey(`0)">
-            <summary>
-            Verifica se chiave presente
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.GetAt(`0,System.Int32)">
-            <summary>
-            Ritorna valore alla posizione specificata
-            </summary>
-            <param name="key"></param>
-            <param name="index"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.GetValuesEnumerator(`0)">
-            <summary>
-            Enumeratore dei valori di una chiave
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.CountValues(`0)">
-            <summary>
-            Ritorna numero valori
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.Add(`0,`1)">
-            <summary>
-            Aggiunge coppia chiave/valore
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.RemoveAll(`0)">
-            <summary>
-            Rimuove chiave (con tutti i valori associati)
-            </summary>
-            <param name="key"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.RemoveAt(`0,System.Int32)">
-            <summary>
-            Rimuove un valore. Se non presenti ulteriori valori elimina totalmente la chiave
-            </summary>
-            <param name="key"></param>
-            <param name="index"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.Clear">
-            <summary>
-            Elimina tutte le chiavi e gli oggetti
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.TryGetValue(`0,System.Int32,`1@)">
-            <summary>
-            Prova a ottenere il valore per la chiave specificata ed alla posizione fornita (0 -> N).
-            Se viene trovato ritorna true altrimenti false
-            </summary>
-            <param name="key"></param>
-            <param name="index"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.TryGetFirstValue(`0,`1@)">
-            <summary>
-            Prova ad ottenere il primo valore della chiave fornita. Se trovato ritorna true altrimenti false
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.DictionaryMap`2.TryGetLastValue(`0,`1@)">
-            <summary>
-            Ritorna ultimo valore trovato
-            </summary>
-            <param name="key"></param>
-            <param name="index"></param>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
         <member name="T:Business.Data.Objects.Common.Utils.Encryption.ICryptoAlgo">
             <summary>
             Interfaccia di Crypt/Decrypt
@@ -6084,6 +5968,123 @@
             Ritorna stringa decriptata da testo codificato ed in base64
             </summary>
             <param name="encdata"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor">
+            <summary>
+            Classe per la codifica/decodifica di dati tramite RSA (chiavi) e AES (per i dati)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.createRijandelAES256">
+            <summary>
+            Crea istanza Rijandel (AES) con parametri base AES 256
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.createRijandelAES256(System.String)">
+            <summary>
+            Crea istanza Rijandel (AES) con parametri base AES 256 da chiave
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_AES_Encrypt(System.Security.Cryptography.RSA,System.Byte[],System.IO.Stream)">
+            <summary>
+            Cripta tramite chiave RSA un buffer su altro stream
+            </summary>
+            <param name="key"></param>
+            <param name="data"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_AES_Decrypt(System.Security.Cryptography.RSA,System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Decripta tramite chiave RSA uno stream su altro stream
+            </summary>
+            <param name="key"></param>
+            <param name="encInput"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
+            <summary>
+            Cripta tramite chiave RSA un buffer
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
+            <summary>
+            Decripta tramite chiave RSA
+            </summary>
+            <param name="key"></param>
+            <param name="encData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt_B64(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
+            <summary>
+            Cripta buffer e ritorna un testo base 64
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt_B64(System.Security.Cryptography.RSACryptoServiceProvider,System.String)">
+            <summary>
+            Decripta un testo codificato ed in base 64 e ritorna un buffer
+            </summary>
+            <param name="key"></param>
+            <param name="encData64"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt_B64_Text(System.Security.Cryptography.RSACryptoServiceProvider,System.String,System.Text.Encoding)">
+            <summary>
+            Cripta un testo (fornendo encoding) e ritorna testo codificato ed in base 64
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt_B64_Text(System.Security.Cryptography.RSACryptoServiceProvider,System.String,System.Text.Encoding)">
+            <summary>
+            Decripta un testo codificato ed in base 64 e ritorna un testo nell'encoding specificato
+            </summary>
+            <param name="key"></param>
+            <param name="encData64"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.AES_Encrypt(System.Byte[],System.String)">
+            <summary>
+            Cripta AES
+            </summary>
+            <param name="clearData"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.AES_Decrypt(System.Byte[],System.String)">
+            <summary>
+            Decripta tramite chiave RSA
+            </summary>
+            <param name="key"></param>
+            <param name="encData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.AES_Encrypt_B64_Text(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Cripta un testo (fornendo encoding) e ritorna testo codificato ed in base 64
+            </summary>
+            <param name="key"></param>
+            <param name="clearData"></param>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Encryption.RSA_AES_Encryptor.AES_Decrypt_B64_Text(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Decripta un testo codificato ed in base 64 e ritorna un testo nell'encoding specificato
+            </summary>
+            <param name="key"></param>
+            <param name="encData64"></param>
+            <param name="enc"></param>
             <returns></returns>
         </member>
         <member name="T:Business.Data.Objects.Common.Utils.Extensions">
@@ -6212,6 +6213,53 @@
             Legge oggetto
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.LinqExt">
+            <summary>
+            Metodi di estensione per espressioni linq
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.LinqExt.AndAlso``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Ritorna espressione combinata in AND
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="expression"></param>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.LinqExt.OrElse``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            Ritorn espressione combinata in OR
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="expression"></param>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Utils.LinqFilter`1">
+            <summary>
+            Casse filtro per combinare dinamicamente statement linq di ricerca
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Utils.LinqFilter`1.Result">
+            <summary>
+            Ritorna espressione risultato delle operazioni eseguite.
+            In caso di nessuna operazione ritorna una generica espressione sempre vera (1=1)
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.LinqFilter`1.And(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Aggiunge Condizione AND
+            </summary>
+            <param name="exp"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.LinqFilter`1.Or(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Aggiunge condizione OR
+            </summary>
+            <param name="exp"></param>
         </member>
         <member name="T:Business.Data.Objects.Common.Utils.Mailer">
             <summary>
@@ -7903,123 +7951,6 @@
             <param name="evt"></param>
             <param name="value"></param>
         </member>
-        <member name="T:Bdo.Utils.Encryption.RSA_AES_Encryptor">
-            <summary>
-            Classe per la codifica/decodifica di dati tramite RSA (chiavi) e AES (per i dati)
-            </summary>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.createRijandelAES256">
-            <summary>
-            Crea istanza Rijandel (AES) con parametri base AES 256
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.createRijandelAES256(System.String)">
-            <summary>
-            Crea istanza Rijandel (AES) con parametri base AES 256 da chiave
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_AES_Encrypt(System.Security.Cryptography.RSA,System.Byte[],System.IO.Stream)">
-            <summary>
-            Cripta tramite chiave RSA un buffer su altro stream
-            </summary>
-            <param name="key"></param>
-            <param name="data"></param>
-            <param name="output"></param>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_AES_Decrypt(System.Security.Cryptography.RSA,System.IO.Stream,System.IO.Stream)">
-            <summary>
-            Decripta tramite chiave RSA uno stream su altro stream
-            </summary>
-            <param name="key"></param>
-            <param name="encInput"></param>
-            <param name="output"></param>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
-            <summary>
-            Cripta tramite chiave RSA un buffer
-            </summary>
-            <param name="key"></param>
-            <param name="clearData"></param>
-            <param name="output"></param>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
-            <summary>
-            Decripta tramite chiave RSA
-            </summary>
-            <param name="key"></param>
-            <param name="encData"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt_B64(System.Security.Cryptography.RSACryptoServiceProvider,System.Byte[])">
-            <summary>
-            Cripta buffer e ritorna un testo base 64
-            </summary>
-            <param name="key"></param>
-            <param name="clearData"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt_B64(System.Security.Cryptography.RSACryptoServiceProvider,System.String)">
-            <summary>
-            Decripta un testo codificato ed in base 64 e ritorna un buffer
-            </summary>
-            <param name="key"></param>
-            <param name="encData64"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Encrypt_B64_Text(System.Security.Cryptography.RSACryptoServiceProvider,System.String,System.Text.Encoding)">
-            <summary>
-            Cripta un testo (fornendo encoding) e ritorna testo codificato ed in base 64
-            </summary>
-            <param name="key"></param>
-            <param name="clearData"></param>
-            <param name="enc"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.RSA_Decrypt_B64_Text(System.Security.Cryptography.RSACryptoServiceProvider,System.String,System.Text.Encoding)">
-            <summary>
-            Decripta un testo codificato ed in base 64 e ritorna un testo nell'encoding specificato
-            </summary>
-            <param name="key"></param>
-            <param name="encData64"></param>
-            <param name="enc"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Encrypt(System.Byte[],System.String)">
-            <summary>
-            Cripta AES
-            </summary>
-            <param name="clearData"></param>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Decrypt(System.Byte[],System.String)">
-            <summary>
-            Decripta tramite chiave RSA
-            </summary>
-            <param name="key"></param>
-            <param name="encData"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Encrypt_B64_Text(System.String,System.String,System.Text.Encoding)">
-            <summary>
-            Cripta un testo (fornendo encoding) e ritorna testo codificato ed in base 64
-            </summary>
-            <param name="key"></param>
-            <param name="clearData"></param>
-            <param name="enc"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Bdo.Utils.Encryption.RSA_AES_Encryptor.AES_Decrypt_B64_Text(System.String,System.String,System.Text.Encoding)">
-            <summary>
-            Decripta un testo codificato ed in base 64 e ritorna un testo nell'encoding specificato
-            </summary>
-            <param name="key"></param>
-            <param name="encData64"></param>
-            <param name="enc"></param>
-            <returns></returns>
-        </member>
         <member name="T:Bdo.Utils.Hashing.External.CityHash">
             <summary>
             CityHash provides hash functions for strings. The functions mix the
@@ -8261,13 +8192,6 @@
             <returns>
             A 32-bit signed integer that is the hash code for this instance.
             </returns>
-        </member>
-        <member name="M:Bdo.Utils.Hashing.External.OldMurmurHash3.Hash(System.String)">
-            <summary>
-            Hash di una stringa
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
         </member>
         <member name="M:Bdo.Utils.Hashing.IHashAlgo.Hash(System.String)">
             <summary>
