@@ -139,6 +139,11 @@ namespace Business.Data.Objects.Core.Utils
                 var result = Convert.ChangeType(json, type, System.Globalization.CultureInfo.InvariantCulture);
                 return result;
             }
+            if (type.Equals(typeof(bool)))
+            {
+                var result = (json == @"true");
+                return result;
+            }
             if (type == typeof(decimal))
             {
                 decimal result;
@@ -147,7 +152,7 @@ namespace Business.Data.Objects.Core.Utils
             }
             if (type == typeof(DateTime))
             {
-                DateTime result;
+                DateTime result = DateTime.MinValue;
                 DateTime.TryParse(json.Replace(@"""", ""), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.RoundtripKind, out result);
                 return result;
             }
