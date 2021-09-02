@@ -315,7 +315,7 @@ namespace Business.Data.Objects.Core
                     for (int i = 0; i < values.Length; i++)
                     {
                         //Esegue la conversione di ciascun tipo
-                        var oFilt = new FilterEQUAL(this.Name, values[i]);
+                        var oFilt = new Filter(this.Name, EOperator.Equal, values[i]);
                         if (oFilt.PropertyTest(obj))
                         {
                             bTest = true;

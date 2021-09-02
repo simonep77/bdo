@@ -166,22 +166,6 @@
             </summary>
             <param name="keyName"></param>
         </member>
-        <member name="T:Business.Data.Objects.Core.Attributes.ListMap">
-            <summary>
-            Consente di definire la dipendenza di una proprieta' rispetta ad una o piu'
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Core.Attributes.ListMap.Names">
-            <summary>
-            Indica i nomi delle proprieta' mappate
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Attributes.ListMap.#ctor(System.String[])">
-            <summary>
-            Crea istanza di PropertyMap specificando Nome ed ordine
-            </summary>
-            <param name="propertyNames"></param>
-        </member>
         <member name="T:Business.Data.Objects.Core.Attributes.PropertyMap">
             <summary>
             Consente di definire la dipendenza di una proprieta' rispetta ad una o piu'
@@ -1151,7 +1135,7 @@
             Indica se presenti property map
             </summary>
         </member>
-        <member name="P:Business.Data.Objects.Core.Schema.Definition.Property.IsSqlSelectExcluded">
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.Property.ExcludeSelect">
             <summary>
             Indica se la proprieta' va inclusa nella query di selezione standard
             </summary>
@@ -1184,54 +1168,6 @@
             </summary>
             <param name="value"></param>
             <returns></returns>
-        </member>
-        <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertyDataList">
-            <summary>
-            Definizione di proprietà
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.GetValue(Business.Data.Objects.Core.Base.DataObjectBase)">
-            <summary>
-            Ritorna il valore della proprieta'
-            </summary>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.SetValue(Business.Data.Objects.Core.Base.DataObjectBase,System.Object)">
-            <summary>
-            Metodo privato di impostazione proprietà
-            </summary>
-            <param name="obj"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.WriteXml(Business.Data.Objects.Common.Utils.XmlWrite,Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
-            <summary>
-             Crea rappresentazione Xml
-            </summary>
-            <param name="xw"></param>
-            <param name="obj"></param>
-            <param name="depth"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.WriteDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
-            <summary>
-            Scrive property nel DTO
-            </summary>
-            <param name="dto"></param>
-            <param name="obj"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.ReadDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase)">
-            <summary>
-            Legge DTO
-            </summary>
-            <param name="dto"></param>
-            <param name="obj"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyDataList.SetValueFromReader(Business.Data.Objects.Core.Base.DataObjectBase,System.Data.IDataReader)">
-            <summary>
-            Carica valori proprieta' da datareader
-            </summary>
-            <param name="obj"></param>
-            <param name="dr"></param>
         </member>
         <member name="T:Business.Data.Objects.Core.Schema.Definition.PropertyDictionary">
             <summary>
@@ -1310,20 +1246,6 @@
             <param name="obj"></param>
             <param name="depth"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.WriteDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
-            <summary>
-            Scrive property nel DTO
-            </summary>
-            <param name="dto"></param>
-            <param name="obj"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.ReadDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase)">
-            <summary>
-            Legge DTO
-            </summary>
-            <param name="dto"></param>
-            <param name="obj"></param>
-        </member>
         <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertyObject.SetValueFromReader(Business.Data.Objects.Core.Base.DataObjectBase,System.Data.IDataReader)">
             <summary>
             Carica valori proprieta' da datareader
@@ -1346,7 +1268,7 @@
             Indica se presenti modificatori
             </summary>
         </member>
-        <member name="P:Business.Data.Objects.Core.Schema.Definition.PropertySimple.IsSqlSelectExcluded">
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.PropertySimple.ExcludeSelect">
             <summary>
             Indica se esclusa dal caricamento standard (query load)
             </summary>
@@ -1385,21 +1307,6 @@
             <param name="xw"></param>
             <param name="obj"></param>
             <param name="depth"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.WriteDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase,System.Int32)">
-            <summary>
-             Scrive DTO
-            </summary>
-            <param name="dto"></param>
-            <param name="obj"></param>
-            <param name="depth"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.ReadDTO(System.Collections.Generic.Dictionary{System.String,System.Object},Business.Data.Objects.Core.Base.DataObjectBase)">
-            <summary>
-            Legge DTO
-            </summary>
-            <param name="dto"></param>
-            <param name="obj"></param>
         </member>
         <member name="M:Business.Data.Objects.Core.Schema.Definition.PropertySimple.SetValueFromReader(Business.Data.Objects.Core.Base.DataObjectBase,System.Data.IDataReader)">
             <summary>
@@ -1451,21 +1358,6 @@
             <summary>
             Ritorna la rappresentazione in stringa
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.BinSerialize(Business.Data.Objects.Core.Schema.Usage.DataSchema)">
-            <summary>
-            Serializzazione dataschema
-            </summary>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.BinDeserialize(System.Byte[])">
-            <summary>
-            Deserializza dataschema
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="data"></param>
             <returns></returns>
         </member>
         <member name="T:Business.Data.Objects.Core.Base.BusinessObjectBase">
@@ -1586,18 +1478,6 @@
             Imposta uno slot sulla lista corrente
             </summary>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToDTO">
-            <summary>
-            Ritorna elenco oggetti in formato DTO con profondita' 0
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToDTO(System.Int32)">
-            <summary>
-            Ritorna elenco oggetti in formato DTO con profondita' specificata
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataListBase.ToJSON">
             <summary>
             Ritorna elenco oggetti in formato JSON
@@ -1706,37 +1586,17 @@
             <param name="depth"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDTO">
-            <summary>
-            Ritorna rappresentazione in forma di coppie property=valore con
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDTO(System.Int32)">
-            <summary>
-            Ritorna rappresentazione in forma di coppie property=valore con specifica di profondita'
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToJSON">
             <summary>
-            Ritorna rappresentazione  JSON dell'oggetto
+            Ritorna rappresentazione  JSON dell'oggetto (per serializzazione)
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToXml(System.String[])">
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.FromJSON(System.String)">
             <summary>
-            Ritorna Xml contenente i valori delle proprieta' in input
+            Carica i dati di un JSON sull'oggetto (per deserializzazione)
             </summary>
-            <param name="propertyNames"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.IsDefaultValue(Business.Data.Objects.Core.Schema.Definition.Property)">
-            <summary>
-            Verifica se property nulla (Interna)
-            </summary>
-            <param name="prop"></param>
-            <returns></returns>
+            <param name="json"></param>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.IsNull(System.String)">
             <summary>
@@ -2009,30 +1869,6 @@
             Passa oggetto su Slot Fornito
             </summary>
             <param name="slotIn"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.BusinessList`3">
-            <summary>
-            Classe astratta per la definizione dei metodi di
-            business per una generica classe lista
-            </summary>
-            <typeparam name="TL"></typeparam>
-        </member>
-        <member name="P:Business.Data.Objects.Core.BusinessList`3.DataList">
-            <summary>
-            Oggetto dati associato
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessList`3.#ctor(`0)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="list"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessList`3.AddOrUpdate(`2)">
-            <summary>
-            Aggiunge l'oggetto o aggiorna l'istanza gia' presente con l'istanza fornita
-            </summary>
-            <param name="item"></param>
         </member>
         <member name="T:Business.Data.Objects.Core.BusinessObject`1">
             <summary>
@@ -2704,7 +2540,13 @@
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.DeleteAll``1(``0,System.Boolean)">
             <summary>
-            Cancella tutti gli elementi di una lista. Al termine la lista risulta vuota
+            Cancella tutti gli elementi di una lista. Al termine la lista risulta ancora piena
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ToBizList``2(System.Collections.Generic.IEnumerable{``1})">
+            <summary>
+            Ritorna una lista di businessobjects a partire da qualsiasi enumerabile di dataobject
             </summary>
             <param name="list"></param>
         </member>
@@ -2713,15 +2555,6 @@
             Ritorna copia esatta dell'oggetto su nuova istanza
             </summary>
             <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.CloneList``2(Business.Data.Objects.Core.DataList{``0,``1})">
-            <summary>
-            Ritorna una lista identica a quella in input
-            </summary>
-            <typeparam name="TL"></typeparam>
-            <typeparam name="T"></typeparam>
-            <param name="list"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.CloneObjectForNew``1(``0)">
@@ -2838,22 +2671,6 @@
             </summary>
             <param name="issync"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.BinSerialize``1(``0)">
-            <summary>
-            Esegue serializzazione binaria oggetto. Per deserializzare utilizzare BinDeserialize
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="obj"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.BinDeserialize``1(System.Byte[])">
-            <summary>
-            Deserializza oggetto serializzato con BinSerialize
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="data"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithCreateObj``1">
             <summary>
             Crea un business object con un oggetto dal vuoto
@@ -2893,22 +2710,6 @@
             <typeparam name="T"></typeparam>
             <param name="keyName"></param>
             <param name="args"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.FromDTO_AsNew``1(System.Collections.Generic.Dictionary{System.String,System.Object})">
-            <summary>
-            Carica un oggetto da DTO by tipo e dto e lo rappresenta come nuovo
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="dto"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.FromDTO_AsLoaded``1(System.Collections.Generic.Dictionary{System.String,System.Object})">
-            <summary>
-             Carica un oggetto da DTO by tipo e dto e lo rappresenta come caricato
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="dto"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.ToString">
@@ -3175,101 +2976,6 @@
             <param name="predicate"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.ToArray">
-            <summary>
-            Ritorna array con oggetti caricati
-            Vengono copiati solo i riferimenti
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.GetFirst">
-            <summary>
-            Ritorna primo elemento della lista 
-            oppure null se vuota
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.GetLast">
-            <summary>
-            Ritorna ultimo elemento della lista 
-            oppure null se vuota
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Max(System.String)">
-            <summary>
-            Ritorna l'oggetto che ha il valore massimo della proprieta'
-            </summary>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Max(System.String,Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Ritorna l'oggetto che ha il valore massimo della proprieta' applicando un ulteriore filtro
-            </summary>
-            <param name="propertyName"></param>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Min(System.String)">
-            <summary>
-            Ritorna oggetto con valore minimo della proprieta' fornita
-            </summary>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Min(System.String,Business.Data.Objects.Core.IFilter)">
-            <summary>
-             Ritorna oggetto con valore minimo della proprieta' fornita applicando ulteriore filtro
-            </summary>
-            <param name="propertyName"></param>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.getMinMax(System.String,Business.Data.Objects.Core.IFilter,System.Boolean)">
-            <summary>
-            Metodo privato unico per calcolo min e max
-            </summary>
-            <param name="propertyName"></param>
-            <param name="filter"></param>
-            <param name="isMin"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Union(`0)">
-            <summary>
-            Ritorna nuova lista come unione di elementi con la lista in input.
-            Oggetti con la medesima PK vengono riportati una sola volta.
-            </summary>
-            <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Clone">
-            <summary>
-            Ritorna un clone della lista corrente
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.UnionAll(`0)">
-            <summary>
-            Ritorna nuova lista come unione di tutti gli elementi con la lista in input.
-            </summary>
-            <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.Diff(`0)">
-            <summary>
-            Ritorna tutti gli elementi presenti nella lista che non sono presenti nella lista in input.
-            </summary>
-            <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.GroupByProperty(System.String)">
-            <summary>
-            Ritorna dizionario di valori raggruppati con associata la lista di elementi
-            </summary>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.ToPagedList(System.Int32,System.Int32)">
             <summary>
             Data una lista ritorna una sottolista paginata
@@ -3369,28 +3075,6 @@
             </summary>
             <param name="index"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassive(System.Collections.Generic.IDictionary{System.String,System.Object})">
-            <summary>
-            Esegue aggiornamento di più proprietà contemporaneamente
-            </summary>
-            <param name="propertyValues"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassive(System.String,System.Object)">
-            <summary>
-            Imposta una proprieta' in maniera massiva su tutti gli oggetti
-            </summary>
-            <param name="propertyName"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassiveByFilter(System.String,System.Object,Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Imposta massivamente le proprietà di oggetti che corrispondono al filtro impostato.
-            RItorna il numero di oggetti modificati
-            </summary>
-            <param name="propertyName"></param>
-            <param name="value"></param>
-            <param name="filter"></param>
-        </member>
         <member name="T:Business.Data.Objects.Core.DataObject`1">
             <summary>
             Classe da cui ereditare tutti gli oggetti di business con accesso a database
@@ -3424,22 +3108,6 @@
             Ritorna una lista contenente l'elemento selezionato
             </summary>
             <typeparam name="TL"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataObject`1.ToListFromEnumerable``1(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-            Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'enumerabile in input
-            </summary>
-            <typeparam name="TL"></typeparam>
-            <param name="others"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataObject`1.ToListFromArray``1(`0[])">
-            <summary>
-            Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'array in input
-            </summary>
-            <typeparam name="TL"></typeparam>
-            <param name="others"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataObject`1.ToBizObject``1">
@@ -3802,68 +3470,6 @@
             <param name="value6"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            Crea filtro IN
-            </summary>
-            <param name="fieldName"></param>
-            <param name="value1"></param>
-            <param name="value2"></param>
-            <param name="value3"></param>
-            <param name="value4"></param>
-            <param name="value5"></param>
-            <param name="value6"></param>
-            <param name="value7"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            Crea filtro IN
-            </summary>
-            <param name="fieldName"></param>
-            <param name="value1"></param>
-            <param name="value2"></param>
-            <param name="value3"></param>
-            <param name="value4"></param>
-            <param name="value5"></param>
-            <param name="value6"></param>
-            <param name="value7"></param>
-            <param name="value8"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            Crea filtro IN
-            </summary>
-            <param name="fieldName"></param>
-            <param name="value1"></param>
-            <param name="value2"></param>
-            <param name="value3"></param>
-            <param name="value4"></param>
-            <param name="value5"></param>
-            <param name="value6"></param>
-            <param name="value7"></param>
-            <param name="value8"></param>
-            <param name="value9"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            Crea filtro IN
-            </summary>
-            <param name="fieldName"></param>
-            <param name="value1"></param>
-            <param name="value2"></param>
-            <param name="value3"></param>
-            <param name="value4"></param>
-            <param name="value5"></param>
-            <param name="value6"></param>
-            <param name="value7"></param>
-            <param name="value8"></param>
-            <param name="value9"></param>
-            <param name="value10"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.Filter.In(System.String,System.Array)">
             <summary>
             Crea filtro IN
@@ -4056,289 +3662,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:Business.Data.Objects.Core.FilterBETWEEN">
-            <summary>
-            Filtro BETWEEN
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterBETWEEN.#ctor(System.String,System.Object,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterDIFFERS">
-            <summary>
-            Filtro DIFFERS
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterDIFFERS.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterEQUAL">
-            <summary>
-            Filtro EQUAL
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterEQUAL.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterGREATER">
-            <summary>
-            Filtro GREATER
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterGREATER.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterGREATEREQ">
-            <summary>
-            Filtro GREATER EQUAL
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterGREATEREQ.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterIN">
-            <summary>
-            Filtro IN
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Array)">
-            <summary>
-            Crea un filtro in a partire da un qualunque tipo di array definito
-            </summary>
-            <param name="fieldName"></param>
-            <param name="values"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Collections.IEnumerable)">
-            <summary>
-            Crea filtro in a partire da qualunque enumerabile
-            </summary>
-            <param name="fieldName"></param>
-            <param name="values"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object)">
-            <summary>
-            FiltroIN con 1 valore
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 2 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 3 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 4 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 5 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-            <param name="val5"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 6 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-            <param name="val5"></param>
-            <param name="val6"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-             FiltroIN con 7 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-            <param name="val5"></param>
-            <param name="val6"></param>
-            <param name="val7"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 8 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-            <param name="val5"></param>
-            <param name="val6"></param>
-            <param name="val7"></param>
-            <param name="val8"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 9 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-            <param name="val5"></param>
-            <param name="val6"></param>
-            <param name="val7"></param>
-            <param name="val8"></param>
-            <param name="val9"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterIN.#ctor(System.String,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object,System.Object)">
-            <summary>
-            FiltroIN con 10 valori
-            </summary>
-            <param name="fieldName"></param>
-            <param name="val1"></param>
-            <param name="val2"></param>
-            <param name="val3"></param>
-            <param name="val4"></param>
-            <param name="val5"></param>
-            <param name="val6"></param>
-            <param name="val7"></param>
-            <param name="val8"></param>
-            <param name="val9"></param>
-            <param name="val10"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterISNOTNULL">
-            <summary>
-            Filtro ISNOTNULL
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterISNOTNULL.#ctor(System.String)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterISNULL">
-            <summary>
-            Filtro ISNULL
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterISNULL.#ctor(System.String)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterLESS">
-            <summary>
-            Filtro LESS
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterLESS.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterLESSEQ">
-            <summary>
-            Filtro LESS EQUAL
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterLESSEQ.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterLIKE">
-            <summary>
-            Filtro LIKE
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterLIKE.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.FilterNOTLIKE">
-            <summary>
-            Filtro NOTLIKE
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.FilterNOTLIKE.#ctor(System.String,System.Object)">
-            <summary>
-            Costruttore base
-            </summary>
-            <param name="propName"></param>
-            <param name="op"></param>
-            <param name="propValue"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Core.GroupByResult`1">
-            <summary>
-            Classe risultato di operazione group by su lista
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
         <member name="M:Business.Data.Objects.Core.Objects.LinqQueryTranslator`1.VisitBinary(System.Linq.Expressions.BinaryExpression)">
             <summary>
             
@@ -4476,11 +3799,6 @@
         <member name="P:Business.Data.Objects.Core.SlotConfig.ChangeTrackingEnabled">
             <summary>
             Indica se attivo il change tracking
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Core.SlotConfig.LoadFullObjects">
-            <summary>
-            Indica se attivo il caricamento completo degli oggetti nelle liste
             </summary>
         </member>
         <member name="P:Business.Data.Objects.Core.SlotConfig.EventManagerEnabled">
@@ -6000,76 +5318,6 @@
             </summary>
             <param name="obj"></param>
             <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Business.Data.Objects.Common.Utils.ObjType">
-            <summary>
-            Enumerazione Che identifica i tipi di dato supportati
-            </summary>
-        </member>
-        <member name="T:Business.Data.Objects.Common.Utils.SerializationWriter">
-            <summary>
-            Serializzatore semplice, rapido, con output non voluminoso
-            Basato su quello di Tim Haynes, May 2006
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeObjType(Business.Data.Objects.Common.Utils.ObjType)">
-            <summary>
-            Scrive tipo oggetto
-            </summary>
-            <param name="ot"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeByteArray(System.Byte[])">
-            <summary>
-            scrive byte array
-            </summary>
-            <param name="b"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeCharArray(System.Char[])">
-            <summary>
-            Scrive array di caratteri
-            </summary>
-            <param name="c"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.writeObjArray(System.Object[])">
-            <summary>
-            Scrive nel flusso un array di oggetti
-            </summary>
-            <param name="o"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationWriter.WriteObject(System.Object)">
-            <summary>
-            Scrive oggetto nel flusso di serializzazione
-            </summary>
-            <param name="obj"></param>
-        </member>
-        <member name="T:Business.Data.Objects.Common.Utils.SerializationReader">
-            <summary>
-            Classe per Deserializzazione
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.readByteArray">
-            <summary>
-            Legge array di byte
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.readCharArray">
-            <summary>
-            Legge array di caratteri
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.readObjectArray">
-            <summary>
-            Legge dal flusso un array di oggetti
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.SerializationReader.ReadObject">
-            <summary>
-            Legge oggetto
-            </summary>
             <returns></returns>
         </member>
         <member name="T:Business.Data.Objects.Common.Utils.LinqExt">
