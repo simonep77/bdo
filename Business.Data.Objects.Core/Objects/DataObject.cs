@@ -7,6 +7,7 @@ using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using System.Collections.Generic;
 using System.Dynamic;
+using System;
 
 namespace Business.Data.Objects.Core
 {
@@ -45,7 +46,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public bool EqualsDeep(T other)
         {
-            DataDiffList oDiffList = this.Diff(other);
+            var oDiffList = this.Diff(other);
 
             return (oDiffList.Count == 0);
         }
@@ -57,12 +58,10 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public DataDiffList DiffSource()
+        public List<Tuple<string, object, object>> DiffSource()
         {
             if (this.ObjectState != EObjectState.Loaded)
-            {
                 throw new ObjectException(ObjectMessages.Base_DiffSourceNotLoaded, this.mClassSchema.ClassName);
-            }
 
             //Forza skip del tracking se attivo
             if (this.Slot.LiveTrackingEnabled)
@@ -82,40 +81,36 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Dati due oggetti ritorna elenco differenze
+        /// Dati due oggetti ritorna elenco differenze. Item1 e' il nome della prorieta, item2 il valore dell'oggetto origine, item3 dell'oggetto confrontato
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public DataDiffList Diff(T other)
+        public List<Tuple<string, object, object>> Diff(T other)
         {
-            Property oProp;
             object oSource, oOther;
 
             //Se other null eccezione
             if (other == null)
-            {
                 throw new ObjectException(ObjectMessages.Diff_Null, this.mClassSchema.ClassName);
-            }
 
             //Se other non e' dello stesso tipo
             if (this.mClassSchema.InternalID != other.mClassSchema.InternalID)
-            {
                 throw new ObjectException(ObjectMessages.Diff_WrongType, this.mClassSchema.ClassName, other.mClassSchema.ClassName);
-            }
 
-            DataDiffList oDiffList = new DataDiffList();
-            for (int iPropIndex = 0; iPropIndex < this.mClassSchema.Properties.Count; iPropIndex++)
+            var oDiffList = new List<Tuple<string, object, object>>();
+
+
+            foreach (var oProp in this.mClassSchema.Properties)
             {
-                oProp = this.mClassSchema.Properties[iPropIndex];
-                oSource = this.GetProperty(iPropIndex);
-                oOther = other.GetProperty(iPropIndex);
+                if (!(oProp is PropertySimple))
+                    continue;
+
+                oSource = oProp.GetValue(this);
+                oOther = oProp.GetValue(other);
 
                 //Proprietà normale
                 if (!object.Equals(oSource, oOther))
-                {
-                    DataDiff oDiff = new DataDiff(oProp.Name, ref oSource, ref oOther);
-                    oDiffList.Add(oDiff);
-                }
+                    oDiffList.Add(new Tuple<string, object, object>(oProp.Name, oSource, oOther));
             }
 
             return oDiffList;
