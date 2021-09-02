@@ -1413,6 +1413,7 @@ namespace Business.Data.Objects.Core
         /// <param name="keyName"></param>
         /// <param name="values"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), true, values);
@@ -1438,6 +1439,7 @@ namespace Business.Data.Objects.Core
         /// </param>
         /// <param name="values"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjNullByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), false, values);
@@ -1468,6 +1470,7 @@ namespace Business.Data.Objects.Core
         /// </param>
         /// <param name="values"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjOrNewByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjOrNewInternalByKEY(keyName, typeof(T), values);
@@ -1485,6 +1488,7 @@ namespace Business.Data.Objects.Core
         /// <param name="filter"></param>
         /// <param name="order"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
@@ -1497,6 +1501,7 @@ namespace Business.Data.Objects.Core
         /// <typeparam name="T"></typeparam>
         /// <param name="filter"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
@@ -1509,6 +1514,7 @@ namespace Business.Data.Objects.Core
         /// <param name="filter"></param>
         /// <param name="order"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
         {
             return LoadObjNullByFILTER<T>(filter, order) ?? this.CreateObject<T>();
@@ -1717,52 +1723,65 @@ namespace Business.Data.Objects.Core
         /// <typeparam name="TL"></typeparam>
         /// <param name="list"></param>
         public void SaveAll<TL>(TL list)
-            where TL : DataListBase
+            where TL : IEnumerable<DataObjectBase>
         {
             //Se null errore
             if (list == null)
                 throw new ObjectException(ObjectMessages.Base_Save_Null, typeof(TL).Name);
 
-            //Imposta se stesso come slot
-            list.SetSlot(this);
-
-            var lstCasted = list as IList;
-
             //Salva
-            for (int i = 0; i < lstCasted.Count; i++)
+            foreach (var item in list)
             {
-                var item = lstCasted[i] as DataObjectBase;
+                //Imposta se stesso come slot
+                item.SetSlot(this);
                 this.SaveObject(item);
-                list.mInnerList[i].PkHashCode = item.mDataSchema.PkHash;
             }
 
         }
 
 
         /// <summary>
-        /// Cancella tutti gli elementi di una lista. Al termine la lista risulta vuota
+        /// Cancella tutti gli elementi di una lista. Al termine la lista risulta ancora piena
         /// </summary>
         /// <param name="list"></param>
         public void DeleteAll<TL>(TL list, bool bypassLogical = false)
-            where TL : DataListBase
+            where TL : IEnumerable<DataObjectBase>
         {
             //Se null errore
             if (list == null)
-            {
                 throw new ObjectException(ObjectMessages.Base_Save_Null, typeof(TL).Name);
-            }
-
-            //Imposta se stesso come slot
-            list.SetSlot(this);
 
             //Salva
-            foreach (DataObjectBase item in (IEnumerable)list)
+            foreach (var item in list)
             {
-                this.DeleteObject(item, bypassLogical);
+                //Imposta se stesso come slot
+                item.SetSlot(this);
+                this.DeleteObject(item);
+            }
+        }
+
+
+        /// <summary>
+        /// Ritorna una lista di businessobjects a partire da qualsiasi enumerabile di dataobject
+        /// </summary>
+        /// <param name="list"></param>
+        public List<TB> ToBizList<TB, T>(IEnumerable<T> list)
+            where TB : BusinessObject<T>
+            where T: DataObject<T>
+        {
+            //Se null errore
+            if (list == null)
+                throw new ArgumentNullException();
+
+            var lstOut = new List<TB>();
+
+            //Salva
+            foreach (var item in list)
+            {
+                lstOut.Add(item.ToBizObject<TB>());
             }
 
-            //Svuota lista
-            list.Clear();
+            return lstOut;
         }
 
 
@@ -1792,24 +1811,6 @@ namespace Business.Data.Objects.Core
             return o;
         }
 
-
-        /// <summary>
-        /// Ritorna una lista identica a quella in input
-        /// </summary>
-        /// <typeparam name="TL"></typeparam>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public DataList<TL, T> CloneList<TL, T>(DataList<TL, T> list)
-            where T : DataObject<T>
-            where TL : DataList<TL, T>
-        {
-            if (list == null)
-                throw new ObjectException(ObjectMessages.Base_Null_Input, typeof(TL).Name);
-
-            return list.Clone();
-
-        }
 
         /// <summary>
         /// Ritorna copia dell'oggetto su nuova istanza azzerando la chiave primaria
@@ -2235,36 +2236,6 @@ namespace Business.Data.Objects.Core
         #endregion
 
 
-        #region SERIALIZATION
-
-
-        /// <summary>
-        /// Esegue serializzazione binaria oggetto. Per deserializzare utilizzare BinDeserialize
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public byte[] BinSerialize<T>(T obj) where T : DataObject<T>
-        {
-            return DataSchema.BinSerialize(obj.mDataSchema);
-        }
-
-        /// <summary>
-        /// Deserializza oggetto serializzato con BinSerialize
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public T BinDeserialize<T>(byte[] data) where T : DataObject<T>
-        {
-            T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(typeof(T));
-            o.SetSlot(this);
-            o.mDataSchema = DataSchema.BinDeserialize(data);
-            return o;
-        }
-
-        #endregion
-
         #region BIZCREATORS
 
         /// <summary>
@@ -2337,54 +2308,6 @@ namespace Business.Data.Objects.Core
         #endregion
 
         #region MISC
-
-        internal DataObjectBase FromDTO_AsNewByType(Type type,  Dictionary<string, object> dto)
-        {
-            var o = this.CreateObjectByType(type);
-
-            for (int i = 0; i < o.mClassSchema.Properties.Count; i++)
-            {
-                o.mClassSchema.Properties[i].ReadDTO(dto, o);
-            }
-
-            return o;
-        }
-
-        internal DataObjectBase FromDTO_AsLoadedByType(Type type, Dictionary<string, object> dto)
-        {
-            var o = this.FromDTO_AsNewByType(type, dto);
-            o.mDataSchema.ObjectSource = EObjectSource.DTO;
-            o.mDataSchema.ObjectState = EObjectState.Loaded;
-
-            return o;
-        }
-
-        /// <summary>
-        /// Carica un oggetto da DTO by tipo e dto e lo rappresenta come nuovo
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public T FromDTO_AsNew<T>(Dictionary<string, object> dto) 
-            where T : DataObjectBase
-        {
-            return (T)this.FromDTO_AsNewByType(typeof(T), dto);
-        }
-
-        /// <summary>
-        ///  Carica un oggetto da DTO by tipo e dto e lo rappresenta come caricato
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public T FromDTO_AsLoaded<T>(Dictionary<string, object> dto)
-            where T : DataObjectBase
-        {
-            return (T)this.FromDTO_AsLoadedByType(typeof(T), dto);
-        }
-
-
-
 
         /// <summary>
         /// Ritorna rappresentazione in stringa

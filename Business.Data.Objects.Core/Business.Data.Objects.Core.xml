@@ -1623,13 +1623,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.CountByFilter(Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Esegue conteggio in base a filtro per proprieta'
-            </summary>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataListBase.GetExtraValue(System.Int32,System.String)">
             <summary>
             Ritorna un valore accessorio ripreso dalla query di caricamento lista.
@@ -1637,36 +1630,6 @@
             </summary>
             <param name="index"></param>
             <param name="columnName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Sum(System.String)">
-            <summary>
-            Somma tutti i valori delle proprieta' degli elementi della lista
-            </summary>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Sum(System.String,Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Somma applicando un filtro
-            </summary>
-            <param name="propertyName"></param>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Avg(System.String,Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Ritorna la media dei valori delle proprieta' della lista con filtro
-            </summary>
-            <param name="propertyName"></param>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.Avg(System.String)">
-            <summary>
-            Ritorna la media dei valori delle proprieta' della lista
-            </summary>
-            <param name="propertyName"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.DataListBase.Clear">
@@ -3100,14 +3063,6 @@
             Lista di differenze tra oggetti
             </summary>
         </member>
-        <member name="T:Business.Data.Objects.Core.ObjectTest`1">
-            <summary>
-            Delegato per definizione routine di test oggetto
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="arg"></param>
-            <returns></returns>
-        </member>
         <member name="T:Business.Data.Objects.Core.DataList`2">
             <summary>
             Classe astratta da utilizzare per gestione Liste
@@ -3122,25 +3077,10 @@
             <param name="index"></param>
             <returns></returns>
         </member>
-        <member name="T:Business.Data.Objects.Core.DataList`2.XmlFunction">
-            <summary>
-            Delegato per la gestione dell' Xml del singolo oggetto della lista
-            </summary>
-            <param name="value"></param>
-            <param name="writer"></param>
-            <param name="args"></param>
-        </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.#ctor">
             <summary>
             Costruttore
             </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.FindByPK(System.Object[])">
-            <summary>
-            Cerca per chiave primaria tra gli elementi della lista.
-            </summary>
-            <param name="values"></param>
-            <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.CacheResult">
             <summary>
@@ -3295,23 +3235,6 @@
             <param name="isMin"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.ToXml(Business.Data.Objects.Core.DataList{`0,`1}.XmlFunction,System.Boolean,System.Object[])">
-            <summary>
-            Ritorna Xml con dati oggetti. E' possibile specificare un delegato per poter manipolare
-            l'xml di ogni oggetto con altri dati. Utilizzando rewriteAll viene soppresso l'output Xml standard 
-            dell'oggetto
-            </summary>
-            <param name="function">
-            Delegato ad una funzione (e.s. AggiornaXmlUtente(Utente ut, Xmlwrite xw)) per la manipolazione dell'xml
-            </param>
-            <param name="rewriteAll">
-            Impostato a true disabilita l'output xml standard dell'oggetto
-            </param>
-            <param name="args">
-            Dati esterni da inviare alla funzione di scrittura xml
-            </param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.Union(`0)">
             <summary>
             Ritorna nuova lista come unione di elementi con la lista in input.
@@ -3433,13 +3356,6 @@
             <param name="item"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.IndexOfByPK(System.Object[])">
-            <summary>
-            Ritorna il primo indice di oggetto per PK
-            </summary>
-            <param name="values"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.Insert(System.Int32,`1)">
             <summary>
             Inserisce elemento nella posizione indicata
@@ -3452,44 +3368,6 @@
             Rimuove elemento alla posizione indicata
             </summary>
             <param name="index"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.SortByProperty(System.String,System.Boolean)">
-            <summary>
-            Ritorna lista ordinata
-            </summary>
-            <param name="propertyName"></param>
-            <param name="ascending"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.FindAllByDelegate(Business.Data.Objects.Core.ObjectTest{`1})">
-            <summary>
-            Ritorna una lista di oggetti che rispondono true al delegato passato in input
-            </summary>
-            <param name="testFunc"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.FindFirstByPropertyFilter(Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Ricerca primo oggetto che ha la proprietà fornita con il valore specificato
-            </summary>
-            <param name="propertyName">Nome della proprietà per cui si vuole cercare (case sensitive)</param>
-            <param name="value">valore da testare</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.FindLastByPropertyFilter(Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Ricerca ultimo oggetto che ha la proprietà fornita con il valore specificato
-            </summary>
-            <param name="propertyName">Nome della proprietà per cui si vuole cercare (case sensitive)</param>
-            <param name="value">valore da testare</param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.FindAllByPropertyFilter(Business.Data.Objects.Core.IFilter)">
-            <summary>
-            Ricerca tutti gli oggetti che hanno la proprietà fornita con il valore che rientra nel filtro
-            </summary>
-            <param name="filter"></param>
-            <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.SetPropertyMassive(System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
@@ -3519,14 +3397,6 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
-        <member name="T:Business.Data.Objects.Core.DataObject`1.XmlFunction">
-            <summary>
-            Delegato per la gestione dell' Xml del singolo oggetto della lista
-            </summary>
-            <param name="value"></param>
-            <param name="writer"></param>
-            <param name="args"></param>
-        </member>
         <member name="M:Business.Data.Objects.Core.DataObject`1.EqualsDeep(`0)">
             <summary>
             Verifica se due oggetti sono uguali in tutte le proprietà mappate su DB
@@ -3547,18 +3417,6 @@
             Dati due oggetti ritorna elenco differenze
             </summary>
             <param name="other"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataObject`1.ToXml(Business.Data.Objects.Core.DataObject{`0}.XmlFunction,System.Boolean,System.Object[])">
-            <summary>
-            Scrive Xml con possibilita' di integrazione dati attraverso la specifica di una funzione
-            di manipolazione
-            </summary>
-            <param name="function"></param>
-            <param name="rewriteAll">
-            Se true allora non emette l'Xml standard dell'oggetto
-            </param>
-            <param name="args"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataObject`1.ToList``1">

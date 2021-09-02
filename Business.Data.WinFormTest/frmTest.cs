@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq.Expressions;
+using Business.Data.Objects.TestClass.BIZ;
 
 namespace Business.Data.WinFormTest
 {
@@ -166,6 +167,8 @@ namespace Business.Data.WinFormTest
                     this.WriteLog(aa.Id.ToString());
 
                 }
+
+                ss1.ToBizList<AnagraficaBiz, Anagrafica>(new List<Anagrafica>());
 
                 // oAnag1.FillFrom(o2)
 

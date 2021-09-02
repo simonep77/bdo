@@ -27,15 +27,13 @@ namespace Business.Data.Objects.Core.Utils
     // - No JIT Emit support to parse structures quickly
     // - Limited to parsing <2GB JSON files (due to int.MaxValue)
     // - Parsing of abstract classes or interfaces is NOT supported and will throw an exception.
-    public static class JSONParser
+    public class JSONParser: IDisposable
     {
-        [ThreadStatic] static Stack<List<string>> splitArrayPool = new Stack<List<string>>();
-        [ThreadStatic] static StringBuilder stringBuilder = new StringBuilder();
-        [ThreadStatic] static Dictionary<Type, Dictionary<string, FieldInfo>> fieldInfoCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
-        [ThreadStatic] static Dictionary<Type, Dictionary<string, PropertyInfo>> propertyInfoCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
+        private Stack<List<string>> splitArrayPool = new Stack<List<string>>();
+        private StringBuilder stringBuilder = new StringBuilder();
 
 
-        static int AppendUntilStringEnd(bool appendEscapeCharacter, int startIdx, string json)
+        private int AppendUntilStringEnd(bool appendEscapeCharacter, int startIdx, string json)
         {
             stringBuilder.Append(json[startIdx]);
             for (int i = startIdx + 1; i < json.Length; i++)
@@ -59,7 +57,7 @@ namespace Business.Data.Objects.Core.Utils
         }
 
         //Splits { <value>:<value>, <value>:<value> } and [ <value>, <value> ] into a list of <value> strings
-        static List<string> Split(string json)
+        private List<string> Split(string json)
         {
             List<string> splitArray = splitArrayPool.Count > 0 ? splitArrayPool.Pop() : new List<string>();
             splitArray.Clear();
@@ -101,7 +99,7 @@ namespace Business.Data.Objects.Core.Utils
             return splitArray;
         }
 
-        internal static object ParseValue(Type type, string json)
+        private object ParseValue(Type type, string json)
         {
             if (type == typeof(string))
             {
@@ -230,140 +228,18 @@ namespace Business.Data.Objects.Core.Utils
                 }
                 return dictionary;
             }
-            if (type == typeof(object))
-            {
-                return ParseAnonymousValue(json);
-            }
-            if (json[0] == '{' && json[json.Length - 1] == '}')
-            {
-                return ParseObject(type, json);
-            }
+
 
             return null;
         }
 
-        static object ParseAnonymousValue(string json)
+
+        public void FillFromJson(DataObjectBase instance, string json)
         {
-            if (json.Length == 0)
-                return null;
-            if (json[0] == '{' && json[json.Length - 1] == '}')
-            {
-                List<string> elems = Split(json);
-                if (elems.Count % 2 != 0)
-                    return null;
-                var dict = new Dictionary<string, object>(elems.Count / 2);
-                for (int i = 0; i < elems.Count; i += 2)
-                    dict[elems[i].Substring(1, elems[i].Length - 2)] = ParseAnonymousValue(elems[i + 1]);
-                return dict;
-            }
-            if (json[0] == '[' && json[json.Length - 1] == ']')
-            {
-                List<string> items = Split(json);
-                var finalList = new List<object>(items.Count);
-                for (int i = 0; i < items.Count; i++)
-                    finalList.Add(ParseAnonymousValue(items[i]));
-                return finalList;
-            }
-            if (json[0] == '"' && json[json.Length - 1] == '"')
-            {
-                string str = json.Substring(1, json.Length - 2);
-                return str.Replace("\\", string.Empty);
-            }
-            if (char.IsDigit(json[0]) || json[0] == '-')
-            {
-                if (json.Contains("."))
-                {
-                    double result;
-                    double.TryParse(json, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out result);
-                    return result;
-                }
-                else
-                {
-                    int result;
-                    int.TryParse(json, out result);
-                    return result;
-                }
-            }
-            if (json == "true")
-                return true;
-            if (json == "false")
-                return false;
-            // handles json == "null" as well as invalid JSON
-            return null;
-        }
-
-        static Dictionary<string, T> CreateMemberNameDictionary<T>(T[] members) where T : MemberInfo
-        {
-            Dictionary<string, T> nameToMember = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
-            for (int i = 0; i < members.Length; i++)
-            {
-                T member = members[i];
-                if (member.IsDefined(typeof(IgnoreDataMemberAttribute), true))
-                    continue;
-
-                string name = member.Name;
-                if (member.IsDefined(typeof(DataMemberAttribute), true))
-                {
-                    DataMemberAttribute dataMemberAttribute = (DataMemberAttribute)Attribute.GetCustomAttribute(member, typeof(DataMemberAttribute), true);
-                    if (!string.IsNullOrEmpty(dataMemberAttribute.Name))
-                        name = dataMemberAttribute.Name;
-                }
-
-                nameToMember.Add(name, member);
-            }
-
-            return nameToMember;
-        }
-
-        static object ParseObject(Type type, string json)
-        {
-            object instance = FormatterServices.GetUninitializedObject(type);
-
-            //The list is split into key/value pairs only, this means the split must be divisible by 2 to be valid JSON
-            List<string> elems = Split(json);
-            if (elems.Count % 2 != 0)
-                return instance;
-
-            Dictionary<string, FieldInfo> nameToField;
-            Dictionary<string, PropertyInfo> nameToProperty;
-            if (!fieldInfoCache.TryGetValue(type, out nameToField))
-            {
-                nameToField = CreateMemberNameDictionary(type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy));
-                fieldInfoCache.Add(type, nameToField);
-            }
-            if (!propertyInfoCache.TryGetValue(type, out nameToProperty))
-            {
-                nameToProperty = CreateMemberNameDictionary(type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy));
-                propertyInfoCache.Add(type, nameToProperty);
-            }
-
-            for (int i = 0; i < elems.Count; i += 2)
-            {
-                if (elems[i].Length <= 2)
-                    continue;
-                string key = elems[i].Substring(1, elems[i].Length - 2);
-                string value = elems[i + 1];
-
-                FieldInfo fieldInfo;
-                PropertyInfo propertyInfo;
-                if (nameToField.TryGetValue(key, out fieldInfo))
-                    fieldInfo.SetValue(instance, ParseValue(fieldInfo.FieldType, value));
-                else if (nameToProperty.TryGetValue(key, out propertyInfo))
-                    propertyInfo.SetValue(instance, ParseValue(propertyInfo.PropertyType, value), null);
-            }
-
-            return instance;
-        }
-
-
-        public static void FillFromJson(DataObjectBase instance, string json)
-        {
-
             //The list is split into key/value pairs only, this means the split must be divisible by 2 to be valid JSON
             List<string> elems = Split(json);
             if (elems.Count % 2 != 0)
                 return;
-
 
             for (int i = 0; i < elems.Count; i += 2)
             {
@@ -386,6 +262,10 @@ namespace Business.Data.Objects.Core.Utils
 
         }
 
-
+        public void Dispose()
+        {
+            this.splitArrayPool.Clear();
+            this.stringBuilder.Length = 0;
+        }
     }
 }

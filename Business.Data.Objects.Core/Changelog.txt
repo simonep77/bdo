@@ -88,3 +88,17 @@ Fix classe LinqFilter ritorna condizione vera se non eseguita alcuna combinazion
 
 [30/08/2021] - 5.0.28 - Simone Pelaia
 Piccole fix alla deserializzazione JSON
+
+[31/08/2021] - 5.0.29 - Simone Pelaia
+Fix alla deserializzazione JSON
+Inizio rimozione metodi non più utili
+
+[01/09/2021] - 5.0.30 - Simone Pelaia
+Rimozione metodi non più utili
+Rimozione LoadFullobjects (ora di default)
+Rimozione To e From DTO (Dictionary)
+Rimozione Mapping DataList
+Rimossa gestione oggetti non mappati (ovvero impostabili)
+Rimossa BusinessObjectList in quanto poco utiles
+Rimossa serializzazione/deserializzazione binaria
+

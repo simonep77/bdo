@@ -57,7 +57,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <summary>
         /// Indica se la proprieta' va inclusa nella query di selezione standard
         /// </summary>
-        public abstract bool IsSqlSelectExcluded { get; }
+        public abstract bool ExcludeSelect { get; }
 
         /// <summary>
         /// Ritorna il nomeclasse.nomeproprieta'
@@ -180,10 +180,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public abstract void SetValue(DataObjectBase obj, object value);
 
         public abstract void WriteXml(XmlWrite xw, DataObjectBase obj, int depth);
-
-        public abstract void WriteDTO(Dictionary<string, object> dto, DataObjectBase obj, int depth);
-
-        public abstract void ReadDTO(Dictionary<string, object> dto, DataObjectBase obj);
 
         public abstract void SetValueFromReader(DataObjectBase obj, IDataReader dr);
 

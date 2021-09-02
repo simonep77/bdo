@@ -164,36 +164,9 @@ namespace Business.Data.Objects.Core.Base
 
         }
 
-        /// <summary>
-        /// Ritorna rappresentazione in forma di coppie property=valore con
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<string, object> ToDTO()
-        {
-            return this.ToDTO(0);
-        }
 
         /// <summary>
-        /// Ritorna rappresentazione in forma di coppie property=valore con specifica di profondita'
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<string, object> ToDTO(int depth)
-        {
-            Dictionary<string, object> oRet = new Dictionary<string, object>(this.mClassSchema.Properties.Count + 10);
-
-            for (int k = 0; k < this.mClassSchema.Properties.Count; k++)
-            {
-                //Verifica proprietà una per una in base al tipo
-                this.mClassSchema.Properties[k].WriteDTO(oRet, this, depth);
-
-            }
-
-            return oRet;
-        }
-
-
-        /// <summary>
-        /// Ritorna rappresentazione  JSON dell'oggetto
+        /// Ritorna rappresentazione  JSON dell'oggetto (per serializzazione)
         /// </summary>
         /// <returns></returns>
         public virtual string ToJSON()
@@ -201,48 +174,18 @@ namespace Business.Data.Objects.Core.Base
             return JSONWriter.ToJson(this);
         }
 
-
+        /// <summary>
+        /// Carica i dati di un JSON sull'oggetto (per deserializzazione)
+        /// </summary>
+        /// <param name="json"></param>
         public virtual void FromJSON(string json)
         {
-            JSONParser.FillFromJson(this, json);
+            using (var parser = new JSONParser())
+            {
+                parser.FillFromJson(this, json);
+            }
             this.mDataSchema.ObjectSource = EObjectSource.DTO;
             this.mDataSchema.ObjectState = EObjectState.Loaded;
-        }
-
-
-        /// <summary>
-        /// Ritorna Xml contenente i valori delle proprieta' in input
-        /// </summary>
-        /// <param name="propertyNames"></param>
-        /// <returns></returns>
-        public string ToXml(params string[] propertyNames)
-        {
-            //Controllo array
-            if (propertyNames == null || propertyNames.Length == 0)
-                throw new ObjectException("{0} - L'elenco di proprieta' fornite e' vuoto");
-
-            using (XmlWrite xw = new XmlWrite())
-            {
-                for (int i = 0; i < propertyNames.Length; i++)
-                {
-                    //Verifica proprietà una per una in base al tipo
-                    this.mClassSchema.Properties.GetPropertyByName(propertyNames[i]).WriteXml(xw, this, 0);
-                }
-
-                return xw.ToString();
-            }
-            
-        }
-
-
-        /// <summary>
-        /// Verifica se property nulla (Interna)
-        /// </summary>
-        /// <param name="prop"></param>
-        /// <returns></returns>
-        internal bool IsDefaultValue(Property prop)
-        {
-            return object.Equals(prop.GetValue(this), prop.DefaultValue);
         }
 
 
@@ -437,6 +380,7 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="order"></param>
+        [Obsolete("Utilizzare LoadByLinq")]
         internal void LoadByFilter(IFilter filter, OrderBy order)
         {
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
@@ -526,7 +470,7 @@ namespace Business.Data.Objects.Core.Base
                 oProp = this.mClassSchema.Properties[k];
 
                 //Salta le proprietà non incluse nel caricamento
-                if (oProp.IsSqlSelectExcluded && !includeAll)
+                if (oProp.ExcludeSelect && !includeAll)
                     continue;
 
                 //Richiama il caricamento della singola proprietà

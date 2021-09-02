@@ -26,7 +26,6 @@ namespace Business.Data.Objects.Core.Base
         internal object mSyncRoot = new object();
         internal protected bool mIsSearch;
         internal protected bool mCacheResult;
-        internal protected bool mLoadFullObjects = true;
         internal protected bool mIncludeDeleted;
 
         #region PROPERTY
@@ -126,8 +125,8 @@ namespace Business.Data.Objects.Core.Base
                     }
                 }
 
-                //Se attivo LoadObjects allora prova a caricare il singolo oggetto dal reader e lo imposta nell'Item
-                if (this.mLoadFullObjects && this.mIsSearch)
+                //Se trattasi di ricerca BDO allora prova a caricare il singolo oggetto dal reader e lo imposta nell'Item
+                if (this.mIsSearch)
                 {
                     //Cerca in LT
                     if(this.Slot.LiveTrackingEnabled)
@@ -187,13 +186,13 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         internal protected DataObjectBase getItem(int index)
         {
-            var oInnerItem = this.mInnerList[index];
+            //var oInnerItem = this.mInnerList[index];
 
-            if (oInnerItem.Object == null)
-                oInnerItem.Object = this.Slot.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.mObjSchema.OriginalType, true, oInnerItem.PkValues);
+            //if (oInnerItem.Object == null)
+            //    oInnerItem.Object = this.Slot.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.mObjSchema.OriginalType, true, oInnerItem.PkValues);
 
             //Ritorna
-            return oInnerItem.Object;
+            return this.mInnerList[index].Object ?? this.Slot.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.mObjSchema.OriginalType, true, this.mInnerList[index].PkValues);
 
         }
 
@@ -296,7 +295,6 @@ namespace Business.Data.Objects.Core.Base
             {
                 //Resetta comunque le variabili di esecuzione contesto
                 this.mCacheResult = false;
-                this.mLoadFullObjects = true;
                 this.mIncludeDeleted = false;
                 this.mIsSearch = false;
             }
@@ -364,10 +362,7 @@ namespace Business.Data.Objects.Core.Base
             //Inizia a preparare SQL
             StringBuilder sql = null;
 
-            if (this.mLoadFullObjects)
-                sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_Item), this.mObjSchema.TableDef.SQL_Select_Item.Length + 300);
-            else
-                sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_List), this.mObjSchema.TableDef.SQL_Select_List.Length + 300);
+            sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_Item), this.mObjSchema.TableDef.SQL_Select_Item.Length + 300);
 
             sql.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
 
@@ -407,10 +402,7 @@ namespace Business.Data.Objects.Core.Base
             //Inizia a preparare SQL
             StringBuilder sql = null;
 
-            if (this.mLoadFullObjects)
-                sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_Item), this.mObjSchema.TableDef.SQL_Select_Item.Length + 300);
-            else
-                sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_List), this.mObjSchema.TableDef.SQL_Select_List.Length + 300);
+            sql = new StringBuilder(string.Intern(this.mObjSchema.TableDef.SQL_Select_Item), this.mObjSchema.TableDef.SQL_Select_Item.Length + 300);
 
             sql.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
             sql.Append(@" WHERE ");
@@ -509,7 +501,6 @@ namespace Business.Data.Objects.Core.Base
         internal override void SetSlot(BusinessSlot slot)
         {
             base.SetSlot(slot);
-            this.mLoadFullObjects = this.Slot.Conf.LoadFullObjects;
         }
 
         /// <summary>
@@ -556,33 +547,6 @@ namespace Business.Data.Objects.Core.Base
                 if (this.mInnerList[i].Object != null)
                     this.mInnerList[i].Object.SwitchToSlot(slot);
             }
-        }
-
-
-
-        /// <summary>
-        /// Ritorna elenco oggetti in formato DTO con profondita' 0
-        /// </summary>
-        /// <returns></returns>
-        public List<Dictionary<string, object>> ToDTO()
-        {
-            return this.ToDTO(0);
-        }
-
-        /// <summary>
-        /// Ritorna elenco oggetti in formato DTO con profondita' specificata
-        /// </summary>
-        /// <returns></returns>
-        public List<Dictionary<string, object>> ToDTO(int depth)
-        {
-            List<Dictionary<string, object>> oRet = new List<Dictionary<string, object>>(this.Count);
-
-            for (int i = 0; i < this.Count; i++)
-            {
-                oRet.Add(this.getItem(i).ToDTO(depth));
-            }
-
-            return oRet;
         }
 
 
@@ -643,34 +607,6 @@ namespace Business.Data.Objects.Core.Base
         }
 
 
-        /// <summary>
-        /// Esegue conteggio in base a filtro per proprieta'
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public int CountByFilter(IFilter filter)
-        {
-
-            int iLen = this.Count;
-
-            if (filter == null)
-            {
-                return iLen;
-            }
-
-            int iRet = 0;
-
-            for (int i = 0; i < iLen; i++)
-            {
-                if (filter.PropertyTest(this.getItem(i)))
-                {
-                    iRet++;
-                }
-            }
-
-            return iRet;
-        }
-
 
         /// <summary>
         /// Ritorna un valore accessorio ripreso dalla query di caricamento lista.
@@ -699,79 +635,6 @@ namespace Business.Data.Objects.Core.Base
 
 
         #region OPERATIONS
-
-
-
-        /// <summary>
-        /// Somma tutti i valori delle proprieta' degli elementi della lista
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public decimal Sum(string propertyName)
-        {
-            return Sum(propertyName, null);
-        }
-
-
-        /// <summary>
-        /// Somma applicando un filtro
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public decimal Sum(string propertyName, IFilter filter)
-        {
-            decimal dRet = decimal.Zero;
-
-            int iLen = this.Count;
-
-            if (iLen > 0)
-            {
-                var oProp = this.mObjSchema.Properties.GetPropertyByName(propertyName);
-
-                if (!TypeHelper.IsNumericType(oProp.Type))
-                    throw new ObjectException(ObjectMessages.List_CannotAggregateNonNumeric, this.GetType().Name, oProp.Name);
-
-                for (int i = 0; i < iLen; i++)
-                {
-                    if (filter != null && !filter.PropertyTest(this.getItem(i)))
-                        continue;
-
-                    dRet += Convert.ToDecimal(oProp.GetValue(this.getItem(i)));
-                }
-            }
-
-            return dRet;
-        }
-
-
-
-
-        /// <summary>
-        /// Ritorna la media dei valori delle proprieta' della lista con filtro
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public decimal Avg(string propertyName, IFilter filter)
-        {
-            if (this.Count == 0)
-                return decimal.Zero;
-
-            return (this.Sum(propertyName, filter) / this.Count);
-        }
-
-
-        /// <summary>
-        /// Ritorna la media dei valori delle proprieta' della lista
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public decimal Avg(string propertyName)
-        {
-            return this.Avg(propertyName, null);
-        }
-
 
         /// <summary>
         /// Svuota la lista

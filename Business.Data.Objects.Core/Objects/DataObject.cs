@@ -18,17 +18,6 @@ namespace Business.Data.Objects.Core
         : DataObjectBase where T : DataObject<T>
     {
 
-        #region PUBLIC DELEGATES
-
-        /// <summary>
-        /// Delegato per la gestione dell' Xml del singolo oggetto della lista
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="writer"></param>
-        /// <param name="args"></param>
-        public delegate void XmlFunction(T value, XmlWrite writer, params object[] args);
-
-        #endregion
 
         #region PUBLIC METHODS
 
@@ -132,35 +121,6 @@ namespace Business.Data.Objects.Core
             return oDiffList;
         }
 
-        /// <summary>
-        /// Scrive Xml con possibilita' di integrazione dati attraverso la specifica di una funzione
-        /// di manipolazione
-        /// </summary>
-        /// <param name="function"></param>
-        /// <param name="rewriteAll">
-        /// Se true allora non emette l'Xml standard dell'oggetto
-        /// </param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public string ToXml(XmlFunction function, bool rewriteAll, params object[] args)
-        {
-            using (XmlWrite xw = new XmlWrite())
-            {
-                //Se deve riscrivere
-                if (!rewriteAll)
-                {
-                    xw.WriteRaw(this.ToXml(1));
-                }
-
-                //Se fornita funzione allora la richiama
-                if (function != null)
-                {
-                    function((T)this, xw, args);
-                }
-
-                return xw.ToString();
-            }
-        }
 
         /// <summary>
         /// Ritorna una lista contenente l'elemento selezionato
@@ -173,35 +133,6 @@ namespace Business.Data.Objects.Core
             var list = this.Slot.CreateList<TL>();
             list.Add(this);
             return list;
-        }
-
-        /// <summary>
-        /// Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'enumerabile in input
-        /// </summary>
-        /// <typeparam name="TL"></typeparam>
-        /// <param name="others"></param>
-        /// <returns></returns>
-        public TL ToListFromEnumerable<TL>(IEnumerable<T> others)
-            where TL : DataList<TL, T>
-        {
-
-            var list = this.ToList<TL>();
-            if (others != null)
-                list.AddRange(others);
-            return list;
-        }
-
-
-        /// <summary>
-        /// Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'array in input
-        /// </summary>
-        /// <typeparam name="TL"></typeparam>
-        /// <param name="others"></param>
-        /// <returns></returns>
-        public TL ToListFromArray<TL>(params T[] others)
-            where TL : DataList<TL, T>
-        {
-            return this.ToListFromEnumerable<TL>(others);
         }
 
 

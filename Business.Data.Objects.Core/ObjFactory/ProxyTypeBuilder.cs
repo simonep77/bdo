@@ -298,10 +298,6 @@ namespace Business.Data.Objects.Core.ObjFactory
                     oProp = new PropertyObject(propInfo.Name, propInfo.PropertyType, oSchema.ObjCount);
                     oSchema.ObjCount++; //Incrementa contatore generale
                 }
-                else if (propInfo.PropertyType.IsSubclassOf(typeof(DataListBase)))
-                {
-                    oProp = new PropertyDataList(propInfo.Name, propInfo.PropertyType);
-                }
                 else
                     oProp = new PropertySimple(propInfo.Name, propInfo.PropertyType);
                 
@@ -368,7 +364,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                     oSchema.MustReload = true;
 
                 //Select: esclude loadonaccess e mappature property-property
-                if (!oProp.IsSqlSelectExcluded)
+                if (!oProp.ExcludeSelect)
                 {
                     sbSqlSelect.Append(oProp.Column.Name);
                     sbSqlSelect.Append(@", ");
@@ -520,7 +516,7 @@ namespace Business.Data.Objects.Core.ObjFactory
             //    throw new TypeFactoryException("{0}.{1} - E' ammesso definire una chiave su una proprieta' semplice (non mappata)", oSchema.ClassName, oProp.Name, ClassSchema.PRIMARY_KEY);
 
             //La property non puo' essere di tipo LoadOnAccess
-            if (oProp.IsSqlSelectExcluded)
+            if (oProp.ExcludeSelect)
                 throw new TypeFactoryException(SchemaMessages.Prop_KeyNeedValueQuery, oSchema.ClassName, oProp.Name);
 
             //Aggiunge property a key

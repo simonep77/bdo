@@ -22,7 +22,6 @@ namespace Business.Data.Objects.Core
             public static string XmlDefaultDecimalFormat = "N2";
             public static bool LiveTrackingEnabled = false;
             public static bool ChangeTrackingEnabled = true;
-            public static bool LoadFullObjects = true;
 
         }
 
@@ -90,11 +89,6 @@ namespace Business.Data.Objects.Core
         public bool ChangeTrackingEnabled { get; set; } = Defaults.ChangeTrackingEnabled;
 
         /// <summary>
-        /// Indica se attivo il caricamento completo degli oggetti nelle liste
-        /// </summary>
-        public bool LoadFullObjects { get; set; } = Defaults.LoadFullObjects;
-
-        /// <summary>
         /// Indica se attivo l'event manager
         /// </summary>
         public bool EventManagerEnabled { get; set; } = false;
@@ -128,7 +122,6 @@ namespace Business.Data.Objects.Core
             sc.XmlDefaultDecimalFormat = this.XmlDefaultDecimalFormat;
             sc.LiveTrackingEnabled = this.LiveTrackingEnabled;
             sc.ChangeTrackingEnabled = this.ChangeTrackingEnabled;
-            sc.LoadFullObjects = this.LoadFullObjects;
             sc.EventManagerEnabled = this.EventManagerEnabled;
             sc.CachingEnabled = this.CachingEnabled;
             sc.SimulateEnabled = this.SimulateEnabled;

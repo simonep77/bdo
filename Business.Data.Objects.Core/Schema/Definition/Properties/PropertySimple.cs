@@ -59,7 +59,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <summary>
         /// Indica se esclusa dal caricamento standard (query load)
         /// </summary>
-        public override bool IsSqlSelectExcluded { 
+        public override bool ExcludeSelect { 
             get {
                 return this.LoadOnAccess;
             } 
@@ -371,32 +371,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         }
 
-        /// <summary>
-        ///  Scrive DTO
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="obj"></param>
-        /// <param name="depth"></param>
-        public override void WriteDTO(Dictionary<string, object> dto, DataObjectBase obj, int depth)
-        {
-            dto.Add(this.Name, this.GetValue(obj));
-        }
-
-        /// <summary>
-        /// Legge DTO
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="obj"></param>
-        public override void ReadDTO(Dictionary<string, object> dto, DataObjectBase obj)
-        {
-            object o = null;
-
-            if (!dto.TryGetValue(this.Name, out o))
-                return;
-
-            this.SetValue(obj, o);
-
-        }
 
 
         /// <summary>
