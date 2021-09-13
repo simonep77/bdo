@@ -26,7 +26,7 @@ namespace Business.Data.WinFormTest
 
         private void WriteLog(string msg)
         {
-            
+
 
             if (this.InvokeRequired)
                 this.Invoke(new Action(() => WriteLog(msg)));
@@ -85,7 +85,7 @@ namespace Business.Data.WinFormTest
                 WriteLog(lst.ToXml());
 
 
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).OrderByLinq(o=> o.AnagraficaId).OrderByLinqDesc(o=>o.Id).SearchByLinq((o => o.Id > 10));
+                lst = ss1.CreatePagedList<OrdineLista>(1, 10).OrderByLinq(o => o.AnagraficaId).OrderByLinqDesc(o => o.Id).SearchByLinq((o => o.Id > 10));
                 WriteLog(lst.ToXml());
 
                 var oo = ss1.LoadObjByLINQ<Ordine>(o => o.Id == 150);
@@ -171,6 +171,32 @@ namespace Business.Data.WinFormTest
                 ss1.ToBizList<AnagraficaBiz, Anagrafica>(new List<Anagrafica>());
 
                 // oAnag1.FillFrom(o2)
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
+
+        private void lINQ2SQLENHANCEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+
+
+                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000 && o.Stato.Id == 1);
+
+                foreach (var item in lst)
+                {
+
+                    this.WriteLog(item.ToJSON());
+
+                }
 
                 // Me.WriteLog(o2)
                 this.WriteLog(ss1.PrintInfo());

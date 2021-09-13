@@ -212,16 +212,22 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
             if (oRet == null)
             {
-                //Se oggetto nuovo o già caricato da db ritorna default
-                if (obj.mDataSchema.ObjectState == EObjectState.New || obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
+                if (!this.LoadOnAccess)
+                {
                     //Ritorna default
                     return this.DefaultValue;
+                }
+                else
+                {
+                    if (!obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
+                    {
+                        //Deve Caricare property
+                        obj.LoadPropertyFromDB(this);
 
-                //Deve Caricare property
-                obj.LoadPropertyFromDB(this);
-
-                //Reimposta il valore
-                oRet = obj.mDataSchema.Values[this.PropertyIndex];
+                        //Reimposta il valore
+                        oRet = obj.mDataSchema.Values[this.PropertyIndex];
+                    }
+                }
             }
 
             return oRet;

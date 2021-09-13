@@ -2838,32 +2838,6 @@
             Libera risorse associate
             </summary>
         </member>
-        <member name="T:Business.Data.Objects.Core.DataDiff">
-            <summary>
-            Classe che identifica una differenza di campo db tra
-            due oggetti
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Core.DataDiff.FieldName">
-            <summary>
-            Nome Campo Modificato
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Core.DataDiff.SourceValue">
-            <summary>
-            Valore dell'oggetto di cui si richiede la verifica
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Core.DataDiff.OtherValue">
-            <summary>
-            Valore dell'oggetto di raffronto
-            </summary>
-        </member>
-        <member name="T:Business.Data.Objects.Core.DataDiffList">
-            <summary>
-            Lista di differenze tra oggetti
-            </summary>
-        </member>
         <member name="T:Business.Data.Objects.Core.DataList`2">
             <summary>
             Classe astratta da utilizzare per gestione Liste
@@ -3098,7 +3072,7 @@
         </member>
         <member name="M:Business.Data.Objects.Core.DataObject`1.Diff(`0)">
             <summary>
-            Dati due oggetti ritorna elenco differenze
+            Dati due oggetti ritorna elenco differenze. Item1 e' il nome della prorieta, item2 il valore dell'oggetto origine, item3 dell'oggetto confrontato
             </summary>
             <param name="other"></param>
             <returns></returns>

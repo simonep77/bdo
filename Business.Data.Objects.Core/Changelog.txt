@@ -103,3 +103,5 @@ Rimossa BusinessObjectList in quanto poco utiles
 Rimossa serializzazione/deserializzazione binaria
 Rimossi filtri specializzati
 
+[13/09/2021] - 5.0.31 - Simone Pelaia
+Fix bug che esegue query su campo oggetto quando questo e' null (come se fosse LoadOnAccess)

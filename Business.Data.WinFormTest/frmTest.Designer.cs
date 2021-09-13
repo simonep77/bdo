@@ -33,8 +33,9 @@ namespace Business.Data.WinFormTest
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.lINQ2SQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.jSONTOEFROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.lINQ2SQLENHANCEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +54,8 @@ namespace Business.Data.WinFormTest
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lINQ2SQLToolStripMenuItem,
-            this.jSONTOEFROMToolStripMenuItem});
+            this.jSONTOEFROMToolStripMenuItem,
+            this.lINQ2SQLENHANCEToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -63,9 +65,16 @@ namespace Business.Data.WinFormTest
             // lINQ2SQLToolStripMenuItem
             // 
             this.lINQ2SQLToolStripMenuItem.Name = "lINQ2SQLToolStripMenuItem";
-            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.lINQ2SQLToolStripMenuItem.Text = "LINQ 2 SQL";
             this.lINQ2SQLToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLToolStripMenuItem_Click);
+            // 
+            // jSONTOEFROMToolStripMenuItem
+            // 
+            this.jSONTOEFROMToolStripMenuItem.Name = "jSONTOEFROMToolStripMenuItem";
+            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.jSONTOEFROMToolStripMenuItem.Text = "JSON TO e FROM";
+            this.jSONTOEFROMToolStripMenuItem.Click += new System.EventHandler(this.jSONTOEFROMToolStripMenuItem_Click);
             // 
             // txtLog
             // 
@@ -80,12 +89,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // jSONTOEFROMToolStripMenuItem
+            // lINQ2SQLENHANCEToolStripMenuItem
             // 
-            this.jSONTOEFROMToolStripMenuItem.Name = "jSONTOEFROMToolStripMenuItem";
-            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.jSONTOEFROMToolStripMenuItem.Text = "JSON TO e FROM";
-            this.jSONTOEFROMToolStripMenuItem.Click += new System.EventHandler(this.jSONTOEFROMToolStripMenuItem_Click);
+            this.lINQ2SQLENHANCEToolStripMenuItem.Name = "lINQ2SQLENHANCEToolStripMenuItem";
+            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.lINQ2SQLENHANCEToolStripMenuItem.Text = "LINQ 2 SQL ENHANCE";
+            this.lINQ2SQLENHANCEToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLENHANCEToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -110,5 +119,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem jSONTOEFROMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lINQ2SQLENHANCEToolStripMenuItem;
     }
 }

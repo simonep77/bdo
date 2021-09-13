@@ -362,7 +362,7 @@ namespace Business.Data.Objects.Core.Objects
             }
 
             return m;
-            //throw new NotSupportedException(string.Format("The member '{0}' is not supported", m.Member.Name));
+
         }
 
         protected bool IsNullConstant(Expression exp)
@@ -372,56 +372,12 @@ namespace Business.Data.Objects.Core.Objects
 
         private bool ParseOrderByExpression(MethodCallExpression expression, string order)
         {
-            //UnaryExpression unary = (UnaryExpression)expression.Arguments[1];
-            //LambdaExpression lambdaExpression = (LambdaExpression)unary.Operand;
 
-            //lambdaExpression = (LambdaExpression)Evaluator.PartialEval(lambdaExpression);
-
-            //MemberExpression body = lambdaExpression.Body as MemberExpression;
-            //if (body != null)
-            //{
-            //    if (string.IsNullOrEmpty(_orderBy))
-            //    {
-            //        _orderBy = string.Format("{0} {1}", body.Member.Name, order);
-            //    }
-            //    else
-            //    {
-            //        _orderBy = string.Format("{0}, {1} {2}", _orderBy, body.Member.Name, order);
-            //    }
-
-            //    return true;
-            //}
 
             return false;
         }
 
-        //private bool ParseTakeExpression(MethodCallExpression expression)
-        //{
-        //    ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
 
-        //    int size;
-        //    if (int.TryParse(sizeExpression.Value.ToString(), out size))
-        //    {
-        //        _take = size;
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
-        //private bool ParseSkipExpression(MethodCallExpression expression)
-        //{
-        //    ConstantExpression sizeExpression = (ConstantExpression)expression.Arguments[1];
-
-        //    int size;
-        //    if (int.TryParse(sizeExpression.Value.ToString(), out size))
-        //    {
-        //        _skip = size;
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
 
         public void Dispose()
         {
