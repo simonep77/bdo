@@ -4,6 +4,7 @@
   Data  : $(DATE) $(TIME)
  --------------------------------------*/
 
+using Business.Data.Objects.Common;
 using Business.Data.Objects.Common.Logging;
 using System;
 using System.Collections.Generic;
@@ -215,12 +216,27 @@ namespace Business.Data.Objects.Database
         /// <param name="offsetIn"></param>
         /// <returns></returns>
         DataTable Select(int positionIn, int offsetIn);
-		
 
-		/// <summary>
+        /// <summary>
+        /// Esegue query mappando i dati sull'oggetto T
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        List<T> Query<T>();
+
+        /// <summary>
+        /// Esegue query paginata mappando i dati sull'oggetto T e ritornando i dati di paginazione
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        PageableResult<T> Query<T>(int page, int offset);
+
+        /// <summary>
         /// Aggiunge paramtro con nome, valore e tipo
-		/// </summary>
-		/// <returns></returns>
+        /// </summary>
+        /// <returns></returns>
         DbParameter AddParameter(string name, object value);
 
         /// <summary>

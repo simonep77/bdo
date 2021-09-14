@@ -18,6 +18,9 @@ using System.Linq;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Common.Logging;
 using Business.Data.Objects.Core.Database.Resources;
+using Business.Data.Objects.Common;
+using FastMember;
+using System.Collections.Concurrent;
 
 namespace Business.Data.Objects.Database
 {
@@ -846,6 +849,130 @@ namespace Business.Data.Objects.Database
                 }
             }
         }
+
+        /// <summary>
+        /// Dizionario concorrente per le mappature delle query
+        /// </summary>
+        private static ConcurrentDictionary<string, Dictionary<string, PropertyInfo>> _TypeMapperCache = new ConcurrentDictionary<string, Dictionary<string, PropertyInfo>>();
+        
+
+        private static Dictionary<string, PropertyInfo> _GetTypeMapInfo(Type t)
+        {
+            //Crea la classe di lettura info
+            return = _TypeMapperCache.GetOrAdd(t.FullName, (k) => {
+
+                var diz = new Dictionary<string, PropertyInfo>();
+                foreach (var item in t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty))
+                {
+                    diz.Add(item.Name.ToUpper(), item);
+                }
+                return diz;
+            });
+        }
+
+        /// <summary>
+        /// Esegue una query paginata e mappa i dati sull'oggetto di tipo T
+        /// Vengono mappati i campi pubblici di istanza se il risultato non e' null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public virtual PageableResult<T> Query<T>(int page, int offset)
+           where T : new()
+        {
+            //Crea la classe di lettura info
+            var tInfo = _GetTypeMapInfo(typeof(T));
+
+            var res = new PageableResult<T>();
+
+            using (var rd = this.ExecReaderPaged(page, offset))
+            {
+                res.Pager.Page = page;
+                res.Pager.Offset = offset;
+                res.Pager.TotRecords = this.TotRecordQueryPaginata;
+
+                while (rd.Read())
+                {
+                    T obj = new T();
+
+                    for (int i = 0; i < rd.FieldCount; i++)
+                    {
+                        PropertyInfo mi;
+
+                        if (rd.IsDBNull(i))
+                            continue;
+
+                        if (!tInfo.TryGetValue(rd.GetName(i).ToUpper(), out mi))
+                            continue;
+
+                        mi.SetValue(obj, Convert.ChangeType(rd[i], mi.PropertyType));
+                    }
+
+                    res.Result.Add(obj);
+                }
+                
+            }
+
+            return res;
+        }
+
+
+        public virtual List<T> Query<T>()
+           where T : new()
+        {
+            var tInfo = _GetTypeMapInfo(typeof(T));
+
+            var res = new List<T>();
+
+            using (var rd = this.ExecReader())
+            {
+                while (rd.Read())
+                {
+                    T obj = new T();
+
+                    for (int i = 0; i < rd.FieldCount; i++)
+                    {
+                        PropertyInfo mi;
+
+                        if (rd.IsDBNull(i))
+                            continue;
+
+                        if (!tInfo.TryGetValue(rd.GetName(i).ToUpper(), out mi))
+                            continue;
+
+                        mi.SetValue(obj, Convert.ChangeType(rd[i], mi.PropertyType));
+                    }
+
+                    res.Add(obj);
+                }
+
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Maps a SqlDataReader record to an object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dataReader"></param>
+        /// <param name="newObject"></param>
+        public static void MapDataToObject<T>(DbDataReader dataReader, T newObject)
+        {
+            Type t = typeof(T);
+
+            for (int i = 0; i < dataReader.FieldCount; i++)
+            {
+                PropertyInfo mi = t.GetProperty(dataReader.GetName(i), BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+
+                if (mi == null || dataReader.IsDBNull(i))
+                    continue;
+
+                mi.SetValue(newObject, Convert.ChangeType(dataReader[i], mi.PropertyType));
+            }
+        }
+
 
 
         /// <summary>

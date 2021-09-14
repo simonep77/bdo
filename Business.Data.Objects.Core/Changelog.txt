@@ -105,3 +105,6 @@ Rimossi filtri specializzati
 
 [13/09/2021] - 5.0.31 - Simone Pelaia
 Fix bug che esegue query su campo oggetto quando questo e' null (come se fosse LoadOnAccess)
+
+[14/09/2021] - 5.0.32 - Simone Pelaia
+Aggiunti metodi DB per la mappatura delle query su oggetti DTO
