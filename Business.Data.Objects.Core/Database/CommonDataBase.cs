@@ -19,8 +19,9 @@ using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Common.Logging;
 using Business.Data.Objects.Core.Database.Resources;
 using Business.Data.Objects.Common;
-using FastMember;
 using System.Collections.Concurrent;
+using System.Linq.Expressions;
+using Business.Data.Objects.Core.Common.Utils;
 
 namespace Business.Data.Objects.Database
 {
@@ -853,22 +854,8 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Dizionario concorrente per le mappature delle query
         /// </summary>
-        private static ConcurrentDictionary<string, Dictionary<string, PropertyInfo>> _TypeMapperCache = new ConcurrentDictionary<string, Dictionary<string, PropertyInfo>>();
-        
+        private static DtoBinderReflection _DtoBinder = new DtoBinderReflection();
 
-        private static Dictionary<string, PropertyInfo> _GetTypeMapInfo(Type t)
-        {
-            //Crea la classe di lettura info
-            return = _TypeMapperCache.GetOrAdd(t.FullName, (k) => {
-
-                var diz = new Dictionary<string, PropertyInfo>();
-                foreach (var item in t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty))
-                {
-                    diz.Add(item.Name.ToUpper(), item);
-                }
-                return diz;
-            });
-        }
 
         /// <summary>
         /// Esegue una query paginata e mappa i dati sull'oggetto di tipo T
@@ -882,7 +869,7 @@ namespace Business.Data.Objects.Database
            where T : new()
         {
             //Crea la classe di lettura info
-            var tInfo = _GetTypeMapInfo(typeof(T));
+            var tInfo = _DtoBinder.GetTypeMapper<T>();
 
             var res = new PageableResult<T>();
 
@@ -890,38 +877,49 @@ namespace Business.Data.Objects.Database
             {
                 res.Pager.Page = page;
                 res.Pager.Offset = offset;
-                res.Pager.TotRecords = this.TotRecordQueryPaginata;
 
                 while (rd.Read())
                 {
+                    //Imposta totale records da ultima colonna della query. Se non pertinente allora imposta -1
+                    if (res.Pager.TotRecords == 0)
+                    {
+                        var oTotRecs = rd[rd.FieldCount - 1];
+                        if (oTotRecs is Int32)
+                            res.Pager.TotRecords = (Int32)oTotRecs;
+                        ;
+                    }
+
                     T obj = new T();
 
-                    for (int i = 0; i < rd.FieldCount; i++)
+                    for (int i = 0; i < rd.FieldCount-1; i++)
                     {
-                        PropertyInfo mi;
-
-                        if (rd.IsDBNull(i))
-                            continue;
-
-                        if (!tInfo.TryGetValue(rd.GetName(i).ToUpper(), out mi))
-                            continue;
-
-                        mi.SetValue(obj, Convert.ChangeType(rd[i], mi.PropertyType));
+                        _DtoBinder.MapSingle<T>(tInfo, obj, rd);
                     }
 
                     res.Result.Add(obj);
                 }
                 
+                //Se presente un resultset aggiuntivo allora assume che sia il numero di record
+                if (rd.NextResult())
+                {
+                    if (rd.Read())
+                        res.Pager.TotRecords = rd.GetInt32(0);
+                }
+
             }
 
             return res;
         }
 
-
+        /// <summary>
+        /// Esegue una query con mappatura su oggetti
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public virtual List<T> Query<T>()
            where T : new()
         {
-            var tInfo = _GetTypeMapInfo(typeof(T));
+            var tInfo = _DtoBinder.GetTypeMapper<T>();
 
             var res = new List<T>();
 
@@ -931,18 +929,7 @@ namespace Business.Data.Objects.Database
                 {
                     T obj = new T();
 
-                    for (int i = 0; i < rd.FieldCount; i++)
-                    {
-                        PropertyInfo mi;
-
-                        if (rd.IsDBNull(i))
-                            continue;
-
-                        if (!tInfo.TryGetValue(rd.GetName(i).ToUpper(), out mi))
-                            continue;
-
-                        mi.SetValue(obj, Convert.ChangeType(rd[i], mi.PropertyType));
-                    }
+                    _DtoBinder.MapSingle<T>(tInfo, obj, rd);
 
                     res.Add(obj);
                 }

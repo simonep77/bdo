@@ -16,7 +16,7 @@ namespace Business.Data.Objects.TestClass.BIZ
         {
             this.ListaOrdini = new Lazy<OrdineLista>(() =>
             {
-                return this.Slot.CreateList<OrdineLista>().SearchByColumn(new FilterEQUAL(nameof(Ordine.AnagraficaId), this.DataObj.Id));
+                return this.Slot.CreateList<OrdineLista>().SearchByColumn(Filter.Eq(nameof(Ordine.AnagraficaId), this.DataObj.Id));
             });
 
             //this.ListaOrdini = new Lazy<OrdineLista>(() => this.Slot.CreateList<OrdineLista>().SearchByColumn(new FilterEQUAL(nameof(Ordine.AnagraficaId), this.DataObj.Id)));

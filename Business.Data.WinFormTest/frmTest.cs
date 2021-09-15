@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq.Expressions;
 using Business.Data.Objects.TestClass.BIZ;
+using Business.Data.Objects.TestClass.DTO;
 
 namespace Business.Data.WinFormTest
 {
@@ -187,16 +188,25 @@ namespace Business.Data.WinFormTest
                 ss1.UserName = "Simone";
 
                 //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Query non paginata");
 
+                ss1.DB.SQL = "SELECT * FROM ordini LIMIT 0, 200";
 
-                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000 && o.Stato.Id == 1);
+                var res = ss1.DB.Query<OrdineDTO>();
 
-                foreach (var item in lst)
-                {
+                this.WriteLog(ss1.GetCurrentElapsed().ToString());
+                this.WriteLog(res.Count.ToString());
 
-                    this.WriteLog(item.ToJSON());
+                this.WriteLog("Query paginata");
 
-                }
+                ss1.DB.SQL = "SELECT * FROM ordini";
+
+                var res2 = ss1.DB.Query<OrdineDTO>(2, 200);
+
+                this.WriteLog(ss1.GetCurrentElapsed().ToString());
+                this.WriteLog(res2.Result.Count.ToString());
+                this.WriteLog(res2.Pager.TotRecords.ToString());
+
 
                 // Me.WriteLog(o2)
                 this.WriteLog(ss1.PrintInfo());

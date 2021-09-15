@@ -222,7 +222,7 @@ namespace Business.Data.Objects.Database
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        List<T> Query<T>();
+        List<T> Query<T>() where T : new();
 
         /// <summary>
         /// Esegue query paginata mappando i dati sull'oggetto T e ritornando i dati di paginazione
@@ -231,7 +231,7 @@ namespace Business.Data.Objects.Database
         /// <param name="page"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        PageableResult<T> Query<T>(int page, int offset);
+        PageableResult<T> Query<T>(int page, int offset) where T : new();
 
         /// <summary>
         /// Aggiunge paramtro con nome, valore e tipo

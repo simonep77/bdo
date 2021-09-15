@@ -34,8 +34,8 @@ namespace Business.Data.WinFormTest
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.lINQ2SQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jSONTOEFROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.lINQ2SQLENHANCEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLog = new System.Windows.Forms.TextBox();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,16 +65,23 @@ namespace Business.Data.WinFormTest
             // lINQ2SQLToolStripMenuItem
             // 
             this.lINQ2SQLToolStripMenuItem.Name = "lINQ2SQLToolStripMenuItem";
-            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.lINQ2SQLToolStripMenuItem.Text = "LINQ 2 SQL";
             this.lINQ2SQLToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLToolStripMenuItem_Click);
             // 
             // jSONTOEFROMToolStripMenuItem
             // 
             this.jSONTOEFROMToolStripMenuItem.Name = "jSONTOEFROMToolStripMenuItem";
-            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.jSONTOEFROMToolStripMenuItem.Text = "JSON TO e FROM";
             this.jSONTOEFROMToolStripMenuItem.Click += new System.EventHandler(this.jSONTOEFROMToolStripMenuItem_Click);
+            // 
+            // lINQ2SQLENHANCEToolStripMenuItem
+            // 
+            this.lINQ2SQLENHANCEToolStripMenuItem.Name = "lINQ2SQLENHANCEToolStripMenuItem";
+            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lINQ2SQLENHANCEToolStripMenuItem.Text = "QUERY MAPPERS";
+            this.lINQ2SQLENHANCEToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLENHANCEToolStripMenuItem_Click);
             // 
             // txtLog
             // 
@@ -88,13 +95,6 @@ namespace Business.Data.WinFormTest
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
-            // 
-            // lINQ2SQLENHANCEToolStripMenuItem
-            // 
-            this.lINQ2SQLENHANCEToolStripMenuItem.Name = "lINQ2SQLENHANCEToolStripMenuItem";
-            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.lINQ2SQLENHANCEToolStripMenuItem.Text = "LINQ 2 SQL ENHANCE";
-            this.lINQ2SQLENHANCEToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLENHANCEToolStripMenuItem_Click);
             // 
             // frmTest
             // 
