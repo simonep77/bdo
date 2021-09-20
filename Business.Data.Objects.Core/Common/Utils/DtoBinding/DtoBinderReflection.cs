@@ -13,8 +13,22 @@ namespace Business.Data.Objects.Core.Common.Utils
 
     internal class DtoBinderReflection
     {
+        internal class PropertyHandler
+        {
+            public PropertyInfo PInfo { get; set; }
+            public bool Nullable { get; set; }
+            public Type PType { get; set; }
 
-        internal class TypeMapper : Dictionary<string, PropertyInfo>
+            public void SetValue(object target, object value)
+            {
+                if (this.PType.Equals(value))
+                    value = Convert.ChangeType(value, this.PType);
+
+                this.PInfo.SetValue(target, value);
+            }
+        }
+
+        internal class TypeMapper : Dictionary<string, PropertyHandler>
         { }
 
         private static ConcurrentDictionary<string, TypeMapper> _TypeMapperCache = new ConcurrentDictionary<string, TypeMapper>();
@@ -24,12 +38,20 @@ namespace Business.Data.Objects.Core.Common.Utils
         {
             var t = typeof(T);
             //Crea la classe di lettura info
-            return _TypeMapperCache.GetOrAdd(t.FullName, (k) => {
+            return _TypeMapperCache.GetOrAdd(t.FullName, (k) =>
+            {
 
                 var diz = new TypeMapper();
-                foreach (var item in t.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.DeclaredOnly))
+                foreach (var item in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.DeclaredOnly))
                 {
-                    diz.Add(item.Name.ToUpper(), item);
+                    //Verifica se la propreta' è nullable
+                    var ph = new PropertyHandler() { 
+                        PInfo = item, 
+                        Nullable = (Nullable.GetUnderlyingType(item.PropertyType) != null) 
+                    };
+                    ph.PType = ph.Nullable ? item.PropertyType.GenericTypeArguments[0] : item.PropertyType;
+
+                    diz.Add(item.Name.ToUpper(), ph);
                 }
                 return diz;
             });
@@ -39,7 +61,7 @@ namespace Business.Data.Objects.Core.Common.Utils
         {
             for (int i = 0; i < rd.FieldCount; i++)
             {
-                PropertyInfo act;
+                PropertyHandler act;
 
                 if (rd.IsDBNull(i))
                     continue;
@@ -47,7 +69,8 @@ namespace Business.Data.Objects.Core.Common.Utils
                 if (!mapper.TryGetValue(rd.GetName(i).ToUpper(), out act))
                     continue;
 
-                act.SetValue(obj, Convert.ChangeType(rd[i], act.PropertyType));
+                act.SetValue(obj, rd[i]);
+
             }
         }
 

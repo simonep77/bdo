@@ -215,7 +215,7 @@ namespace Business.Data.WinFormTest
 
         private void qUERYMAPSPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var ss1 = new BusinessSlot("MSSQL2005Database", "Server=xxxxxx;Database=xxxx;User Id=xxxxxx;Password=xxxxxx"))
+            using (var ss1 = new BusinessSlot("MSSQL2005Database", "Server=csswdbms01.casagit.it;Database=GESTIONALE;User Id=gestionale;Password=Sviluppo1"))
             {
                 ss1.DB.AutoCloseConnection = true;
                 ss1.LiveTrackingEnabled = true;
@@ -231,6 +231,17 @@ namespace Business.Data.WinFormTest
                 ss1.DB.SQL = "SP_GT005_CAP_FIND_BY_ADDRESS_NAME";
 
                 var results = ss1.DB.Query<SP_GT005_CAP_FIND_RESULT>();
+
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Query paginata");
+
+                ss1.DB.AddParameter("@CityId", 5983, DbType.Int32);
+                ss1.DB.AddParameter("@Addr", "VIALE CAMILLO SABATINI", DbType.String);
+                ss1.DB.CommandType = CommandType.StoredProcedure;
+                ss1.DB.SQL = "SP_GT005_CAP_FIND_BY_ADDRESS_NAME";
+
+                var results2 = ss1.DB.Query<SP_GT005_CAP_FIND_RESULT>(0, 100);
 
 
                 // Me.WriteLog(o2)

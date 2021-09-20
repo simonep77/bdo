@@ -868,6 +868,10 @@ namespace Business.Data.Objects.Database
         public virtual PageableResult<T> Query<T>(int page, int offset)
            where T : new()
         {
+            //Se sp allora errore
+            if (this.CommandType != CommandType.Text)
+                throw new ArgumentException("E' possibile paginare solo una query SQL standard!");
+
             //Crea la classe di lettura info
             var tInfo = _DtoBinder.GetTypeMapper<T>();
 
@@ -886,15 +890,11 @@ namespace Business.Data.Objects.Database
                         var oTotRecs = rd[rd.FieldCount - 1];
                         if (oTotRecs is Int32)
                             res.Pager.TotRecords = (Int32)oTotRecs;
-                        ;
                     }
 
                     T obj = new T();
 
-                    for (int i = 0; i < rd.FieldCount-1; i++)
-                    {
-                        _DtoBinder.MapSingle<T>(tInfo, obj, rd);
-                    }
+                    _DtoBinder.MapSingle<T>(tInfo, obj, rd);
 
                     res.Result.Add(obj);
                 }
