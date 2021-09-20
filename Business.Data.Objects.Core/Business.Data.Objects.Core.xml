@@ -4637,6 +4637,21 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Business.Data.Objects.Common.PageableResult`1">
+            <summary>
+            Classe che ritorna lista di risultati ed informazioni di paginazione associate
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.PageableResult`1.Result">
+            <summary>
+            Risultati
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.PageableResult`1.Pager">
+            <summary>
+            paginatore
+            </summary>
+        </member>
         <member name="T:Business.Data.Objects.Common.EObjectSource">
             <summary>
             Enumerazione provenienza oggetto
@@ -6004,6 +6019,36 @@
             <param name="offsetIn"></param>
             <returns></returns>
         </member>
+        <member name="F:Business.Data.Objects.Database.CommonDataBase._DtoBinder">
+            <summary>
+            Dizionario concorrente per le mappature delle query
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Query``1(System.Int32,System.Int32)">
+            <summary>
+            Esegue una query paginata e mappa i dati sull'oggetto di tipo T
+            Vengono mappati i campi pubblici di istanza se il risultato non e' null.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="page"></param>
+            <param name="offset"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.Query``1">
+            <summary>
+            Esegue una query con mappatura su oggetti
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.MapDataToObject``1(System.Data.Common.DbDataReader,``0)">
+            <summary>
+            Maps a SqlDataReader record to an object.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="dataReader"></param>
+            <param name="newObject"></param>
+        </member>
         <member name="M:Business.Data.Objects.Database.CommonDataBase.CreateParamName(System.String)">
             <summary>
             Ritorna nome parametro compatibile a partire da una stringa
@@ -6604,6 +6649,22 @@
             </summary>
             <param name="positionIn"></param>
             <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Query``1">
+            <summary>
+            Esegue query mappando i dati sull'oggetto T
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.IDataBase.Query``1(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata mappando i dati sull'oggetto T e ritornando i dati di paginazione
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="page"></param>
+            <param name="offset"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Database.IDataBase.AddParameter(System.String,System.Object)">

@@ -108,3 +108,6 @@ Fix bug che esegue query su campo oggetto quando questo e' null (come se fosse L
 
 [14/09/2021] - 5.0.32 - Simone Pelaia
 Aggiunti metodi DB per la mappatura delle query su oggetti DTO
+
+[20/09/2021] - 5.0.33 - Simone Pelaia
+Fix bug query mappata che non ritorna ultimo campo db

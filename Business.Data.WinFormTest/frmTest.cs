@@ -190,7 +190,7 @@ namespace Business.Data.WinFormTest
                 //ss1.OnUserInfoRequired += getUserInfoFromSlot;
                 this.WriteLog("Query non paginata");
 
-                ss1.DB.SQL = "SELECT * FROM ordini LIMIT 0, 200";
+                ss1.DB.SQL = "SELECT * FROM ordini LIMIT 0, 1000";
 
                 var res = ss1.DB.Query<OrdineDTO>();
 
@@ -201,11 +201,36 @@ namespace Business.Data.WinFormTest
 
                 ss1.DB.SQL = "SELECT * FROM ordini";
 
-                var res2 = ss1.DB.Query<OrdineDTO>(2, 200);
+                var res2 = ss1.DB.Query<OrdineDTO>(2, 1000);
 
                 this.WriteLog(ss1.GetCurrentElapsed().ToString());
                 this.WriteLog(res2.Result.Count.ToString());
                 this.WriteLog(res2.Pager.TotRecords.ToString());
+
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
+
+        private void qUERYMAPSPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = new BusinessSlot("MSSQL2005Database", "Server=xxxxxx;Database=xxxx;User Id=xxxxxx;Password=xxxxxx"))
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Query non paginata");
+
+                ss1.DB.AddParameter("@CityId", 5983, DbType.Int32);
+                ss1.DB.AddParameter("@Addr", "VIALE CAMILLO SABATINI", DbType.String);
+                ss1.DB.CommandType = CommandType.StoredProcedure;
+                ss1.DB.SQL = "SP_GT005_CAP_FIND_BY_ADDRESS_NAME";
+
+                var results = ss1.DB.Query<SP_GT005_CAP_FIND_RESULT>();
 
 
                 // Me.WriteLog(o2)

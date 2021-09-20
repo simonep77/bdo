@@ -37,7 +37,7 @@ namespace Business.Data.Objects.Core.Common.Utils
 
         public void MapSingle<T>(TypeMapper mapper, T obj, DbDataReader rd)
         {
-            for (int i = 0; i < rd.FieldCount - 1; i++)
+            for (int i = 0; i < rd.FieldCount; i++)
             {
                 PropertyInfo act;
 

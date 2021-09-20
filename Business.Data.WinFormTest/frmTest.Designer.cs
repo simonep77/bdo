@@ -36,6 +36,7 @@ namespace Business.Data.WinFormTest
             this.jSONTOEFROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINQ2SQLENHANCEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtLog = new System.Windows.Forms.TextBox();
+            this.qUERYMAPSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +56,8 @@ namespace Business.Data.WinFormTest
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lINQ2SQLToolStripMenuItem,
             this.jSONTOEFROMToolStripMenuItem,
-            this.lINQ2SQLENHANCEToolStripMenuItem});
+            this.lINQ2SQLENHANCEToolStripMenuItem,
+            this.qUERYMAPSPToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -96,6 +98,13 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
+            // qUERYMAPSPToolStripMenuItem
+            // 
+            this.qUERYMAPSPToolStripMenuItem.Name = "qUERYMAPSPToolStripMenuItem";
+            this.qUERYMAPSPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.qUERYMAPSPToolStripMenuItem.Text = "QUERY MAP SP";
+            this.qUERYMAPSPToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPSPToolStripMenuItem_Click);
+            // 
             // frmTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -120,5 +129,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem jSONTOEFROMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLENHANCEToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem qUERYMAPSPToolStripMenuItem;
     }
 }
