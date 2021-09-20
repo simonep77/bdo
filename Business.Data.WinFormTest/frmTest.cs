@@ -215,7 +215,7 @@ namespace Business.Data.WinFormTest
 
         private void qUERYMAPSPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var ss1 = new BusinessSlot("MSSQL2005Database", "Server=csswdbms01.casagit.it;Database=GESTIONALE;User Id=gestionale;Password=Sviluppo1"))
+            using (var ss1 = new BusinessSlot("MSSQL2005Database", "Server=xxxxx.;Database=xxxxx;User Id=xxx;Password=xxxx"))
             {
                 ss1.DB.AutoCloseConnection = true;
                 ss1.LiveTrackingEnabled = true;
