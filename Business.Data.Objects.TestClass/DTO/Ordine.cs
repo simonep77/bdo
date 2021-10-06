@@ -13,7 +13,7 @@ namespace Business.Data.Objects.TestClass.DTO
 
         public string CodiceOrdine { get; set; }
 
-        public sbyte StatoId { get; set; }
+        public byte StatoId { get; set; }
 
         public DateTime DataPagamanto { get; set; }
 

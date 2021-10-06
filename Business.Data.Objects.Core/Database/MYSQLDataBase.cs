@@ -28,7 +28,13 @@ namespace Business.Data.Objects.Database
 
         #region "PROPERTY"
 
-
+        protected override bool PagedReaderLastRow
+        {
+            get
+            {
+                return false;
+            }
+        }
         public override string LastAutoIdFunction { get; } = @"LAST_INSERT_ID()";
 
         /// <summary>

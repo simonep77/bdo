@@ -42,7 +42,7 @@ namespace Business.Data.Objects.Core.Common.Utils
             {
 
                 var diz = new TypeMapper();
-                foreach (var item in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty | BindingFlags.DeclaredOnly))
+                foreach (var item in t.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty))
                 {
                     //Verifica se la propreta' è nullable
                     var ph = new PropertyHandler() { 

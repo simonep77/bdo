@@ -71,7 +71,17 @@ namespace Business.Data.Objects.Database
         private Dictionary<string, object> _LockAcquired; //Istanziato al primo utilizzo
         private IsolationLevel _PendingTransactionLevel = IsolationLevel.Unspecified;
 
-		#region "PROPERTY"
+        #region "PROPERTY"
+
+
+        protected virtual bool PagedReaderLastRow
+        {
+            get
+            {
+                return true; ;
+            }
+        }
+
 
         /// <summary>
         /// Ritorna il nome della funzione per la cattura dell'ultimo Id inserito automaticamente
@@ -877,15 +887,17 @@ namespace Business.Data.Objects.Database
 
             var res = new PageableResult<T>();
 
-            using (var rd = this.ExecReaderPaged(page, offset))
+            res.Pager.Page = page;
+            res.Pager.Offset = offset;
+
+            using (var rd = this.ExecReaderPaged(res.Pager.Position, res.Pager.Offset))
             {
-                res.Pager.Page = page;
-                res.Pager.Offset = offset;
+
 
                 while (rd.Read())
                 {
                     //Imposta totale records da ultima colonna della query. Se non pertinente allora imposta -1
-                    if (res.Pager.TotRecords == 0)
+                    if (res.Pager.TotRecords == 0 && this.PagedReaderLastRow)
                     {
                         var oTotRecs = rd[rd.FieldCount - 1];
                         if (oTotRecs is Int32)
@@ -900,7 +912,7 @@ namespace Business.Data.Objects.Database
                 }
                 
                 //Se presente un resultset aggiuntivo allora assume che sia il numero di record
-                if (rd.NextResult())
+                if (!this.PagedReaderLastRow && rd.NextResult())
                 {
                     if (rd.Read())
                         res.Pager.TotRecords = rd.GetInt32(0);

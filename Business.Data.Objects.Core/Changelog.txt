@@ -112,5 +112,8 @@ Aggiunti metodi DB per la mappatura delle query su oggetti DTO
 [20/09/2021] - 5.0.33 - Simone Pelaia
 Fix bug query mappata che non ritorna ultimo campo db
 
-[20/09/2021] - 5.0.34 - Simone Pelaia
-Fix bug query mappata su campi nullable + ottimizzazione
+[20/09/2021] - 5.0.36 - Simone Pelaia
+Fix bug query mappata su campi nullable e fix query paginata
+
+[06/10/2021] - 5.0.37 - Simone Pelaia
+Query mappata imposta anche proprietà ereditate

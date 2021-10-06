@@ -199,7 +199,7 @@ namespace Business.Data.WinFormTest
 
                 this.WriteLog("Query paginata");
 
-                ss1.DB.SQL = "SELECT * FROM ordini";
+                ss1.DB.SQL = "SELECT * FROM ordini order by id";
 
                 var res2 = ss1.DB.Query<OrdineDTO>(2, 1000);
 
