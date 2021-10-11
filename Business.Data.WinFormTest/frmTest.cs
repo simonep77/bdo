@@ -248,5 +248,34 @@ namespace Business.Data.WinFormTest
                 this.WriteLog(ss1.PrintInfo());
             }
         }
+
+        private void qUERYMAPPERSBENCHToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Avvio");
+
+                for (int i = 0; i < 500; i++)
+                {
+                    ss1.DB.SQL = "SELECT * FROM ordini LIMIT 0, 1000";
+
+                    var res = ss1.DB.Query<OrdineDTO>();
+                }
+
+
+
+                this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
     }
 }

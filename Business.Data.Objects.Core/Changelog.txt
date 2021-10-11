@@ -117,3 +117,6 @@ Fix bug query mappata su campi nullable e fix query paginata
 
 [06/10/2021] - 5.0.37 - Simone Pelaia
 Query mappata imposta anche proprietà ereditate
+
+[06/10/2021] - 5.0.38 - Simone Pelaia (non ancora rilasciato)
+Modificato mapper interno delle query su Efficient Mapper

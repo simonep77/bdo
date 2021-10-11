@@ -35,8 +35,9 @@ namespace Business.Data.WinFormTest
             this.lINQ2SQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jSONTOEFROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINQ2SQLENHANCEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.qUERYMAPSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.qUERYMAPPERSBENCHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +58,8 @@ namespace Business.Data.WinFormTest
             this.lINQ2SQLToolStripMenuItem,
             this.jSONTOEFROMToolStripMenuItem,
             this.lINQ2SQLENHANCEToolStripMenuItem,
-            this.qUERYMAPSPToolStripMenuItem});
+            this.qUERYMAPSPToolStripMenuItem,
+            this.qUERYMAPPERSBENCHToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -67,23 +69,30 @@ namespace Business.Data.WinFormTest
             // lINQ2SQLToolStripMenuItem
             // 
             this.lINQ2SQLToolStripMenuItem.Name = "lINQ2SQLToolStripMenuItem";
-            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.lINQ2SQLToolStripMenuItem.Text = "LINQ 2 SQL";
             this.lINQ2SQLToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLToolStripMenuItem_Click);
             // 
             // jSONTOEFROMToolStripMenuItem
             // 
             this.jSONTOEFROMToolStripMenuItem.Name = "jSONTOEFROMToolStripMenuItem";
-            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.jSONTOEFROMToolStripMenuItem.Text = "JSON TO e FROM";
             this.jSONTOEFROMToolStripMenuItem.Click += new System.EventHandler(this.jSONTOEFROMToolStripMenuItem_Click);
             // 
             // lINQ2SQLENHANCEToolStripMenuItem
             // 
             this.lINQ2SQLENHANCEToolStripMenuItem.Name = "lINQ2SQLENHANCEToolStripMenuItem";
-            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
             this.lINQ2SQLENHANCEToolStripMenuItem.Text = "QUERY MAPPERS";
             this.lINQ2SQLENHANCEToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLENHANCEToolStripMenuItem_Click);
+            // 
+            // qUERYMAPSPToolStripMenuItem
+            // 
+            this.qUERYMAPSPToolStripMenuItem.Name = "qUERYMAPSPToolStripMenuItem";
+            this.qUERYMAPSPToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.qUERYMAPSPToolStripMenuItem.Text = "QUERY MAP SP";
+            this.qUERYMAPSPToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPSPToolStripMenuItem_Click);
             // 
             // txtLog
             // 
@@ -98,12 +107,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // qUERYMAPSPToolStripMenuItem
+            // qUERYMAPPERSBENCHToolStripMenuItem
             // 
-            this.qUERYMAPSPToolStripMenuItem.Name = "qUERYMAPSPToolStripMenuItem";
-            this.qUERYMAPSPToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.qUERYMAPSPToolStripMenuItem.Text = "QUERY MAP SP";
-            this.qUERYMAPSPToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPSPToolStripMenuItem_Click);
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Name = "qUERYMAPPERSBENCHToolStripMenuItem";
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Text = "QUERY MAPPERS BENCH";
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPPERSBENCHToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -130,5 +139,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem jSONTOEFROMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLENHANCEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem qUERYMAPSPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem qUERYMAPPERSBENCHToolStripMenuItem;
     }
 }

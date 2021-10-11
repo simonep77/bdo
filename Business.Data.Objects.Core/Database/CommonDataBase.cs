@@ -864,7 +864,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Dizionario concorrente per le mappature delle query
         /// </summary>
-        private static DtoBinderReflection _DtoBinder = new DtoBinderReflection();
+        private static DtoBinder _DtoBinder = new DtoBinder();
 
 
         /// <summary>
