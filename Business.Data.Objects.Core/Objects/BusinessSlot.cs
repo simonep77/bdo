@@ -1033,12 +1033,20 @@ namespace Business.Data.Objects.Core
         /// <param name="level"></param>
         /// <param name="msgFmt"></param>
         /// <param name="args"></param>
-        public void LogDebug(DebugLevel level, string msgFmt, params object[] args)
+        public void LogDebugFormat(DebugLevel level, string msgFmt, params object[] args)
         {
-            if (this.OnLogDebugSent == null)
-                return;
+            this.OnLogDebugSent?.Invoke(this, level, string.Format(msgFmt, args));
+        }
 
-            this.OnLogDebugSent(this, level, string.Format(msgFmt, args));
+        /// <summary>
+        /// Scrive LogDebug. per utilizzarlo è necessario agganciare l'evento OnLogDebugSent
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="msgFmt"></param>
+        /// <param name="args"></param>
+        public void LogDebug(DebugLevel level, string text)
+        {
+            this.OnLogDebugSent?.Invoke(this, level, text);
         }
 
 
@@ -1047,9 +1055,9 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="msgFmt"></param>
         /// <param name="args"></param>
-        public void LogDebug(string msgFmt, params object[] args)
+        public void LogDebug(string text)
         {
-            this.LogDebug(DebugLevel.User_1, msgFmt, args);
+            this.LogDebug(DebugLevel.User_1, text);
         }
 
 
@@ -1075,30 +1083,30 @@ namespace Business.Data.Objects.Core
             {
                 string sIndent = string.Empty.PadRight(iIndentEx);
 
-                this.LogDebug(level, @"{0}ECCEZIONE! Livello {1}", sIndent, iInnerCount.ToString());
-                this.LogDebug(level, @"{0}  + Tipo     : {1}", sIndent, oException.GetType().Name);
-                this.LogDebug(level, @"{0}  + Messaggio: {1}", sIndent, oException.Message);
+                this.LogDebug(level, $"{sIndent}ECCEZIONE! Livello {iInnerCount}");
+                this.LogDebug(level, $"{sIndent}  + Tipo     : {oException.GetType().Name}");
+                this.LogDebug(level, $"{sIndent}  + Messaggio: {oException.Message}");
                 //Dati variabili
                 if (!string.IsNullOrEmpty(oException.Source))
-                    this.LogDebug(level, @"{0}  + Source   : {1}", sIndent, oException.Source);
+                    this.LogDebug(level, $"{sIndent}  + Source   : {oException.Source}");
 
                 if (oException.TargetSite != null)
                 {
-                    this.LogDebug(level, @"{0}  + Classe   : {1}", sIndent, oException.TargetSite.DeclaringType.Name);
-                    this.LogDebug(level, @"{0}  + Metodo   : {1}", sIndent, oException.TargetSite.Name);
-                    this.LogDebug(level, @"{0}  + Namespace: {1}", sIndent, oException.TargetSite.DeclaringType.Namespace);
+                    this.LogDebug(level, $"{sIndent}  + Classe   : {oException.TargetSite.DeclaringType.Name}");
+                    this.LogDebug(level, $"{sIndent}  + Metodo   : {oException.TargetSite.Name}");
+                    this.LogDebug(level, $"{sIndent}  + Namespace: {oException.TargetSite.DeclaringType.Namespace}");
                 }
 
                 if (oException.StackTrace != null)
                 {
-                    this.LogDebug(level, @"{0}  + Stack    :", sIndent);
+                    this.LogDebug(level, $"{sIndent}  + Stack    :");
 
                     using (System.IO.StringReader reader = new System.IO.StringReader(oException.StackTrace))
                     {
                         string line;
                         while ((line = reader.ReadLine()) != null)
                         {
-                            this.LogDebug(level, @"{0}             > {1}", sIndent, line);
+                            this.LogDebug(level, $"{sIndent}             > {line}");
                         }
                     }
                 }

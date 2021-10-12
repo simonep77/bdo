@@ -2328,7 +2328,7 @@
             <param name="tableName"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebug(Business.Data.Objects.Core.DebugLevel,System.String,System.Object[])">
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebugFormat(Business.Data.Objects.Core.DebugLevel,System.String,System.Object[])">
             <summary>
             Scrive LogDebug. per utilizzarlo è necessario agganciare l'evento OnLogDebugSent
             </summary>
@@ -2336,7 +2336,15 @@
             <param name="msgFmt"></param>
             <param name="args"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebug(System.String,System.Object[])">
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebug(Business.Data.Objects.Core.DebugLevel,System.String)">
+            <summary>
+            Scrive LogDebug. per utilizzarlo è necessario agganciare l'evento OnLogDebugSent
+            </summary>
+            <param name="level"></param>
+            <param name="msgFmt"></param>
+            <param name="args"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LogDebug(System.String)">
             <summary>
             Scrive LogDebug con livello default User_1
             </summary>
@@ -7360,6 +7368,14 @@
             Hash 64 di una stringa
             </summary>
             <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tact.Reflection.EfficientInvoker.ForMethodNoCached(System.Type,System.Reflection.MethodInfo)">
+            <summary>
+            Crea un invoker senza gestione della cache interna
+            </summary>
+            <param name="type"></param>
+            <param name="method"></param>
             <returns></returns>
         </member>
     </members>
