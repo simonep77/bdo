@@ -38,6 +38,6 @@ namespace Business.Data.Objects.TestClass.DAL
         public abstract string Utente { get; }
 
         [LogicalDelete]
-        public abstract sbyte Cancellato { get; }
+        public abstract bool Cancellato { get; }
     }
 }

@@ -1699,7 +1699,7 @@ namespace Business.Data.Objects.Core
                     if (ldProp.DefaultValue is DateTime)
                         ldProp.SetValue(obj, DateTime.Now);
                     else
-                        ldProp.SetValue(obj, 1);
+                        ldProp.SetValue(obj, Convert.ChangeType(1, ldProp.Type));
                 }
 
                 //Esegue aggiornamento

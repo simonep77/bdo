@@ -36,8 +36,9 @@ namespace Business.Data.WinFormTest
             this.jSONTOEFROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINQ2SQLENHANCEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.qUERYMAPSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.qUERYMAPPERSBENCHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.tESTLOGICALDELETEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +60,8 @@ namespace Business.Data.WinFormTest
             this.jSONTOEFROMToolStripMenuItem,
             this.lINQ2SQLENHANCEToolStripMenuItem,
             this.qUERYMAPSPToolStripMenuItem,
-            this.qUERYMAPPERSBENCHToolStripMenuItem});
+            this.qUERYMAPPERSBENCHToolStripMenuItem,
+            this.tESTLOGICALDELETEToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -94,6 +96,13 @@ namespace Business.Data.WinFormTest
             this.qUERYMAPSPToolStripMenuItem.Text = "QUERY MAP SP";
             this.qUERYMAPSPToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPSPToolStripMenuItem_Click);
             // 
+            // qUERYMAPPERSBENCHToolStripMenuItem
+            // 
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Name = "qUERYMAPPERSBENCHToolStripMenuItem";
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Text = "QUERY MAPPERS BENCH";
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPPERSBENCHToolStripMenuItem_Click);
+            // 
             // txtLog
             // 
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -107,12 +116,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // qUERYMAPPERSBENCHToolStripMenuItem
+            // tESTLOGICALDELETEToolStripMenuItem
             // 
-            this.qUERYMAPPERSBENCHToolStripMenuItem.Name = "qUERYMAPPERSBENCHToolStripMenuItem";
-            this.qUERYMAPPERSBENCHToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
-            this.qUERYMAPPERSBENCHToolStripMenuItem.Text = "QUERY MAPPERS BENCH";
-            this.qUERYMAPPERSBENCHToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPPERSBENCHToolStripMenuItem_Click);
+            this.tESTLOGICALDELETEToolStripMenuItem.Name = "tESTLOGICALDELETEToolStripMenuItem";
+            this.tESTLOGICALDELETEToolStripMenuItem.Size = new System.Drawing.Size(208, 22);
+            this.tESTLOGICALDELETEToolStripMenuItem.Text = "TEST LOGICAL DELETE";
+            this.tESTLOGICALDELETEToolStripMenuItem.Click += new System.EventHandler(this.tESTLOGICALDELETEToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -140,5 +149,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLENHANCEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem qUERYMAPSPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem qUERYMAPPERSBENCHToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tESTLOGICALDELETEToolStripMenuItem;
     }
 }

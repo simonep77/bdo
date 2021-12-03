@@ -277,5 +277,33 @@ namespace Business.Data.WinFormTest
                 this.WriteLog(ss1.PrintInfo());
             }
         }
+
+        private void tESTLOGICALDELETEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Avvio");
+
+                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
+
+                var ord = lst.FirstOrDefault();
+
+                ss1.DeleteObject(ord);
+
+                this.WriteLog(ord.Cancellato.ToString());
+
+                this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
     }
 }

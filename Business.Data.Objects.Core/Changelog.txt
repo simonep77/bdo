@@ -120,3 +120,6 @@ Query mappata imposta anche proprietà ereditate
 
 [06/10/2021] - 5.0.38 - Simone Pelaia
 Modificato logdebug senza format
+
+[03/12/2021] - 5.0.39 - Simone Pelaia
+Fix bug Accesso a campo di LogicalDelete dopo chiamata DeleteObject
