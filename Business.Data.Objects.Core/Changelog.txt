@@ -123,3 +123,7 @@ Modificato logdebug senza format
 
 [03/12/2021] - 5.0.39 - Simone Pelaia
 Fix bug Accesso a campo di LogicalDelete dopo chiamata DeleteObject
+
+[24/12/2021] - 5.0.40 - Simone Pelaia
+Aggiunti metodi Exec e ExecTrans a livello di slot per eseguire blocchi di codice "Gestito" senza preoccuparsi di try/catch o altro
+ToBizObjectList - Aggiunta possibilità di eseguire un'azione su ciscun oggetto creato

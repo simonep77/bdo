@@ -169,7 +169,7 @@ namespace Business.Data.WinFormTest
 
                 }
 
-                ss1.ToBizList<AnagraficaBiz, Anagrafica>(new List<Anagrafica>());
+                ss1.ToBizObjectList<AnagraficaBiz, Anagrafica>(new List<Anagrafica>());
 
                 // oAnag1.FillFrom(o2)
 

@@ -31,7 +31,7 @@ namespace Business.Data.Objects.Core
     /// Oggetto base che gestisce la vita degli altri oggetti di business
     /// consentendo in primo luogo l'accesso ai dati
     /// </summary>
-    public class BusinessSlot:IComparable<BusinessSlot>, IEquatable<BusinessSlot>, IDisposable
+    public class BusinessSlot : IComparable<BusinessSlot>, IEquatable<BusinessSlot>, IDisposable
     {
 
         #region PRIVATE FIELDS
@@ -84,7 +84,7 @@ namespace Business.Data.Objects.Core
         /// <param name="message"></param>
         public delegate void LogDebugHandler(BusinessSlot slot, DebugLevel level, string message);
 
-        
+
         /// <summary>
         /// Evento scatenato dalle chiamate al metodo LogDebug() dello slot
         /// </summary>
@@ -515,7 +515,7 @@ namespace Business.Data.Objects.Core
                     {
                         innerArg.Func.DynamicInvoke(innerArg.Slot, innerArg.Slice);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         innerArg.Exception = e;
                         //terminato errore
@@ -552,6 +552,66 @@ namespace Business.Data.Objects.Core
 
                 //Lancia eccezione unica
                 throw new BusinessSlotException(sb.ToString());
+            }
+
+        }
+
+
+        /// <summary>
+        /// Esegue un'azione nel contesto dello slot e scatena alcuni eventi gestibili
+        /// </summary>
+        /// <param name="action">Azione da eseguire</param>
+        /// <param name="onStart">Evento scatenato prima di eseguire l'azione</param>
+        /// <param name="onEnd">Evento scatenato al termine dell'esecuzione</param>
+        /// <param name="onException">Evento scatenato al verificarsi di una eccezione. Consente di sopprimere il raise dell'eccezione ritornando true</param>
+        public void Exec(Action<BusinessSlot> action, Action<BusinessSlot> onStart = null, Action<BusinessSlot> onEnd = null, Func<BusinessSlot, Exception, bool> onException = null)
+        {
+            onStart?.Invoke(this);
+            try
+            {
+                action?.Invoke(this);
+            }
+            catch (Exception e)
+            {
+                //Se la gestione dell'evento di eccezione ritorna true allora non rilancia l'eccezione
+                if (!(onException?.Invoke(this, e) ?? false))
+                    throw;
+            }
+            finally
+            {
+                onEnd?.Invoke(this);
+            }
+        }
+
+
+        /// <summary>
+        /// Esegue un'azione transazionale nel contesto dello slot e scatena alcuni eventi gestibili
+        /// </summary>
+        /// <param name="action">Azione da eseguire</param>
+        /// <param name="onStart">Evento scatenato prima di eseguire l'azione</param>
+        /// <param name="onEnd">Evento scatenato al termine dell'esecuzione</param>
+        /// <param name="onException">Evento scatenato al verificarsi di una eccezione. Consente di sopprimere il raise dell'eccezione ritornando true</param>
+        public void ExecTrans(Action<BusinessSlot> action, Action<BusinessSlot> onStart = null, Action<BusinessSlot> onEnd = null, Func<BusinessSlot, Exception, bool> onException = null)
+        {
+            onStart?.Invoke(this);
+            this.DbBeginTransAll();
+            try
+            {
+                action?.Invoke(this);
+
+                this.DbCommitAll();
+            }
+            catch (Exception e)
+            {
+                this.DbRollBackAll();
+
+                //Se la gestione dell'evento di eccezione ritorna true allora non rilancia l'eccezione
+                if (!(onException?.Invoke(this, e) ?? false))
+                    throw;
+            }
+            finally
+            {
+                onEnd?.Invoke(this);
             }
 
         }
@@ -923,7 +983,7 @@ namespace Business.Data.Objects.Core
         #endregion
 
 
-    
+
         #region DBPREFIX
 
         /// <summary>
@@ -1075,7 +1135,7 @@ namespace Business.Data.Objects.Core
             Exception oException = e;
             int iIndentEx = 0;
             int iInnerCount = 0;
-     
+
 
             this.LogDebug(level, Constants.LOG_SEPARATOR);
 
@@ -1228,7 +1288,7 @@ namespace Business.Data.Objects.Core
         {
 
             //Verifica dati passati
-            if (filter == null )
+            if (filter == null)
                 throw new BusinessSlotException(SessionMessages.LoadObj_Filter_Null);
 
             //Crea oggetto vuoto
@@ -1342,7 +1402,7 @@ namespace Business.Data.Objects.Core
                 oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
 
                 //Se PL impostiamo hash gia' calcolato (evitiamo un calcolo inutile)
-                if(bIsPk)
+                if (bIsPk)
                     oNewObj.mDataSchema.PkHash = string.Intern(uPkHash);
 
                 //Salva in cache se previsto solo per oggetti caricati dal db
@@ -1770,12 +1830,28 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Ritorna una lista di businessobjects a partire da qualsiasi enumerabile di dataobject
+        /// Ritorna una lista di BusinessObjects a partire da qualsiasi enumerabile di DataObject
         /// </summary>
         /// <param name="list"></param>
-        public List<TB> ToBizList<TB, T>(IEnumerable<T> list)
+        public List<TB> ToBizObjectList<TB, T>(IEnumerable<T> list)
             where TB : BusinessObject<T>
-            where T: DataObject<T>
+            where T : DataObject<T>
+        {
+            return this.ToBizObjectList<TB, T>(list, null);
+        }
+
+        /// <summary>
+        ///Ritorna una lista di BusinessObjects a partire da qualsiasi enumerabile di DataObject 
+        ///consentendo di eseguire un azione specifica su ogni oggetto creato
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">Lista</param>
+        /// <param name="act">Azione da eseguire</param>
+        /// <returns></returns>
+        public List<TB> ToBizObjectList<TB, T>(IEnumerable<T> list, Action<TB> act)
+    where TB : BusinessObject<T>
+    where T : DataObject<T>
         {
             //Se null errore
             if (list == null)
@@ -1786,7 +1862,12 @@ namespace Business.Data.Objects.Core
             //Salva
             foreach (var item in list)
             {
-                lstOut.Add(item.ToBizObject<TB>());
+                var biz = item.ToBizObject<TB>();
+
+                lstOut.Add(biz);
+
+                //Esegue azione specifica
+                act?.Invoke(biz);
             }
 
             return lstOut;
@@ -1834,7 +1915,7 @@ namespace Business.Data.Objects.Core
             T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(other.mClassSchema.OriginalType);
             o.mDataSchema = other.mDataSchema.Clone(false, false);
             //Imposta Sorgente e Stato a nuovo
-            o.mDataSchema.ObjectSource = EObjectSource.None; 
+            o.mDataSchema.ObjectSource = EObjectSource.None;
             o.mDataSchema.ObjectState = EObjectState.New;
             //Imposto slot
             o.SetSlot(this);
@@ -2106,7 +2187,7 @@ namespace Business.Data.Objects.Core
             sb.AppendLine(BusinessSlot._SharedLog.LogPath);
             sb.Append("ObjeRefIdCounter: ");
             sb.AppendLine(System.Threading.Interlocked.Read(ref ProxyAssemblyCache.Instance.ObjeRefIdCounter).ToString());
-             
+
 
             sb.AppendLine("** PROPERTIES **");
             foreach (var item in this.PropertyAllKeys())
@@ -2675,7 +2756,7 @@ namespace Business.Data.Objects.Core
                 //Inizializza 
                 BusinessSlot._GlobalCache = new CacheSimple<string, DataSchema>(conf.CacheGlobalSize);
                 BusinessSlot._ListCache = new CacheTimed<string, DataTable>(conf.CacheGlobalSize / 2);
-               
+
                 //Se impostata directory di log
                 if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))
                 {

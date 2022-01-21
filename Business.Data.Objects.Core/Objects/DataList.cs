@@ -249,14 +249,27 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Ritorna una lista di business objects
+        /// Ritorna una lista di BusinessObjects a partire da questa lista
         /// </summary>
         /// <typeparam name="TB"></typeparam>
         /// <returns></returns>
         public List<TB> ToBizObjectList<TB>()
             where TB : BusinessObject<T>
         {
-            return this.Slot.ToBizList<TB, T>(this);
+            return this.Slot.ToBizObjectList<TB, T>(this, null);
+        }
+
+        /// <summary>
+        /// Ritorna una lista di BusinessObjects a partire da questa lista
+        /// con la possibilità di eseguire un'azione specifica su ciascun oggetto creato
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <param name="act"></param>
+        /// <returns></returns>
+        public List<TB> ToBizObjectList<TB>(Action<TB> act)
+    where TB : BusinessObject<T>
+        {
+            return this.Slot.ToBizObjectList<TB, T>(this, act);
         }
 
 
