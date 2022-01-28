@@ -45,13 +45,13 @@ namespace Business.Data.Objects.Core
         #region LAZY LOAD MANAGEMENT
 
 
-        private Dictionary<string, object> mDic = new Dictionary<string, object>();
+        private Dictionary<string, object> mLazyDic = new Dictionary<string, object>();
 
         /// <summary>
-        /// Funzione di caricamento oggetto lazy
+        /// Funzione di caricamento oggetto lazy tipizzato
         /// </summary>
         /// <returns></returns>
-        protected delegate object LazyLoadFunc();
+        protected delegate T1 LazyLoadFunc<T1>();
 
         /// <summary>
         /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi
@@ -60,17 +60,49 @@ namespace Business.Data.Objects.Core
         /// <param name="uniqueKey"></param>
         /// <param name="fn"></param>
         /// <returns></returns>
-        protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc fn)
+        protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
         {
-            object obj;
-
-            if (!mDic.TryGetValue(uniqueKey, out obj))
+            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
             {
                 obj = fn();
-                mDic.Add(uniqueKey, obj);
+                mLazyDic.Add(uniqueKey, obj);
             }
 
             return (T1)obj;
+        }
+
+
+        /// <summary>
+        /// Come il Getlazy ma con possibilità di specificare una diversa azione in caso di chiamata su oggetto non ancora salvato (evita potenziali query)
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="uniqueKey"></param>
+        /// <param name="fnForLoaded">Funzione eseguita in caso di oggetto Caricato da DB</param>
+        /// <param name="fnForNew">Funzione eseguita in caso di oggetto non ancora salvato su db (utile per forzature)</param>
+        /// <returns></returns>
+        protected T1 GetLazyEx<T1>(string uniqueKey, LazyLoadFunc<T1> fnForLoaded, LazyLoadFunc<T1> fnForNew)
+        {
+            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
+            {
+                if (this.DataObj.ObjectState == Data.Objects.Common.EObjectState.New)
+                    obj = fnForNew();
+                else
+                    obj = fnForLoaded();
+
+                mLazyDic.Add(uniqueKey, obj);
+            }
+
+            return (T1)obj;
+        }
+
+
+        /// <summary>
+        /// Resetta dei dati eventualmente cached sull'oggetto in modo che l'accesso successivo esegua il refresh
+        /// </summary>
+        /// <param name="uniqueKey"></param>
+        protected void ResetLazy(string uniqueKey)
+        {
+            this.mLazyDic.Remove(uniqueKey);
         }
 
 

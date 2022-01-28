@@ -2105,6 +2105,24 @@
             <param name="numThreads"></param>
             <param name="func"></param>
         </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.Exec(System.Action{Business.Data.Objects.Core.BusinessSlot},System.Action{Business.Data.Objects.Core.BusinessSlot},System.Action{Business.Data.Objects.Core.BusinessSlot},System.Func{Business.Data.Objects.Core.BusinessSlot,System.Exception,System.Boolean})">
+            <summary>
+            Esegue un'azione nel contesto dello slot e scatena alcuni eventi gestibili
+            </summary>
+            <param name="action">Azione da eseguire</param>
+            <param name="onStart">Evento scatenato prima di eseguire l'azione</param>
+            <param name="onEnd">Evento scatenato al termine dell'esecuzione</param>
+            <param name="onException">Evento scatenato al verificarsi di una eccezione. Consente di sopprimere il raise dell'eccezione ritornando true</param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ExecTrans(System.Action{Business.Data.Objects.Core.BusinessSlot},System.Action{Business.Data.Objects.Core.BusinessSlot},System.Action{Business.Data.Objects.Core.BusinessSlot},System.Func{Business.Data.Objects.Core.BusinessSlot,System.Exception,System.Boolean})">
+            <summary>
+            Esegue un'azione transazionale nel contesto dello slot e scatena alcuni eventi gestibili
+            </summary>
+            <param name="action">Azione da eseguire</param>
+            <param name="onStart">Evento scatenato prima di eseguire l'azione</param>
+            <param name="onEnd">Evento scatenato al termine dell'esecuzione</param>
+            <param name="onException">Evento scatenato al verificarsi di una eccezione. Consente di sopprimere il raise dell'eccezione ritornando true</param>
+        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.PropertyClear">
             <summary>
             Elimina tutte le proprieta'
@@ -2552,11 +2570,22 @@
             </summary>
             <param name="list"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.ToBizList``2(System.Collections.Generic.IEnumerable{``1})">
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ToBizObjectList``2(System.Collections.Generic.IEnumerable{``1})">
             <summary>
-            Ritorna una lista di businessobjects a partire da qualsiasi enumerabile di dataobject
+            Ritorna una lista di BusinessObjects a partire da qualsiasi enumerabile di DataObject
             </summary>
             <param name="list"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.ToBizObjectList``2(System.Collections.Generic.IEnumerable{``1},System.Action{``0})">
+             <summary>
+            Ritorna una lista di BusinessObjects a partire da qualsiasi enumerabile di DataObject 
+            consentendo di eseguire un azione specifica su ogni oggetto creato
+             </summary>
+             <typeparam name="TB"></typeparam>
+             <typeparam name="T"></typeparam>
+             <param name="list">Lista</param>
+             <param name="act">Azione da eseguire</param>
+             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.CloneObject``1(``0)">
             <summary>
@@ -2968,9 +2997,18 @@
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.ToBizObjectList``1">
             <summary>
-            Ritorna una lista di business objects
+            Ritorna una lista di BusinessObjects a partire da questa lista
             </summary>
             <typeparam name="TB"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToBizObjectList``1(System.Action{``0})">
+            <summary>
+            Ritorna una lista di BusinessObjects a partire da questa lista
+            con la possibilità di eseguire un'azione specifica su ciascun oggetto creato
+            </summary>
+            <typeparam name="TB"></typeparam>
+            <param name="act"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.Dispose">
