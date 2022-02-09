@@ -1812,12 +1812,12 @@ namespace Business.Data.Objects.Core
         /// Cancella tutti gli elementi di una lista. Al termine la lista risulta ancora piena
         /// </summary>
         /// <param name="list"></param>
-        public void DeleteAll<TL>(TL list, bool bypassLogical = false)
-            where TL : IEnumerable<DataObjectBase>
+        public void DeleteAll<T>(IEnumerable<T> list, bool bypassLogical = false)
+            where T : DataObject<T>
         {
             //Se null errore
-            if (list == null)
-                throw new ObjectException(ObjectMessages.Base_Save_Null, typeof(TL).Name);
+            if (list == null || !list.Any())
+                return;
 
             //Salva
             foreach (var item in list)

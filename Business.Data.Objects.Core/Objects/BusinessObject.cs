@@ -54,13 +54,32 @@ namespace Business.Data.Objects.Core
         protected delegate T1 LazyLoadFunc<T1>();
 
         /// <summary>
-        /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi
+        /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi.
+        /// Utilizzare LazyGet, in futuro verrà rimosso
         /// </summary>
         /// <typeparam name="T1"></typeparam>
         /// <param name="uniqueKey"></param>
         /// <param name="fn"></param>
         /// <returns></returns>
         protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
+        {
+            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
+            {
+                obj = fn();
+                mLazyDic.Add(uniqueKey, obj);
+            }
+
+            return (T1)obj;
+        }
+
+        /// <summary>
+        /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="uniqueKey"></param>
+        /// <param name="fn"></param>
+        /// <returns></returns>
+        protected T1 LazyGet<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
         {
             if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
             {
@@ -80,7 +99,7 @@ namespace Business.Data.Objects.Core
         /// <param name="fnForLoaded">Funzione eseguita in caso di oggetto Caricato da DB</param>
         /// <param name="fnForNew">Funzione eseguita in caso di oggetto non ancora salvato su db (utile per forzature)</param>
         /// <returns></returns>
-        protected T1 GetLazyEx<T1>(string uniqueKey, LazyLoadFunc<T1> fnForLoaded, LazyLoadFunc<T1> fnForNew)
+        protected T1 LazyGetEx<T1>(string uniqueKey, LazyLoadFunc<T1> fnForLoaded, LazyLoadFunc<T1> fnForNew)
         {
             if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
             {
@@ -100,9 +119,20 @@ namespace Business.Data.Objects.Core
         /// Resetta dei dati eventualmente cached sull'oggetto in modo che l'accesso successivo esegua il refresh
         /// </summary>
         /// <param name="uniqueKey"></param>
-        protected void ResetLazy(string uniqueKey)
+        protected void LazyReset(string uniqueKey)
         {
             this.mLazyDic.Remove(uniqueKey);
+        }
+
+        /// <summary>
+        /// Forza l'impostazione di un valore Lazy (per usi successivi)
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <param name="uniqueKey"></param>
+        /// <param name="value"></param>
+        protected void LazySet<T1>(string uniqueKey, T1 value)
+        {
+            this.mLazyDic[uniqueKey] = value;
         }
 
 

@@ -132,3 +132,8 @@ ToBizObjectList - Aggiunta possibilità di eseguire un'azione su ciscun oggetto 
 GetLazy fortemente tipizzato
 Introdotto GetLazyEx per gestire eventuali chiamate su oggetto non ancora salvato
 Introdotto ResetLazy per eliminare un dato cached e forzare il ricaricamento all'accesso successivo
+
+[28/01/2022] - 5.0.42 - Simone Pelaia
+DeleteAll su IEnumerable
+Rinominati metodi Lazy
+Aggiunto LazySet per setters
