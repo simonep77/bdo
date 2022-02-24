@@ -137,3 +137,6 @@ Introdotto ResetLazy per eliminare un dato cached e forzare il ricaricamento all
 DeleteAll su IEnumerable
 Rinominati metodi Lazy
 Aggiunto LazySet per setters
+
+[24/02/2022] - 5.0.43 - Simone Pelaia
+Aggiunti metodi base di Save e Delete sul BusinessObject con possibilità di overridare dei metodi protetti da eseguire prima o dopo entrambe le operazioni

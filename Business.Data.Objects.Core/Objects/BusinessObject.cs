@@ -42,6 +42,67 @@ namespace Business.Data.Objects.Core
         }
 
 
+        #region Base Methods
+
+        /// <summary>
+        /// Routine overridable per eseguire codice prima del salvataggio
+        /// </summary>
+        protected virtual void SaveExecBefore()
+        { }
+
+        /// <summary>
+        /// Routine overridable per eseguire codice dopo il salvataggio se andato a buon fine
+        /// </summary>
+        protected virtual void SaveExecAfter()
+        { }
+
+        
+        /// <summary>
+        /// Esegue salvataggio del dataobject sottostante
+        /// </summary>
+        public void Save()
+        {
+            //Esegue before
+            this.SaveExecBefore();
+
+            //Salva
+            this.Slot.SaveObject(this.DataObj);
+
+            //Esegue After
+            this.SaveExecAfter();
+        }
+
+        /// <summary>
+        /// Routine overridable per eseguire codice prima della cancellazione
+        /// </summary>
+        protected virtual void DeleteExecBefore()
+        { }
+
+        /// <summary>
+        /// Routine overridable per eseguire codice dopo la cancellazione se andata a buon fine
+        /// </summary>
+        protected virtual void DeleteExecAfter()
+        { }
+
+        /// <summary>
+        /// Esegue delete del dataobject sottostante
+        /// </summary>
+        public void Delete()
+        {
+            //Esegue before
+            this.DeleteExecBefore();
+
+            //Salva
+            this.Slot.DeleteObject(this.DataObj);
+
+            //Esegue After
+            this.DeleteExecAfter();
+        }
+
+
+        #endregion
+
+
         #region LAZY LOAD MANAGEMENT
 
 
