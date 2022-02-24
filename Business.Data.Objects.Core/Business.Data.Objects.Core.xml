@@ -1888,6 +1888,36 @@
             </summary>
             <param name="obj"></param>
         </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.saveExecBefore">
+            <summary>
+            Routine overridable per eseguire codice prima del salvataggio
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.saveExecAfter">
+            <summary>
+            Routine overridable per eseguire codice dopo il salvataggio se andato a buon fine
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.Save">
+            <summary>
+            Esegue salvataggio del dataobject sottostante
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.deleteExecBefore">
+            <summary>
+            Routine overridable per eseguire codice prima della cancellazione
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.deleteExecAfter">
+            <summary>
+            Routine overridable per eseguire codice dopo la cancellazione se andata a buon fine
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessObject`1.Delete">
+            <summary>
+            Esegue delete del dataobject sottostante
+            </summary>
+        </member>
         <member name="T:Business.Data.Objects.Core.BusinessObject`1.LazyLoadFunc`1">
             <summary>
             Funzione di caricamento oggetto lazy tipizzato

@@ -47,13 +47,13 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Routine overridable per eseguire codice prima del salvataggio
         /// </summary>
-        protected virtual void SaveExecBefore()
+        protected virtual void saveExecBefore()
         { }
 
         /// <summary>
         /// Routine overridable per eseguire codice dopo il salvataggio se andato a buon fine
         /// </summary>
-        protected virtual void SaveExecAfter()
+        protected virtual void saveExecAfter()
         { }
 
         
@@ -63,25 +63,25 @@ namespace Business.Data.Objects.Core
         public void Save()
         {
             //Esegue before
-            this.SaveExecBefore();
+            this.saveExecBefore();
 
             //Salva
             this.Slot.SaveObject(this.DataObj);
 
             //Esegue After
-            this.SaveExecAfter();
+            this.saveExecAfter();
         }
 
         /// <summary>
         /// Routine overridable per eseguire codice prima della cancellazione
         /// </summary>
-        protected virtual void DeleteExecBefore()
+        protected virtual void deleteExecBefore()
         { }
 
         /// <summary>
         /// Routine overridable per eseguire codice dopo la cancellazione se andata a buon fine
         /// </summary>
-        protected virtual void DeleteExecAfter()
+        protected virtual void deleteExecAfter()
         { }
 
         /// <summary>
@@ -90,13 +90,13 @@ namespace Business.Data.Objects.Core
         public void Delete()
         {
             //Esegue before
-            this.DeleteExecBefore();
+            this.deleteExecBefore();
 
             //Salva
             this.Slot.DeleteObject(this.DataObj);
 
             //Esegue After
-            this.DeleteExecAfter();
+            this.deleteExecAfter();
         }
 
 
