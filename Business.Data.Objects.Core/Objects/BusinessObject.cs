@@ -186,6 +186,15 @@ namespace Business.Data.Objects.Core
         }
 
         /// <summary>
+        /// Resetta tutti i dati cache a livello di business object (tutti quelli caricati con le funzioni Lazy)
+        /// </summary>
+        /// <param name="uniqueKey"></param>
+        public void LazyResetALL()
+        {
+            this.mLazyDic.Clear();
+        }
+
+        /// <summary>
         /// Forza l'impostazione di un valore Lazy (per usi successivi)
         /// </summary>
         /// <typeparam name="T1"></typeparam>
