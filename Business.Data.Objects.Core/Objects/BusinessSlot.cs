@@ -5,6 +5,7 @@ using Business.Data.Objects.Common.Logging;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.Common.Resources;
+using Business.Data.Objects.Core.Common.Utils;
 using Business.Data.Objects.Core.Objects;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
@@ -37,20 +38,12 @@ namespace Business.Data.Objects.Core
         #region PRIVATE FIELDS
 
         //Private vars
-        private string mSlotId = Guid.NewGuid().ToString();
-        private DateTime mStartDate = DateTime.Now;
-        private EProtectionLevel mProtectionLevel = EProtectionLevel.Normal;
-        private bool mTerminated;
         private IDataBase mDB;
         private DatabaseList mDbList = new DatabaseList();
-        private string mUserName = string.Empty;
-        private string mUserType = string.Empty;
-        private bool mIsAuthenticated;
         private Dictionary<string, object> mProperties = new Dictionary<string, object>();
         private DbPrefixDictionary mDbPrefixKeys;
-
-        private MessageList mMessageList = new MessageList();
         private System.Diagnostics.Stopwatch mStopWatch;
+        private LazyStore mLazyStore;
 
         //Base config
         public SlotConfig Conf { get; internal set; }
@@ -132,35 +125,19 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// ID Univoco Sessione
         /// </summary>
-        public string SlotId
-        {
-            get
-            {
-                return this.mSlotId;
-            }
-        }
+        public string SlotId { get; } = Guid.NewGuid().ToString();
 
 
         /// <summary>
         /// Data/Ora inizio della sessione corrente
         /// </summary>
-        public DateTime StartDate
-        {
-            get
-            {
-                return this.mStartDate;
-            }
-        }
+        public DateTime StartDate { get; } = DateTime.Now;
 
 
         /// <summary>
         /// Livello di protezione applicato allo slot
         /// </summary>
-        public EProtectionLevel ProtectionLevel
-        {
-            get { return this.mProtectionLevel; }
-            set { this.mProtectionLevel = value; }
-        }
+        public EProtectionLevel ProtectionLevel { get; set; } = EProtectionLevel.Normal;
 
 
         /// <summary>
@@ -266,38 +243,13 @@ namespace Business.Data.Objects.Core
         /// Attenzione: non è detto che questo sia il numero effettivo di oggetti in memoria in quanto i riferimenti
         /// possono venir eliminati in qualsiasi momento dal GC (una entry potrebbe essere in lista ma con un riferimento ad oggetto nullo).
         /// </summary>
-        public int LiveTrackingSize
-        {
-            get
-            {
-                return this.Conf.LiveTrackingEnabled ? this.mLiveTrackingStore.Count : 0;
-            }
-        }
-
-
-        /// <summary>
-        /// Ritorna numero degli oggetti in memoria
-        /// </summary>
-        public int LiveTrackingCurrentSize
-        {
-            get
-            {
-                return this.LiveTrackingEnabled ? this.mLiveTrackingStore.Count : -1;
-            }
-        }
-
+        public int LiveTrackingCurrentSize => this.LiveTrackingEnabled ? this.mLiveTrackingStore.Count : -1;
 
 
         /// <summary>
         /// Indica che lo slot è stato terminato (Disposed())
         /// </summary>
-        public bool Terminated
-        {
-            get
-            {
-                return this.mTerminated;
-            }
-        }
+        public bool Terminated { get; private set; }
 
 
         /// <summary>
@@ -316,45 +268,21 @@ namespace Business.Data.Objects.Core
         /// Indica l'utente associato alla sessione corrente
         /// Solo ad uso applicativo.
         /// </summary>
-        public string UserName
-        {
-            get
-            {
-                return this.mUserName;
-            }
-            set
-            {
-                this.mUserName = value;
-            }
-        }
+        public string UserName { get; set; } = string.Empty;
 
 
         /// <summary>
         /// Indica il tipo di utente associato alla sessione.
         /// Ad esclusivo uso applicativo.
         /// </summary>
-        public string UserType
-        {
-            get
-            {
-                return this.mUserType;
-            }
-            set
-            {
-                this.mUserType = value;
-            }
-        }
+        public string UserType { get; set; } = string.Empty;
 
 
         /// <summary>
         /// Indica se la sessione è stata esplicitamente Autenticata.
         /// Solo ad uso utente.
         /// </summary>
-        public bool IsAuthenticated
-        {
-            get { return this.mIsAuthenticated; }
-            set { this.mIsAuthenticated = value; }
-        }
+        public bool IsAuthenticated { get; set; }
 
 
         /// <summary>
@@ -370,13 +298,7 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Lista Messaggi pubblica
         /// </summary>
-        public MessageList MessageList
-        {
-            get
-            {
-                return this.mMessageList;
-            }
-        }
+        public MessageList MessageList { get; } = new MessageList();
 
 
         /// <summary>
@@ -394,7 +316,9 @@ namespace Business.Data.Objects.Core
         public int DBCount
         {
             get
-            { return this.mDbList.Count; }
+            {
+                return this.mDbList.Count;
+            }
         }
 
         /// <summary>
@@ -412,6 +336,17 @@ namespace Business.Data.Objects.Core
             }
         }
 
+
+        /// <summary>
+        /// Ritorna istanza del lazystore per i dati accessibili on-demand
+        /// </summary>
+        public LazyStore LazyStore
+        {
+            get
+            {
+                return this.mLazyStore != null ? this.mLazyStore : this.mLazyStore = new LazyStore();
+            }
+        }
 
         #endregion
 
@@ -459,6 +394,24 @@ namespace Business.Data.Objects.Core
         public delegate void WorkListSlice<TL>(BusinessSlot slot, TL slice);
 
         /// <summary>
+        /// Esegue loop multithreading impostando autonomamente il numero di threads in base ai parametri (maxThread e minItemPerThread)
+        /// </summary>
+        /// <typeparam name="TL"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="maxThreads"></param>
+        /// <param name="minItemPerThread"></param>
+        /// <param name="func"></param>
+        public void LoopMT<TL, T>(TL list, int maxThreads, int minItemPerThread, WorkListSlice<TL> func)
+           where TL : IEnumerable<T>
+        {
+            var thdNum = Math.Min(maxThreads, Math.Max(1, Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count()) / Convert.ToDecimal(minItemPerThread)))));
+
+            //Esegue il ciclo classico
+            this.LoopMT<TL, T>(list, thdNum, func);
+        }
+
+        /// <summary>
         /// Esegue un loop multithreading con attesa di completamento. Se si verificano errori all'interno dei thread lancia eccezione al completamento
         /// </summary>
         /// <typeparam name="TL"></typeparam>
@@ -467,7 +420,7 @@ namespace Business.Data.Objects.Core
         /// <param name="numThreads"></param>
         /// <param name="func"></param>
         public void LoopMT<TL, T>(TL list, int numThreads, WorkListSlice<TL> func)
-            where TL : IEnumerable<T>
+        where TL : IEnumerable<T>
         {
             bool isSlotAware = list is SlotAwareObject;
             var pager = new DataPager();
@@ -1660,6 +1613,27 @@ namespace Business.Data.Objects.Core
             return oList;
         }
 
+        /// <summary>
+        /// Nuova versione per lista paginata con stesso nome e parametri facoltativi
+        /// </summary>
+        /// <typeparam name="TL"></typeparam>
+        /// <param name="page">Se page = 0 la lista non è paginata</param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public TL CreateList<TL>(int page = 0, int offset = 0) where TL : DataListBase
+        {
+            TL oList = this.CreateList<TL>();
+
+            if (page > 0)
+            {
+                oList.Pager = new DataPager();
+                oList.Pager.Page = page;
+                oList.Pager.Offset = offset > 0 ? offset : 15;
+            }
+
+            return oList;
+        }
+
 
         /// <summary>
         /// Crea una lista paginata
@@ -1667,14 +1641,10 @@ namespace Business.Data.Objects.Core
         /// <param name="page"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare il metodo CreateList(page, offset)")]
         public TL CreatePagedList<TL>(int page, int offset) where TL : DataListBase
         {
-            TL oList = this.CreateList<TL>();
-            oList.Pager = new DataPager();
-            oList.Pager.Page = page;
-            oList.Pager.Offset = offset;
-
-            return oList;
+            return this.CreateList<TL>(page, offset);
         }
 
         #endregion
@@ -2155,10 +2125,10 @@ namespace Business.Data.Objects.Core
             StringBuilder sb = new StringBuilder(1000);
             sb.AppendLine("** SLOT INFO **");
             sb.Append("SlotID: ");
-            sb.Append(this.mSlotId);
+            sb.Append(this.SlotId);
             sb.AppendLine();
             sb.Append("Start Time: ");
-            sb.Append(this.mStartDate.ToString("dd/MM/yyyy HH:mm:ss"));
+            sb.Append(this.StartDate.ToString("dd/MM/yyyy HH:mm:ss"));
             sb.AppendLine();
             sb.Append("Elapsed Msec: ");
             sb.Append(this.GetCurrentElapsed().ToString());
@@ -2167,16 +2137,16 @@ namespace Business.Data.Objects.Core
             sb.Append(this.GetCurrentElapsed().Ticks.ToString());
             sb.AppendLine();
             sb.Append("Authenticated: ");
-            sb.Append(this.mIsAuthenticated);
+            sb.Append(this.IsAuthenticated);
             sb.AppendLine();
             sb.Append("User: ");
-            sb.Append(this.mUserName);
+            sb.Append(this.UserName);
             sb.AppendLine();
             sb.Append("User Type: ");
-            sb.Append(this.mUserType);
+            sb.Append(this.UserType);
             sb.AppendLine();
             sb.Append("Protection Level: ");
-            sb.AppendLine(this.mProtectionLevel.ToString());
+            sb.AppendLine(this.ProtectionLevel.ToString());
             sb.Append("Live Tracking Enabled: ");
             sb.AppendLine(this.LiveTrackingEnabled.ToString());
             sb.Append("Change Tracking Enabled: ");
@@ -2396,6 +2366,7 @@ namespace Business.Data.Objects.Core
 
         #endregion
 
+
         #region MISC
 
         /// <summary>
@@ -2404,7 +2375,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Concat("Slot ", this.mSlotId);
+            return string.Concat("Slot ", this.SlotId);
         }
 
 
@@ -2428,11 +2399,11 @@ namespace Business.Data.Objects.Core
             }
 
             //Imposta tutti gli attributi
-            oCloned.mUserName = this.mUserName;
-            oCloned.mUserType = this.mUserType;
-            oCloned.mIsAuthenticated = this.mIsAuthenticated;
-            oCloned.mProtectionLevel = this.mProtectionLevel;
-            oCloned.mTerminated = this.mTerminated;
+            oCloned.UserName = this.UserName;
+            oCloned.UserType = this.UserType;
+            oCloned.IsAuthenticated = this.IsAuthenticated;
+            oCloned.ProtectionLevel = this.ProtectionLevel;
+            oCloned.Terminated = this.Terminated;
             oCloned.ChangeTrackingEnabled = this.ChangeTrackingEnabled;
             oCloned.LiveTrackingEnabled = this.LiveTrackingEnabled;
             oCloned.Simulate = this.Simulate;
@@ -2461,10 +2432,6 @@ namespace Business.Data.Objects.Core
 
         #endregion
 
-        #region XML
-
-
-        #endregion
 
         #endregion
 
@@ -2805,7 +2772,7 @@ namespace Business.Data.Objects.Core
 
         public int CompareTo(BusinessSlot other)
         {
-            return this.mSlotId.CompareTo(other.mSlotId);
+            return this.SlotId.CompareTo(other.SlotId);
         }
 
         #endregion
@@ -2815,7 +2782,7 @@ namespace Business.Data.Objects.Core
 
         public override int GetHashCode()
         {
-            return this.mSlotId.GetHashCode();
+            return this.SlotId.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -2836,7 +2803,7 @@ namespace Business.Data.Objects.Core
             {
                 return true;
             }
-            return (string.Equals(this.mSlotId, other.mSlotId));
+            return (string.Equals(this.SlotId, other.SlotId));
         }
 
         #endregion
@@ -2894,7 +2861,7 @@ namespace Business.Data.Objects.Core
             finally
             {
                 //Imposta flag di fine sessione
-                this.mTerminated = true;
+                this.Terminated = true;
             }
 
         }

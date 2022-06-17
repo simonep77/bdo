@@ -18,7 +18,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
     {
 
         #region PROPERTIES
-        private object mDefaultValue;
         private string XmlFormatString;
         private Encrypted mEncAttr;
 
@@ -26,44 +25,22 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public List<Attributes.BaseModifierAttribute> AttrModifiers { get; set; }
         public List<Attributes.BaseValidatorAttribute> AttrValidators { get; set; }
 
-        public override object DefaultValue
-        {
-            get
-            {
-                return this.mDefaultValue;
-            }
-        }
+        public override object DefaultValue { get; protected set; }
 
         /// <summary>
         /// Indica se presenti validatori
         /// </summary>
-        public bool HasValidators
-        {
-            get
-            {
-                return (this.AttrValidators != null && this.AttrValidators.Count > 0);
-            }
-        }
+        public bool HasValidators => this.AttrValidators != null && this.AttrValidators.Count > 0;
 
         /// <summary>
         /// Indica se presenti modificatori
         /// </summary>
-        public bool HasModifiers
-        {
-            get
-            {
-                return (this.AttrModifiers != null && this.AttrModifiers.Count > 0);
-            }
-        }
+        public bool HasModifiers => this.AttrModifiers != null && this.AttrModifiers.Count > 0;
 
         /// <summary>
         /// Indica se esclusa dal caricamento standard (query load)
         /// </summary>
-        public override bool ExcludeSelect { 
-            get {
-                return this.LoadOnAccess;
-            } 
-        }
+        public override bool ExcludeSelect => this.LoadOnAccess;
 
 
         #endregion
@@ -73,7 +50,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public PropertySimple(string name, Type type)
             :base(name,type)
         {
-            this.mDefaultValue = PropertyHelper.GetDefaultValue(type);
+            this.DefaultValue = PropertyHelper.GetDefaultValue(type);
 
         }
 
@@ -134,7 +111,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //DEFAULT VALUE
             else if (attr is Attributes.DefaultValue)
             {
-                this.mDefaultValue = ((Attributes.DefaultValue)attr).ConvertTo(this.Type);
+                this.DefaultValue = ((Attributes.DefaultValue)attr).ConvertTo(this.Type);
             }
             //CARICA SUL PRIMO ACCESSO
             else if (attr is LoadOnAccess)
@@ -386,7 +363,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <param name="dr"></param>
         public override void SetValueFromReader(DataObjectBase obj, IDataReader dr)
         {
-            object oTemp = dr[this.Column.Name];
+            object oTemp = dr[this.Column.NormalizedName];
 
             if (DBNull.Value.Equals(oTemp) || oTemp == null)
                 oTemp = null;

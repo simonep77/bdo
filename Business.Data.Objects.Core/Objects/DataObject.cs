@@ -8,6 +8,7 @@ using Business.Data.Objects.Core.Schema.Definition;
 using System.Collections.Generic;
 using System.Dynamic;
 using System;
+using System.Reflection;
 
 namespace Business.Data.Objects.Core
 {
@@ -177,6 +178,43 @@ namespace Business.Data.Objects.Core
         //    this.mDataSchema.ObjectState = (EObjectState)od[nameof(DataObjectBase.ObjectState)];
         //}
 
+
+        /// <summary>
+        /// Prova a copiare i valori su un oggetto di outpu output
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        public void TryCopyTo(object output, bool checkNullable = true)
+        {
+            var outputType = output.GetType();
+
+            foreach (var prop in this.mClassSchema.Properties)
+            {
+                try
+                {
+                    var _value = prop.GetValue(this);
+
+                    if (_value != null)
+                    {
+                        PropertyInfo p = outputType.GetProperty(prop.Name);
+
+                        if (p == null)
+                            continue;
+
+                        //Se valore puo' considerarsi null e la prprietà è nullable non la imposta
+                        if (checkNullable && Nullable.GetUnderlyingType(p.PropertyType) != null && prop.IsNull(_value))
+                            continue;
+
+                        if (p.CanWrite)
+                            p.SetValue(output, Convert.ChangeType(_value, prop.Type));
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+        }
 
         #endregion
 

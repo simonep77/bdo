@@ -38,7 +38,7 @@ namespace Business.Data.Objects.Core
             get
             {
                 //Ritorna
-                return  (T)this.getItem(index);
+                return (T)this.getItem(index);
             }
             set
             {
@@ -67,7 +67,8 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public TL CacheResult()
         {
-            this.mCacheResult = this.Slot.IsCacheable(this.mObjSchema);
+            this.mCacheResult = true;
+            //this.mCacheResult = this.Slot.IsCacheable(this.mObjSchema);
 
             return (TL)this;
         }
@@ -115,7 +116,6 @@ namespace Business.Data.Objects.Core
         /// <param name="sortField"></param>
         /// <param name="versus"></param>
         /// <returns></returns>
-        [Obsolete("Utilizzare OrderByLinq")]
         public TL OrderBy(string sortField, OrderVersus versus)
         {
             return (TL)this.orderBy(sortField, versus);
@@ -126,7 +126,6 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="sortField"></param>
         /// <returns></returns>
-        [Obsolete("Utilizzare OrderByLinq")]
         public TL OrderBy(string sortField)
         {
             return (TL)this.orderBy(sortField, OrderVersus.Asc);
@@ -137,7 +136,6 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        [Obsolete("Utilizzare OrderByLinq")]
         public TL OrderBy(OrderBy order)
         {
             return (TL)this.orderBy(order);
@@ -233,7 +231,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public TL ToPagedList(int page, int offset)
         {
-            TL newList = this.Slot.CreatePagedList<TL>(page, offset);
+            TL newList = this.Slot.CreateList<TL>(page, offset);
             newList.Pager.TotRecords = this.Count;
 
             int idxBegin = newList.Pager.Position;
@@ -421,10 +419,7 @@ namespace Business.Data.Objects.Core
         }
 
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
 
         /// <summary>
@@ -447,7 +442,7 @@ namespace Business.Data.Objects.Core
         public bool Remove(T item)
         {
             if (item == null)
-                return false;              
+                return false;
 
             int iFound = this.IndexOf(item);
             //Non trovato
@@ -503,8 +498,9 @@ namespace Business.Data.Objects.Core
                 throw new ArgumentException("Non e' possibile inserire nella lista un oggetto NULL!");
 
             //Setta item
-            this.mInnerList.Insert(index, new InnerDataListItem() { 
-                Object = item, 
+            this.mInnerList.Insert(index, new InnerDataListItem()
+            {
+                Object = item,
                 PkHashCode = item.GetHashBaseString(),
                 PkValues = this.mObjSchema.PrimaryKey.GetValues(item)
             });
@@ -545,20 +541,11 @@ namespace Business.Data.Objects.Core
             throw new ObjectException("{0} - La lista non consente l'aggiunta di oggetti non salvati.", this.GetType().Name);
         }
 
-        public bool AllowEdit
-        {
-            get { return false; }
-        }
+        public bool AllowEdit => false;
 
-        public bool AllowNew
-        {
-            get { return false; }
-        }
+        public bool AllowNew => false;
 
-        public bool AllowRemove
-        {
-            get { return true; }
-        }
+        public bool AllowRemove => true;
 
         public void ApplySort(PropertyDescriptor property, ListSortDirection direction)
         {
@@ -578,12 +565,7 @@ namespace Business.Data.Objects.Core
             return -1;
         }
 
-        public bool IsSorted
-        {
-            get { return false; }
-        }
-
-
+        public bool IsSorted => false;
         public void RemoveIndex(PropertyDescriptor property)
         {
             throw new NotImplementedException("Metodo non supportato");
@@ -594,30 +576,15 @@ namespace Business.Data.Objects.Core
             throw new NotImplementedException("Metodo non supportato");
         }
 
-        public ListSortDirection SortDirection
-        {
-            get { return ListSortDirection.Ascending; }
-        }
+        public ListSortDirection SortDirection => ListSortDirection.Ascending;
 
-        public PropertyDescriptor SortProperty
-        {
-            get { return null; }
-        }
+        public PropertyDescriptor SortProperty => null;
 
-        public bool SupportsChangeNotification
-        {
-            get { return true; }
-        }
+        public bool SupportsChangeNotification => true;
 
-        public bool SupportsSearching
-        {
-            get { return false; }
-        }
+        public bool SupportsSearching => false;
 
-        public bool SupportsSorting
-        {
-            get { return false; }
-        }
+        public bool SupportsSorting => false;
 
 
         #endregion
@@ -677,15 +644,10 @@ namespace Business.Data.Objects.Core
             this.CopyTo(array, index);
         }
 
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
+        public bool IsSynchronized => false;
 
-        public object SyncRoot
-        {
-            get { return this.mSyncRoot; }
-        }
+        public object SyncRoot => this.mSyncRoot;
+
 
         #endregion
 

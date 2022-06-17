@@ -13,7 +13,7 @@ namespace Business.Data.Objects.Common.Utils
     public static class Extensions
     {
         /// <summary>
-        /// Operatore IN
+        /// Operatore IN applicabile ad array parametrico
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
@@ -22,7 +22,20 @@ namespace Business.Data.Objects.Common.Utils
         public static bool In<T>(this T obj, params T[] args)
            where T : IComparable<T>
         {
-            if (args == null || args.Length == 0)
+            return obj.In(args as IEnumerable<T>);
+        }
+
+        /// <summary>
+        /// Operatore IN applicabile ad enumerabili
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static bool In<T>(this T obj, IEnumerable<T> args)
+            where T : IComparable<T>
+        {
+            if (args == null || !args.Any())
                 return false;
 
             return args.Contains(obj);
@@ -35,6 +48,7 @@ namespace Business.Data.Objects.Common.Utils
 
             return args.Contains(obj);
         }
+
 
         /// <summary>
         /// Operatore BEETWEEN

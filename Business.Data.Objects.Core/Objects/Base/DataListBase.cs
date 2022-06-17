@@ -33,13 +33,7 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Indica se la lista e' paginata
         /// </summary>
-        public bool IsPaged
-        {
-            get
-            {
-                return (this.Pager != null);
-            }
-        }
+        public bool IsPaged => this.Pager != null;
 
         /// <summary>
         /// Paginatore
@@ -50,13 +44,7 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Numero elementi
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return this.mInnerList.Count;
-            }
-        }
+        public int Count => this.mInnerList.Count;
 
 
         #endregion
@@ -276,7 +264,12 @@ namespace Business.Data.Objects.Core.Base
                     {
                         //Crea datatable a partire dal reader
                         var dt = new System.Data.DataTable();
-                        dt.Load(rd);
+
+                        //Usa il dr della query e lo chiude
+                        using (rd)
+                        {
+                            dt.Load(rd);
+                        }
                         //Salva in cache
                         BusinessSlot._ListCache.SetObject(sQueryHash, dt);
                         //Ricrea il reader dalla tabella

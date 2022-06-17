@@ -1,6 +1,8 @@
 using Business.Data.Objects.Common.Exceptions;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Common.Utils;
 using System.Collections.Generic;
+using static Business.Data.Objects.Core.Common.Utils.LazyStore;
 
 namespace Business.Data.Objects.Core
 {
@@ -106,14 +108,9 @@ namespace Business.Data.Objects.Core
         #region LAZY LOAD MANAGEMENT
 
 
-        private Dictionary<string, object> mLazyDic = new Dictionary<string, object>();
+        private LazyStore _lazyStore = new LazyStore();
 
-        /// <summary>
-        /// Funzione di caricamento oggetto lazy tipizzato
-        /// </summary>
-        /// <returns></returns>
-        protected delegate T1 LazyLoadFunc<T1>();
-
+       
         /// <summary>
         /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi.
         /// Utilizzare LazyGet, in futuro verrà rimosso
@@ -124,13 +121,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
         {
-            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
-            {
-                obj = fn();
-                mLazyDic.Add(uniqueKey, obj);
-            }
-
-            return (T1)obj;
+            return this._lazyStore.Get<T1>(uniqueKey, fn);
         }
 
         /// <summary>
@@ -142,37 +133,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         protected T1 LazyGet<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
         {
-            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
-            {
-                obj = fn();
-                mLazyDic.Add(uniqueKey, obj);
-            }
-
-            return (T1)obj;
-        }
-
-
-        /// <summary>
-        /// Come il Getlazy ma con possibilità di specificare una diversa azione in caso di chiamata su oggetto non ancora salvato (evita potenziali query)
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="uniqueKey"></param>
-        /// <param name="fnForLoaded">Funzione eseguita in caso di oggetto Caricato da DB</param>
-        /// <param name="fnForNew">Funzione eseguita in caso di oggetto non ancora salvato su db (utile per forzature)</param>
-        /// <returns></returns>
-        protected T1 LazyGetEx<T1>(string uniqueKey, LazyLoadFunc<T1> fnForLoaded, LazyLoadFunc<T1> fnForNew)
-        {
-            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
-            {
-                if (this.DataObj.ObjectState == Data.Objects.Common.EObjectState.New)
-                    obj = fnForNew();
-                else
-                    obj = fnForLoaded();
-
-                mLazyDic.Add(uniqueKey, obj);
-            }
-
-            return (T1)obj;
+            return this._lazyStore.Get<T1>(uniqueKey, fn);
         }
 
 
@@ -182,7 +143,7 @@ namespace Business.Data.Objects.Core
         /// <param name="uniqueKey"></param>
         protected void LazyReset(string uniqueKey)
         {
-            this.mLazyDic.Remove(uniqueKey);
+            this._lazyStore.Reset(uniqueKey);
         }
 
         /// <summary>
@@ -191,7 +152,7 @@ namespace Business.Data.Objects.Core
         /// <param name="uniqueKey"></param>
         public void LazyResetALL()
         {
-            this.mLazyDic.Clear();
+            this._lazyStore.ResetAll();
         }
 
         /// <summary>
@@ -202,7 +163,7 @@ namespace Business.Data.Objects.Core
         /// <param name="value"></param>
         protected void LazySet<T1>(string uniqueKey, T1 value)
         {
-            this.mLazyDic[uniqueKey] = value;
+            this._lazyStore.Set(uniqueKey, value);
         }
 
 

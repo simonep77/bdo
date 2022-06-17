@@ -34,13 +34,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         #region PROPERTIES
 
-        public string ClassName
-        {
-            get
-            {
-                return this.OriginalType.Name;
-            }
-        }
+        public string ClassName => this.OriginalType.Name;
 
         /// <summary>
         /// Indica se la classe e' in sola lettura
@@ -50,12 +44,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <summary>
         /// Indica se utilizza la connessione db di default
         /// </summary>
-        public bool IsDefaultDb
-        { 
-            get {
-                return (this.DbConnDef == null);
-            } 
-        }
+        public bool IsDefaultDb => this.DbConnDef == null;
+
 
         #endregion
 

@@ -47,24 +47,13 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Indica la provenienza dell'oggetto
         /// </summary>
-        public EObjectSource ObjectSource
-        {
-            get
-            {
-                return this.mDataSchema.ObjectSource;
-            }
-        }
+        public EObjectSource ObjectSource => this.mDataSchema.ObjectSource;
 
         /// <summary>
         /// Indica lo stato interno dell'oggetto
         /// </summary>
-        public EObjectState ObjectState
-        {
-            get
-            {
-                return this.mDataSchema.ObjectState;
-            }
-        }
+        public EObjectState ObjectState => this.mDataSchema.ObjectState;
+
 
         #endregion
 
@@ -75,10 +64,10 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="propIn"></param>
         internal void firePropertyChanged(Property propIn)
-        { 
+        {
             //Notifica per DataBindings
             if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propIn.Name));        
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propIn.Name));
         }
 
         /// <summary>
@@ -114,23 +103,14 @@ namespace Business.Data.Objects.Core.Base
         /// Ritorna la rappresentazione in stringa dell'oggetto
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return string.Concat(this.mClassSchema.ClassName,
-                @" (",
-                ObjectHelper.ObjectEnumerableToString(this.mClassSchema.PrimaryKey.GetValues(this)),
-                @")");
-        }
+        public override string ToString() => $"{this.mClassSchema.ClassName} ({ObjectHelper.ObjectEnumerableToString(this.mClassSchema.PrimaryKey.GetValues(this))})";
 
 
         /// <summary>
         /// Ritorna una rappresentazione XML dell'oggetto senza navigazione nei sotto oggetti
         /// </summary>
         /// <returns></returns>
-        public virtual string ToXml()
-        {
-            return this.ToXml(0);
-        }
+        public virtual string ToXml() => this.ToXml(0);
 
 
         /// <summary>
@@ -156,7 +136,7 @@ namespace Business.Data.Objects.Core.Base
                         continue;
 
                     oProp.WriteXml(xw, this, depth);
-                   
+
                 }
 
                 return xw.ToString();
@@ -169,10 +149,7 @@ namespace Business.Data.Objects.Core.Base
         /// Ritorna rappresentazione  JSON dell'oggetto (per serializzazione)
         /// </summary>
         /// <returns></returns>
-        public virtual string ToJSON()
-        {
-            return JSONWriter.ToJson(this);
-        }
+        public virtual string ToJSON() => JSONWriter.ToJson(this);
 
         /// <summary>
         /// Carica i dati di un JSON sull'oggetto (per deserializzazione)
@@ -206,11 +183,8 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public bool IsChanged(string propertyName)
-        {
-            return this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex, DataFlags.Changed);
-        }
-
+        public bool IsChanged(string propertyName) => this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex, DataFlags.Changed);
+ 
 
         /// <summary>
         /// Ritorna elenco di proprieta' modificate
@@ -270,7 +244,7 @@ namespace Business.Data.Objects.Core.Base
                     break;
                 case EObjectState.Loaded:
                     //esegue
-                    eSaveRes =  this.performDbUpdate();
+                    eSaveRes = this.performDbUpdate();
                     break;
             }
 
@@ -329,7 +303,7 @@ namespace Business.Data.Objects.Core.Base
             try
             {
                 //Imposta SQL (preleva quello standard dalla PK e sostituisce il contenuto della select con il solo nome campo)
-                db.SQL = string.Concat(@"SELECT ", prop.Column.Name, " FROM " , this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), this.mClassSchema.PrimaryKey.SQL_Where_Clause);
+                db.SQL = string.Concat(@"SELECT ", prop.Column.Name, " FROM ", this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), this.mClassSchema.PrimaryKey.SQL_Where_Clause);
 
                 //Imposta PK
                 var oKeyValues = this.mClassSchema.PrimaryKey.FillKeyQueryWhereParams(db, this);
@@ -443,9 +417,9 @@ namespace Business.Data.Objects.Core.Base
         {
 
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
-            
+
             //SQL DIRETTO
-            db.SQL = string.Concat(string.Intern(this.mClassSchema.TableDef.SQL_Select_Item),  this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), 
+            db.SQL = string.Concat(string.Intern(this.mClassSchema.TableDef.SQL_Select_Item), this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef),
                 string.Intern(keyIn.SQL_Where_Clause));
 
             //Imposta parametri WHERE
@@ -482,17 +456,13 @@ namespace Business.Data.Objects.Core.Base
             this.mDataSchema.ObjectState = EObjectState.Loaded;
         }
 
-   
+
         /// <summary>
         /// Carica definizione di proprietà con controllo
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private Property GetPropertyDefinition(int propertyIndex)
-        {
-            //Ritorna proprietà
-            return this.mClassSchema.Properties[propertyIndex];
-        }
+        private Property GetPropertyDefinition(int propertyIndex) => this.mClassSchema.Properties[propertyIndex];
 
 
         /// <summary>
@@ -529,7 +499,7 @@ namespace Business.Data.Objects.Core.Base
                 {
                     //Check changed flag
                     bChanged = this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed);
-                    
+
 
                     //skip object not new and not changed
                     if (this.mDataSchema.ObjectState == EObjectState.Loaded && !bChanged)
@@ -583,7 +553,7 @@ namespace Business.Data.Objects.Core.Base
 
         }
 
- 
+
         /// <summary>
         /// Esegue la insert sul DB
         /// </summary>
@@ -614,7 +584,7 @@ namespace Business.Data.Objects.Core.Base
 
                     //Imposta campi
                     object oValue = oProp.GetValueForDb(this);
-               
+
                     //Imposta valore
                     oDbParams.Add(db.CreateParameter(oProp.Column.ParamName, oValue, oProp.Column.DbType));
 
@@ -643,14 +613,14 @@ namespace Business.Data.Objects.Core.Base
                         sbSql.Append(@"=");
                         sbSql.Append(db.LastAutoIdFunction);
                     }
-                    else 
+                    else
                     {
                         sbSql.Append(this.mClassSchema.PrimaryKey.SQL_Where_Clause);
 
                         for (int i = 0; i < this.mClassSchema.PrimaryKey.Properties.Count; i++)
                         {
-                            oDbParams.Add(db.CreateParameter(this.mClassSchema.PrimaryKey.Properties[i].Column.GetKeyParamName(), 
-                                this.mClassSchema.PrimaryKey.Properties[i].GetValueForDb(this), 
+                            oDbParams.Add(db.CreateParameter(this.mClassSchema.PrimaryKey.Properties[i].Column.GetKeyParamName(),
+                                this.mClassSchema.PrimaryKey.Properties[i].GetValueForDb(this),
                                 this.mClassSchema.PrimaryKey.Properties[i].Type));
                         }
                     }

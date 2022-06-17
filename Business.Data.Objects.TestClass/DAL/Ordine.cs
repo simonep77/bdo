@@ -34,10 +34,10 @@ namespace Business.Data.Objects.TestClass.DAL
         [AutoUpdateTimestamp]
         public abstract DateTime DataAggiornamento { get; }
 
-        [MaxLength(50), AcceptNull, UserInfo]
-        public abstract string Utente { get; }
+        //[MaxLength(50), AcceptNull, UserInfo]
+        //public abstract string Utente { get; }
 
-        [LogicalDelete]
-        public abstract bool Cancellato { get; }
+        //[LogicalDelete]
+        //public abstract bool Cancellato { get; }
     }
 }

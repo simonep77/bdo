@@ -68,7 +68,7 @@ namespace Business.Data.WinFormTest
                 var dtOgg = DateTime.Now;
                 // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
                 // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
-                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In<uint>(Convert.ToUInt32("1"), 1000) & o.Utente == "".PadLeft(3, '0'));
+                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In<uint>(Convert.ToUInt32("1"), 1000) & o.CodiceOrdine == "".PadLeft(3, '0'));
 
                 WriteLog(lst.ToXml());
 
@@ -82,8 +82,8 @@ namespace Business.Data.WinFormTest
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
                 WriteLog(lst.ToXml());
 
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Utente.Like("aaa%"));
-                WriteLog(lst.ToXml());
+                //lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Utente.Like("aaa%"));
+                //WriteLog(lst.ToXml());
 
 
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).OrderByLinq(o => o.AnagraficaId).OrderByLinqDesc(o => o.Id).SearchByLinq((o => o.Id > 10));
@@ -294,16 +294,75 @@ namespace Business.Data.WinFormTest
 
                 var ord = lst.FirstOrDefault();
 
-                ss1.DeleteObject(ord);
+                //ss1.DeleteObject(ord);
 
-                this.WriteLog(ord.Cancellato.ToString());
+                //this.WriteLog(ord.Cancellato.ToString());
 
-                this.WriteLog(ss1.GetCurrentElapsed().ToString());
+                //this.WriteLog(ss1.GetCurrentElapsed().ToString());
 
 
                 // Me.WriteLog(o2)
                 this.WriteLog(ss1.PrintInfo());
             }
+        }
+
+        private void tESTCacheresultConLinqToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Avvio");
+
+                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > 1000);
+
+                this.WriteLog(lst.ToJSON());
+
+                var lst2 = ss1.CreateList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > 1000);
+
+                this.WriteLog(lst.ToJSON());
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+
+        }
+
+        private void tESTCacheResultSizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                //ss1.OnUserInfoRequired += getUserInfoFromSlot;
+                this.WriteLog("Avvio");
+                var rnd = new Random();
+
+                for (int i = 0; i < 100000; i++)
+                {
+                    var irnd = rnd.Next(1, 10000);
+                    var lst = ss1.CreatePagedList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > irnd);
+
+                    //this.WriteLog(ss1.DB.Stats.ToString());
+
+                    if (i % 1000 == 0)
+                        this.WriteLog(i.ToString());
+                }
+
+
+                // Me.WriteLog(o2)
+                this.WriteLog(ss1.PrintInfo());
+            }
+
         }
     }
 }

@@ -8,8 +8,8 @@ namespace Business.Data.Objects.Core.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
     public class Column: BaseAttribute 
     {
-        private string mName;
-        private string mParamName;
+
+        private readonly static char[] _NormalizeChars = new char[] { '[', ']', '`' };
 
         /// <summary>
         /// Tipo DB
@@ -19,21 +19,17 @@ namespace Business.Data.Objects.Core.Attributes
         /// <summary>
         /// Nome della colonna
         /// </summary>
-        public string Name
-        {
-            get { return this.mName; }
-        }
+        public string Name { get;}
 
         /// <summary>
         /// Ritorna nome parametro
         /// </summary>
-        public string ParamName
-        {
-            get 
-            { 
-                return this.mParamName; 
-            }
-        }
+        public string ParamName { get; }
+
+        /// <summary>
+        /// Nome del campo normalizzata per usi interni
+        /// </summary>
+        public string NormalizedName { get; }
 
         /// <summary>
         /// Costruttore semplice con nome colonna
@@ -62,9 +58,10 @@ namespace Business.Data.Objects.Core.Attributes
         /// <param name="paramName"></param>
         public Column(string columnName, Type dbType, string paramName)
         {
-            this.mName = columnName;
+            this.Name = columnName;
             this.DbType = dbType;
-            this.mParamName = string.Intern(string.Concat(@"@", paramName ?? columnName));
+            this.ParamName = string.Intern(string.Concat(@"@", paramName ?? columnName));
+            this.NormalizedName = this.Name.Trim(_NormalizeChars);
         }
 
         /// <summary>

@@ -18,10 +18,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         #region PROPERTIES
         public byte ObjectIndex { get; set; }
 
-        public override object DefaultValue
-        {
-            get { return null; }
-        }
+        public override object DefaultValue { get; protected set; }
 
         public override bool ExcludeSelect { get; } = true;
 

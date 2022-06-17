@@ -14,10 +14,7 @@ namespace Business.Data.Objects.Core.Base
         /// Ritorna rappresentazione JSON
         /// </summary>
         /// <returns></returns>
-        public string ToJSON()
-        {
-            return Utils.JSONWriter.ToJson(this);
-        }
+        public string ToJSON() => Utils.JSONWriter.ToJson(this);
 
     }
 }

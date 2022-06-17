@@ -41,18 +41,12 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         #region PROPERTIES
 
-        public abstract object DefaultValue { get; }
+        public abstract object DefaultValue { get; protected set; }
 
         /// <summary>
         /// Indica se presenti property map
         /// </summary>
-        public bool HasPropertyMaps
-        {
-            get
-            {
-                return (this.PropertyMap != null && this.PropertyMap.Count > 0);
-            }
-        }
+        public bool HasPropertyMaps => this.PropertyMap != null && this.PropertyMap.Count > 0;
 
         /// <summary>
         /// Indica se la proprieta' va inclusa nella query di selezione standard
@@ -62,13 +56,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <summary>
         /// Ritorna il nomeclasse.nomeproprieta'
         /// </summary>
-        public string Fullname
-        {
-            get
-            {
-                return string.Concat(this.Schema.ClassName, @".", this.Name);
-            }
-        }
+        public string Fullname => string.Concat(this.Schema.ClassName, @".", this.Name);
 
 
         #endregion
@@ -87,10 +75,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
         #region PUBLIC
 
 
-        public override string ToString()
-        {
-            return string.Concat(this.Name, @" (type: ", this.GetType().Name, @")");
-        }
+        public override string ToString() => string.Concat(this.Name, @" (type: ", this.GetType().Name, @")");
+
 
         /// <summary>
         /// Esegue validazione formale di tutti i valori immessi

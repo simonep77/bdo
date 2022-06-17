@@ -143,3 +143,13 @@ Aggiunti metodi base di Save e Delete sul BusinessObject con possibilità di ove
 
 [07/03/2022] - 5.0.45 - Simone Pelaia
 Aggiunta possibilità di resettare dall'esterno tutte le proprietà Lazy di un businessobject
+
+[08/03/2022] - 5.0.46 - Simone Pelaia
+Aggiunta possibilità di copiare valori di un dataobject su un qualsiasi oggetto
+
+[17/06/2022] - 5.0.47 - Simone Pelaia
+Operator In con ienumerable
+Possibilità di specificare un nome colonna con notazioni speciali DB (e. [Colname] per SQL Server o `Colname` per MySql )
+LoopMT con gestione automatica dei thread
+CreateList(page, offset)
+CacheResult senza limitazioni

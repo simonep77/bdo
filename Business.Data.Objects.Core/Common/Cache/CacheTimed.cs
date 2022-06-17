@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 /*==================================================================================================
@@ -26,8 +27,8 @@ namespace Business.Data.Objects.Common.Cache
         {
             public TK Key;
             public TV Value;
-            public DateTime DtFine;
-            
+            public DateTime DtScad;
+
         }
 
         #endregion
@@ -35,11 +36,11 @@ namespace Business.Data.Objects.Common.Cache
         #region "PROPERTY"
 
         protected object SyncLock
-        { 
-            get 
-            { 
-                return this.mSyncLock; 
-            } 
+        {
+            get
+            {
+                return this.mSyncLock;
+            }
         }
 
 
@@ -61,7 +62,6 @@ namespace Business.Data.Objects.Common.Cache
         {
             this.mCacheMaxSize = cacheMaxSize;
             this.mDictionary = new Dictionary<TKey, CacheItem<TKey, T>>(cacheMaxSize);
-
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Business.Data.Objects.Common.Cache
         /// <remarks></remarks>
         public void Reset()
         {
-            lock(this.mSyncLock)
+            lock (this.mSyncLock)
             {
                 this.mDictionary.Clear();
             }
@@ -82,17 +82,6 @@ namespace Business.Data.Objects.Common.Cache
         }
 
 
-        /// <summary>
-        /// Aggiunge o Aggiorna oggetto in cache
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <remarks></remarks>
-        public void SetObject(TKey key, T value)
-        {
-            this.SetObject(key, value, TimeSpan.FromMinutes(this.DefaultTimeoutMinuti));
-        }
-
 
         /// <summary>
         /// Aggiunge o Aggiorna oggetto in cache
@@ -100,29 +89,26 @@ namespace Business.Data.Objects.Common.Cache
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="span"></param>
-        public void SetObject(TKey key, T value, TimeSpan span)
+        public void SetObject(TKey key, T value)
         {
             lock (this.mSyncLock)
             {
-                //In caso di eccesso elementi rimuove quelli scaduti
-                var perc = this.calcolaPercFree();
-                var mult = 0;
-                while (perc <0.2m)
+                //In caso di eccesso elementi rimuove il 5% di quelli piu' vecchi
+                if (this.CurrentSize >= this.MaxSize)
                 {
-                    this.FreeByDate(DateTime.Now.AddMinutes(mult));
-                    //Aggiunge 2 minuti a data val
-                    mult += 2;
-                    //Ricalcola percentuale
-                    perc = calcolaPercFree();
+                    this.mDictionary.Values
+                        .OrderBy(x => x.DtScad)
+                        .Take(this.MaxSize / 20).ToList()
+                        .ForEach(x => this.mDictionary.Remove(x.Key));
+
                 }
-                    
 
                 if (!this.mDictionary.TryGetValue(key, out CacheItem<TKey, T> oNode))
-                    this.mDictionary.Add(key, 
-                        new CacheItem<TKey, T> { Key=key, Value = value, DtFine=DateTime.Now.AddTicks(span.Ticks) }  );
+                    this.mDictionary.Add(key,
+                        new CacheItem<TKey, T> { Key = key, Value = value, DtScad = DateTime.Now.AddMinutes(this.DefaultTimeoutMinuti) });
             }
 
-            
+
         }
 
 
@@ -138,10 +124,21 @@ namespace Business.Data.Objects.Common.Cache
             {
                 if (this.mDictionary.TryGetValue(key, out CacheItem<TKey, T> oNode))
                 {
-                    if (DateTime.Now <= oNode.DtFine)
+                    var dtNow = DateTime.Now;
+
+                    if (oNode.DtScad >= dtNow)
+                    {
+                        //oNode.DtScad = dtNow.AddMinutes(this.DefaultTimeoutMinuti);
                         return oNode.Value;
+                    }
                     else
-                        this.RemoveObject(key); //Scaduto
+                    {
+                        //Se becchiamo uno scaduto eliminiamo tutti gli scaduti!
+                        this.mDictionary.Values
+                        .Where(x => x.DtScad < dtNow)
+                        .ToList()
+                        .ForEach(x => this.mDictionary.Remove(x.Key));
+                    }
                 }
             }
 
@@ -171,7 +168,10 @@ namespace Business.Data.Objects.Common.Cache
         /// <returns></returns>
         public bool ContainsObject(TKey key)
         {
-            return this.mDictionary.ContainsKey(key);
+            lock (this.mSyncLock)
+            { 
+                return this.mDictionary.ContainsKey(key);
+            }
         }
 
 
@@ -204,7 +204,7 @@ namespace Business.Data.Objects.Common.Cache
                     oSb.Append("Item ");
                     oSb.AppendLine(i.ToString("D4"));
                     oSb.Append(" > DtFine: ");
-                    oSb.AppendLine(item.DtFine.ToString("yyyyMMddHHmmssfff"));
+                    oSb.AppendLine(item.DtScad.ToString("yyyyMMddHHmmssfff"));
                     oSb.Append(" > Key: ");
                     oSb.AppendLine(item.Key.ToString());
                     if (item.Value != null)
@@ -234,32 +234,5 @@ namespace Business.Data.Objects.Common.Cache
 
         #endregion
 
-        #region "PROTECTED"
-
-        /// <summary>
-        /// Se la cache ha raggiunto il massimo inizia ad eliminare elementi
-        /// E' possibile specificare il numero di elementi da liberare
-        /// </summary>
-        /// <remarks></remarks>
-        protected void FreeByDate(DateTime dtInput)
-        {
-            lock (this.mSyncLock)
-            {
-                var listDel = new List<TKey>();
-
-                foreach (var item in this.mDictionary.Values)
-                {
-                    if (item.DtFine < dtInput)
-                        listDel.Add(item.Key);
-                }
-
-                foreach (var item in listDel)
-                {
-                    this.RemoveObject(item);
-                }
-            }
-        }
-
-        #endregion
     }
 }
