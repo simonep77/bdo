@@ -22,7 +22,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// Singleton main instance
         /// </summary>
         internal readonly static ProxyAssemblyCache Instance = new ProxyAssemblyCache();
-        internal static Int64 _ObjeRefIdCounter = Int64.MinValue;
+        internal Int64 ObjeRefIdCounter = Int64.MinValue;
 
         #region INTERNAL CLASSES
 
@@ -60,7 +60,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// <summary>
         /// Dizionario per la gestione dei proxy BIZ
         /// </summary>
-        internal class ProxyAssemblyBizDiz : Dictionary<long, ProxyAssemblyBiz>
+        internal class ProxyAssemblyBizDiz : Dictionary<string, ProxyAssemblyBiz>
         {
             public object WriteLock = new object();
             public ProxyAssemblyBizDiz(int capacity)
@@ -77,12 +77,25 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// </summary>
         internal class ProxyAssemblyBiz
         {
-            public long Key;
+            public string Key;
             public Assembly SrcAss;
             public ProxyEntryBizDic TypeBizEntries;
         }
 
         #endregion
+
+        #endregion
+
+        #region STATIC
+
+        /// <summary>
+        /// Ritorna un nuovo object reeference Id
+        /// </summary>
+        /// <returns></returns>
+        public long NewObjeRefId()
+        {
+            return Interlocked.Increment(ref this.ObjeRefIdCounter);
+        }
 
         #endregion
 
@@ -191,9 +204,9 @@ namespace Business.Data.Objects.Core.ObjFactory
 
                 //Imposta schema su oggetto
                 o.mClassSchema = oTypeEntry.ClassSchema;
-                o.ObjectRefId = Interlocked.Increment(ref _ObjeRefIdCounter);
+                o.ObjectRefId = this.NewObjeRefId();
 
-                if(withData)
+                if (withData)
                     o.mDataSchema = new Schema.Usage.DataSchema(o.mClassSchema.Properties.Count, o.mClassSchema.ObjCount);
 
                 //Ritorna
@@ -274,7 +287,7 @@ namespace Business.Data.Objects.Core.ObjFactory
 
         public ProxyEntryBiz GetBizEntry(Type tBiz)
         {
-            long lKey = tBiz.Assembly.ManifestModule.MetadataToken;
+            var lKey = tBiz.Assembly.FullName;
             ProxyAssemblyBiz pxa = null;
 
             //Controlla presenza

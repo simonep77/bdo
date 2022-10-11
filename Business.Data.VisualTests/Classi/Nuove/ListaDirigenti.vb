@@ -1,4 +1,5 @@
-Imports BDO.Objects
+Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
 
 Public Class ListaDirigenti
     Inherits DataList(Of ListaDirigenti, Dirigente)

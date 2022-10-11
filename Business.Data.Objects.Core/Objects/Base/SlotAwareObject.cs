@@ -1,5 +1,5 @@
 ﻿using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,13 +19,7 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Slot associato all'oggetto (interno)
         /// </summary>
-        protected BusinessSlot Slot
-        {
-            get
-            {
-                return this.mSlot;
-            }
-        }
+        protected BusinessSlot Slot => this.mSlot;
 
         /// <summary>
         /// Imposta lo slot sull'oggetto
@@ -39,10 +33,7 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Slot associato all'oggetto
         /// </summary>
-        public BusinessSlot GetSlot()
-        {
-            return this.mSlot;
-        }
+        public BusinessSlot GetSlot() => this.Slot;
 
         #endregion
 

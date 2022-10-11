@@ -108,15 +108,19 @@ Partial Class frmTests
         Me.HashStringsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListeCachedToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EncryptedPropertyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LoopMT1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSplitButton4 = New System.Windows.Forms.ToolStripSplitButton()
         Me.NewPaginazioneMYSQLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListeCachedToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ListePrefetchToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BenchmarkLoadFullObjectsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ClassiNoAbstractToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CheckModificatoriStringheNULLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CaricamentiDinamiciToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.UsernameECancellazioneLogicaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.dgv1 = New System.Windows.Forms.DataGridView()
-        Me.LoopMT1ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LinqToSQLToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsTest.SuspendLayout()
         CType(Me.dgv1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -151,145 +155,145 @@ Partial Class frmTests
         Me.ToolStripDropDownButton1.Image = CType(resources.GetObject("ToolStripDropDownButton1.Image"), System.Drawing.Image)
         Me.ToolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripDropDownButton1.Name = "ToolStripDropDownButton1"
-        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(105, 22)
+        Me.ToolStripDropDownButton1.Size = New System.Drawing.Size(104, 22)
         Me.ToolStripDropDownButton1.Text = "Test Sessione"
         '
         'AvvioSessioneToolStripMenuItem
         '
         Me.AvvioSessioneToolStripMenuItem.Name = "AvvioSessioneToolStripMenuItem"
-        Me.AvvioSessioneToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.AvvioSessioneToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.AvvioSessioneToolStripMenuItem.Text = "Avvio Sessione"
         '
         'AvvioSessioniMultipleToolStripMenuItem
         '
         Me.AvvioSessioniMultipleToolStripMenuItem.Name = "AvvioSessioniMultipleToolStripMenuItem"
-        Me.AvvioSessioniMultipleToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.AvvioSessioniMultipleToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.AvvioSessioniMultipleToolStripMenuItem.Text = "Avvio Sessioni Multiple"
         '
         'SessioneOggettoToolStripMenuItem
         '
         Me.SessioneOggettoToolStripMenuItem.Name = "SessioneOggettoToolStripMenuItem"
-        Me.SessioneOggettoToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.SessioneOggettoToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.SessioneOggettoToolStripMenuItem.Text = "Sessione Oggetto"
         '
         'ProveSchema1ToolStripMenuItem
         '
         Me.ProveSchema1ToolStripMenuItem.Name = "ProveSchema1ToolStripMenuItem"
-        Me.ProveSchema1ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.ProveSchema1ToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.ProveSchema1ToolStripMenuItem.Text = "Prove Schema 1"
         '
         'SchemaFactoryToolStripMenuItem
         '
         Me.SchemaFactoryToolStripMenuItem.Name = "SchemaFactoryToolStripMenuItem"
-        Me.SchemaFactoryToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.SchemaFactoryToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.SchemaFactoryToolStripMenuItem.Text = "Prova Oggetti Sql Server"
         '
         'ProvaOggettiMysqlToolStripMenuItem
         '
         Me.ProvaOggettiMysqlToolStripMenuItem.Name = "ProvaOggettiMysqlToolStripMenuItem"
-        Me.ProvaOggettiMysqlToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.ProvaOggettiMysqlToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.ProvaOggettiMysqlToolStripMenuItem.Text = "Prova Oggetti Mysql"
         '
         'OggettiCompostiMysqlToolStripMenuItem
         '
         Me.OggettiCompostiMysqlToolStripMenuItem.Name = "OggettiCompostiMysqlToolStripMenuItem"
-        Me.OggettiCompostiMysqlToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.OggettiCompostiMysqlToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.OggettiCompostiMysqlToolStripMenuItem.Text = "Oggetti Composti Mysql"
         '
         'TestCopiaToolStripMenuItem
         '
         Me.TestCopiaToolStripMenuItem.Name = "TestCopiaToolStripMenuItem"
-        Me.TestCopiaToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestCopiaToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestCopiaToolStripMenuItem.Text = "Test Copia"
         '
         'New1ToolStripMenuItem
         '
         Me.New1ToolStripMenuItem.Name = "New1ToolStripMenuItem"
-        Me.New1ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.New1ToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.New1ToolStripMenuItem.Text = "New1"
         '
         'TestCacheToolStripMenuItem
         '
         Me.TestCacheToolStripMenuItem.Name = "TestCacheToolStripMenuItem"
-        Me.TestCacheToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestCacheToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestCacheToolStripMenuItem.Text = "Test Cache"
         '
         'Schem2ToolStripMenuItem
         '
         Me.Schem2ToolStripMenuItem.Name = "Schem2ToolStripMenuItem"
-        Me.Schem2ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.Schem2ToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.Schem2ToolStripMenuItem.Text = "Schem2"
         '
         'TESTISCRITTIPERPOLIZZAToolStripMenuItem
         '
         Me.TESTISCRITTIPERPOLIZZAToolStripMenuItem.Name = "TESTISCRITTIPERPOLIZZAToolStripMenuItem"
-        Me.TESTISCRITTIPERPOLIZZAToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TESTISCRITTIPERPOLIZZAToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TESTISCRITTIPERPOLIZZAToolStripMenuItem.Text = "TEST ISCRITTIPERPOLIZZA"
         '
         'TestLogToolStripMenuItem
         '
         Me.TestLogToolStripMenuItem.Name = "TestLogToolStripMenuItem"
-        Me.TestLogToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestLogToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestLogToolStripMenuItem.Text = "Test Log"
         '
         'TestXmlWriteToolStripMenuItem
         '
         Me.TestXmlWriteToolStripMenuItem.Name = "TestXmlWriteToolStripMenuItem"
-        Me.TestXmlWriteToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestXmlWriteToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestXmlWriteToolStripMenuItem.Text = "Test XmlWrite"
         '
         'TestArrayBytesToolStripMenuItem
         '
         Me.TestArrayBytesToolStripMenuItem.Name = "TestArrayBytesToolStripMenuItem"
-        Me.TestArrayBytesToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestArrayBytesToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestArrayBytesToolStripMenuItem.Text = "Test Array Bytes"
         '
         'TestProprietàToolStripMenuItem
         '
         Me.TestProprietàToolStripMenuItem.Name = "TestProprietàToolStripMenuItem"
-        Me.TestProprietàToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestProprietàToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestProprietàToolStripMenuItem.Text = "Test Proprietà"
         '
         'TestMemoriaToolStripMenuItem
         '
         Me.TestMemoriaToolStripMenuItem.Name = "TestMemoriaToolStripMenuItem"
-        Me.TestMemoriaToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestMemoriaToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestMemoriaToolStripMenuItem.Text = "Test Memoria"
         '
         'TestCacheNoCacheToolStripMenuItem
         '
         Me.TestCacheNoCacheToolStripMenuItem.Name = "TestCacheNoCacheToolStripMenuItem"
-        Me.TestCacheNoCacheToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestCacheNoCacheToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestCacheNoCacheToolStripMenuItem.Text = "Test Cache/NoCache"
         '
         'TestCacheNoCache2ToolStripMenuItem
         '
         Me.TestCacheNoCache2ToolStripMenuItem.Name = "TestCacheNoCache2ToolStripMenuItem"
-        Me.TestCacheNoCache2ToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestCacheNoCache2ToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestCacheNoCache2ToolStripMenuItem.Text = "Test Cache/No Cache 2"
         '
         'TestMultiThreadCacheToolStripMenuItem
         '
         Me.TestMultiThreadCacheToolStripMenuItem.Name = "TestMultiThreadCacheToolStripMenuItem"
-        Me.TestMultiThreadCacheToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestMultiThreadCacheToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestMultiThreadCacheToolStripMenuItem.Text = "Test MultiThread Cache"
         '
         'TestFunzioniListaSumToolStripMenuItem
         '
         Me.TestFunzioniListaSumToolStripMenuItem.Name = "TestFunzioniListaSumToolStripMenuItem"
-        Me.TestFunzioniListaSumToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.TestFunzioniListaSumToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.TestFunzioniListaSumToolStripMenuItem.Text = "Test Funzioni Lista (Sum, ...)"
         '
         'BizCTORToolStripMenuItem
         '
         Me.BizCTORToolStripMenuItem.Name = "BizCTORToolStripMenuItem"
-        Me.BizCTORToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.BizCTORToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.BizCTORToolStripMenuItem.Text = "Biz CTOR"
         '
         'PasswordGeneratorToolStripMenuItem
         '
         Me.PasswordGeneratorToolStripMenuItem.Name = "PasswordGeneratorToolStripMenuItem"
-        Me.PasswordGeneratorToolStripMenuItem.Size = New System.Drawing.Size(220, 22)
+        Me.PasswordGeneratorToolStripMenuItem.Size = New System.Drawing.Size(219, 22)
         Me.PasswordGeneratorToolStripMenuItem.Text = "Password Generator"
         '
         'ToolStripSplitButton1
@@ -298,7 +302,7 @@ Partial Class frmTests
         Me.ToolStripSplitButton1.Image = CType(resources.GetObject("ToolStripSplitButton1.Image"), System.Drawing.Image)
         Me.ToolStripSplitButton1.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton1.Name = "ToolStripSplitButton1"
-        Me.ToolStripSplitButton1.Size = New System.Drawing.Size(82, 22)
+        Me.ToolStripSplitButton1.Size = New System.Drawing.Size(81, 22)
         Me.ToolStripSplitButton1.Text = "Test Vari"
         '
         'InviEmailToolStripMenuItem
@@ -655,13 +659,19 @@ Partial Class frmTests
         Me.EncryptedPropertyToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
         Me.EncryptedPropertyToolStripMenuItem.Text = "Encrypted  Property"
         '
+        'LoopMT1ToolStripMenuItem
+        '
+        Me.LoopMT1ToolStripMenuItem.Name = "LoopMT1ToolStripMenuItem"
+        Me.LoopMT1ToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
+        Me.LoopMT1ToolStripMenuItem.Text = "LoopMT 1"
+        '
         'ToolStripSplitButton4
         '
-        Me.ToolStripSplitButton4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewPaginazioneMYSQLToolStripMenuItem, Me.ListeCachedToolStripMenuItem1, Me.ListePrefetchToolStripMenuItem, Me.BenchmarkLoadFullObjectsToolStripMenuItem, Me.CheckModificatoriStringheNULLToolStripMenuItem})
+        Me.ToolStripSplitButton4.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewPaginazioneMYSQLToolStripMenuItem, Me.ListeCachedToolStripMenuItem1, Me.ListePrefetchToolStripMenuItem, Me.BenchmarkLoadFullObjectsToolStripMenuItem, Me.ClassiNoAbstractToolStripMenuItem, Me.CheckModificatoriStringheNULLToolStripMenuItem, Me.CaricamentiDinamiciToolStripMenuItem, Me.LinqToSQLToolStripMenuItem, Me.UsernameECancellazioneLogicaToolStripMenuItem})
         Me.ToolStripSplitButton4.Image = CType(resources.GetObject("ToolStripSplitButton4.Image"), System.Drawing.Image)
         Me.ToolStripSplitButton4.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripSplitButton4.Name = "ToolStripSplitButton4"
-        Me.ToolStripSplitButton4.Size = New System.Drawing.Size(110, 22)
+        Me.ToolStripSplitButton4.Size = New System.Drawing.Size(108, 22)
         Me.ToolStripSplitButton4.Text = "BDO TEST DB"
         '
         'NewPaginazioneMYSQLToolStripMenuItem
@@ -688,11 +698,29 @@ Partial Class frmTests
         Me.BenchmarkLoadFullObjectsToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.BenchmarkLoadFullObjectsToolStripMenuItem.Text = "Benchmark LoadFullObjects"
         '
+        'ClassiNoAbstractToolStripMenuItem
+        '
+        Me.ClassiNoAbstractToolStripMenuItem.Name = "ClassiNoAbstractToolStripMenuItem"
+        Me.ClassiNoAbstractToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.ClassiNoAbstractToolStripMenuItem.Text = "Classi no abstract"
+        '
         'CheckModificatoriStringheNULLToolStripMenuItem
         '
         Me.CheckModificatoriStringheNULLToolStripMenuItem.Name = "CheckModificatoriStringheNULLToolStripMenuItem"
         Me.CheckModificatoriStringheNULLToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
         Me.CheckModificatoriStringheNULLToolStripMenuItem.Text = "Check Modificatori Stringhe (NULL)"
+        '
+        'CaricamentiDinamiciToolStripMenuItem
+        '
+        Me.CaricamentiDinamiciToolStripMenuItem.Name = "CaricamentiDinamiciToolStripMenuItem"
+        Me.CaricamentiDinamiciToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.CaricamentiDinamiciToolStripMenuItem.Text = "Caricamento DB On Demand"
+        '
+        'UsernameECancellazioneLogicaToolStripMenuItem
+        '
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Name = "UsernameECancellazioneLogicaToolStripMenuItem"
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.UsernameECancellazioneLogicaToolStripMenuItem.Text = "Username e Cancellazione logica"
         '
         'ToolStripButton1
         '
@@ -711,11 +739,11 @@ Partial Class frmTests
         Me.dgv1.Size = New System.Drawing.Size(783, 232)
         Me.dgv1.TabIndex = 2
         '
-        'LoopMT1ToolStripMenuItem
+        'LinqToSQLToolStripMenuItem
         '
-        Me.LoopMT1ToolStripMenuItem.Name = "LoopMT1ToolStripMenuItem"
-        Me.LoopMT1ToolStripMenuItem.Size = New System.Drawing.Size(197, 22)
-        Me.LoopMT1ToolStripMenuItem.Text = "LoopMT 1"
+        Me.LinqToSQLToolStripMenuItem.Name = "LinqToSQLToolStripMenuItem"
+        Me.LinqToSQLToolStripMenuItem.Size = New System.Drawing.Size(262, 22)
+        Me.LinqToSQLToolStripMenuItem.Text = "Linq To SQL"
         '
         'frmTests
         '
@@ -829,4 +857,8 @@ Partial Class frmTests
     Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents CheckModificatoriStringheNULLToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents LoopMT1ToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ClassiNoAbstractToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CaricamentiDinamiciToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents UsernameECancellazioneLogicaToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LinqToSQLToolStripMenuItem As ToolStripMenuItem
 End Class

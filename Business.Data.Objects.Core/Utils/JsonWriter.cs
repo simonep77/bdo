@@ -1,5 +1,6 @@
 ﻿using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Schema.Definition;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,13 +58,11 @@ namespace Business.Data.Objects.Core.Utils
                 stringBuilder.Append('\"');
 
                 if (dt != DateTime.MinValue)
-                { 
+                {
                     //Se non presente la parte oraria
-                    if (dt.Equals(dt.Date))
-                        stringBuilder.Append(dt.ToString("dd/MM/yyyy"));
-                    else
-                        stringBuilder.Append(dt.ToString("dd/MM/yyyy HH:mm:ss"));
+                    stringBuilder.Append(dt.ToString("O"));
                 }
+                //"2019-09-26T07:58:30.996+0200"
 
                 stringBuilder.Append('\"');
             }
@@ -89,6 +88,10 @@ namespace Business.Data.Objects.Core.Utils
                 var obj = item as DataObjectBase;
                 foreach (var oProp in obj.mClassSchema.Properties)
                 {
+                    //Skip complex property
+                    if (!(oProp is PropertySimple))
+                        continue;
+
                     if (isFirst)
                         isFirst = false;
                     else

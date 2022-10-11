@@ -9,7 +9,7 @@ namespace Business.Data.Objects.Core.Attributes
     /// E' possibile utilizzarlo su proprieta' semplici
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class AutoUpdateTimestamp : BaseAutomaticAttribute
+    public class AutoUpdateTimestamp : AutomaticField
     {
     }
 }

@@ -1,5 +1,5 @@
-Imports BDO.Objects
-Imports BDO.Attributes
+Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
 
 <Table("abicab")>
 Public MustInherit Class AbiCab

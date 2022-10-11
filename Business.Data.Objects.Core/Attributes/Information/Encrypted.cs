@@ -1,6 +1,6 @@
-using Bdo.Utils.Encryption;
 using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Common.Utils.Encryption;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Core.Schema.Definition;
 using System;
 using System.Text;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -12,16 +13,15 @@ namespace Business.Data.Objects.Core
     {
         internal class Defaults
         {
-            internal static string LogBaseDirectory = Assembly.GetExecutingAssembly().Location;
-            internal static bool LogDatabaseActivity = true;
-            internal static bool LogDatabaseOnlyErrors = true;
-            internal static int CacheGlobalSize = 8192;
-            internal static bool ObjectValidationUseMessageList = false;
-            internal static string XmlDefaultDateFormat = @"dd/MM/yyyy";
-            internal static string XmlDefaultDecimalFormat = "N2";
-            internal static bool LiveTrackingEnabled = false;
-            internal static bool ChangeTrackingEnabled = true;
-            internal static bool LoadFullObjects = true;
+            public static string LogBaseDirectory = string.Empty;
+            public static bool LogDatabaseActivity = true;
+            public static bool LogDatabaseOnlyErrors = true;
+            public static int CacheGlobalSize = 8192;
+            public static bool ObjectValidationUseMessageList = false;
+            public static string XmlDefaultDateFormat = @"dd/MM/yyyy";
+            public static string XmlDefaultDecimalFormat = "N2";
+            public static bool LiveTrackingEnabled = false;
+            public static bool ChangeTrackingEnabled = true;
 
         }
 
@@ -35,12 +35,12 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Indica se attivo il logging delle operazioni database
         /// </summary>
-        public bool LogDatabaseActivity { get; } = Defaults.LogDatabaseActivity;
+        public bool LogDatabaseActivity { get; set; } = Defaults.LogDatabaseActivity;
 
         /// <summary>
         /// Indica se per il log db vanno loggati solo gli errori
         /// </summary>
-        public bool LogDatabaseOnlyErrors { get; } = Defaults.LogDatabaseOnlyErrors;
+        public bool LogDatabaseOnlyErrors { get; set; } = Defaults.LogDatabaseOnlyErrors;
        
         #endregion
 
@@ -49,7 +49,7 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Dimensione cache GLOBAL
         /// </summary>
-        public int CacheGlobalSize { get; } = Defaults.CacheGlobalSize;
+        public int CacheGlobalSize { get; set; } = Defaults.CacheGlobalSize;
 
         #endregion
 
@@ -89,11 +89,6 @@ namespace Business.Data.Objects.Core
         public bool ChangeTrackingEnabled { get; set; } = Defaults.ChangeTrackingEnabled;
 
         /// <summary>
-        /// Indica se attivo il caricamento completo degli oggetti nelle liste
-        /// </summary>
-        public bool LoadFullObjects { get; set; } = Defaults.LoadFullObjects;
-
-        /// <summary>
         /// Indica se attivo l'event manager
         /// </summary>
         public bool EventManagerEnabled { get; set; } = false;
@@ -109,5 +104,29 @@ namespace Business.Data.Objects.Core
         public bool SimulateEnabled { get; set; } = false;
 
         #endregion
+
+        /// <summary>
+        /// Crea una versione clonata della configurazione
+        /// </summary>
+        /// <returns></returns>
+        public SlotConfig Clone()
+        {
+            var sc = new SlotConfig();
+
+            sc.LogBaseDirectory = this.LogBaseDirectory;
+            sc.LogDatabaseActivity = this.LogDatabaseActivity;
+            sc.LogDatabaseOnlyErrors = this.LogDatabaseOnlyErrors;
+            sc.CacheGlobalSize = this.CacheGlobalSize;
+            sc.ObjectValidationUseMessageList = this.ObjectValidationUseMessageList;
+            sc.XmlDefaultDateFormat = this.XmlDefaultDateFormat;
+            sc.XmlDefaultDecimalFormat = this.XmlDefaultDecimalFormat;
+            sc.LiveTrackingEnabled = this.LiveTrackingEnabled;
+            sc.ChangeTrackingEnabled = this.ChangeTrackingEnabled;
+            sc.EventManagerEnabled = this.EventManagerEnabled;
+            sc.CachingEnabled = this.CachingEnabled;
+            sc.SimulateEnabled = this.SimulateEnabled;
+
+            return sc;
+        }
     }
 }

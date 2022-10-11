@@ -2,9 +2,11 @@ using Business.Data.Objects.Common;
 using Business.Data.Objects.Common.Cache;
 using Business.Data.Objects.Common.Exceptions;
 using Business.Data.Objects.Common.Logging;
-using Business.Data.Objects.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Common.Resources;
+using Business.Data.Objects.Core.Common.Utils;
+using Business.Data.Objects.Core.Objects;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Core.Schema.Usage;
@@ -18,7 +20,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Business.Data.Objects.Core
@@ -28,26 +32,18 @@ namespace Business.Data.Objects.Core
     /// Oggetto base che gestisce la vita degli altri oggetti di business
     /// consentendo in primo luogo l'accesso ai dati
     /// </summary>
-    public class BusinessSlot:IComparable<BusinessSlot>, IEquatable<BusinessSlot>, IDisposable
+    public class BusinessSlot : IComparable<BusinessSlot>, IEquatable<BusinessSlot>, IDisposable
     {
 
         #region PRIVATE FIELDS
 
         //Private vars
-        private string mSlotId = Guid.NewGuid().ToString();
-        private DateTime mStartDate = DateTime.Now;
-        private EProtectionLevel mProtectionLevel = EProtectionLevel.Normal;
-        private bool mTerminated;
         private IDataBase mDB;
         private DatabaseList mDbList = new DatabaseList();
-        private string mUserName = string.Empty;
-        private string mUserType = string.Empty;
-        private bool mIsAuthenticated;
         private Dictionary<string, object> mProperties = new Dictionary<string, object>();
         private DbPrefixDictionary mDbPrefixKeys;
-
-        private MessageList mMessageList = new MessageList();
         private System.Diagnostics.Stopwatch mStopWatch;
+        private LazyStore mLazyStore;
 
         //Base config
         public SlotConfig Conf { get; internal set; }
@@ -64,7 +60,8 @@ namespace Business.Data.Objects.Core
         internal static CacheTimed<string, DataTable> _ListCache;
         private static LoggerBase _SharedLog;
         private static LoggerBase _DatabaseLog;
-        private static SlotConfig _Conf;
+        private static SlotConfig _StaticConf;
+        private static int _StaticConfCount = 0;
 
 
         #endregion
@@ -80,11 +77,44 @@ namespace Business.Data.Objects.Core
         /// <param name="message"></param>
         public delegate void LogDebugHandler(BusinessSlot slot, DebugLevel level, string message);
 
-        
+
         /// <summary>
         /// Evento scatenato dalle chiamate al metodo LogDebug() dello slot
         /// </summary>
         public event LogDebugHandler OnLogDebugSent;
+
+        /// <summary>
+        /// Funzione che ritorna una connessione db a partire da un nome
+        /// </summary>
+        /// <param name="dbName"></param>
+        /// <returns></returns>
+        public delegate IDataBase DbConnectionRequestHandler(string dbName);
+
+        /// <summary>
+        /// Evento scatenato dalla richiesta di un db non presente all'interno dello slot
+        /// </summary>
+        public event DbConnectionRequestHandler OnDbConnectionRequired;
+
+        /// <summary>
+        /// Delegato per ritornare il dato dell'utente da utilizzare con l'attributo "UserInfo"
+        /// </summary>
+        /// <returns></returns>
+        public delegate object UserInfoRequestHandler(BusinessSlot slot);
+
+
+        /// <summary>
+        /// Evento da agganciare per specificare il dato dell'utente da salvare nel campo identificato dall'attributo "Username"
+        /// </summary>
+        public event UserInfoRequestHandler OnUserInfoRequired;
+
+        /// <summary>
+        /// Ritorna le informazioni sull'utente (id o username o altro) dall'evento relativo o, se nullo, dal campo username dello slot
+        /// </summary>
+        /// <returns></returns>
+        internal object GetUserInfo()
+        {
+            return this.OnUserInfoRequired?.Invoke(this) ?? this.UserName;
+        }
 
 
         #endregion
@@ -95,35 +125,19 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// ID Univoco Sessione
         /// </summary>
-        public string SlotId
-        {
-            get
-            {
-                return this.mSlotId;
-            }
-        }
+        public string SlotId { get; } = Guid.NewGuid().ToString();
 
 
         /// <summary>
         /// Data/Ora inizio della sessione corrente
         /// </summary>
-        public DateTime StartDate
-        {
-            get
-            {
-                return this.mStartDate;
-            }
-        }
+        public DateTime StartDate { get; } = DateTime.Now;
 
 
         /// <summary>
         /// Livello di protezione applicato allo slot
         /// </summary>
-        public EProtectionLevel ProtectionLevel
-        {
-            get { return this.mProtectionLevel; }
-            set { this.mProtectionLevel = value; }
-        }
+        public EProtectionLevel ProtectionLevel { get; set; } = EProtectionLevel.Normal;
 
 
         /// <summary>
@@ -229,38 +243,13 @@ namespace Business.Data.Objects.Core
         /// Attenzione: non è detto che questo sia il numero effettivo di oggetti in memoria in quanto i riferimenti
         /// possono venir eliminati in qualsiasi momento dal GC (una entry potrebbe essere in lista ma con un riferimento ad oggetto nullo).
         /// </summary>
-        public int LiveTrackingSize
-        {
-            get
-            {
-                return this.Conf.LiveTrackingEnabled ? this.mLiveTrackingStore.Count : 0;
-            }
-        }
-
-
-        /// <summary>
-        /// Ritorna numero degli oggetti in memoria
-        /// </summary>
-        public int LiveTrackingCurrentSize
-        {
-            get
-            {
-                return this.LiveTrackingEnabled ? this.mLiveTrackingStore.Count : -1;
-            }
-        }
-
+        public int LiveTrackingCurrentSize => this.LiveTrackingEnabled ? this.mLiveTrackingStore.Count : -1;
 
 
         /// <summary>
         /// Indica che lo slot è stato terminato (Disposed())
         /// </summary>
-        public bool Terminated
-        {
-            get
-            {
-                return this.mTerminated;
-            }
-        }
+        public bool Terminated { get; private set; }
 
 
         /// <summary>
@@ -279,45 +268,21 @@ namespace Business.Data.Objects.Core
         /// Indica l'utente associato alla sessione corrente
         /// Solo ad uso applicativo.
         /// </summary>
-        public string UserName
-        {
-            get
-            {
-                return this.mUserName;
-            }
-            set
-            {
-                this.mUserName = value;
-            }
-        }
+        public string UserName { get; set; } = string.Empty;
 
 
         /// <summary>
         /// Indica il tipo di utente associato alla sessione.
         /// Ad esclusivo uso applicativo.
         /// </summary>
-        public string UserType
-        {
-            get
-            {
-                return this.mUserType;
-            }
-            set
-            {
-                this.mUserType = value;
-            }
-        }
+        public string UserType { get; set; } = string.Empty;
 
 
         /// <summary>
         /// Indica se la sessione è stata esplicitamente Autenticata.
         /// Solo ad uso utente.
         /// </summary>
-        public bool IsAuthenticated
-        {
-            get { return this.mIsAuthenticated; }
-            set { this.mIsAuthenticated = value; }
-        }
+        public bool IsAuthenticated { get; set; }
 
 
         /// <summary>
@@ -333,13 +298,7 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Lista Messaggi pubblica
         /// </summary>
-        public MessageList MessageList
-        {
-            get
-            {
-                return this.mMessageList;
-            }
-        }
+        public MessageList MessageList { get; } = new MessageList();
 
 
         /// <summary>
@@ -357,7 +316,9 @@ namespace Business.Data.Objects.Core
         public int DBCount
         {
             get
-            { return this.mDbList.Count; }
+            {
+                return this.mDbList.Count;
+            }
         }
 
         /// <summary>
@@ -375,6 +336,17 @@ namespace Business.Data.Objects.Core
             }
         }
 
+
+        /// <summary>
+        /// Ritorna istanza del lazystore per i dati accessibili on-demand
+        /// </summary>
+        public LazyStore LazyStore
+        {
+            get
+            {
+                return this.mLazyStore != null ? this.mLazyStore : this.mLazyStore = new LazyStore();
+            }
+        }
 
         #endregion
 
@@ -422,6 +394,24 @@ namespace Business.Data.Objects.Core
         public delegate void WorkListSlice<TL>(BusinessSlot slot, TL slice);
 
         /// <summary>
+        /// Esegue loop multithreading impostando autonomamente il numero di threads in base ai parametri (maxThread e minItemPerThread)
+        /// </summary>
+        /// <typeparam name="TL"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        /// <param name="maxThreads"></param>
+        /// <param name="minItemPerThread"></param>
+        /// <param name="func"></param>
+        public void LoopMT<TL, T>(TL list, int maxThreads, int minItemPerThread, WorkListSlice<TL> func)
+           where TL : IEnumerable<T>
+        {
+            var thdNum = Math.Min(maxThreads, Math.Max(1, Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(list.Count()) / Convert.ToDecimal(minItemPerThread)))));
+
+            //Esegue il ciclo classico
+            this.LoopMT<TL, T>(list, thdNum, func);
+        }
+
+        /// <summary>
         /// Esegue un loop multithreading con attesa di completamento. Se si verificano errori all'interno dei thread lancia eccezione al completamento
         /// </summary>
         /// <typeparam name="TL"></typeparam>
@@ -430,7 +420,7 @@ namespace Business.Data.Objects.Core
         /// <param name="numThreads"></param>
         /// <param name="func"></param>
         public void LoopMT<TL, T>(TL list, int numThreads, WorkListSlice<TL> func)
-            where TL : IEnumerable<T>
+        where TL : IEnumerable<T>
         {
             bool isSlotAware = list is SlotAwareObject;
             var pager = new DataPager();
@@ -478,7 +468,7 @@ namespace Business.Data.Objects.Core
                     {
                         innerArg.Func.DynamicInvoke(innerArg.Slot, innerArg.Slice);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         innerArg.Exception = e;
                         //terminato errore
@@ -515,6 +505,66 @@ namespace Business.Data.Objects.Core
 
                 //Lancia eccezione unica
                 throw new BusinessSlotException(sb.ToString());
+            }
+
+        }
+
+
+        /// <summary>
+        /// Esegue un'azione nel contesto dello slot e scatena alcuni eventi gestibili
+        /// </summary>
+        /// <param name="action">Azione da eseguire</param>
+        /// <param name="onStart">Evento scatenato prima di eseguire l'azione</param>
+        /// <param name="onEnd">Evento scatenato al termine dell'esecuzione</param>
+        /// <param name="onException">Evento scatenato al verificarsi di una eccezione. Consente di sopprimere il raise dell'eccezione ritornando true</param>
+        public void Exec(Action<BusinessSlot> action, Action<BusinessSlot> onStart = null, Action<BusinessSlot> onEnd = null, Func<BusinessSlot, Exception, bool> onException = null)
+        {
+            onStart?.Invoke(this);
+            try
+            {
+                action?.Invoke(this);
+            }
+            catch (Exception e)
+            {
+                //Se la gestione dell'evento di eccezione ritorna true allora non rilancia l'eccezione
+                if (!(onException?.Invoke(this, e) ?? false))
+                    throw;
+            }
+            finally
+            {
+                onEnd?.Invoke(this);
+            }
+        }
+
+
+        /// <summary>
+        /// Esegue un'azione transazionale nel contesto dello slot e scatena alcuni eventi gestibili
+        /// </summary>
+        /// <param name="action">Azione da eseguire</param>
+        /// <param name="onStart">Evento scatenato prima di eseguire l'azione</param>
+        /// <param name="onEnd">Evento scatenato al termine dell'esecuzione</param>
+        /// <param name="onException">Evento scatenato al verificarsi di una eccezione. Consente di sopprimere il raise dell'eccezione ritornando true</param>
+        public void ExecTrans(Action<BusinessSlot> action, Action<BusinessSlot> onStart = null, Action<BusinessSlot> onEnd = null, Func<BusinessSlot, Exception, bool> onException = null)
+        {
+            onStart?.Invoke(this);
+            this.DbBeginTransAll();
+            try
+            {
+                action?.Invoke(this);
+
+                this.DbCommitAll();
+            }
+            catch (Exception e)
+            {
+                this.DbRollBackAll();
+
+                //Se la gestione dell'evento di eccezione ritorna true allora non rilancia l'eccezione
+                if (!(onException?.Invoke(this, e) ?? false))
+                    throw;
+            }
+            finally
+            {
+                onEnd?.Invoke(this);
             }
 
         }
@@ -745,15 +795,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         internal IDataBase DbGet(ClassSchema schema)
         {
-            //schema.DbContext
-            try
-            {
-                return (schema.IsDefaultDb ? this.mDB : this.mDbList[schema.DbConnDef.Name]);
-            }
-            catch (Exception)
-            {
-                throw new ObjectException(SessionMessages.DB_Not_Exist, schema.DbConnDef.Name);
-            }
+            return schema.IsDefaultDb ? this.mDB : this.DbGet(schema.DbConnDef.Name);
         }
 
         /// <summary>
@@ -767,7 +809,15 @@ namespace Business.Data.Objects.Core
             IDataBase db = null;
 
             if (!this.mDbList.TryGetValue(name, out db))
-                throw new ObjectException(SessionMessages.DB_Not_Exist, name);
+            {
+                //Se impostata esegue la richiesta della connessione specificata
+                db = this.OnDbConnectionRequired?.Invoke(name);
+
+                if (db == null)
+                    throw new ObjectException(SessionMessages.DB_Not_Exist, name);
+
+                this.DbAdd(name, db);
+            }
 
             return db;
         }
@@ -849,11 +899,20 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Apre transazione su tutti i database collegati
+        /// Apre transazione su tutti i database collegati.
+        /// Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
+        /// </summary>
+        public void DbBeginTransAll(IsolationLevel level)
+        {
+            this.mDbList.BeginTransAll(level);
+        }
+
+        /// <summary>
+        /// Apre transazione su tutti i db utilizzando l'isolamento di default per ciascuno
         /// </summary>
         public void DbBeginTransAll()
         {
-            this.mDbList.BeginTransAll();
+            this.mDbList.BeginTransAll(IsolationLevel.Unspecified);
         }
 
         /// <summary>
@@ -877,7 +936,7 @@ namespace Business.Data.Objects.Core
         #endregion
 
 
-    
+
         #region DBPREFIX
 
         /// <summary>
@@ -927,6 +986,32 @@ namespace Business.Data.Objects.Core
             }
         }
 
+        /// <summary>
+        /// Data una classe ed un nome di proprieta' ritorna il nome del campo DB. 
+        /// Utile quando differenti rispetto alla nomenclatura della classe
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public string DbPrefixGetColumn<T>(string propertyName)
+            where T : DataObject<T>
+        {
+            return DbPrefixGetColumn(typeof(T), propertyName);
+        }
+
+
+        /// <summary>
+        /// Data una classe ed un nome di proprieta' ritorna il nome del campo DB. 
+        /// Utile quando differenti rispetto alla nomenclatura della classe
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        internal string DbPrefixGetColumn(Type type, string propertyName)
+        {
+            return ProxyAssemblyCache.Instance.GetClassSchema(type).Properties.GetPropertyByName(propertyName).Column.Name;
+        }
+
 
         /// <summary>
         /// Ritorna il nome completo di tabella a partire da DbPrefixKey e nome tabella
@@ -961,12 +1046,20 @@ namespace Business.Data.Objects.Core
         /// <param name="level"></param>
         /// <param name="msgFmt"></param>
         /// <param name="args"></param>
-        public void LogDebug(DebugLevel level, string msgFmt, params object[] args)
+        public void LogDebugFormat(DebugLevel level, string msgFmt, params object[] args)
         {
-            if (this.OnLogDebugSent == null)
-                return;
+            this.OnLogDebugSent?.Invoke(this, level, string.Format(msgFmt, args));
+        }
 
-            this.OnLogDebugSent(this, level, string.Format(msgFmt, args));
+        /// <summary>
+        /// Scrive LogDebug. per utilizzarlo è necessario agganciare l'evento OnLogDebugSent
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="msgFmt"></param>
+        /// <param name="args"></param>
+        public void LogDebug(DebugLevel level, string text)
+        {
+            this.OnLogDebugSent?.Invoke(this, level, text);
         }
 
 
@@ -975,9 +1068,9 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="msgFmt"></param>
         /// <param name="args"></param>
-        public void LogDebug(string msgFmt, params object[] args)
+        public void LogDebug(string text)
         {
-            this.LogDebug(DebugLevel.User_1, msgFmt, args);
+            this.LogDebug(DebugLevel.User_1, text);
         }
 
 
@@ -995,7 +1088,7 @@ namespace Business.Data.Objects.Core
             Exception oException = e;
             int iIndentEx = 0;
             int iInnerCount = 0;
-     
+
 
             this.LogDebug(level, Constants.LOG_SEPARATOR);
 
@@ -1003,30 +1096,30 @@ namespace Business.Data.Objects.Core
             {
                 string sIndent = string.Empty.PadRight(iIndentEx);
 
-                this.LogDebug(level, @"{0}ECCEZIONE! Livello {1}", sIndent, iInnerCount.ToString());
-                this.LogDebug(level, @"{0}  + Tipo     : {1}", sIndent, oException.GetType().Name);
-                this.LogDebug(level, @"{0}  + Messaggio: {1}", sIndent, oException.Message);
+                this.LogDebug(level, $"{sIndent}ECCEZIONE! Livello {iInnerCount}");
+                this.LogDebug(level, $"{sIndent}  + Tipo     : {oException.GetType().Name}");
+                this.LogDebug(level, $"{sIndent}  + Messaggio: {oException.Message}");
                 //Dati variabili
                 if (!string.IsNullOrEmpty(oException.Source))
-                    this.LogDebug(level, @"{0}  + Source   : {1}", sIndent, oException.Source);
+                    this.LogDebug(level, $"{sIndent}  + Source   : {oException.Source}");
 
                 if (oException.TargetSite != null)
                 {
-                    this.LogDebug(level, @"{0}  + Classe   : {1}", sIndent, oException.TargetSite.DeclaringType.Name);
-                    this.LogDebug(level, @"{0}  + Metodo   : {1}", sIndent, oException.TargetSite.Name);
-                    this.LogDebug(level, @"{0}  + Namespace: {1}", sIndent, oException.TargetSite.DeclaringType.Namespace);
+                    this.LogDebug(level, $"{sIndent}  + Classe   : {oException.TargetSite.DeclaringType.Name}");
+                    this.LogDebug(level, $"{sIndent}  + Metodo   : {oException.TargetSite.Name}");
+                    this.LogDebug(level, $"{sIndent}  + Namespace: {oException.TargetSite.DeclaringType.Namespace}");
                 }
 
                 if (oException.StackTrace != null)
                 {
-                    this.LogDebug(level, @"{0}  + Stack    :", sIndent);
+                    this.LogDebug(level, $"{sIndent}  + Stack    :");
 
                     using (System.IO.StringReader reader = new System.IO.StringReader(oException.StackTrace))
                     {
                         string line;
                         while ((line = reader.ReadLine()) != null)
                         {
-                            this.LogDebug(level, @"{0}             > {1}", sIndent, line);
+                            this.LogDebug(level, $"{sIndent}             > {line}");
                         }
                     }
                 }
@@ -1057,7 +1150,87 @@ namespace Business.Data.Objects.Core
         #region LOADING OBJECTS
 
         /// <summary>
-        /// Carica oggetto a partire da un filtro fornito
+        /// Finalizza il caricamento. Se ritorna false significa che l'oggetto non e' stato caricato
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="raiseNotFound"></param>
+        /// <param name="raiseMessage"></param>
+        /// <returns></returns>
+        private bool loadObjectComplete(DataObjectBase obj, bool raiseNotFound, string raiseMessage)
+        {
+            //Se lo stato risulta non caricato gestisce casistica
+            if (obj.ObjectState != EObjectState.Loaded)
+            {
+                if (raiseNotFound)
+                    //Richiesta eccezione
+                    throw new ObjectNotFoundException(raiseMessage, obj.mClassSchema.ClassName);
+                else
+                    //Richiesto valore null
+                    return false;
+            }
+
+            //Imposta source
+            obj.mDataSchema.ObjectSource = EObjectSource.Database;
+
+            //Prova ad inserire nelle cache
+            this.CacheSetAny(obj);
+
+            //Gestione evento Load
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, obj);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Carica da espressione linq. Se raiseNotFound=false e non trovato ritorna un nuovo oggetto
+        /// </summary>
+        /// <param name="origType"></param>
+        /// <param name="raiseNotFound"></param>
+        /// <param name="where"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        internal DataObjectBase LoadObjectInternalByCustomWhere(Type origType, bool raiseNotFound, string where, OrderBy order)
+        {
+
+            //Verifica dati passati
+            if (string.IsNullOrWhiteSpace(where))
+                throw new BusinessSlotException(SessionMessages.LoadObj_Filter_Null);
+
+            //Crea oggetto vuoto
+            DataObjectBase oNewObj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(origType, true);
+
+            //Imposta slot
+            oNewObj.SetSlot(this);
+
+            //carica
+            oNewObj.LoadByCustomWhere(where, order);
+
+            //Se lo stato risulta non caricato gestisce casistica
+            if (oNewObj.ObjectState != EObjectState.Loaded)
+            {
+                if (raiseNotFound)
+                    //Richiesta eccezione
+                    throw new ObjectNotFoundException(ObjectMessages.Base_Record_Filter_NotFound, oNewObj.mClassSchema.ClassName);
+                else
+                    //Richiesto valore null
+                    return null;
+            }
+
+            //Imposta source
+            oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
+
+            //Prova ad inserire nelle cache
+            this.CacheSetAny(oNewObj);
+
+            //Gestione evento Load
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
+
+            //Ritorna
+            return oNewObj;
+        }
+
+        /// <summary>
+        /// Carica oggetto a partire da un filtro fornito. Se non trovato lancia eccesione se raiseNotFound è true oppure ritorna oggetto nuovo
         /// </summary>
         /// <param name="origType"></param>
         /// <param name="raiseNotFound"></param>
@@ -1068,7 +1241,7 @@ namespace Business.Data.Objects.Core
         {
 
             //Verifica dati passati
-            if (filter == null )
+            if (filter == null)
                 throw new BusinessSlotException(SessionMessages.LoadObj_Filter_Null);
 
             //Crea oggetto vuoto
@@ -1098,10 +1271,9 @@ namespace Business.Data.Objects.Core
             this.CacheSetAny(oNewObj);
 
             //Gestione evento Load
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
-            //Ritorna oggetto creato
+            //Ritorna
             return oNewObj;
         }
 
@@ -1162,6 +1334,7 @@ namespace Business.Data.Objects.Core
             //Deve caricare oggetto
             if (oNewObj.mDataSchema == null)
             {
+
                 //Crea dataschema 
                 oNewObj.mDataSchema = new DataSchema(oNewObj.mClassSchema.Properties.Count, oNewObj.mClassSchema.ObjCount);
 
@@ -1182,7 +1355,7 @@ namespace Business.Data.Objects.Core
                 oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
 
                 //Se PL impostiamo hash gia' calcolato (evitiamo un calcolo inutile)
-                if(bIsPk)
+                if (bIsPk)
                     oNewObj.mDataSchema.PkHash = string.Intern(uPkHash);
 
                 //Salva in cache se previsto solo per oggetti caricati dal db
@@ -1199,8 +1372,7 @@ namespace Business.Data.Objects.Core
 
 
             //Gestione evento Load
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
             //Ritorna oggetto creato
             return oNewObj;
@@ -1242,41 +1414,6 @@ namespace Business.Data.Objects.Core
         }
 
 
-        internal DataObjectBase LoadObjOrNewInternalByFILTER(Type origType, IFilter filter, OrderBy order)
-        {
-            var obj = this.LoadObjectInternalByFILTER(origType, false, filter, order);
-
-            if (obj == null)
-            {
-                //Crea istanza
-                obj = this.CreateObjectByType(origType);
-
-
-                foreach (var filt in filter)
-                {
-                    if (filt.Operator != EOperator.Equal)
-                        continue;
-
-                    foreach (var prop in obj.mClassSchema.Properties)
-                    {
-                        if (!prop.IsAutomatic &&
-                           filt.Name.ToUpper() == prop.Name.ToUpper())
-
-                        {
-                            //Imposta proprieta'
-                            prop.SetValue(obj, filt.Value);
-                            break; //Esce da ciclo proprieta'
-                        }
-                    }
-                }
-
-            }
-
-            //Ritorna
-            return obj;
-        }
-
-
         /// <summary>
         /// Carica Oggetto Da Chiave Primaria
         /// Se oggetto non trovato viene lanciata eccezione
@@ -1297,34 +1434,10 @@ namespace Business.Data.Objects.Core
         /// <param name="keyName"></param>
         /// <param name="values"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), true, values);
-        }
-
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato lancia eccezione.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjByFILTER<T>(IFilter filter) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, null);
-        }
-
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato lancia eccezione.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        public T LoadObjByFILTER<T>(IFilter filter, OrderBy order) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
         }
 
         /// <summary>
@@ -1347,35 +1460,14 @@ namespace Business.Data.Objects.Core
         /// </param>
         /// <param name="values"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjNullByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), false, values);
         }
 
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato ritorn NULL.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjNullByFILTER<T>(IFilter filter) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, null);
-        }
 
 
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato ritorn NULL.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
-        }
 
         /// <summary>
         /// Carica oggetto da PK e se non esiste ritorna nuovo oggetto precaricato con i valori
@@ -1399,33 +1491,81 @@ namespace Business.Data.Objects.Core
         /// </param>
         /// <param name="values"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
         public T LoadObjOrNewByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
         {
             return (T)this.LoadObjOrNewInternalByKEY(keyName, typeof(T), values);
         }
 
-        /// <summary>
-        ///  Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T LoadObjOrNewByFILTER<T>(IFilter filter) where T : DataObjectBase
-        {
-            return (T)this.LoadObjOrNewInternalByFILTER(typeof(T), filter, null);
-        }
+
+
+        #region LOADBYFILTER
 
         /// <summary>
-        /// Carica oggetto da filtro custom e se non esiste ritorna nuovo oggetto precaricato con i valori dei soli filtri EQUAL
+        /// Carica oggetto da filtro custom.
+        /// Se non trovato lancia eccezione.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="filter"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order) where T : DataObjectBase
+        [Obsolete("Utilizzare LoadObjByLinq")]
+        public T LoadObjByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
         {
-            return (T)this.LoadObjOrNewInternalByFILTER(typeof(T), filter, order);
+            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
         }
+
+        /// <summary>
+        /// Carica oggetto da filtro custom.
+        /// Se non trovato ritorn NULL.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
+        public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        {
+            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
+        }
+
+        /// <summary>
+        /// Carica oggetto da filtro custom e se non esiste ritorna un nuovo oggetto vuoto
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        [Obsolete("Utilizzare LoadObjByLinq")]
+        public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        {
+            return LoadObjNullByFILTER<T>(filter, order) ?? this.CreateObject<T>();
+        }
+
+        #endregion
+
+        #region LOADBYLINQ
+
+        public T LoadObjByLINQ<T>(Expression<Func<T, bool>> expression, OrderBy order = null) where T : DataObject<T>
+        {
+            var lt = new LinqQueryTranslator<T>(this);
+
+            return (T)this.LoadObjectInternalByCustomWhere(typeof(T), true, lt.Translate(expression), order);
+        }
+
+
+        public T LoadObjNullByLINQ<T>(Expression<Func<T, bool>> expression, OrderBy order = null) where T : DataObject<T>
+        {
+            var lt = new LinqQueryTranslator<T>(this);
+            return (T)this.LoadObjectInternalByCustomWhere(typeof(T), false, lt.Translate(expression), order);
+        }
+
+        public T LoadObjOrNewByLINQ<T>(Expression<Func<T, bool>> expression, OrderBy order = null) where T : DataObject<T>
+        {
+            return LoadObjNullByLINQ(expression, order) ?? this.CreateObject<T>();
+        }
+
+
+        #endregion
 
 
         #endregion
@@ -1473,6 +1613,27 @@ namespace Business.Data.Objects.Core
             return oList;
         }
 
+        /// <summary>
+        /// Nuova versione per lista paginata con stesso nome e parametri facoltativi
+        /// </summary>
+        /// <typeparam name="TL"></typeparam>
+        /// <param name="page">Se page = 0 la lista non è paginata</param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public TL CreateList<TL>(int page = 0, int offset = 0) where TL : DataListBase
+        {
+            TL oList = this.CreateList<TL>();
+
+            if (page > 0)
+            {
+                oList.Pager = new DataPager();
+                oList.Pager.Page = page;
+                oList.Pager.Offset = offset > 0 ? offset : 15;
+            }
+
+            return oList;
+        }
+
 
         /// <summary>
         /// Crea una lista paginata
@@ -1480,14 +1641,10 @@ namespace Business.Data.Objects.Core
         /// <param name="page"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare il metodo CreateList(page, offset)")]
         public TL CreatePagedList<TL>(int page, int offset) where TL : DataListBase
         {
-            TL oList = this.CreateList<TL>();
-            oList.Pager = new DataPager();
-            oList.Pager.Page = page;
-            oList.Pager.Offset = offset;
-
-            return oList;
+            return this.CreateList<TL>(page, offset);
         }
 
         #endregion
@@ -1512,8 +1669,7 @@ namespace Business.Data.Objects.Core
             bool bCancel = false;
 
             //Richiama evento pre salvataggio
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPreEventHandlerQueue((obj.ObjectState == EObjectState.New) ? EObjectEvent.Insert : EObjectEvent.Update, obj, ref bCancel);
+            this.EventManager?.RunPreEventHandlerQueue((obj.ObjectState == EObjectState.New) ? EObjectEvent.Insert : EObjectEvent.Update, obj, ref bCancel);
 
 
             //Se simulazione non esegue
@@ -1532,8 +1688,7 @@ namespace Business.Data.Objects.Core
                 this.liveTrackingSet(obj);
 
             //Richiama evento post salvataggio
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue((obj.ObjectSource == EObjectSource.None) ? EObjectEvent.Insert : EObjectEvent.Update, obj);
+            this.EventManager?.RunPostEventHandlerQueue((obj.ObjectSource == EObjectSource.None) ? EObjectEvent.Insert : EObjectEvent.Update, obj);
         }
 
         /// <summary>
@@ -1541,7 +1696,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
-        public void DeleteObject<T>(T obj) where T : DataObjectBase
+        public void DeleteObject<T>(T obj, bool bypassLogical = false) where T : DataObjectBase
         {
             //Se null errore
             if (obj == null)
@@ -1552,23 +1707,45 @@ namespace Business.Data.Objects.Core
 
             bool bCancel = false;
             //Richiama evento pre cancellazione
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPreEventHandlerQueue(EObjectEvent.Delete, obj, ref bCancel);
+            this.EventManager?.RunPreEventHandlerQueue(EObjectEvent.Delete, obj, ref bCancel);
 
             //Se simulazione non esegue
             if (bCancel || this.Simulate)
                 return;
 
             //Infine esegue cancellazione db
-            obj.DoDelete();
+            //Se cancellazione logica allora imposta campo
+            if (obj.mClassSchema.LogicalDeletes.Count == 0 || bypassLogical)
+            {
+                //Elimina fisicamente
+                obj.DoDelete();
+
+            }
+            else
+            {
+                //Imposta valore a seconda del tipo
+                foreach (var ldProp in obj.mClassSchema.LogicalDeletes)
+                {
+                    if (ldProp.DefaultValue is DateTime)
+                        ldProp.SetValue(obj, DateTime.Now);
+                    else
+                        ldProp.SetValue(obj, Convert.ChangeType(1, ldProp.Type));
+                }
+
+                //Esegue aggiornamento
+                this.SaveObject(obj);
+
+                //Forziamo indicazione di oggetto eliminato??
+                //Imposta stato eliminato
+                obj.mDataSchema.ObjectState = EObjectState.Deleted;
+            }
 
             //Se tracking lo salva
             if (this.LiveTrackingEnabled)
                 this.liveTrackingRemove(obj);
 
             //Richiama evento se presente
-            if (this.EventManagerEnabled)
-                this.EventManager.RunPostEventHandlerQueue(EObjectEvent.Delete, obj);
+            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Delete, obj);
         }
 
 
@@ -1584,52 +1761,86 @@ namespace Business.Data.Objects.Core
         /// <typeparam name="TL"></typeparam>
         /// <param name="list"></param>
         public void SaveAll<TL>(TL list)
-            where TL : DataListBase
+            where TL : IEnumerable<DataObjectBase>
         {
             //Se null errore
             if (list == null)
                 throw new ObjectException(ObjectMessages.Base_Save_Null, typeof(TL).Name);
 
-            //Imposta se stesso come slot
-            list.SetSlot(this);
-
-            var lstCasted = list as IList;
-
             //Salva
-            for (int i = 0; i < lstCasted.Count; i++)
+            foreach (var item in list)
             {
-                var item = lstCasted[i] as DataObjectBase;
+                //Imposta se stesso come slot
+                item.SetSlot(this);
                 this.SaveObject(item);
-                list.mInnerList[i].PkHashCode = item.mDataSchema.PkHash;
             }
 
         }
 
 
         /// <summary>
-        /// Cancella tutti gli elementi di una lista. Al termine la lista risulta vuota
+        /// Cancella tutti gli elementi di una lista. Al termine la lista risulta ancora piena
         /// </summary>
         /// <param name="list"></param>
-        public void DeleteAll<TL>(TL list)
-            where TL : DataListBase
+        public void DeleteAll<T>(IEnumerable<T> list, bool bypassLogical = false)
+            where T : DataObject<T>
+        {
+            //Se null errore
+            if (list == null || !list.Any())
+                return;
+
+            //Salva
+            foreach (var item in list)
+            {
+                //Imposta se stesso come slot
+                item.SetSlot(this);
+                this.DeleteObject(item);
+            }
+        }
+
+
+        /// <summary>
+        /// Ritorna una lista di BusinessObjects a partire da qualsiasi enumerabile di DataObject
+        /// </summary>
+        /// <param name="list"></param>
+        public List<TB> ToBizObjectList<TB, T>(IEnumerable<T> list)
+            where TB : BusinessObject<T>
+            where T : DataObject<T>
+        {
+            return this.ToBizObjectList<TB, T>(list, null);
+        }
+
+        /// <summary>
+        ///Ritorna una lista di BusinessObjects a partire da qualsiasi enumerabile di DataObject 
+        ///consentendo di eseguire un azione specifica su ogni oggetto creato
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">Lista</param>
+        /// <param name="act">Azione da eseguire</param>
+        /// <returns></returns>
+        public List<TB> ToBizObjectList<TB, T>(IEnumerable<T> list, Action<TB> act)
+    where TB : BusinessObject<T>
+    where T : DataObject<T>
         {
             //Se null errore
             if (list == null)
-            {
-                throw new ObjectException(ObjectMessages.Base_Save_Null, typeof(TL).Name);
-            }
+                throw new ArgumentNullException();
 
-            //Imposta se stesso come slot
-            list.SetSlot(this);
+            var lstOut = new List<TB>();
 
             //Salva
-            foreach (DataObjectBase item in (IEnumerable)list)
+            foreach (var item in list)
             {
-                this.DeleteObject(item);
+                var biz = item.ToBizObject<TB>();
+
+                lstOut.Add(biz);
+
+                //Esegue azione specifica
+                act?.Invoke(biz);
             }
 
-            //Svuota lista
-            list.Clear();
+            return lstOut;
         }
 
 
@@ -1661,24 +1872,6 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Ritorna una lista identica a quella in input
-        /// </summary>
-        /// <typeparam name="TL"></typeparam>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public DataList<TL, T> CloneList<TL, T>(DataList<TL, T> list)
-            where T : DataObject<T>
-            where TL : DataList<TL, T>
-        {
-            if (list == null)
-                throw new ObjectException(ObjectMessages.Base_Null_Input, typeof(TL).Name);
-
-            return list.Clone();
-
-        }
-
-        /// <summary>
         /// Ritorna copia dell'oggetto su nuova istanza azzerando la chiave primaria
         /// e impostando lo stato a nuovo
         /// </summary>
@@ -1692,7 +1885,7 @@ namespace Business.Data.Objects.Core
             T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(other.mClassSchema.OriginalType);
             o.mDataSchema = other.mDataSchema.Clone(false, false);
             //Imposta Sorgente e Stato a nuovo
-            o.mDataSchema.ObjectSource = EObjectSource.None; 
+            o.mDataSchema.ObjectSource = EObjectSource.None;
             o.mDataSchema.ObjectState = EObjectState.New;
             //Imposto slot
             o.SetSlot(this);
@@ -1932,10 +2125,10 @@ namespace Business.Data.Objects.Core
             StringBuilder sb = new StringBuilder(1000);
             sb.AppendLine("** SLOT INFO **");
             sb.Append("SlotID: ");
-            sb.Append(this.mSlotId);
+            sb.Append(this.SlotId);
             sb.AppendLine();
             sb.Append("Start Time: ");
-            sb.Append(this.mStartDate.ToString("dd/MM/yyyy HH:mm:ss"));
+            sb.Append(this.StartDate.ToString("dd/MM/yyyy HH:mm:ss"));
             sb.AppendLine();
             sb.Append("Elapsed Msec: ");
             sb.Append(this.GetCurrentElapsed().ToString());
@@ -1944,16 +2137,16 @@ namespace Business.Data.Objects.Core
             sb.Append(this.GetCurrentElapsed().Ticks.ToString());
             sb.AppendLine();
             sb.Append("Authenticated: ");
-            sb.Append(this.mIsAuthenticated);
+            sb.Append(this.IsAuthenticated);
             sb.AppendLine();
             sb.Append("User: ");
-            sb.Append(this.mUserName);
+            sb.Append(this.UserName);
             sb.AppendLine();
             sb.Append("User Type: ");
-            sb.Append(this.mUserType);
+            sb.Append(this.UserType);
             sb.AppendLine();
             sb.Append("Protection Level: ");
-            sb.AppendLine(this.mProtectionLevel.ToString());
+            sb.AppendLine(this.ProtectionLevel.ToString());
             sb.Append("Live Tracking Enabled: ");
             sb.AppendLine(this.LiveTrackingEnabled.ToString());
             sb.Append("Change Tracking Enabled: ");
@@ -1963,8 +2156,8 @@ namespace Business.Data.Objects.Core
             sb.Append("Shared Log: ");
             sb.AppendLine(BusinessSlot._SharedLog.LogPath);
             sb.Append("ObjeRefIdCounter: ");
-            sb.AppendLine(System.Threading.Interlocked.Read(ref ProxyAssemblyCache._ObjeRefIdCounter).ToString());
-             
+            sb.AppendLine(System.Threading.Interlocked.Read(ref ProxyAssemblyCache.Instance.ObjeRefIdCounter).ToString());
+
 
             sb.AppendLine("** PROPERTIES **");
             foreach (var item in this.PropertyAllKeys())
@@ -2102,36 +2295,6 @@ namespace Business.Data.Objects.Core
         #endregion
 
 
-        #region SERIALIZATION
-
-
-        /// <summary>
-        /// Esegue serializzazione binaria oggetto. Per deserializzare utilizzare BinDeserialize
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public byte[] BinSerialize<T>(T obj) where T : DataObject<T>
-        {
-            return DataSchema.BinSerialize(obj.mDataSchema);
-        }
-
-        /// <summary>
-        /// Deserializza oggetto serializzato con BinSerialize
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public T BinDeserialize<T>(byte[] data) where T : DataObject<T>
-        {
-            T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(typeof(T));
-            o.SetSlot(this);
-            o.mDataSchema = DataSchema.BinDeserialize(data);
-            return o;
-        }
-
-        #endregion
-
         #region BIZCREATORS
 
         /// <summary>
@@ -2201,58 +2364,10 @@ namespace Business.Data.Objects.Core
         }
 
 
-
         #endregion
 
+
         #region MISC
-
-        internal DataObjectBase FromDTO_AsNewByType(Type type,  Dictionary<string, object> dto)
-        {
-            var o = this.CreateObjectByType(type);
-
-            for (int i = 0; i < o.mClassSchema.Properties.Count; i++)
-            {
-                o.mClassSchema.Properties[i].ReadDTO(dto, o);
-            }
-
-            return o;
-        }
-
-        internal DataObjectBase FromDTO_AsLoadedByType(Type type, Dictionary<string, object> dto)
-        {
-            var o = this.FromDTO_AsNewByType(type, dto);
-            o.mDataSchema.ObjectSource = EObjectSource.DTO;
-            o.mDataSchema.ObjectState = EObjectState.Loaded;
-
-            return o;
-        }
-
-        /// <summary>
-        /// Carica un oggetto da DTO by tipo e dto e lo rappresenta come nuovo
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public T FromDTO_AsNew<T>(Dictionary<string, object> dto) 
-            where T : DataObjectBase
-        {
-            return (T)this.FromDTO_AsNewByType(typeof(T), dto);
-        }
-
-        /// <summary>
-        ///  Carica un oggetto da DTO by tipo e dto e lo rappresenta come caricato
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        public T FromDTO_AsLoaded<T>(Dictionary<string, object> dto)
-            where T : DataObjectBase
-        {
-            return (T)this.FromDTO_AsLoadedByType(typeof(T), dto);
-        }
-
-
-
 
         /// <summary>
         /// Ritorna rappresentazione in stringa
@@ -2260,7 +2375,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Concat("Slot ", this.mSlotId);
+            return string.Concat("Slot ", this.SlotId);
         }
 
 
@@ -2284,11 +2399,11 @@ namespace Business.Data.Objects.Core
             }
 
             //Imposta tutti gli attributi
-            oCloned.mUserName = this.mUserName;
-            oCloned.mUserType = this.mUserType;
-            oCloned.mIsAuthenticated = this.mIsAuthenticated;
-            oCloned.mProtectionLevel = this.mProtectionLevel;
-            oCloned.mTerminated = this.mTerminated;
+            oCloned.UserName = this.UserName;
+            oCloned.UserType = this.UserType;
+            oCloned.IsAuthenticated = this.IsAuthenticated;
+            oCloned.ProtectionLevel = this.ProtectionLevel;
+            oCloned.Terminated = this.Terminated;
             oCloned.ChangeTrackingEnabled = this.ChangeTrackingEnabled;
             oCloned.LiveTrackingEnabled = this.LiveTrackingEnabled;
             oCloned.Simulate = this.Simulate;
@@ -2306,17 +2421,17 @@ namespace Business.Data.Objects.Core
                 oCloned.DbPrefixKeys.Add(item.Key, item.Value);
             }
 
+            //Imposta eventi
+            oCloned.OnLogDebugSent = this.OnLogDebugSent;
+            oCloned.OnDbConnectionRequired = this.OnDbConnectionRequired;
+            oCloned.OnUserInfoRequired = this.OnUserInfoRequired;
+
             return oCloned;
 
         }
 
         #endregion
 
-
-        #region XML
-
-
-        #endregion
 
         #endregion
 
@@ -2369,7 +2484,7 @@ namespace Business.Data.Objects.Core
         {
 
             //Imposta una nuova istanza di configurazione specifica per questo slot
-            this.Conf = new SlotConfig();
+            this.Conf = _StaticConf.Clone();
 
             //Avvia stopwatch
             this.mStopWatch = System.Diagnostics.Stopwatch.StartNew();
@@ -2431,7 +2546,7 @@ namespace Business.Data.Objects.Core
         internal bool IsCacheable(DataObjectBase obj)
         {
             //Default
-            return this.IsCacheable(obj.mClassSchema);
+            return this.IsCacheable(obj.mClassSchema) && obj.mDataSchema.ObjectSource == EObjectSource.Database;
         }
 
         /// <summary>
@@ -2575,44 +2690,69 @@ namespace Business.Data.Objects.Core
             InitConfigure(new SlotConfig());
         }
 
+        /// <summary>
+        /// Consente di impostare la configurazione statica base dello slot.
+        /// E' ammessa una sola chiamata per ciclo di vita dell'applicazione.
+        /// </summary>
+        /// <param name="conf"></param>
+        public static void StaticConfigure(SlotConfig conf)
+        {
+            //Test configurazione null
+            if (conf == null)
+                throw new ArgumentException("Configurazione nulla");
+            //E' consentita una unica configurazione statica
+            var iCount = Interlocked.Increment(ref _StaticConfCount);
+            if (iCount > 1)
+                throw new BusinessSlotException("Non e' possibile configurare staticamente lo slot piu' di una volta per applicazione");
+
+            //Riconfigura lo slot
+            InitConfigure(conf);
+        }
 
         /// <summary>
         /// Configura uno slot a partire da un'oggetto configurazione
         /// </summary>
         /// <param name="conf"></param>
-        static void InitConfigure(SlotConfig conf)
+        private static void InitConfigure(SlotConfig conf)
         {
             try
             {
                 //Imposta configurazione default
-                _Conf = conf;
+                _StaticConf = conf;
 
                 //Inizializza 
                 BusinessSlot._GlobalCache = new CacheSimple<string, DataSchema>(conf.CacheGlobalSize);
                 BusinessSlot._ListCache = new CacheTimed<string, DataTable>(conf.CacheGlobalSize / 2);
-               
+
                 //Se impostata directory di log
-                if (string.IsNullOrEmpty(_Conf.LogBaseDirectory))
+                if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))
                 {
                     //Utilizza cartella di default dell'assembly
                     Uri uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-                    _Conf.LogBaseDirectory = System.IO.Path.GetDirectoryName(uri.LocalPath);
+                    _StaticConf.LogBaseDirectory = System.IO.Path.GetDirectoryName(uri.LocalPath);
                 }
 
                 //Si assicura dell'esistenza della directory
-                System.IO.Directory.CreateDirectory(_Conf.LogBaseDirectory);
+                System.IO.Directory.CreateDirectory(_StaticConf.LogBaseDirectory);
 
-                //Crea logger
-                _SharedLog = new FileStreamLogger(System.IO.Path.Combine(_Conf.LogBaseDirectory, string.Concat("SlotMainLog_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
+                //Chiude shared logger
+                if (_SharedLog != null)
+                    _SharedLog.Dispose();
+                //Apre shared logger
+                _SharedLog = new FileStreamLogger(System.IO.Path.Combine(_StaticConf.LogBaseDirectory, string.Concat("SlotMainLog_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
                 {
                     WriteThreadId = true
                 };
 
+                //Chiude log database se aperto
+                if (_DatabaseLog != null)
+                    _DatabaseLog.Dispose();
+
                 //Crea logger per DB
-                if (_Conf.LogDatabaseActivity)
+                if (_StaticConf.LogDatabaseActivity)
                 {
                     //Imposta trace su file specifico
-                    _DatabaseLog = new FileStreamLogger(System.IO.Path.Combine(_Conf.LogBaseDirectory, string.Concat("TraceSQL_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
+                    _DatabaseLog = new FileStreamLogger(System.IO.Path.Combine(_StaticConf.LogBaseDirectory, string.Concat("TraceSQL_", DateTime.Now.ToString("yyyy_MM_dd"), ".log")))
                     {
                         WriteThreadId = true
                     };
@@ -2632,7 +2772,7 @@ namespace Business.Data.Objects.Core
 
         public int CompareTo(BusinessSlot other)
         {
-            return this.mSlotId.CompareTo(other.mSlotId);
+            return this.SlotId.CompareTo(other.SlotId);
         }
 
         #endregion
@@ -2642,7 +2782,7 @@ namespace Business.Data.Objects.Core
 
         public override int GetHashCode()
         {
-            return this.mSlotId.GetHashCode();
+            return this.SlotId.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -2663,7 +2803,7 @@ namespace Business.Data.Objects.Core
             {
                 return true;
             }
-            return (string.Equals(this.mSlotId, other.mSlotId));
+            return (string.Equals(this.SlotId, other.SlotId));
         }
 
         #endregion
@@ -2690,21 +2830,38 @@ namespace Business.Data.Objects.Core
                     db.Dispose();
                 }
 
-                //Rimuove eventuali eventi rimasti
+                //Rimuove eventuali eventi rimasti attaccati
                 if (this.OnLogDebugSent != null)
                 {
-                    Delegate[] dList = this.OnLogDebugSent.GetInvocationList();
-
-                    for (int i = 0; i < dList.Length; i++)
-                        this.OnLogDebugSent -= (LogDebugHandler)dList[i];
+                    foreach (var item in this.OnLogDebugSent.GetInvocationList())
+                    {
+                        this.OnLogDebugSent -= (LogDebugHandler)item;
+                    }
                 }
+
+                if (this.OnDbConnectionRequired != null)
+                {
+                    foreach (var item in this.OnDbConnectionRequired.GetInvocationList())
+                    {
+                        this.OnDbConnectionRequired -= (DbConnectionRequestHandler)item;
+                    }
+                }
+
+                if (this.OnUserInfoRequired != null)
+                {
+                    foreach (var item in this.OnUserInfoRequired.GetInvocationList())
+                    {
+                        this.OnUserInfoRequired -= (UserInfoRequestHandler)item;
+                    }
+                }
+
 
                 _SharedLog.Dispose();
             }
             finally
             {
                 //Imposta flag di fine sessione
-                this.mTerminated = true;
+                this.Terminated = true;
             }
 
         }

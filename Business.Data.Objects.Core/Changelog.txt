@@ -1,0 +1,155 @@
+﻿[30/11/2020] - 5.0.2 - Simone Pelaia
+Modificato il nome di attributo DbDataType -> CustomDbType
+
+[30/11/2020] - 5.0.3 - Simone Pelaia
+Fix modificatore attributo CustomDbType che deve essere per property e non per classe
+
+[30/11/2020] - 5.0.4 - Simone Pelaia
+Link a Db 5.0.4
+
+[01/12/2020] - 5.0.5 - Simone Pelaia
+Link a Db 5.0.5
+
+[01/12/2020] - 5.0.6 - Simone Pelaia
+implemenatzione funzione facility di lazy load per oggetti su BusinessObject
+
+[29/12/2020] - 5.0.7 - Simone Pelaia
+Rinominato attributo "BaseAutomaticAttribute" in "AutomaticField". Può essere utilizzato per ricaricare i valori calcolati lato DB
+
+[29/12/2020] - 5.0.8 - Simone Pelaia
+Risolto bug che non consente il caricamento di biz objects su assembly multipli nella stessa applicazione (errata chiave di cache dell'assembly)
+
+[26/01/2021] - 5.0.9 - Simone Pelaia
+Introdotta funzione slot per tradurre i nomi proprieta' -> nomi colonne
+Resa pubblica proprieta' TraceOnlyErrors su database
+La configurazione di runtime dei nuovi slot viene clonata dalla statica
+
+[14/04/2021] - 5.0.10 - Simone Pelaia
+Introdotto attributo UserInfo per impostare automaticamente l'identificazione dell'utente automaticamente su dataobject da:
+  - dato fornito attraverso la gestione dell'evento slot.OnUserInfoRequired
+  - oppure da slot.Username
+Introdotto attributo LogicalDelete per eseguire la cancellazione logica dei dataobject
+  - modificato metodo Delete per consentire il bypass della cancellazione logica
+Introdotto evento OnDbConnectionRequired sullo slot per richiedere esternamente la connessione DB specifica se non gia' presente nello slot
+  - se e' stata preventivamente aperta una transazione sull'intera lista anche il nuovo db caricato avviera' la transazione
+
+[14/04/2021] - 5.0.11 - Simone Pelaia
+Nuovo metodo ToBizObjectList sulla datalist
+
+[21/04/2021] - 5.0.12 - Simone Pelaia
+Clone Businesslot - Vengono riattribuiti gli eventi dello slot principale
+Reinclusa documentazione nei pacchetti
+
+[21/05/2021] - 5.0.13 - Simone Pelaia
+Possibile specificare la posizione del campo nel filtro: sx (default), dx rispetto all'operatore
+
+[21/05/2021] - 5.0.14 - Simone Pelaia
+Reincluso Xml di documentazione
+
+[15/06/2021] - 5.0.15 - Simone Pelaia
+Possibilita' di eseguire query su lista tramite espressione LINQ (SearchByLinq)
+
+[28/06/2021] - 5.0.16 - Simone Pelaia
+Serializzazione JSON solo per propriet semplici. No navigazione
+Ordinamento SQL Liste tramite espressione LINQ
+
+[30/06/2021] - 5.0.17 - Simone Pelaia
+Ripristino DBBeginTransAll senza parametri
+
+[01/07/2021] - 5.0.18 - Simone Pelaia
+Metodo IncludeDeleted su lista per rimuovere il filtro automatico sui record cancellati logicamente. Vale solo per l'istruzione query successiva
+
+[06/07/2021] - 5.0.19 - Simone Pelaia
+Fix su traduzione Linq dell'estensione "In" in caso di array non esplicitato fornito in input
+
+[06/07/2021] - 5.0.20 - Simone Pelaia
+Introdotte estensioni fake IsNull e IsNotNull per forzare la relativa query tramite Linq
+
+[06/07/2021] - 5.0.21 - Simone Pelaia
+Fix bug che impedisce di utilizzare una SearchByLinq all'interno di un'altra
+
+[02/08/2021] - 5.0.22 - Simone Pelaia
+Reintegrate tutte le librerie nell'unica Business.Data.Objects.Core
+
+[03/08/2021] - 5.0.23 - Simone Pelaia
+Esposta la lista dei parametri db
+
+[03/08/2021] - 5.0.24 - Simone Pelaia
+Esposta la proprietà che indica se possibile chiudere o meno la connessione db dopo uno statement
+
+[03/08/2021] - 5.0.25 - Simone Pelaia
+Aggiunto metodo su oggetto "FromJson" per deserializzazione. Attenzione: presuppone la serializzazione con "ToJson"
+
+[11/08/2021] - 5.0.26 - Simone Pelaia
+Aggiunta classe LinqFilter per combinare dinamicamente più statement LINQ. utile nelle ricerche con parametri multipli opzionali
+
+[12/08/2021] - 5.0.27 - Simone Pelaia
+Fix classe LinqFilter ritorna condizione vera se non eseguita alcuna combinazione And/Or
+
+[30/08/2021] - 5.0.28 - Simone Pelaia
+Piccole fix alla deserializzazione JSON
+
+[31/08/2021] - 5.0.29 - Simone Pelaia
+Fix alla deserializzazione JSON
+Inizio rimozione metodi non più utili
+
+[02/09/2021] - 5.0.30 - Simone Pelaia
+Rimozione metodi non più utili
+Rimozione LoadFullobjects (ora di default)
+Rimozione To e From DTO (Dictionary)
+Rimozione Mapping DataList
+Rimossa gestione oggetti non mappati (ovvero impostabili)
+Rimossa BusinessObjectList in quanto poco utiles
+Rimossa serializzazione/deserializzazione binaria
+Rimossi filtri specializzati
+
+[13/09/2021] - 5.0.31 - Simone Pelaia
+Fix bug che esegue query su campo oggetto quando questo e' null (come se fosse LoadOnAccess)
+
+[14/09/2021] - 5.0.32 - Simone Pelaia
+Aggiunti metodi DB per la mappatura delle query su oggetti DTO
+
+[20/09/2021] - 5.0.33 - Simone Pelaia
+Fix bug query mappata che non ritorna ultimo campo db
+
+[20/09/2021] - 5.0.36 - Simone Pelaia
+Fix bug query mappata su campi nullable e fix query paginata
+
+[06/10/2021] - 5.0.37 - Simone Pelaia
+Query mappata imposta anche proprietà ereditate
+
+[06/10/2021] - 5.0.38 - Simone Pelaia
+Modificato logdebug senza format
+
+[03/12/2021] - 5.0.39 - Simone Pelaia
+Fix bug Accesso a campo di LogicalDelete dopo chiamata DeleteObject
+
+[24/12/2021] - 5.0.40 - Simone Pelaia
+Aggiunti metodi Exec e ExecTrans a livello di slot per eseguire blocchi di codice "Gestito" senza preoccuparsi di try/catch o altro
+ToBizObjectList - Aggiunta possibilità di eseguire un'azione su ciscun oggetto creato
+
+[28/01/2022] - 5.0.41 - Simone Pelaia
+GetLazy fortemente tipizzato
+Introdotto GetLazyEx per gestire eventuali chiamate su oggetto non ancora salvato
+Introdotto ResetLazy per eliminare un dato cached e forzare il ricaricamento all'accesso successivo
+
+[28/01/2022] - 5.0.42 - Simone Pelaia
+DeleteAll su IEnumerable
+Rinominati metodi Lazy
+Aggiunto LazySet per setters
+
+[24/02/2022] - 5.0.44 - Simone Pelaia
+Aggiunti metodi base di Save e Delete sul BusinessObject con possibilità di overridare dei metodi protetti da eseguire prima o dopo entrambe le operazioni
+
+[07/03/2022] - 5.0.45 - Simone Pelaia
+Aggiunta possibilità di resettare dall'esterno tutte le proprietà Lazy di un businessobject
+
+[08/03/2022] - 5.0.46 - Simone Pelaia
+Aggiunta possibilità di copiare valori di un dataobject su un qualsiasi oggetto
+
+[17/06/2022] - 5.0.47 - Simone Pelaia
+Operator In con ienumerable
+Possibilità di specificare un nome colonna con notazioni speciali DB (e. [Colname] per SQL Server o `Colname` per MySql )
+LoopMT con gestione automatica dei thread
+CreateList(page, offset)
+CacheResult senza limitazioni

@@ -1,7 +1,9 @@
-﻿Imports Bdo.Objects.Base
+﻿Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
+Imports Business.Data.Objects.Core.Base
 
 Public MustInherit Class AziendaBizFactory
-    Inherits Bdo.Objects.BusinessObjFactory(Of AziendaBiz)
+    Inherits BusinessObjFactory(Of AziendaBiz)
 
 
 

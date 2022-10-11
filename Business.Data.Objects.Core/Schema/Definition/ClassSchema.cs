@@ -1,4 +1,4 @@
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Core.Attributes;
 using System;
 
@@ -27,17 +27,14 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public bool MustReload;
         public bool AutoIncPk;
 
+        public PropertyList LogicalDeletes = new PropertyList(1);
+        public Property UserInfo;
+
         #endregion
 
         #region PROPERTIES
 
-        public string ClassName
-        {
-            get
-            {
-                return this.OriginalType.Name;
-            }
-        }
+        public string ClassName => this.OriginalType.Name;
 
         /// <summary>
         /// Indica se la classe e' in sola lettura
@@ -47,12 +44,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <summary>
         /// Indica se utilizza la connessione db di default
         /// </summary>
-        public bool IsDefaultDb
-        { 
-            get {
-                return (this.DbConnDef == null);
-            } 
-        }
+        public bool IsDefaultDb => this.DbConnDef == null;
+
 
         #endregion
 
@@ -93,6 +86,47 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     throw new SchemaReaderException(this.PrimaryKey.Properties[i], SchemaMessages.Prop_PrimaryKey_SimpleType);
             }
 
+            //Attributo Username Readonly
+            if (this.UserInfo != null && !this.UserInfo.IsReadonly)
+                throw new SchemaReaderException(this.UserInfo, SchemaMessages.Prop_MustBeReadOnlyForAttribute, nameof(Attributes.UserInfo));
+
+            //Cancellazione logica solo su campo int o datetime
+            //Puo' essere interessante impostarlo come readonly????
+            foreach (var ldProp in this.LogicalDeletes)
+            {
+                if (!ldProp.IsReadonly)
+                    throw new SchemaReaderException(ldProp, SchemaMessages.Prop_MustBeReadOnlyForAttribute, nameof(Attributes.LogicalDelete));
+
+                if (!ldProp.Type.IsValueType)
+                    throw new SchemaReaderException(ldProp, SchemaMessages.Prop_PrimaryKey_SimpleType);
+
+                switch (Type.GetTypeCode(ldProp.Type))
+                {
+                    case TypeCode.Boolean:
+                        break;
+                    case TypeCode.Byte:
+                        break;
+                    case TypeCode.DateTime:
+                        break;
+                    case TypeCode.Int16:
+                        break;
+                    case TypeCode.Int32:
+                        break;
+                    case TypeCode.Int64:
+                        break;
+                    case TypeCode.SByte:
+                        break;
+                    case TypeCode.UInt16:
+                        break;
+                    case TypeCode.UInt32:
+                        break;
+                    case TypeCode.UInt64:
+                        break;
+                    default:
+                        throw new SchemaReaderException(ldProp, SchemaMessages.Prop_LogicalDeleteWrongType);
+                }
+            }
+            
         }
 
         /// <summary>

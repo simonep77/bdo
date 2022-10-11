@@ -1,5 +1,5 @@
-Imports Bdo.Objects
-Imports Bdo.Attributes
+Imports Business.Data.Objects.Core
+Imports Business.Data.Objects.Core.Attributes
 
 <Table("Aziende")>
 Public MustInherit Class Azienda3

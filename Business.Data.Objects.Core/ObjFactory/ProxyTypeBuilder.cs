@@ -1,11 +1,12 @@
 using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Attributes;
 using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.Schema;
 using Business.Data.Objects.Core.Schema.Definition;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -122,14 +123,10 @@ namespace Business.Data.Objects.Core.ObjFactory
                     MethodInfo mySetCustom = tOriginal.GetMethod("SetProperty", BindingFlags.Instance | BindingFlags.Public);
 
                     //Carica elenco proprieta'
-                    arrPropInfo = tOriginal.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-
-                    //Ordina le proprieta' per come sono state definite
-                    Array.Sort<PropertyInfo>(arrPropInfo,
-                        delegate(PropertyInfo p1, PropertyInfo p2)
-                        {
-                            return p1.MetadataToken.CompareTo(p2.MetadataToken);
-                        });
+                    var properties = tOriginal.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                    
+                    //Ordina le proprieta' per come sono definite
+                    arrPropInfo = properties.OrderBy(p => p.MetadataToken).ToArray();
 
                     //Loop su proprietà
                     for (int i = 0; i < arrPropInfo.Length; i++)
@@ -142,10 +139,10 @@ namespace Business.Data.Objects.Core.ObjFactory
 
                         MethodBuilder newGetMethod = null;
                         MethodBuilder newSetMethod = null;
-
+                        
                         //Crea i nuovi metodi
                         //GET
-                        if ((getMethod != null) && (getMethod.IsAbstract))
+                        if ((getMethod != null) && (getMethod.IsAbstract || getMethod.IsVirtual))
                         {
                             //Creo un nuovo metodo GET
                             newGetMethod = typeBuild.DefineMethod(getMethod.Name, MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, prop.PropertyType, null);
@@ -159,7 +156,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                         }
 
                         //SET
-                        if ((setMethod != null) && (setMethod.IsAbstract))
+                        if ((setMethod != null) && (setMethod.IsAbstract || setMethod.IsVirtual))
                         {
                             //Creo un nuovo metodo SET
                             newSetMethod = typeBuild.DefineMethod(setMethod.Name, MethodAttributes.NewSlot | MethodAttributes.Virtual | MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new Type[] { prop.PropertyType });
@@ -301,10 +298,6 @@ namespace Business.Data.Objects.Core.ObjFactory
                     oProp = new PropertyObject(propInfo.Name, propInfo.PropertyType, oSchema.ObjCount);
                     oSchema.ObjCount++; //Incrementa contatore generale
                 }
-                else if (propInfo.PropertyType.IsSubclassOf(typeof(DataListBase)))
-                {
-                    oProp = new PropertyDataList(propInfo.Name, propInfo.PropertyType);
-                }
                 else
                     oProp = new PropertySimple(propInfo.Name, propInfo.PropertyType);
                 
@@ -347,7 +340,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                 if (oProp is PropertySimple)
                 {
                     if (oProp.Column == null)
-                        oProp.Column = new Column(oProp.Name);
+                        oProp.Column = new Column(oProp.Name, oProp.Type);
                 }
 
                 //Gestisce una o più chiavi
@@ -371,7 +364,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                     oSchema.MustReload = true;
 
                 //Select: esclude loadonaccess e mappature property-property
-                if (!oProp.IsSqlSelectExcluded)
+                if (!oProp.ExcludeSelect)
                 {
                     sbSqlSelect.Append(oProp.Column.Name);
                     sbSqlSelect.Append(@", ");
@@ -523,7 +516,7 @@ namespace Business.Data.Objects.Core.ObjFactory
             //    throw new TypeFactoryException("{0}.{1} - E' ammesso definire una chiave su una proprieta' semplice (non mappata)", oSchema.ClassName, oProp.Name, ClassSchema.PRIMARY_KEY);
 
             //La property non puo' essere di tipo LoadOnAccess
-            if (oProp.IsSqlSelectExcluded)
+            if (oProp.ExcludeSelect)
                 throw new TypeFactoryException(SchemaMessages.Prop_KeyNeedValueQuery, oSchema.ClassName, oProp.Name);
 
             //Aggiunge property a key

@@ -1,23 +1,18 @@
 using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
+using Business.Data.Objects.Core.Objects;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Business.Data.Objects.Core
 {
-    /// <summary>
-    /// Delegato per definizione routine di test oggetto
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="arg"></param>
-    /// <returns></returns>
-    public delegate bool ObjectTest<T>(T arg);
-    
 
     /// <summary>
     /// Classe astratta da utilizzare per gestione Liste
@@ -28,9 +23,6 @@ namespace Business.Data.Objects.Core
         where T : DataObject<T>
         where TL : DataList<TL, T>
     {
-
-
-
 
         #region PROPERTY
 
@@ -46,7 +38,7 @@ namespace Business.Data.Objects.Core
             get
             {
                 //Ritorna
-                return  (T)this.getItem(index);
+                return (T)this.getItem(index);
             }
             set
             {
@@ -54,18 +46,6 @@ namespace Business.Data.Objects.Core
                 this.setItem(index, value);
             }
         }
-
-        #endregion
-
-        #region PUBLIC DELEGATES
-
-        /// <summary>
-        /// Delegato per la gestione dell' Xml del singolo oggetto della lista
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="writer"></param>
-        /// <param name="args"></param>
-        public delegate void XmlFunction(T value, XmlWrite writer, params object[] args);
 
         #endregion
 
@@ -80,25 +60,6 @@ namespace Business.Data.Objects.Core
             this.mObjSchema = ProxyAssemblyCache.Instance.GetClassSchema(typeof(T));
         }
 
-        /// <summary>
-        /// Cerca per chiave primaria tra gli elementi della lista.
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public T FindByPK(params object[] values)
-        {
-            int iFound = this.IndexOfByPK(values);
-
-            //Non Trovato
-            if (iFound < 0)
-            {
-                return null;
-            }
-
-            //Trovato
-            return this[iFound];
-        }
-
 
         /// <summary>
         /// La ricerca effettuata dopo questa istruzione verifica la presenza di una eventuale risultato precedente
@@ -106,7 +67,8 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public TL CacheResult()
         {
-            this.mCacheResult = this.Slot.IsCacheable(this.mObjSchema);
+            this.mCacheResult = true;
+            //this.mCacheResult = this.Slot.IsCacheable(this.mObjSchema);
 
             return (TL)this;
         }
@@ -117,9 +79,19 @@ namespace Business.Data.Objects.Core
         /// in quanto andrebbero manipolate senza garanzia del risultato
         /// </summary>
         /// <returns></returns>
+        [Obsolete("Ormai il comportamento e' sempre questo")]
         public TL LoadFullObjects()
         {
-            this.mLoadFullObjects = true;
+            return (TL)this;
+        }
+
+        /// <summary>
+        /// Istruisce la query successiva ad includere gli oggetti eliminati logicamente
+        /// </summary>
+        /// <returns></returns>
+        public TL IncludeDeleted()
+        {
+            base.mIncludeDeleted = true;
 
             return (TL)this;
         }
@@ -185,6 +157,7 @@ namespace Business.Data.Objects.Core
         /// <param name="op">Se [IsNull, IsNotNull] il valore non viene considerato</param>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare SearchByLinq")]
         public TL SearchByColumn(string columnName, EOperator op, object value)
         {
             return (TL)this.searchByColumn(new Filter(columnName, op, value));
@@ -196,6 +169,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare SearchByLinq")]
         public TL SearchByColumn(IFilter filter)
         {
             return (TL)this.searchByColumn(filter);
@@ -203,324 +177,50 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Ritorna array con oggetti caricati
-        /// Vengono copiati solo i riferimenti
+        /// Ricerca attraverso un'espressione linq.
         /// </summary>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public T[] ToArray()
+        public TL SearchByLinq(Expression<Func<T, bool>> predicate)
         {
-            //Istanzio tutti gli oggetti
-            int iLen = this.Count;
-            T[] oItems = new T[iLen];
+            var t = new LinqQueryTranslator<T>(this.Slot);
 
-            for (int i = 0; i < iLen; i++)
-            {
-                oItems[i] = this[i];
-            }
-
-            return oItems;
-        }
-
-
-        /// <summary>
-        /// Ritorna primo elemento della lista 
-        /// oppure null se vuota
-        /// </summary>
-        /// <returns></returns>
-        public T GetFirst() {
-            if (this.Count == 0)
-                return default(T);
-
-            return this[0];
-        }
-
-
-        /// <summary>
-        /// Ritorna ultimo elemento della lista 
-        /// oppure null se vuota
-        /// </summary>
-        /// <returns></returns>
-        public T GetLast()
-        {
-            if (this.Count == 0)
-                return default(T);
-
-            return this[this.Count - 1];
-        }
-
-
-
-
-
-        /// <summary>
-        /// Ritorna l'oggetto che ha il valore massimo della proprieta'
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public T Max(string propertyName)
-        {
-            return this.getMinMax(propertyName, null, false);
-        }
-
-
-        /// <summary>
-        /// Ritorna l'oggetto che ha il valore massimo della proprieta' applicando un ulteriore filtro
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T Max(string propertyName, IFilter filter)
-        {
-            return this.getMinMax(propertyName, filter, false);
+            return (TL)this.searchByCustomWhere(t.Translate(predicate));
         }
 
         /// <summary>
-        /// Ritorna oggetto con valore minimo della proprieta' fornita
+        /// Esegue ordinamento tramite selezione del campo. Modalita' ASC
         /// </summary>
-        /// <param name="propertyName"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public T Min(string propertyName)
+        public TL OrderByLinq<TKey>(Expression<Func<T, TKey>> predicate)
         {
-            return this.getMinMax(propertyName, null, true);
-        }
+            var t = new LinqQueryTranslator<T>(this.Slot);
 
+            var f = t.TranslateKey(predicate);
 
-        /// <summary>
-        ///  Ritorna oggetto con valore minimo della proprieta' fornita applicando ulteriore filtro
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public T Min(string propertyName, IFilter filter)
-        {
-            return this.getMinMax(propertyName, filter, true);
-        }
+            this.orderBy(f, OrderVersus.Asc);
 
-
-        /// <summary>
-        /// Metodo privato unico per calcolo min e max
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="filter"></param>
-        /// <param name="isMin"></param>
-        /// <returns></returns>
-        private T getMinMax(string propertyName, IFilter filter, bool isMin)
-        {
-            //Se vuota esce
-            if (this.Count <= 0)
-                return null;
-
-            //Se prop non comparabile
-            Property oProp = this.mObjSchema.Properties.GetPropertyByName(propertyName);
-
-            if (!typeof(IComparable).IsAssignableFrom(oProp.Type))
-                return null;
-
-            //Ok, calcola
-            T oRet = null;
-            IComparable oTemp = null;
-
-            for (int i = 0; i < this.Count; i++)
-            {
-                //Verifica filtro
-                if (filter != null && !filter.PropertyTest(this[i]))
-                    continue;
-
-                IComparable oTemp2 = oProp.GetValue(this[i]) as IComparable;
-                //Preimposta comparazione con elemento precedente
-                var bCompare = (oTemp == null);
-                
-                //Necessario procedere a comparazione
-                if (!bCompare)
-                    bCompare = isMin ? (oTemp2.CompareTo(oTemp) <= 0) : (oTemp2.CompareTo(oTemp) >= 0);
-
-                //Comparazione verificata
-                if (bCompare)
-                {
-                    oRet = this[i];
-                    oTemp = oTemp2;
-                }
-            }
-
-            return oRet;
-        }
-
-
-
-
-        /// <summary>
-        /// Ritorna Xml con dati oggetti. E' possibile specificare un delegato per poter manipolare
-        /// l'xml di ogni oggetto con altri dati. Utilizzando rewriteAll viene soppresso l'output Xml standard 
-        /// dell'oggetto
-        /// </summary>
-        /// <param name="function">
-        /// Delegato ad una funzione (e.s. AggiornaXmlUtente(Utente ut, Xmlwrite xw)) per la manipolazione dell'xml
-        /// </param>
-        /// <param name="rewriteAll">
-        /// Impostato a true disabilita l'output xml standard dell'oggetto
-        /// </param>
-        /// <param name="args">
-        /// Dati esterni da inviare alla funzione di scrittura xml
-        /// </param>
-        /// <returns></returns>
-        public string ToXml(XmlFunction function, bool rewriteAll, params object[] args)
-        {
-            DataObjectBase o;
-            using (XmlWrite xw = new XmlWrite())
-            {
-                for (int i = 0; i < this.Count; i++)
-                {
-                    o = this[i];
-
-                    xw.WriteStartElement(o.mClassSchema.ClassName);
-                    try
-                    {
-                        if (!rewriteAll)
-                            xw.WriteRaw(o.ToXml());
-
-                        //Se fornita funzione allora la richiama
-                        if (function != null)
-                        {
-                            function((T)o, xw, args);
-                        }
-                    }
-                    finally
-                    {
-                        xw.WriteEndElement();
-                    }
-                }
-
-                return xw.ToString();
-            }
+            return (TL)this;
         }
 
         /// <summary>
-        /// Ritorna nuova lista come unione di elementi con la lista in input.
-        /// Oggetti con la medesima PK vengono riportati una sola volta.
+        /// Esegue ordinamento tramite selezione del campo. Modalita' DESC
         /// </summary>
-        /// <param name="other"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="predicate"></param>
         /// <returns></returns>
-        public TL Union(TL other)
+        public TL OrderByLinqDesc<TKey>(Expression<Func<T, TKey>> predicate)
         {
-            TL oListRet = this.Slot.CreateList<TL>();
+            var t = new LinqQueryTranslator<T>(this.Slot);
 
-            //Lista originale
-            oListRet.mInnerList.AddRange(this.mInnerList);
+            var f = t.TranslateKey(predicate);
 
-            //Lista input
-            if (other != null)
-            {
-                for (int i = 0; i < other.Count; i++)
-                {
-                    //Aggiunge in lista se non gia' presente
-                    if (oListRet.getIndexOfByPK(other.mInnerList[i].PkValues) == -1)
-                    {
-                        oListRet.Add(other[i]);
-                    }
-                }
-            }
+            this.orderBy(f, OrderVersus.Desc);
 
-            return oListRet;
+            return (TL)this;
         }
-
-
-        /// <summary>
-        /// Ritorna un clone della lista corrente
-        /// </summary>
-        /// <returns></returns>
-        public TL Clone()
-        {
-            TL oListRet = this.Slot.CreateList<TL>();
-
-            for (int i = 0; i < this.Count; i++)
-            {
-                InnerDataListItem item = new InnerDataListItem();
-                item.PkValues = this.mInnerList[i].PkValues;
-                item.PkHashCode = this.mInnerList[i].PkHashCode;
-                item.ExtraData = this.mInnerList[i].ExtraData;
-
-                oListRet.mInnerList.Add(item);
-            }
-
-            return oListRet;
-        }
-
-
-        /// <summary>
-        /// Ritorna nuova lista come unione di tutti gli elementi con la lista in input.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public TL UnionAll(TL other)
-        {
-            TL oListRet = this.Slot.CreateList<TL>();
-
-            //Merge delle sole tabelle interne
-            oListRet.mInnerList.AddRange(this.mInnerList);
-            
-            if (other != null)
-                oListRet.mInnerList.AddRange(other.mInnerList);
-
-            return oListRet;
-        }
-
-        /// <summary>
-        /// Ritorna tutti gli elementi presenti nella lista che non sono presenti nella lista in input.
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public TL Diff(TL other)
-        {
-            TL oListRet = this.Slot.CreateList<TL>();
-
-            //Lista originale
-            for (int i = 0; i < this.Count; i++)
-            {
-                //Aggiunge in lista se non gia' presente (confronto con la sola PK su datatable)
-                if (other == null || other.getIndexOfByPK(this.mInnerList[i].PkValues) == -1)
-                {
-                    //Crea nuova row da tab return e copia i valori di quella vecchia
-                    oListRet.mInnerList.Add(this.mInnerList[i]);
-                }
-            }
-
-            return oListRet;
-        }
-
-
-        /// <summary>
-        /// Ritorna dizionario di valori raggruppati con associata la lista di elementi
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        public GroupByResult<TL> GroupByProperty(string propertyName)
-        {
-            GroupByResult<TL> ret = new GroupByResult<TL>();
-
-            Dictionary<object, TL> dicOutput = new Dictionary<object, TL>();
-            Property oProp = this.mObjSchema.Properties.GetPropertyByName(propertyName);
-            object oTemp;
-            TL oTmplist = null;
-
-            //Lista originale
-            for (int i = 0; i < this.Count; i++)
-            {
-                oTemp = oProp.GetValue(this[i]);
-
-                //Se non esiste
-                if (!ret.TryGetValue(oTemp, out oTmplist))
-                {
-                    oTmplist = this.Slot.CreateList<TL>();
-                    ret.Add(oTemp, oTmplist);
-                }
-                oTmplist.mInnerList.Add(this.mInnerList[i]);
-            }
-
-            //Ritorna la lista
-            return ret;
-        }
-
-
 
 
         /// <summary>
@@ -531,7 +231,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public TL ToPagedList(int page, int offset)
         {
-            TL newList = this.Slot.CreatePagedList<TL>(page, offset);
+            TL newList = this.Slot.CreateList<TL>(page, offset);
             newList.Pager.TotRecords = this.Count;
 
             int idxBegin = newList.Pager.Position;
@@ -544,6 +244,32 @@ namespace Business.Data.Objects.Core
 
             return newList;
         }
+
+
+        /// <summary>
+        /// Ritorna una lista di BusinessObjects a partire da questa lista
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <returns></returns>
+        public List<TB> ToBizObjectList<TB>()
+            where TB : BusinessObject<T>
+        {
+            return this.Slot.ToBizObjectList<TB, T>(this, null);
+        }
+
+        /// <summary>
+        /// Ritorna una lista di BusinessObjects a partire da questa lista
+        /// con la possibilità di eseguire un'azione specifica su ciascun oggetto creato
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <param name="act"></param>
+        /// <returns></returns>
+        public List<TB> ToBizObjectList<TB>(Action<TB> act)
+    where TB : BusinessObject<T>
+        {
+            return this.Slot.ToBizObjectList<TB, T>(this, act);
+        }
+
 
 
         #endregion
@@ -665,9 +391,6 @@ namespace Business.Data.Objects.Core
         }
 
 
-
-
-
         /// <summary>
         /// Verifica se la lista contiene l'elemento fornito (by PK)
         /// </summary>
@@ -696,10 +419,7 @@ namespace Business.Data.Objects.Core
         }
 
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
 
         /// <summary>
@@ -722,9 +442,9 @@ namespace Business.Data.Objects.Core
         public bool Remove(T item)
         {
             if (item == null)
-                return false;              
+                return false;
 
-            int iFound = this.IndexOfByPK(item.mClassSchema.PrimaryKey.GetValues(item));
+            int iFound = this.IndexOf(item);
             //Non trovato
             if (iFound < 0)
                 return false;
@@ -762,23 +482,8 @@ namespace Business.Data.Objects.Core
             if (item == null)
                 return -1;
 
-            return this.IndexOfByPK(item.mClassSchema.PrimaryKey.GetValues(item));
+            return this.getIndexOfByPK(item.mClassSchema.PrimaryKey.GetValues(item));
         }
-
-
-        /// <summary>
-        /// Ritorna il primo indice di oggetto per PK
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public int IndexOfByPK(params object[] values)
-        {
-            if (values == null || values.Length == 0)
-                return -1;
-
-            return this.getIndexOfByPK(values);
-        }
-
 
 
         /// <summary>
@@ -793,8 +498,9 @@ namespace Business.Data.Objects.Core
                 throw new ArgumentException("Non e' possibile inserire nella lista un oggetto NULL!");
 
             //Setta item
-            this.mInnerList.Insert(index, new InnerDataListItem() { 
-                Object = item, 
+            this.mInnerList.Insert(index, new InnerDataListItem()
+            {
+                Object = item,
                 PkHashCode = item.GetHashBaseString(),
                 PkValues = this.mObjSchema.PrimaryKey.GetValues(item)
             });
@@ -835,20 +541,11 @@ namespace Business.Data.Objects.Core
             throw new ObjectException("{0} - La lista non consente l'aggiunta di oggetti non salvati.", this.GetType().Name);
         }
 
-        public bool AllowEdit
-        {
-            get { return false; }
-        }
+        public bool AllowEdit => false;
 
-        public bool AllowNew
-        {
-            get { return false; }
-        }
+        public bool AllowNew => false;
 
-        public bool AllowRemove
-        {
-            get { return true; }
-        }
+        public bool AllowRemove => true;
 
         public void ApplySort(PropertyDescriptor property, ListSortDirection direction)
         {
@@ -857,16 +554,18 @@ namespace Business.Data.Objects.Core
 
         public int Find(PropertyDescriptor property, object key)
         {
-            T obj = this.FindFirstByPropertyFilter(new Filter(property.Name, EOperator.Equal, key));
-            return this.IndexOf(obj);
+            var prop = this.mObjSchema.Properties.GetPropertyByName(property.Name);
+
+            for (int i = 0; i < this.mInnerList.Count; i++)
+            {
+                if (this[i].GetProperty(prop.PropertyIndex).Equals(key))
+                    return i;
+            }
+
+            return -1;
         }
 
-        public bool IsSorted
-        {
-            get { return false; }
-        }
-
-
+        public bool IsSorted => false;
         public void RemoveIndex(PropertyDescriptor property)
         {
             throw new NotImplementedException("Metodo non supportato");
@@ -877,260 +576,15 @@ namespace Business.Data.Objects.Core
             throw new NotImplementedException("Metodo non supportato");
         }
 
-        public ListSortDirection SortDirection
-        {
-            get { return ListSortDirection.Ascending; }
-        }
+        public ListSortDirection SortDirection => ListSortDirection.Ascending;
 
-        public PropertyDescriptor SortProperty
-        {
-            get { return null; }
-        }
+        public PropertyDescriptor SortProperty => null;
 
-        public bool SupportsChangeNotification
-        {
-            get { return true; }
-        }
+        public bool SupportsChangeNotification => true;
 
-        public bool SupportsSearching
-        {
-            get { return false; }
-        }
+        public bool SupportsSearching => false;
 
-        public bool SupportsSorting
-        {
-            get { return false; }
-        }
-
-  
-        /// <summary>
-        /// Ritorna lista ordinata
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="ascending"></param>
-        /// <returns></returns>
-        public TL SortByProperty(string propertyName, bool ascending)
-        {
-            int iLen = this.Count;
-            int iMultiplier = ascending ? 1 : -1;
-
-            Property oProp = this.mObjSchema.Properties.GetPropertyByName(propertyName);
-
-            TL oListRet = this.Slot.CreateList<TL>();
-
-            for (int i = 0; i < iLen; i++)
-            {
-                int iInsertPos = 0;
-
-                for (int k = 0; k < oListRet.Count; k++)
-			    {
-                    //Esegue comparazione
-                    int iComp = ((IComparable)oProp.GetValue(this[i])).CompareTo(oProp.GetValue(oListRet[k])) * iMultiplier;
-                    if (iComp > 0)
-                    {
-                        iInsertPos++;
-                    }
-                    else 
-                    {
-                        break;
-                    }
-			    }
-                //Inserisce in nuova lista
-                oListRet.mInnerList.Insert(iInsertPos, this.mInnerList[i]);
-            }
-
-            //Ritorna Lista
-            return oListRet;
-        }
-
-      
-        /// <summary>
-        /// Ritorna una lista di oggetti che rispondono true al delegato passato in input
-        /// </summary>
-        /// <param name="testFunc"></param>
-        /// <returns></returns>
-        public TL FindAllByDelegate(ObjectTest<T> testFunc)
-        {
-            //Verifica delegato
-            if (testFunc == null)
-                throw new ObjectException(ObjectMessages.List_NullDelegate, typeof(T).Name);
-
-            TL oListRet = this.Slot.CreateList<TL>();
-
-            int iLen = this.Count;
-
-            for (int i = 0; i < iLen; i++)
-            {
-                if (testFunc(this[i]))
-                {
-                    oListRet.Add(this.mInnerList[i]);
-                }
-            }
-
-            //Ritorna Lista
-            return oListRet;
-        }
-
-        /// <summary>
-        /// Ricerca primo oggetto che ha la proprietà fornita con il valore specificato
-        /// </summary>
-        /// <param name="propertyName">Nome della proprietà per cui si vuole cercare (case sensitive)</param>
-        /// <param name="value">valore da testare</param>
-        /// <returns></returns>
-        public T FindFirstByPropertyFilter(IFilter filter)
-        {
-            T o = null;
-            int iLen = this.Count;
-
-            if (iLen > 0)
-            {
-                for (int i = 0; i < iLen; i++)
-                {
-                    if (filter.PropertyTest(this[i]))
-                    {
-                        o = this[i];
-                        break;
-                    }
-                }
-            }
-
-            //Ritorna Lista
-            return o;
-        }
-
-
-        /// <summary>
-        /// Ricerca ultimo oggetto che ha la proprietà fornita con il valore specificato
-        /// </summary>
-        /// <param name="propertyName">Nome della proprietà per cui si vuole cercare (case sensitive)</param>
-        /// <param name="value">valore da testare</param>
-        /// <returns></returns>
-        public T FindLastByPropertyFilter(IFilter filter)
-        {
-            T o = null;
-            int iLen = this.Count;
-
-            if (iLen > 0)
-            {
-                for (int i = iLen-1; i > -1; i--)
-                {
-                    if (filter.PropertyTest(this[i]))
-                    {
-                        o = this[i];
-                        break;
-                    }
-                }
-            }
-
-            //Ritorna Lista
-            return o;
-        }
-
-
-        /// <summary>
-        /// Ricerca tutti gli oggetti che hanno la proprietà fornita con il valore che rientra nel filtro
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        public TL FindAllByPropertyFilter(IFilter filter)
-        {
-            TL oListRet = this.Slot.CreateList<TL>();
-
-            int iLen = this.Count;
-
-            for (int i = 0; i < iLen; i++)
-            {
-                if (filter.PropertyTest(this[i]))
-                {
-                    oListRet.mInnerList.Add(this.mInnerList[i]);
-                }
-            }
-
-            //Ritorna Lista
-            return oListRet;
-        }
-
-
-        /// <summary>
-        /// Esegue aggiornamento di più proprietà contemporaneamente
-        /// </summary>
-        /// <param name="propertyValues"></param>
-        public void SetPropertyMassive(IDictionary<string, object> propertyValues)
-        {
-            //Crea la struttura di property da aggiornare
-            IDictionary<int, KeyValuePair<Property, object>> oInnerDic = new Dictionary<int, KeyValuePair<Property, object>>(propertyValues.Count);
-            foreach (var pair in propertyValues)
-            {
-                    Property oProp = this.mObjSchema.Properties.GetPropertyByName(pair.Key);
-                
-                    //Se la proprieta' e' readonly ritorna errore
-                    if (oProp.IsReadonly)
-                        throw new ObjectException("La proprieta' {0} e' in sola lettura", oProp.Name);
- 
-                    KeyValuePair<Property, object> oNewpair = new KeyValuePair<Property, object>(oProp, pair.Value);
-
-                    //Imposta
-                    oInnerDic.Add(oProp.PropertyIndex, oNewpair);
-            }
-
-            //Esegue aggiornamento
-            for (int i = 0; i < this.Count; i++)
-            {
-                foreach (var pair in oInnerDic)
-                {
-                    //Imposta
-                    pair.Value.Key.SetValue(this[i], pair.Value.Value);
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Imposta una proprieta' in maniera massiva su tutti gli oggetti
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="value"></param>
-        public void SetPropertyMassive(string propertyName, object value) 
-        {
-            Property oProp = this.mObjSchema.Properties.GetPropertyByName(propertyName);
-
-            //Se la proprieta' e' readonly ritorna errore
-            if (oProp.IsReadonly)
-                throw new ObjectException("La proprieta' {0} e' in sola lettura", oProp.Name);
-
-            for (int i = 0; i < this.Count; i++)
-            {
-                oProp.SetValue(this[i], value);
-            }
-        }
-
-        /// <summary>
-        /// Imposta massivamente le proprietà di oggetti che corrispondono al filtro impostato.
-        /// RItorna il numero di oggetti modificati
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <param name="value"></param>
-        /// <param name="filter"></param>
-        public int SetPropertyMassiveByFilter(string propertyName, object value, IFilter filter)
-        {
-            if (filter == null)
-                throw new ArgumentException("Il filtro di ricerca non puo' essere nullo");
-
-            Property oProp = this.mObjSchema.Properties.GetPropertyByName(propertyName);
-            int iLen = this.Count;
-            int iRet = 0;
-
-            for (int i = 0; i < iLen; i++)
-            {
-                if (filter.PropertyTest(this[i]))
-                {
-                    oProp.SetValue(this[i], value);
-                    iRet++;
-                }
-            }
-
-            return iRet;
-        }
+        public bool SupportsSorting => false;
 
 
         #endregion
@@ -1190,15 +644,10 @@ namespace Business.Data.Objects.Core
             this.CopyTo(array, index);
         }
 
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
+        public bool IsSynchronized => false;
 
-        public object SyncRoot
-        {
-            get { return this.mSyncRoot; }
-        }
+        public object SyncRoot => this.mSyncRoot;
+
 
         #endregion
 

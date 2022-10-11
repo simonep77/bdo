@@ -1,11 +1,14 @@
 using Business.Data.Objects.Common;
 using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using System.Collections.Generic;
+using System.Dynamic;
+using System;
+using System.Reflection;
 
 namespace Business.Data.Objects.Core
 {
@@ -15,22 +18,26 @@ namespace Business.Data.Objects.Core
     /// <typeparam name="T"></typeparam>
     public abstract class DataObject<T>
         : DataObjectBase where T : DataObject<T>
-        
     {
 
-        #region PUBLIC DELEGATES
-
-        /// <summary>
-        /// Delegato per la gestione dell' Xml del singolo oggetto della lista
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="writer"></param>
-        /// <param name="args"></param>
-        public delegate void XmlFunction(T value, XmlWrite writer, params object[] args);
-
-        #endregion
 
         #region PUBLIC METHODS
+
+        //public DataObject()
+        //{
+        //    var t = typeof(T);
+        //    //Se la classe e' astratta significa che e' creata tramite slot, altrimenti tramite "new"
+        //    if (!t.IsAbstract)
+        //    {
+        //        //Crea istanza
+        //        ProxyEntryDAO oTypeEntry = ProxyAssemblyCache.Instance.GetDaoEntry(t);
+
+        //        //Imposta schema su oggetto
+        //        this.mClassSchema = oTypeEntry.ClassSchema;
+        //        this.ObjectRefId = ProxyAssemblyCache.Instance.NewObjeRefId();
+        //        this.mDataSchema = new Schema.Usage.DataSchema(this.mClassSchema.Properties.Count, this.mClassSchema.ObjCount);
+        //    }
+        //}
 
 
         /// <summary>
@@ -40,7 +47,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public bool EqualsDeep(T other)
         {
-            DataDiffList oDiffList = this.Diff(other);
+            var oDiffList = this.Diff(other);
 
             return (oDiffList.Count == 0);
         }
@@ -52,12 +59,10 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public DataDiffList DiffSource()
+        public List<Tuple<string, object, object>> DiffSource()
         {
             if (this.ObjectState != EObjectState.Loaded)
-            {
                 throw new ObjectException(ObjectMessages.Base_DiffSourceNotLoaded, this.mClassSchema.ClassName);
-            }
 
             //Forza skip del tracking se attivo
             if (this.Slot.LiveTrackingEnabled)
@@ -77,74 +82,41 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Dati due oggetti ritorna elenco differenze
+        /// Dati due oggetti ritorna elenco differenze. Item1 e' il nome della prorieta, item2 il valore dell'oggetto origine, item3 dell'oggetto confrontato
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public DataDiffList Diff(T other)
+        public List<Tuple<string, object, object>> Diff(T other)
         {
-            Property oProp;
             object oSource, oOther;
 
             //Se other null eccezione
             if (other == null)
-            {
                 throw new ObjectException(ObjectMessages.Diff_Null, this.mClassSchema.ClassName);
-            }
 
             //Se other non e' dello stesso tipo
             if (this.mClassSchema.InternalID != other.mClassSchema.InternalID)
-            {
                 throw new ObjectException(ObjectMessages.Diff_WrongType, this.mClassSchema.ClassName, other.mClassSchema.ClassName);
-            }
 
-            DataDiffList oDiffList = new DataDiffList();
-            for (int iPropIndex = 0; iPropIndex < this.mClassSchema.Properties.Count; iPropIndex++)
+            var oDiffList = new List<Tuple<string, object, object>>();
+
+
+            foreach (var oProp in this.mClassSchema.Properties)
             {
-                oProp = this.mClassSchema.Properties[iPropIndex];
-                oSource = this.GetProperty(iPropIndex);
-                oOther = other.GetProperty(iPropIndex);
+                if (!(oProp is PropertySimple))
+                    continue;
+
+                oSource = oProp.GetValue(this);
+                oOther = oProp.GetValue(other);
 
                 //Proprietà normale
                 if (!object.Equals(oSource, oOther))
-                {
-                    DataDiff oDiff = new DataDiff(oProp.Name, ref oSource, ref oOther);
-                    oDiffList.Add(oDiff);
-                }
+                    oDiffList.Add(new Tuple<string, object, object>(oProp.Name, oSource, oOther));
             }
 
             return oDiffList;
         }
 
-        /// <summary>
-        /// Scrive Xml con possibilita' di integrazione dati attraverso la specifica di una funzione
-        /// di manipolazione
-        /// </summary>
-        /// <param name="function"></param>
-        /// <param name="rewriteAll">
-        /// Se true allora non emette l'Xml standard dell'oggetto
-        /// </param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public string ToXml(XmlFunction function, bool rewriteAll, params object[] args)
-        {
-            using (XmlWrite xw = new XmlWrite())
-            {
-                //Se deve riscrivere
-                if (!rewriteAll)
-                {
-                    xw.WriteRaw(this.ToXml(1));
-                }
-
-                //Se fornita funzione allora la richiama
-                if (function != null)
-                {
-                    function((T)this, xw, args);
-                }
-
-                return xw.ToString();
-            }
-        }
 
         /// <summary>
         /// Ritorna una lista contenente l'elemento selezionato
@@ -159,35 +131,6 @@ namespace Business.Data.Objects.Core
             return list;
         }
 
-        /// <summary>
-        /// Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'enumerabile in input
-        /// </summary>
-        /// <typeparam name="TL"></typeparam>
-        /// <param name="others"></param>
-        /// <returns></returns>
-        public TL ToListFromEnumerable<TL>(IEnumerable<T> others)
-            where TL : DataList<TL, T>
-        {
-
-            var list = this.ToList<TL>();
-            if (others != null)
-                list.AddRange(others);
-            return list;
-        }
-
-
-        /// <summary>
-        /// Ritorna una lista contenente l'elemento selezionato e gli elementi presenti nell'array in input
-        /// </summary>
-        /// <typeparam name="TL"></typeparam>
-        /// <param name="others"></param>
-        /// <returns></returns>
-        public TL ToListFromArray<TL>(params T[] others)
-            where TL : DataList<TL, T>
-        {
-            return this.ToListFromEnumerable<TL>(others);
-        }
-
 
         /// <summary>
         /// Dato un DataObject ritorna il corrispondente business object
@@ -200,6 +143,78 @@ namespace Business.Data.Objects.Core
             return (TL)ProxyAssemblyCache.Instance.CreateBizObj(ProxyAssemblyCache.Instance.GetBizEntry(typeof(TL)), this);
         }
 
+        ///// <summary>
+        ///// Ritorna un oggetto dinamico copiato dall'attuale
+        ///// </summary>
+        ///// <returns></returns>
+        //public dynamic ToDynamicObject()
+        //{
+        //    var o = new ExpandoObject();
+        //    var od = o as IDictionary<string, object>;
+        //    foreach (var prop in this.mClassSchema.Properties)
+        //    {
+        //        od[prop.Name] = prop.GetValue(this);
+        //    }
+        //    od[nameof(DataObjectBase.ObjectSource)] = this.mDataSchema.ObjectSource;
+        //    od[nameof(DataObjectBase.ObjectState)] = this.mDataSchema.ObjectState;
+
+        //    return o;
+        //}
+
+        ///// <summary>
+        ///// Carica i dati di un oggetto dinamico su quello corrente
+        ///// </summary>
+        ///// <param name="obj"></param>
+        //public void FromDynamicObject(dynamic obj)
+        //{
+        //    var od = obj as IDictionary<string, object>;
+
+        //    foreach (var prop in this.mClassSchema.Properties)
+        //    {
+        //        prop.SetValue(this, od[prop.Name]);
+        //    }
+
+        //    this.mDataSchema.ObjectSource = (EObjectSource)od[nameof(DataObjectBase.ObjectSource)];
+        //    this.mDataSchema.ObjectState = (EObjectState)od[nameof(DataObjectBase.ObjectState)];
+        //}
+
+
+        /// <summary>
+        /// Prova a copiare i valori su un oggetto di outpu output
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        public void TryCopyTo(object output, bool checkNullable = true)
+        {
+            var outputType = output.GetType();
+
+            foreach (var prop in this.mClassSchema.Properties)
+            {
+                try
+                {
+                    var _value = prop.GetValue(this);
+
+                    if (_value != null)
+                    {
+                        PropertyInfo p = outputType.GetProperty(prop.Name);
+
+                        if (p == null)
+                            continue;
+
+                        //Se valore puo' considerarsi null e la prprietà è nullable non la imposta
+                        if (checkNullable && Nullable.GetUnderlyingType(p.PropertyType) != null && prop.IsNull(_value))
+                            continue;
+
+                        if (p.CanWrite)
+                            p.SetValue(output, Convert.ChangeType(_value, prop.Type));
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+        }
 
         #endregion
 

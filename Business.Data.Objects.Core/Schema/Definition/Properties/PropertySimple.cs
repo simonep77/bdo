@@ -1,6 +1,6 @@
 using Business.Data.Objects.Common;
 using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Attributes;
 using Business.Data.Objects.Core.Base;
@@ -18,7 +18,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
     {
 
         #region PROPERTIES
-        private object mDefaultValue;
         private string XmlFormatString;
         private Encrypted mEncAttr;
 
@@ -26,44 +25,22 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public List<Attributes.BaseModifierAttribute> AttrModifiers { get; set; }
         public List<Attributes.BaseValidatorAttribute> AttrValidators { get; set; }
 
-        public override object DefaultValue
-        {
-            get
-            {
-                return this.mDefaultValue;
-            }
-        }
+        public override object DefaultValue { get; protected set; }
 
         /// <summary>
         /// Indica se presenti validatori
         /// </summary>
-        public bool HasValidators
-        {
-            get
-            {
-                return (this.AttrValidators != null && this.AttrValidators.Count > 0);
-            }
-        }
+        public bool HasValidators => this.AttrValidators != null && this.AttrValidators.Count > 0;
 
         /// <summary>
         /// Indica se presenti modificatori
         /// </summary>
-        public bool HasModifiers
-        {
-            get
-            {
-                return (this.AttrModifiers != null && this.AttrModifiers.Count > 0);
-            }
-        }
+        public bool HasModifiers => this.AttrModifiers != null && this.AttrModifiers.Count > 0;
 
         /// <summary>
         /// Indica se esclusa dal caricamento standard (query load)
         /// </summary>
-        public override bool IsSqlSelectExcluded { 
-            get {
-                return this.LoadOnAccess;
-            } 
-        }
+        public override bool ExcludeSelect => this.LoadOnAccess;
 
 
         #endregion
@@ -73,7 +50,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public PropertySimple(string name, Type type)
             :base(name,type)
         {
-            this.mDefaultValue = PropertyHelper.GetDefaultValue(type);
+            this.DefaultValue = PropertyHelper.GetDefaultValue(type);
 
         }
 
@@ -100,7 +77,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 return true;
 
             //Check campi automatici
-            if (attr is BaseAutomaticAttribute)
+            if (attr is AutomaticField)
             {
                 if (this.IsAutomatic)
                     throw new SchemaReaderException(this, SchemaMessages.Prop_NoMultipleAutomatic);
@@ -134,7 +111,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //DEFAULT VALUE
             else if (attr is Attributes.DefaultValue)
             {
-                this.mDefaultValue = ((Attributes.DefaultValue)attr).ConvertTo(this.Type);
+                this.DefaultValue = ((Attributes.DefaultValue)attr).ConvertTo(this.Type);
             }
             //CARICA SUL PRIMO ACCESSO
             else if (attr is LoadOnAccess)
@@ -167,6 +144,16 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     this.AttrValidators.Add(bv);
                 }
 
+            }
+            //Username automatico in salvataggio
+            else if (attr is UserInfo) 
+            {
+                this.Schema.UserInfo = this;
+            }
+            //Cancellazione logica
+            else if (attr is LogicalDelete) 
+            {
+                this.Schema.LogicalDeletes.Add(this);
             }
             //Proprieta' criptata su DB
             else if (attr is Encrypted)
@@ -202,16 +189,22 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
             if (oRet == null)
             {
-                //Se oggetto nuovo o già caricato da db ritorna default
-                if (obj.mDataSchema.ObjectState == EObjectState.New || obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
+                if (!this.LoadOnAccess)
+                {
                     //Ritorna default
                     return this.DefaultValue;
+                }
+                else
+                {
+                    if (!obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
+                    {
+                        //Deve Caricare property
+                        obj.LoadPropertyFromDB(this);
 
-                //Deve Caricare property
-                obj.LoadPropertyFromDB(this);
-
-                //Reimposta il valore
-                oRet = obj.mDataSchema.Values[this.PropertyIndex];
+                        //Reimposta il valore
+                        oRet = obj.mDataSchema.Values[this.PropertyIndex];
+                    }
+                }
             }
 
             return oRet;
@@ -361,32 +354,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         }
 
-        /// <summary>
-        ///  Scrive DTO
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="obj"></param>
-        /// <param name="depth"></param>
-        public override void WriteDTO(Dictionary<string, object> dto, DataObjectBase obj, int depth)
-        {
-            dto.Add(this.Name, this.GetValue(obj));
-        }
-
-        /// <summary>
-        /// Legge DTO
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <param name="obj"></param>
-        public override void ReadDTO(Dictionary<string, object> dto, DataObjectBase obj)
-        {
-            object o = null;
-
-            if (!dto.TryGetValue(this.Name, out o))
-                return;
-
-            this.SetValue(obj, o);
-
-        }
 
 
         /// <summary>
@@ -396,7 +363,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <param name="dr"></param>
         public override void SetValueFromReader(DataObjectBase obj, IDataReader dr)
         {
-            object oTemp = dr[this.Column.Name];
+            object oTemp = dr[this.Column.NormalizedName];
 
             if (DBNull.Value.Equals(oTemp) || oTemp == null)
                 oTemp = null;

@@ -41,34 +41,22 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         #region PROPERTIES
 
-        public abstract object DefaultValue { get; }
+        public abstract object DefaultValue { get; protected set; }
 
         /// <summary>
         /// Indica se presenti property map
         /// </summary>
-        public bool HasPropertyMaps
-        {
-            get
-            {
-                return (this.PropertyMap != null && this.PropertyMap.Count > 0);
-            }
-        }
+        public bool HasPropertyMaps => this.PropertyMap != null && this.PropertyMap.Count > 0;
 
         /// <summary>
         /// Indica se la proprieta' va inclusa nella query di selezione standard
         /// </summary>
-        public abstract bool IsSqlSelectExcluded { get; }
+        public abstract bool ExcludeSelect { get; }
 
         /// <summary>
         /// Ritorna il nomeclasse.nomeproprieta'
         /// </summary>
-        public string Fullname
-        {
-            get
-            {
-                return string.Concat(this.Schema.ClassName, @".", this.Name);
-            }
-        }
+        public string Fullname => string.Concat(this.Schema.ClassName, @".", this.Name);
 
 
         #endregion
@@ -87,10 +75,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
         #region PUBLIC
 
 
-        public override string ToString()
-        {
-            return string.Concat(this.Name, @" (type: ", this.GetType().Name, @")");
-        }
+        public override string ToString() => string.Concat(this.Name, @" (type: ", this.GetType().Name, @")");
+
 
         /// <summary>
         /// Esegue validazione formale di tutti i valori immessi
@@ -115,10 +101,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //Colonne
             if (attr is Column)
             {
-
                 //Aggiunge un campo verificando l'ordinamento
                 this.Column = (Column)attr;
-
             }
             //ACCETTA NULL
             else if (attr is AcceptNull)
@@ -126,9 +110,9 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 this.AcceptNull = true;
             }
             //DB Provider Type
-            else if (attr is DbDataType)
+            else if (attr is CustomDbType)
             {
-                this.CustomDbType = ((DbDataType)attr).Value;
+                this.CustomDbType = ((CustomDbType)attr).Value;
             }
             //ESCLUDE DA XML
             else if (attr is ExcludeFromXml)
@@ -182,10 +166,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public abstract void SetValue(DataObjectBase obj, object value);
 
         public abstract void WriteXml(XmlWrite xw, DataObjectBase obj, int depth);
-
-        public abstract void WriteDTO(Dictionary<string, object> dto, DataObjectBase obj, int depth);
-
-        public abstract void ReadDTO(Dictionary<string, object> dto, DataObjectBase obj);
 
         public abstract void SetValueFromReader(DataObjectBase obj, IDataReader dr);
 

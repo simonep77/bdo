@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Data.Common;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Core.Base;
@@ -35,7 +36,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Eq(string fieldName, object value)
         {
-            return new FilterEQUAL(fieldName, value);
+            return new Filter(fieldName, EOperator.Equal, value);
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Lt(string fieldName, object value)
         {
-            return new FilterLESS(fieldName, value);
+            return new Filter(fieldName, EOperator.LessThan, value);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Lte(string fieldName, object value)
         {
-            return new FilterLESSEQ(fieldName, value);
+            return new Filter(fieldName, EOperator.LessEquals, value);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Neq(string fieldName, object value)
         {
-            return new FilterDIFFERS(fieldName, value);
+            return new Filter(fieldName, EOperator.Differs, value);
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Gt(string fieldName, object value)
         {
-            return new FilterGREATER(fieldName, value);
+            return new Filter(fieldName, EOperator.GreaterThan, value);
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Gte(string fieldName, object value)
         {
-            return new FilterGREATEREQ(fieldName, value);
+            return new Filter(fieldName, EOperator.GreaterEquals, value);
         }
 
         /// <summary>
@@ -102,7 +103,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Betw(string fieldName, object valueA, object valueB)
         {
-            return new FilterBETWEEN(fieldName, valueA, valueB);
+            return new Filter(fieldName, EOperator.Between, new object[] { valueA, valueB });
         }
 
         /// <summary>
@@ -112,7 +113,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter IsNull(string fieldName)
         {
-            return new FilterISNULL(fieldName);
+            return new Filter(fieldName, EOperator.IsNull, null);
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter NotNull(string fieldName)
         {
-            return new FilterISNOTNULL(fieldName);
+            return new Filter(fieldName, EOperator.IsNotNull, null);
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter Like(string fieldName, object value)
         {
-            return new FilterLIKE(fieldName, value);
+            return new Filter(fieldName, EOperator.Like, value);
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter NotLike(string fieldName, object value)
         {
-            return new FilterNOTLIKE(fieldName, value);
+            return new Filter(fieldName, EOperator.NotLike, value);
         }
 
         /// <summary>
@@ -155,7 +156,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, object value)
         {
-            return new FilterIN(fieldName, value);
+            return new Filter(fieldName, EOperator.In, new object[] { value });
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, object value1, object value2)
         {
-            return new FilterIN(fieldName, value1, value2);
+            return new Filter(fieldName, EOperator.In, new object[] { value1, value2 });
         }
 
         /// <summary>
@@ -180,7 +181,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, object value1, object value2, object value3)
         {
-            return new FilterIN(fieldName, value1, value2, value3);
+            return new Filter(fieldName, EOperator.In, new object[] { value1, value2, value3 });
         }
 
         /// <summary>
@@ -194,7 +195,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, object value1, object value2, object value3, object value4)
         {
-            return new FilterIN(fieldName, value1, value2, value3, value4);
+            return new Filter(fieldName, EOperator.In, new object[] { value1, value2, value3, value4 });
         }
 
         /// <summary>
@@ -209,7 +210,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, object value1, object value2, object value3, object value4, object value5)
         {
-            return new FilterIN(fieldName, value1, value2, value3, value4, value5);
+            return new Filter(fieldName, EOperator.In, new object[] { value1, value2, value3, value4, value5 });
         }
 
         /// <summary>
@@ -225,81 +226,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, object value1, object value2, object value3, object value4, object value5, object value6)
         {
-            return new FilterIN(fieldName, value1, value2, value3, value4, value5, value6);
-        }
-
-        /// <summary>
-        /// Crea filtro IN
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
-        /// <param name="value3"></param>
-        /// <param name="value4"></param>
-        /// <param name="value5"></param>
-        /// <param name="value6"></param>
-        /// <param name="value7"></param>
-        /// <returns></returns>
-        public static IFilter In(string fieldName, object value1, object value2, object value3, object value4, object value5, object value6, object value7)
-        {
-            return new FilterIN(fieldName, value1, value2, value3, value4, value5, value6, value7);
-        }
-
-        /// <summary>
-        /// Crea filtro IN
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
-        /// <param name="value3"></param>
-        /// <param name="value4"></param>
-        /// <param name="value5"></param>
-        /// <param name="value6"></param>
-        /// <param name="value7"></param>
-        /// <param name="value8"></param>
-        /// <returns></returns>
-        public static IFilter In(string fieldName, object value1, object value2, object value3, object value4, object value5, object value6, object value7, object value8)
-        {
-            return new FilterIN(fieldName, value1, value2, value3, value4, value5, value6, value7, value8);
-        }
-
-        /// <summary>
-        /// Crea filtro IN
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
-        /// <param name="value3"></param>
-        /// <param name="value4"></param>
-        /// <param name="value5"></param>
-        /// <param name="value6"></param>
-        /// <param name="value7"></param>
-        /// <param name="value8"></param>
-        /// <param name="value9"></param>
-        /// <returns></returns>
-        public static IFilter In(string fieldName, object value1, object value2, object value3, object value4, object value5, object value6, object value7, object value8, object value9)
-        {
-            return new FilterIN(fieldName, value1, value2, value3, value4, value5, value6, value7, value8, value9);
-        }
-
-        /// <summary>
-        /// Crea filtro IN
-        /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="value1"></param>
-        /// <param name="value2"></param>
-        /// <param name="value3"></param>
-        /// <param name="value4"></param>
-        /// <param name="value5"></param>
-        /// <param name="value6"></param>
-        /// <param name="value7"></param>
-        /// <param name="value8"></param>
-        /// <param name="value9"></param>
-        /// <param name="value10"></param>
-        /// <returns></returns>
-        public static IFilter In(string fieldName, object value1, object value2, object value3, object value4, object value5, object value6, object value7, object value8, object value9, object value10)
-        {
-            return new FilterIN(fieldName, value1, value2, value3, value4, value5, value6, value7, value8, value9, value10);
+            return new Filter(fieldName, EOperator.In, new object[] { value1, value2, value3, value4, value5, value6 });
         }
 
         /// <summary>
@@ -310,7 +237,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, Array values)
         {
-            return new FilterIN(fieldName, values);
+            return new Filter(fieldName, EOperator.In, values.Cast<object>().ToArray());
         }
 
         /// <summary>
@@ -321,7 +248,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public static IFilter In(string fieldName, IEnumerable values)
         {
-            return new FilterIN(fieldName, values);
+            return new Filter(fieldName, EOperator.In, values.Cast<object>().ToArray());
         }
 
         #endregion

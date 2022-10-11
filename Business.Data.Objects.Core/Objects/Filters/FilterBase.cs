@@ -1,5 +1,5 @@
 ﻿using Business.Data.Objects.Common.Exceptions;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Database;
@@ -22,6 +22,7 @@ namespace Business.Data.Objects.Core
         private EOperator mOperator;
         private object mValue;
         private bool mIsValueChecked = false;
+        private bool mIsFieldRight = false;
 
         private List<ChainItem> mChain;
 
@@ -131,6 +132,28 @@ namespace Business.Data.Objects.Core
         public object Value
         {
             get { return this.mValue; }
+        }
+
+
+        /// <summary>
+        /// Indica che il nome di proprieta' deve essere impostato a dx dello statement.
+        /// Non vale per tutti gli statement
+        /// </summary>
+        /// <returns></returns>
+        public IFilter FieldRight()
+        {
+            this.mIsFieldRight = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Indica che il nome di proprieta' deve essere impostato a sx dello statement (DEFAULT)
+        /// </summary>
+        /// <returns></returns>
+        public IFilter FieldLeft()
+        {
+            this.mIsFieldRight = false;
+            return this;
         }
 
 
@@ -292,7 +315,7 @@ namespace Business.Data.Objects.Core
                     for (int i = 0; i < values.Length; i++)
                     {
                         //Esegue la conversione di ciascun tipo
-                        var oFilt = new FilterEQUAL(this.Name, values[i]);
+                        var oFilt = new Filter(this.Name, EOperator.Equal, values[i]);
                         if (oFilt.PropertyTest(obj))
                         {
                             bTest = true;
@@ -338,8 +361,12 @@ namespace Business.Data.Objects.Core
             //Aertura filtro
             sql.Append(@"(");
 
-            sql.Append(this.mName);
-            sql.Append(Utils.ObjectHelper.OperatorToString(this.mOperator));
+            //Se nome a sx
+            if (!this.mIsFieldRight)
+            {
+                sql.Append(this.mName);
+                sql.Append(Utils.ObjectHelper.OperatorToString(this.mOperator));
+            }
 
             switch (this.mOperator)
             {
@@ -375,6 +402,13 @@ namespace Business.Data.Objects.Core
                     break;
             }
 
+            //Se nome a dx
+            if (this.mIsFieldRight)
+            {
+                sql.Append(Utils.ObjectHelper.OperatorToString(this.mOperator));
+                sql.Append(this.mName);
+            }
+
             //Aggiunge AND
             if (bComplex)
             {
@@ -395,6 +429,94 @@ namespace Business.Data.Objects.Core
             if (bComplex)
                 sql.Append(@")");
         }
+
+
+        /// <summary>
+        /// Appende la clausola generata (SQL + Parametri) con traduzione Proprieta -> Colonne
+        /// </summary>
+        /// <param name="db"></param>
+        internal void appendFilterSqlInternal(IDataBase db, BusinessSlot slot, ClassSchema schema, StringBuilder sql, int paramIndex)
+        {
+            object[] arrValues;
+            DbParameter oParam;
+            bool bComplex = (this.mChain != null);
+
+            if (bComplex)
+                sql.Append(@"(");//Apre statement principale
+
+            //Aertura filtro
+            sql.Append(@"(");
+
+            //Se nome a sx
+            if (!this.mIsFieldRight)
+            {
+                sql.Append(slot.DbPrefixGetColumn(schema.OriginalType, this.mName));
+                sql.Append(Utils.ObjectHelper.OperatorToString(this.mOperator));
+            }
+
+            switch (this.mOperator)
+            {
+                case EOperator.IsNull:
+                case EOperator.IsNotNull:
+                    break;
+                case EOperator.Between:
+                    arrValues = this.mValue as object[];
+                    oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString(), "_1"), arrValues[0]);
+                    sql.Append(oParam.ParameterName);
+                    sql.Append(@" AND ");
+
+                    oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString(), "_2"), arrValues[1]);
+                    sql.Append(oParam.ParameterName);
+
+                    break;
+                case EOperator.In:
+                    sql.Append(@"(");
+                    arrValues = this.mValue as object[];
+                    for (int i = 0; i < arrValues.Length; i++)
+                    {
+                        oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString(), "_", i.ToString()), arrValues[i]);
+                        sql.Append(oParam.ParameterName);
+                        sql.Append(@", ");
+                    }
+                    sql.Remove(sql.Length - 2, 2);
+                    sql.Append(@")");
+
+                    break;
+                default:
+                    oParam = db.AddParameter(string.Concat(this.mName, paramIndex.ToString()), this.mValue);
+                    sql.Append(oParam.ParameterName);
+                    break;
+            }
+
+            //Se nome a dx
+            if (this.mIsFieldRight)
+            {
+                sql.Append(Utils.ObjectHelper.OperatorToString(this.mOperator));
+                sql.Append(slot.DbPrefixGetColumn(schema.OriginalType, this.mName));
+            }
+
+            //Aggiunge AND
+            if (bComplex)
+            {
+                for (int i = 0; i < this.mChain.Count; i++)
+                {
+                    sql.Append(this.mChain[i].ToSqlOperator());
+
+                    ((FilterBase)this.mChain[i].Filter).appendFilterSqlInternal(db, slot, schema, sql, ++paramIndex);
+                }
+            }
+
+
+            //Chiusura filtro
+            sql.Append(@")");
+
+
+            //Chiude statement principale
+            if (bComplex)
+                sql.Append(@")");
+        }
+
+
 
         public IEnumerator<IFilter> GetEnumerator()
         {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Bdo.Attributes;
-using Bdo.Objects;
+using Business.Data.Objects.Core;
+using Business.Data.Objects.Core.Attributes;
 
 namespace Business.Data.Objects.TestClass.DAL
 {
@@ -34,6 +34,10 @@ namespace Business.Data.Objects.TestClass.DAL
         [AutoUpdateTimestamp]
         public abstract DateTime DataAggiornamento { get; }
 
+        //[MaxLength(50), AcceptNull, UserInfo]
+        //public abstract string Utente { get; }
 
+        //[LogicalDelete]
+        //public abstract bool Cancellato { get; }
     }
 }

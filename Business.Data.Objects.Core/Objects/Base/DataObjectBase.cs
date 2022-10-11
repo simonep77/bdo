@@ -1,5 +1,5 @@
 using Business.Data.Objects.Common;
-using Business.Data.Objects.Common.Resources;
+using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Common.Exceptions;
 using Business.Data.Objects.Common.Utils;
 using Business.Data.Objects.Core.Schema.Definition;
@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using Business.Data.Objects.Core.Attributes;
 
 namespace Business.Data.Objects.Core.Base
 {
@@ -46,24 +47,13 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Indica la provenienza dell'oggetto
         /// </summary>
-        public EObjectSource ObjectSource
-        {
-            get
-            {
-                return this.mDataSchema.ObjectSource;
-            }
-        }
+        public EObjectSource ObjectSource => this.mDataSchema.ObjectSource;
 
         /// <summary>
         /// Indica lo stato interno dell'oggetto
         /// </summary>
-        public EObjectState ObjectState
-        {
-            get
-            {
-                return this.mDataSchema.ObjectState;
-            }
-        }
+        public EObjectState ObjectState => this.mDataSchema.ObjectState;
+
 
         #endregion
 
@@ -74,10 +64,10 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="propIn"></param>
         internal void firePropertyChanged(Property propIn)
-        { 
+        {
             //Notifica per DataBindings
             if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propIn.Name));        
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propIn.Name));
         }
 
         /// <summary>
@@ -113,23 +103,14 @@ namespace Business.Data.Objects.Core.Base
         /// Ritorna la rappresentazione in stringa dell'oggetto
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return string.Concat(this.mClassSchema.ClassName,
-                @" (",
-                ObjectHelper.ObjectEnumerableToString(this.mClassSchema.PrimaryKey.GetValues(this)),
-                @")");
-        }
+        public override string ToString() => $"{this.mClassSchema.ClassName} ({ObjectHelper.ObjectEnumerableToString(this.mClassSchema.PrimaryKey.GetValues(this))})";
 
 
         /// <summary>
         /// Ritorna una rappresentazione XML dell'oggetto senza navigazione nei sotto oggetti
         /// </summary>
         /// <returns></returns>
-        public virtual string ToXml()
-        {
-            return this.ToXml(0);
-        }
+        public virtual string ToXml() => this.ToXml(0);
 
 
         /// <summary>
@@ -155,7 +136,7 @@ namespace Business.Data.Objects.Core.Base
                         continue;
 
                     oProp.WriteXml(xw, this, depth);
-                   
+
                 }
 
                 return xw.ToString();
@@ -163,77 +144,25 @@ namespace Business.Data.Objects.Core.Base
 
         }
 
-        /// <summary>
-        /// Ritorna rappresentazione in forma di coppie property=valore con
-        /// </summary>
-        /// <returns></returns>
-        public Dictionary<string, object> ToDTO()
-        {
-            return this.ToDTO(0);
-        }
 
         /// <summary>
-        /// Ritorna rappresentazione in forma di coppie property=valore con specifica di profondita'
+        /// Ritorna rappresentazione  JSON dell'oggetto (per serializzazione)
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, object> ToDTO(int depth)
-        {
-            Dictionary<string, object> oRet = new Dictionary<string, object>(this.mClassSchema.Properties.Count + 10);
+        public virtual string ToJSON() => JSONWriter.ToJson(this);
 
-            for (int k = 0; k < this.mClassSchema.Properties.Count; k++)
+        /// <summary>
+        /// Carica i dati di un JSON sull'oggetto (per deserializzazione)
+        /// </summary>
+        /// <param name="json"></param>
+        public virtual void FromJSON(string json)
+        {
+            using (var parser = new JSONParser())
             {
-                //Verifica proprietà una per una in base al tipo
-                this.mClassSchema.Properties[k].WriteDTO(oRet, this, depth);
-
+                parser.FillFromJson(this, json);
             }
-
-            return oRet;
-        }
-
-
-        /// <summary>
-        /// Ritorna rappresentazione  JSON dell'oggetto
-        /// </summary>
-        /// <returns></returns>
-        public virtual string ToJSON()
-        {
-            return JSONWriter.ToJson(this);
-        }
-
-
-        /// <summary>
-        /// Ritorna Xml contenente i valori delle proprieta' in input
-        /// </summary>
-        /// <param name="propertyNames"></param>
-        /// <returns></returns>
-        public string ToXml(params string[] propertyNames)
-        {
-            //Controllo array
-            if (propertyNames == null || propertyNames.Length == 0)
-                throw new ObjectException("{0} - L'elenco di proprieta' fornite e' vuoto");
-
-            using (XmlWrite xw = new XmlWrite())
-            {
-                for (int i = 0; i < propertyNames.Length; i++)
-                {
-                    //Verifica proprietà una per una in base al tipo
-                    this.mClassSchema.Properties.GetPropertyByName(propertyNames[i]).WriteXml(xw, this, 0);
-                }
-
-                return xw.ToString();
-            }
-            
-        }
-
-
-        /// <summary>
-        /// Verifica se property nulla (Interna)
-        /// </summary>
-        /// <param name="prop"></param>
-        /// <returns></returns>
-        internal bool IsDefaultValue(Property prop)
-        {
-            return object.Equals(prop.GetValue(this), prop.DefaultValue);
+            this.mDataSchema.ObjectSource = EObjectSource.DTO;
+            this.mDataSchema.ObjectState = EObjectState.Loaded;
         }
 
 
@@ -254,11 +183,8 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public bool IsChanged(string propertyName)
-        {
-            return this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex, DataFlags.Changed);
-        }
-
+        public bool IsChanged(string propertyName) => this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex, DataFlags.Changed);
+ 
 
         /// <summary>
         /// Ritorna elenco di proprieta' modificate
@@ -318,7 +244,7 @@ namespace Business.Data.Objects.Core.Base
                     break;
                 case EObjectState.Loaded:
                     //esegue
-                    eSaveRes =  this.performDbUpdate();
+                    eSaveRes = this.performDbUpdate();
                     break;
             }
 
@@ -377,7 +303,7 @@ namespace Business.Data.Objects.Core.Base
             try
             {
                 //Imposta SQL (preleva quello standard dalla PK e sostituisce il contenuto della select con il solo nome campo)
-                db.SQL = string.Concat(@"SELECT ", prop.Column.Name, " FROM " , this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), this.mClassSchema.PrimaryKey.SQL_Where_Clause);
+                db.SQL = string.Concat(@"SELECT ", prop.Column.Name, " FROM ", this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), this.mClassSchema.PrimaryKey.SQL_Where_Clause);
 
                 //Imposta PK
                 var oKeyValues = this.mClassSchema.PrimaryKey.FillKeyQueryWhereParams(db, this);
@@ -428,6 +354,7 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="filter"></param>
         /// <param name="order"></param>
+        [Obsolete("Utilizzare LoadByLinq")]
         internal void LoadByFilter(IFilter filter, OrderBy order)
         {
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
@@ -438,7 +365,7 @@ namespace Business.Data.Objects.Core.Base
             sb.Append(@" WHERE ");
 
             //Imposta parametri WHERE
-            filter.AppendFilterSql(db, sb, 0);
+            ((FilterBase)filter).appendFilterSqlInternal(db, this.Slot, this.mClassSchema, sb, 0);
 
             //Se valorizzato include l'order by
             if (order != null)
@@ -451,6 +378,36 @@ namespace Business.Data.Objects.Core.Base
             this.ExecQueryAndLoadObj(db);
         }
 
+
+        /// <summary>
+        /// Carica oggetto a partire da uno statement where custom
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="order"></param>
+        internal void LoadByCustomWhere(string where, OrderBy order)
+        {
+            IDataBase db = this.Slot.DbGet(this.mClassSchema);
+
+            //SQL DIRETTO
+            var sb = new StringBuilder(this.mClassSchema.TableDef.SQL_Select_Item);
+            sb.Append(this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef));
+            sb.Append(@" WHERE ");
+
+            //Imposta parametri WHERE
+            sb.Append(where);
+
+            //Se valorizzato include l'order by
+            if (order != null)
+                sb.Append(order.ToString());
+
+            //imposta query
+            db.SQL = sb.ToString();
+
+            //Imposta dati dopo query
+            this.ExecQueryAndLoadObj(db);
+        }
+
+
         /// <summary>
         /// Carica oggetto da chiave 
         /// </summary>
@@ -460,9 +417,9 @@ namespace Business.Data.Objects.Core.Base
         {
 
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
-            
+
             //SQL DIRETTO
-            db.SQL = string.Concat(string.Intern(this.mClassSchema.TableDef.SQL_Select_Item),  this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef), 
+            db.SQL = string.Concat(string.Intern(this.mClassSchema.TableDef.SQL_Select_Item), this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef),
                 string.Intern(keyIn.SQL_Where_Clause));
 
             //Imposta parametri WHERE
@@ -487,7 +444,7 @@ namespace Business.Data.Objects.Core.Base
                 oProp = this.mClassSchema.Properties[k];
 
                 //Salta le proprietà non incluse nel caricamento
-                if (oProp.IsSqlSelectExcluded && !includeAll)
+                if (oProp.ExcludeSelect && !includeAll)
                     continue;
 
                 //Richiama il caricamento della singola proprietà
@@ -499,17 +456,13 @@ namespace Business.Data.Objects.Core.Base
             this.mDataSchema.ObjectState = EObjectState.Loaded;
         }
 
-   
+
         /// <summary>
         /// Carica definizione di proprietà con controllo
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        private Property GetPropertyDefinition(int propertyIndex)
-        {
-            //Ritorna proprietà
-            return this.mClassSchema.Properties[propertyIndex];
-        }
+        private Property GetPropertyDefinition(int propertyIndex) => this.mClassSchema.Properties[propertyIndex];
 
 
         /// <summary>
@@ -546,7 +499,7 @@ namespace Business.Data.Objects.Core.Base
                 {
                     //Check changed flag
                     bChanged = this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed);
-                    
+
 
                     //skip object not new and not changed
                     if (this.mDataSchema.ObjectState == EObjectState.Loaded && !bChanged)
@@ -600,7 +553,7 @@ namespace Business.Data.Objects.Core.Base
 
         }
 
- 
+
         /// <summary>
         /// Esegue la insert sul DB
         /// </summary>
@@ -614,6 +567,9 @@ namespace Business.Data.Objects.Core.Base
 
             try
             {
+                //Se prevista gestione UserInfo la avvia
+                this.mClassSchema.UserInfo?.SetValue(this, this.Slot.GetUserInfo());
+
                 //Inserisce campi
                 for (int iPropIndex = 0; iPropIndex < this.mClassSchema.Properties.Count; iPropIndex++)
                 {
@@ -628,7 +584,7 @@ namespace Business.Data.Objects.Core.Base
 
                     //Imposta campi
                     object oValue = oProp.GetValueForDb(this);
-               
+
                     //Imposta valore
                     oDbParams.Add(db.CreateParameter(oProp.Column.ParamName, oValue, oProp.Column.DbType));
 
@@ -657,14 +613,14 @@ namespace Business.Data.Objects.Core.Base
                         sbSql.Append(@"=");
                         sbSql.Append(db.LastAutoIdFunction);
                     }
-                    else 
+                    else
                     {
                         sbSql.Append(this.mClassSchema.PrimaryKey.SQL_Where_Clause);
 
                         for (int i = 0; i < this.mClassSchema.PrimaryKey.Properties.Count; i++)
                         {
-                            oDbParams.Add(db.CreateParameter(this.mClassSchema.PrimaryKey.Properties[i].Column.GetKeyParamName(), 
-                                this.mClassSchema.PrimaryKey.Properties[i].GetValueForDb(this), 
+                            oDbParams.Add(db.CreateParameter(this.mClassSchema.PrimaryKey.Properties[i].Column.GetKeyParamName(),
+                                this.mClassSchema.PrimaryKey.Properties[i].GetValueForDb(this),
                                 this.mClassSchema.PrimaryKey.Properties[i].Type));
                         }
                     }
@@ -721,8 +677,7 @@ namespace Business.Data.Objects.Core.Base
             //Appoggio
             IDataBase db = this.Slot.DbGet(this.mClassSchema);
             List<DbParameter> oDbParams = new List<DbParameter>(this.mClassSchema.Properties.Count);
-
-            int iNumChangedProps = 0;
+            List<Property> lstIncludedProps = new List<Property>();
             Property oProp;
 
             StringBuilder sbSQL = new StringBuilder(@"UPDATE ", 500);
@@ -750,9 +705,17 @@ namespace Business.Data.Objects.Core.Base
                         continue;
                     }
 
+                    //Se username automatico allora prova ad impostarlo
+                    //Gestione automatica delle info utente
+                    if (object.ReferenceEquals(oProp, this.mClassSchema.UserInfo))
+                        this.mClassSchema.UserInfo?.SetValue(this, this.Slot.GetUserInfo());
+
                     //PROPRIETA' 
                     if (!this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed))
                         continue;
+
+                    //Incrementa lista di proprieta' incluse nell'update
+                    lstIncludedProps.Add(oProp);
 
                     var oValue = oProp.GetValueForDb(this);
 
@@ -765,14 +728,12 @@ namespace Business.Data.Objects.Core.Base
                     //Imposta valore
                     oDbParams.Add(db.CreateParameter(oProp.Column.ParamName, oValue, oProp.Column.DbType));
 
-                    //Aggiorna
-                    iNumChangedProps++;
                     //TODO: Attenzione impostando qui il flag, in caso di errore rimane l'oggetto sporco!!!!
                     this.mDataSchema.SetFlags(oProp.PropertyIndex, DataFlags.Changed, false);
                 }
 
-                //NON C'È NULLA DA MODIFICARE ESCE
-                if (iNumChangedProps == 0)
+                //NON C'È NULLA DA MODIFICARE ESCE (nessun campo modificato oppure )
+                if (lstIncludedProps.Count == 0 || (lstIncludedProps.Count == 1 && object.ReferenceEquals(lstIncludedProps[0], this.mClassSchema.UserInfo)))
                     return ESaveResult.UnChanged;
 
                 //Rimuove ,
