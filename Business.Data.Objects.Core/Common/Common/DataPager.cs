@@ -59,34 +59,5 @@ namespace Business.Data.Objects.Common
             this.Offset = 20;
         }
 
-
-        /// <summary>
-        /// Ritorna rappresentazione Xml del pager
-        /// </summary>
-        /// <returns></returns>
-        public string ToXml()
-        {
-            using (XmlWrite xw = new XmlWrite())
-            {
-                //Formattazione standard
-                xw.WriteStartElement("Pager");
-                try
-                {
-                    xw.WriteElementString("Position", this.Position.ToString());
-                    xw.WriteElementString("Offset", this.Offset.ToString());
-                    xw.WriteElementString("Page", this.Page.ToString());
-                    xw.WriteElementString("TotRecords", this.TotRecords.ToString());
-                    xw.WriteElementString("TotPages", this.TotPages.ToString());
-
-                }
-                finally
-                {
-                    xw.WriteEndElement();
-                }
-
-                return xw.ToString();
-            }
-        }
-
     }
 }

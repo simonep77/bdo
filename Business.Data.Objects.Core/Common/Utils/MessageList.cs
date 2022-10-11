@@ -46,37 +46,6 @@ namespace Business.Data.Objects.Common.Utils
             return iTemp;
         }
 
-
-        /// <summary>
-        /// Ritorna la rappresentazione Xml.
-        /// </summary>
-        /// <param name="function"></param>
-        /// <returns></returns>
-        public string ToXml()
-        {
-            using (XmlWrite xw = new XmlWrite()) 
-            {
-
-                //Crea Xml Standard
-                xw.WriteStartElement("MESSAGELIST");
-                try
-                {
-                    for (int i = 0; i < this.Count; i++)
-                    {
-                        xw.WriteRaw(this[i].ToXml());
-                    }
-                }
-                finally
-                {
-                    xw.WriteEndElement();
-                }
-
-
-                return xw.ToString();
-            }
-            
-        }
-
         /// <summary>
         /// Aggiunge messaggio di tipo impostabile
         /// </summary>

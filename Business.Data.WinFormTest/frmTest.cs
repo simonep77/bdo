@@ -70,24 +70,24 @@ namespace Business.Data.WinFormTest
                 // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
                 var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In<uint>(Convert.ToUInt32("1"), 1000) & o.CodiceOrdine == "".PadLeft(3, '0'));
 
-                WriteLog(lst.ToXml());
+                WriteLog(lst.ToJSON());
 
                 var aa = new uint[] { 1, 7, 4, 55 };
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa));
-                WriteLog(lst.ToXml());
+                WriteLog(lst.ToJSON());
 
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa.ToList().ToArray()));
-                WriteLog(lst.ToXml());
+                WriteLog(lst.ToJSON());
 
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
-                WriteLog(lst.ToXml());
+                WriteLog(lst.ToJSON());
 
                 //lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Utente.Like("aaa%"));
                 //WriteLog(lst.ToXml());
 
 
                 lst = ss1.CreatePagedList<OrdineLista>(1, 10).OrderByLinq(o => o.AnagraficaId).OrderByLinqDesc(o => o.Id).SearchByLinq((o => o.Id > 10));
-                WriteLog(lst.ToXml());
+                WriteLog(lst.ToJSON());
 
                 var oo = ss1.LoadObjByLINQ<Ordine>(o => o.Id == 150);
 

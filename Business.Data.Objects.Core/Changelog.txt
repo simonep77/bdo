@@ -153,3 +153,6 @@ Possibilità di specificare un nome colonna con notazioni speciali DB (e. [Colna
 LoopMT con gestione automatica dei thread
 CreateList(page, offset)
 CacheResult senza limitazioni
+
+[11/10/2022] - 5.0.48 - Simone Pelaia
+Rimosso event manager

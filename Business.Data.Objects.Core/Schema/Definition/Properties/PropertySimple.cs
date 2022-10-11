@@ -18,7 +18,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
     {
 
         #region PROPERTIES
-        private string XmlFormatString;
         private Encrypted mEncAttr;
 
         //Liste dinamiche
@@ -162,11 +161,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     throw new SchemaReaderException(this, SchemaMessages.Prop_Encryped_Only_String);
 
                 this.mEncAttr = (Encrypted)attr;
-            }
-            //XmlFormatString
-            else if (attr is XmlFormatString)
-            {
-                this.XmlFormatString = ((XmlFormatString)attr).Format;
             }
             else
             {
@@ -319,42 +313,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
             }
         }
-
-        /// <summary>
-        /// Scrive valore per Xml
-        /// </summary>
-        /// <param name="xw"></param>
-        /// <param name="obj"></param>
-        /// <param name="depth"></param>
-        public override void WriteXml(XmlWrite xw, DataObjectBase obj, int depth)
-        {
-            var oTemp = this.GetValue(obj);
-            string sValue = string.Empty;
-            string sFormat = null;
-
-            //Scrive base 64
-            if (this.Type.IsArray)
-            {
-                sValue = Convert.ToBase64String(oTemp as byte[]);
-            }
-            else
-            {
-                if (TypeHelper.IsDecimalType(this.Type))
-                    sFormat = string.Intern(obj.GetSlot().Conf.XmlDefaultDecimalFormat);
-                else if (TypeHelper.IsDate(this.Type))
-                    sFormat = string.Intern(obj.GetSlot().Conf.XmlDefaultDateFormat);
-
-                if (string.IsNullOrEmpty(sFormat))
-                    sValue = oTemp.ToString();
-                else
-                    sValue = (oTemp as IFormattable).ToString(sFormat, System.Globalization.CultureInfo.CurrentCulture);
-            }
-
-            xw.WriteElementString(this.Name, sValue);
-
-        }
-
-
 
         /// <summary>
         /// Carica valori proprieta' da datareader

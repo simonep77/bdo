@@ -106,43 +106,7 @@ namespace Business.Data.Objects.Core.Base
         public override string ToString() => $"{this.mClassSchema.ClassName} ({ObjectHelper.ObjectEnumerableToString(this.mClassSchema.PrimaryKey.GetValues(this))})";
 
 
-        /// <summary>
-        /// Ritorna una rappresentazione XML dell'oggetto senza navigazione nei sotto oggetti
-        /// </summary>
-        /// <returns></returns>
-        public virtual string ToXml() => this.ToXml(0);
 
-
-        /// <summary>
-        /// Ritorna rappresentazione Xml dell oggetto fornendo il livello di profondita' (navigazione sotto-oggetti)
-        /// 0 indica non navigare nei sotto-oggetti
-        /// Prestare attenzione ad eventuali riferimenti circolari
-        /// </summary>
-        /// <param name="depth"></param>
-        /// <returns></returns>
-        public virtual string ToXml(int depth)
-        {
-            Property oProp;
-
-            using (XmlWrite xw = new XmlWrite())
-            {
-                for (int k = 0; k < this.mClassSchema.Properties.Count; k++)
-                {
-                    //Verifica proprietà una per una in base al tipo
-                    oProp = this.mClassSchema.Properties[k];
-
-                    //Verifica se esclusa da Xml
-                    if (oProp.ExcludeXml)
-                        continue;
-
-                    oProp.WriteXml(xw, this, depth);
-
-                }
-
-                return xw.ToString();
-            }
-
-        }
 
 
         /// <summary>

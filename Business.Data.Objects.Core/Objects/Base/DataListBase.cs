@@ -496,35 +496,6 @@ namespace Business.Data.Objects.Core.Base
             base.SetSlot(slot);
         }
 
-        /// <summary>
-        /// Ritorna Xml per la gestione della paginazione
-        /// </summary>
-        /// <returns></returns>
-        public string GetPagingXml()
-        { 
-            DataPager pager = this.Pager ?? new DataPager();
-
-            using (XmlWrite xw = new XmlWrite())
-            {
-                //Formattazione standard
-                xw.WriteStartElement("Paginazione");
-                try
-                {
-                    xw.WriteElementString("Offset", pager.Offset.ToString());
-                    xw.WriteElementString("Pagina", pager.Page.ToString());
-                    xw.WriteElementString("TotRecord", pager.TotRecords.ToString());
-                    xw.WriteElementString("TotPagine", pager.TotPages.ToString());
-
-                }
-                finally
-                {
-                    xw.WriteEndElement();
-                }
-
-                return xw.ToString();
-            }
-
-        }
 
 
         /// <summary>
@@ -560,43 +531,6 @@ namespace Business.Data.Objects.Core.Base
         public override string ToString()
         {
             return string.Concat(this.GetType().Name, " - Count: ", this.mInnerList.Count.ToString());
-        }
-
-
-        /// <summary>
-        /// Scrive xml lista
-        /// </summary>
-        /// <param name="depht"></param>
-        /// <returns></returns>
-        public string ToXml(int depht)
-        {
-            using (XmlWrite xw = new XmlWrite())
-            {
-                for (int i = 0; i < this.mInnerList.Count; i++)
-                {
-                    xw.WriteStartElement(this.mObjSchema.ClassName);
-                    try
-                    {
-                        xw.WriteRaw(this.getItem(i).ToXml(depht));
-                    }
-                    finally
-                    {
-                        xw.WriteEndElement();
-                    }
-                }
-
-                return xw.ToString();
-            }
-        }
-
-
-        /// <summary>
-        /// Rappresentazione XML
-        /// </summary>
-        /// <returns></returns>
-        public string ToXml()
-        {
-            return this.ToXml(0);
         }
 
 

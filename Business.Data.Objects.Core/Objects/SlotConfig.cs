@@ -88,10 +88,6 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public bool ChangeTrackingEnabled { get; set; } = Defaults.ChangeTrackingEnabled;
 
-        /// <summary>
-        /// Indica se attivo l'event manager
-        /// </summary>
-        public bool EventManagerEnabled { get; set; } = false;
 
         /// <summary>
         /// Indica se attivo il caching (globale)
@@ -122,7 +118,6 @@ namespace Business.Data.Objects.Core
             sc.XmlDefaultDecimalFormat = this.XmlDefaultDecimalFormat;
             sc.LiveTrackingEnabled = this.LiveTrackingEnabled;
             sc.ChangeTrackingEnabled = this.ChangeTrackingEnabled;
-            sc.EventManagerEnabled = this.EventManagerEnabled;
             sc.CachingEnabled = this.CachingEnabled;
             sc.SimulateEnabled = this.SimulateEnabled;
 

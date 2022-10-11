@@ -11,7 +11,6 @@ using Business.Data.Objects.Core.ObjFactory;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Core.Schema.Usage;
 using Business.Data.Objects.Core.Utils;
-using Business.Data.Objects.Core.Utils.BdoOnly;
 using Business.Data.Objects.Database;
 using System;
 using System.Collections;
@@ -50,10 +49,6 @@ namespace Business.Data.Objects.Core
 
         //Object reference management
         internal ReferenceManager<string, DataObjectBase> mLiveTrackingStore;
-
-
-        //Event management
-        internal SlotEventManager mEventManager;
 
         //Static Data
         private static ICache<string, DataSchema> _GlobalCache;
@@ -153,53 +148,6 @@ namespace Business.Data.Objects.Core
             set
             {
                 this.Conf.SimulateEnabled = value;
-            }
-        }
-
-
-        /// <summary>
-        /// Attiva/Disattiva tracciamento eventi su oggetto (che vanno comunque registrati attraverso le opportune funzioni di Register)
-        /// </summary>
-        public bool EventManagerEnabled
-        {
-            get
-            {
-                return this.Conf.EventManagerEnabled;
-            }
-            set
-            {
-                this.Conf.EventManagerEnabled = value;
-
-                //Crea o elimina event manager
-                if (!value)
-                {
-                    if (this.mEventManager != null)
-                    {
-                        this.mEventManager.Dispose();
-                        this.mEventManager = null;
-                    }
-                }
-                else
-                {
-                    if (this.mEventManager == null)
-                    {
-                        this.mEventManager = new SlotEventManager();
-                    }
-                }
-
-            }
-        }
-
-
-        /// <summary>
-        /// Gestore eventi associati allo slot.
-        /// Attenzione: se non impostato EventManagementEnabled=true l'oggetto risulta null
-        /// </summary>
-        public SlotEventManager EventManager
-        {
-            get
-            {
-                return this.mEventManager;
             }
         }
 
@@ -1175,9 +1123,6 @@ namespace Business.Data.Objects.Core
             //Prova ad inserire nelle cache
             this.CacheSetAny(obj);
 
-            //Gestione evento Load
-            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, obj);
-
             return true;
         }
 
@@ -1221,9 +1166,6 @@ namespace Business.Data.Objects.Core
 
             //Prova ad inserire nelle cache
             this.CacheSetAny(oNewObj);
-
-            //Gestione evento Load
-            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
             //Ritorna
             return oNewObj;
@@ -1269,9 +1211,6 @@ namespace Business.Data.Objects.Core
 
             //Prova ad inserire nelle cache
             this.CacheSetAny(oNewObj);
-
-            //Gestione evento Load
-            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
             //Ritorna
             return oNewObj;
@@ -1370,9 +1309,6 @@ namespace Business.Data.Objects.Core
             if (this.LiveTrackingEnabled)
                 this.liveTrackingSet(oNewObj);
 
-
-            //Gestione evento Load
-            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Load, oNewObj);
 
             //Ritorna oggetto creato
             return oNewObj;
@@ -1668,10 +1604,6 @@ namespace Business.Data.Objects.Core
 
             bool bCancel = false;
 
-            //Richiama evento pre salvataggio
-            this.EventManager?.RunPreEventHandlerQueue((obj.ObjectState == EObjectState.New) ? EObjectEvent.Insert : EObjectEvent.Update, obj, ref bCancel);
-
-
             //Se simulazione non esegue
             if (bCancel || this.Simulate)
                 return;
@@ -1687,8 +1619,6 @@ namespace Business.Data.Objects.Core
             if (this.LiveTrackingEnabled)
                 this.liveTrackingSet(obj);
 
-            //Richiama evento post salvataggio
-            this.EventManager?.RunPostEventHandlerQueue((obj.ObjectSource == EObjectSource.None) ? EObjectEvent.Insert : EObjectEvent.Update, obj);
         }
 
         /// <summary>
@@ -1706,8 +1636,6 @@ namespace Business.Data.Objects.Core
             obj.SetSlot(this);
 
             bool bCancel = false;
-            //Richiama evento pre cancellazione
-            this.EventManager?.RunPreEventHandlerQueue(EObjectEvent.Delete, obj, ref bCancel);
 
             //Se simulazione non esegue
             if (bCancel || this.Simulate)
@@ -1744,8 +1672,6 @@ namespace Business.Data.Objects.Core
             if (this.LiveTrackingEnabled)
                 this.liveTrackingRemove(obj);
 
-            //Richiama evento se presente
-            this.EventManager?.RunPostEventHandlerQueue(EObjectEvent.Delete, obj);
         }
 
 
@@ -2151,8 +2077,6 @@ namespace Business.Data.Objects.Core
             sb.AppendLine(this.LiveTrackingEnabled.ToString());
             sb.Append("Change Tracking Enabled: ");
             sb.AppendLine(this.ChangeTrackingEnabled.ToString());
-            sb.Append("Event Manager Enabled: ");
-            sb.AppendLine(this.EventManagerEnabled.ToString());
             sb.Append("Shared Log: ");
             sb.AppendLine(BusinessSlot._SharedLog.LogPath);
             sb.Append("ObjeRefIdCounter: ");
@@ -2201,24 +2125,7 @@ namespace Business.Data.Objects.Core
                 sb.Append(opair.Value.Stats.ToString());
                 sb.AppendLine();
             }
-
-
-            //sb.AppendLine("** SETTINGS INFO **");
-            //foreach (System.Configuration.SettingsPropertyValue oProp in Settings.Default.PropertyValues)
-            //{
-            //    sb.Append(oProp.Name);
-            //    sb.Append(": ");
-            //    sb.AppendLine(oProp.PropertyValue.ToString());
-            //}
-
-
-            if (this.EventManagerEnabled)
-            {
-                sb.AppendLine();
-                sb.AppendLine("** EVENTS INFO **");
-                sb.Append(this.EventManager.PrintInfo());
-            }
-
+                      
             return sb.ToString();
         }
 
@@ -2818,9 +2725,6 @@ namespace Business.Data.Objects.Core
         {
             try
             {
-                //Disattiva gestione eventi
-                this.EventManagerEnabled = false;
-
                 //Disabilita Tracking
                 this.liveTrackingActivation(false);
 

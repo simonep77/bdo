@@ -30,7 +30,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public bool LoadOnAccess;
         public bool ExcludeInsert;
         public bool ExcludeUpdate;
-        public bool ExcludeXml;
 
         public DbType? CustomDbType { get; set; }
 
@@ -114,11 +113,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
             {
                 this.CustomDbType = ((CustomDbType)attr).Value;
             }
-            //ESCLUDE DA XML
-            else if (attr is ExcludeFromXml)
-            {
-                this.ExcludeXml = true;
-            }
             //ESCLUDE DA INSERT
             else if (attr is ExcludeFromInsert)
             {
@@ -164,8 +158,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         }
 
         public abstract void SetValue(DataObjectBase obj, object value);
-
-        public abstract void WriteXml(XmlWrite xw, DataObjectBase obj, int depth);
 
         public abstract void SetValueFromReader(DataObjectBase obj, IDataReader dr);
 

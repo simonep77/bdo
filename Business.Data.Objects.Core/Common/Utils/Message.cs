@@ -71,49 +71,6 @@ namespace Business.Data.Objects.Common.Utils
             }
         }
 
-        /// <summary>
-        /// Rappresentazione XML del messaggio
-        /// </summary>
-        /// <returns></returns>
-        public string ToXml()
-        { 
-            using (XmlWrite xw = new XmlWrite())
-            {
-                xw.WriteStartElement("MESSAGE");
-                try
-                {
-                    xw.WriteElementString("CODE", this.Code.ToString());
-                    xw.WriteElementString("TEXT", this.Text);
-                    xw.WriteElementString("SEVERITY", this.Severity.ToString().ToUpper());
-                    xw.WriteElementString("UIFIELD", this.UiField);
-
-                    //Se presenti parametri li inserisce
-                    if (this.Params.Count > 0)
-                    {
-                        foreach (var item in this.Params)
-                        {
-                            xw.WriteStartElement("PARAMS");
-                            try
-                            {
-                                xw.WriteElementString("KEY", item.Key);
-                                xw.WriteElementString("VALUE", item.Value);
-
-                            }
-                            finally
-                            {
-                                xw.WriteEndElement();
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    xw.WriteEndElement();
-                }
-
-                return xw.ToString();
-            }
-        }
-
+    
     }
 }

@@ -170,37 +170,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
 
         /// <summary>
-        ///  Crea rappresentazione Xml
-        /// </summary>
-        /// <param name="xw"></param>
-        /// <param name="obj"></param>
-        /// <param name="depth"></param>
-        public override void WriteXml(XmlWrite xw, DataObjectBase obj, int depth)
-        {
-            //Include oggetto mappato se profondita' prevista e campio non null
-            if (depth <= 0)
-                return;
-
-            var oTemp = this.GetValue(obj);
-            if (oTemp == null)
-                return;
-
-            //Include oggetto
-            xw.WriteStartElement(this.Name);
-            try
-            {
-                xw.WriteRaw(((DataObjectBase)oTemp).ToXml(depth - 1));
-            }
-            finally
-            {
-                xw.WriteEndElement();
-            }
-
-        }
-
-
-
-        /// <summary>
         /// Carica valori proprieta' da datareader
         /// </summary>
         /// <param name="obj"></param>
