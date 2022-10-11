@@ -41,7 +41,7 @@ namespace Business.Data.Objects.Database
 
         public new void Add(string key, IDataBase db)
         {
-            base.Add(key, db);
+            base[key] = db;
 
             if (this.IsInTransaction)
             {

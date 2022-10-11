@@ -37,7 +37,6 @@ namespace Business.Data.Objects.Core
         #region PRIVATE FIELDS
 
         //Private vars
-        private IDataBase mDB;
         private DatabaseList mDbList = new DatabaseList();
         private Dictionary<string, object> mProperties = new Dictionary<string, object>();
         private DbPrefixDictionary mDbPrefixKeys;
@@ -203,13 +202,7 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Istanza di database associata alla sessione
         /// </summary>
-        public IDataBase DB
-        {
-            get
-            {
-                return this.mDB;
-            }
-        }
+        public IDataBase DB { get; private set; }
 
 
         /// <summary>
@@ -743,7 +736,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         internal IDataBase DbGet(ClassSchema schema)
         {
-            return schema.IsDefaultDb ? this.mDB : this.DbGet(schema.DbConnDef.Name);
+            return this.DbGet(schema.DbConnDef.Name);
         }
 
         /// <summary>
@@ -1881,97 +1874,6 @@ namespace Business.Data.Objects.Core
 
         #endregion
 
-
-        #region OBJECT EXTRA DATA
-
-        /// <summary>
-        /// Verifica se presenti dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public bool ExtraDataExist(SlotAwareObject obj, string key)
-        {
-            //Verifica
-            return obj.ExtraDataExist(key);
-
-        }
-
-        /// <summary>
-        /// Ritorna dati aggiuntivi memorizzati a livello di oggetto (singolo o lista)
-        /// individuati per chiave. Se non trovata la chiave ritorna il valore defult fornito
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
-        public T ExtraDataGet<T>(SlotAwareObject obj, string key, T defaultValue)
-        {
-            return (T)obj.ExtraDataGet(key, defaultValue);
-        }
-
-
-        /// <summary>
-        /// Imposta dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        public void ExtraDataSet<T>(SlotAwareObject obj, string key, T value)
-        {
-            //Extradata non valorizzato: lo crea
-            obj.ExtraDataSet(key, value);
-        }
-
-
-        /// <summary>
-        /// Rimuove dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <param name="key"></param>
-        public void ExtraDataRemove(SlotAwareObject obj, string key)
-        {
-            //Rimuove
-            obj.ExtraDataRemove(key);
-        }
-
-
-        /// <summary>
-        /// Elimina tutti i dati extra
-        /// </summary>
-        /// <param name="obj"></param>
-        public void ExtraDataClear(SlotAwareObject obj)
-        {
-            obj.ExtraDataClear();
-        }
-
-
-        /// <summary>
-        /// Ritorna tutte le chiavi registrate per l'oggetto
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public string[] ExtraDataGetKeys(SlotAwareObject obj)
-        {
-            return obj.ExtraDataGetKeys();
-        }
-
-
-        /// <summary>
-        /// Ritorna tutte le chiavi registrate per l'oggetto
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public int ExtraDataCount(SlotAwareObject obj)
-        {
-            return obj.ExtraDataCount();
-        }
-
-        #endregion
-
-
         #region DEBUGGING
 
         /// <summary>
@@ -2012,17 +1914,17 @@ namespace Business.Data.Objects.Core
                 sbDump.AppendLine();
             }
 
-            string[] keysExtraData = this.ExtraDataGetKeys(obj);
+            string[] keysExtraData = obj.ExtraDataGetKeys();
             if (keysExtraData.Length > 0)
             {
                 sbDump.AppendLine();
                 sbDump.AppendLine("-- Dati Extra --");
 
-                foreach (var item in this.ExtraDataGetKeys(obj))
+                foreach (var key in keysExtraData)
                 {
-                    sbDump.Append(item.PadRight(30, ' '));
+                    sbDump.Append(key.PadRight(30, ' '));
                     sbDump.Append(@" : ");
-                    sbDump.Append(this.ExtraDataGet<object>(obj, item, null));
+                    sbDump.Append(obj.ExtraDataGet(key, null));
                     sbDump.AppendLine();
                 }
             }
@@ -2397,7 +2299,7 @@ namespace Business.Data.Objects.Core
             this.mStopWatch = System.Diagnostics.Stopwatch.StartNew();
 
             //Imposta db primario in lista
-            this.mDB = this.DbAdd(Constants.STR_DB_DEFAULT, db);
+            this.DB = this.DbAdd(Constants.STR_DB_DEFAULT, db);
 
             //Imposta tracking
             this.liveTrackingActivation(this.Conf.LiveTrackingEnabled);
