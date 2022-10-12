@@ -736,7 +736,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         internal IDataBase DbGet(ClassSchema schema)
         {
-            return this.DbGet(schema.DbConnDef.Name);
+            return schema.IsDefaultDb ? this.DB : this.DbGet(schema.DbConnDef.Name);
         }
 
         /// <summary>
