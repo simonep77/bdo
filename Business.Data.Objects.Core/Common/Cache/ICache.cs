@@ -36,13 +36,6 @@ namespace Business.Data.Objects.Common.Cache
         void SetObject(TKey key, T value);
 
 
-        /// <summary>
-        /// Aggiunge una chiave alternativa ad un oggetto gia' in cache
-        /// </summary>
-        /// <param name="keyBase"></param>
-        /// <param name="keyNew"></param>
-        void AddAlternateKey(TKey keyBase, TKey keyNew);
-
 
         /// <summary>
         /// Verifica se oggetto è già presente in cache 

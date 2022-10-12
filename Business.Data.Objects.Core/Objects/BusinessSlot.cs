@@ -2094,11 +2094,10 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Se attivo object live tracking allora rimuove tutte le entry i cui oggetti risultano morti (gc-ed)
         /// </summary>
-        /// <param name="issync"></param>
-        public void LiveTrackingDeadScan(bool issync)
+        public void LiveTrackingDeadScan()
         {
             if (this.Conf.LiveTrackingEnabled)
-                this.mLiveTrackingStore.CleanDeadEntries(issync);
+                this.mLiveTrackingStore.CleanDeadEntries();
         }
 
         #endregion

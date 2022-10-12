@@ -93,17 +93,20 @@ namespace Business.Data.Objects.Common.Cache
         {
             lock (this.mSyncLock)
             {
-                //In caso di eccesso elementi rimuove il 5% di quelli piu' vecchi
+                //In caso di eccesso elementi rimuove il 20% di quelli piu' vecchi
                 if (this.CurrentSize >= this.MaxSize)
                 {
                     this.mDictionary.Values
                         .OrderBy(x => x.DtScad)
-                        .Take(this.MaxSize / 20).ToList()
+                        .AsParallel()
+                        .Take((this.MaxSize / 100) * 20)
+                        .AsParallel()
+                        .ToList()
                         .ForEach(x => this.mDictionary.Remove(x.Key));
 
                 }
 
-                if (!this.mDictionary.TryGetValue(key, out CacheItem<TKey, T> oNode))
+                if (!this.mDictionary.ContainsKey(key))
                     this.mDictionary.Add(key,
                         new CacheItem<TKey, T> { Key = key, Value = value, DtScad = DateTime.Now.AddMinutes(this.DefaultTimeoutMinuti) });
             }
@@ -136,6 +139,7 @@ namespace Business.Data.Objects.Common.Cache
                         //Se becchiamo uno scaduto eliminiamo tutti gli scaduti!
                         this.mDictionary.Values
                         .Where(x => x.DtScad < dtNow)
+                        .AsParallel()
                         .ToList()
                         .ForEach(x => this.mDictionary.Remove(x.Key));
                     }

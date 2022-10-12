@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Linq.Expressions;
 using Business.Data.Objects.TestClass.BIZ;
 using Business.Data.Objects.TestClass.DTO;
+using Business.Data.Objects.Common.Cache;
 
 namespace Business.Data.WinFormTest
 {
@@ -361,7 +362,47 @@ namespace Business.Data.WinFormTest
 
                 // Me.WriteLog(o2)
                 this.WriteLog(ss1.PrintInfo());
+
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+
+                ss1.ResetCacheGlobal();
+                ss1.ResetListGlobal();
+                ss1.LiveTrackingClear();
             }
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+
+
+        }
+
+        private void tESTCacheSimpleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                var c = new CacheSimple<string, int>(2000);
+
+                for (int i = 0; i < 100000; i++)
+                {
+                    c.SetObject(i.ToString(), i);
+                }
+
+                this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+
+                //this.WriteLog(c2.Print());
+            }
+
+
+
+
 
         }
     }

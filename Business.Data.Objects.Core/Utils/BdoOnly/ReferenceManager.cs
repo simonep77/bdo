@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Data.Objects.Core.Utils
 {
     /// <summary>
-    /// Classe per il mantenimento di riferimenti di oggetti
+    /// Classe per il mantenimento di riferimenti di oggetti. NON THREADSAFE!
     /// </summary>
-    internal class ReferenceManager<TKEY, TVALUE>: IDisposable
+    internal class ReferenceManager<TKEY, TVALUE> : IDisposable
     {
-        private bool mIsActive = true;
         private Dictionary<TKEY, InnerReference> mStore;
-        private object mSyncRoot = new object();
         private long mRefCounter = long.MinValue;
 
         #region inner classes
@@ -40,38 +39,13 @@ namespace Business.Data.Objects.Core.Utils
         /// <summary>
         /// Indica se Tracking Attivo
         /// </summary>
-        public bool IsActive
-        {
-            get
-            {
-                lock (this.mSyncRoot)
-                {
-                    return this.mIsActive;
-                }
-            }
-            set
-            {
-                lock (this.mSyncRoot)
-                {
-                    this.mIsActive = value;
-                }
-            }
-        }
+        public bool IsActive { get; set; } = true;
+
 
         /// <summary>
         /// Ritorna numero elementi
         /// </summary>
-        public int Count
-        {
-            get 
-            {
-                lock (this.mSyncRoot)
-                {
-                    return this.mStore.Count;     
-                }
-                
-            }
-        }
+        public int Count => this.mStore.Count;
 
         /// <summary>
         /// Costruttore
@@ -84,31 +58,11 @@ namespace Business.Data.Objects.Core.Utils
 
 
         /// <summary>
-        /// Acquisisce il lock del reference manager per eseguire più operazioni in modalità atomica
-        /// </summary>
-        public void Lock()
-        {
-            System.Threading.Monitor.Enter(this.mStore) ;
-        }
-
-
-        /// <summary>
-        /// Libera il lock acquisito
-        /// </summary>
-        public void Unlock()
-        {
-            System.Threading.Monitor.Exit(this.mStore);
-        }
-
-        /// <summary>
         /// Elimina tutti i riferimenti
         /// </summary>
         public void Clear()
         {
-            lock (this.mSyncRoot)
-            {
-                this.mStore.Clear();
-            }
+            this.mStore.Clear();
         }
 
 
@@ -118,35 +72,12 @@ namespace Business.Data.Objects.Core.Utils
         /// <param name="key"></param>
         public void Remove(TKEY key)
         {
-            lock (this.mSyncRoot)
-            {
-                if (!this.mIsActive)
-                    return;
+            if (!this.IsActive)
+                return;
 
-                this.mStore.Remove(key);
-
-            }
+            this.mStore.Remove(key);
 
         }
-
-
-        ///// <summary>
-        ///// Rimuove oggetti multipli
-        ///// </summary>
-        ///// <param name="keys"></param>
-        //public void RemoveM(IEnumerable<TKEY> keys)
-        //{
-        //    lock (this.mSyncRoot)
-        //    {
-        //        if (!this.mIsActive)
-        //            return;
-
-        //        foreach (var key in keys)
-        //        {
-        //            this.mStore.Remove(key);
-        //        }
-        //    }
-        //}
 
 
         /// <summary>
@@ -156,74 +87,26 @@ namespace Business.Data.Objects.Core.Utils
         /// <param name="value"></param>
         public void Set(TKEY key, TVALUE value)
         {
-            lock (this.mSyncRoot)
+            if (!this.IsActive)
+                return;
+
+            if (this.mStore.TryGetValue(key, out var oRef))
             {
-                if (!this.mIsActive)
+                //esiste, verifichiamo se medesimo riferimento
+                if (!oRef.Wref.IsAlive)
+                {
+                    //Oggetto scaduto: lo reimpostiamo e usciamo
+                    oRef.Wref.Target = value;
                     return;
-
-                InnerReference oRefItem = null;
-
-                InnerReference oRef = null;
-                if (this.mStore.TryGetValue(key, out oRef))
-                {
-                    //esiste, verifichiamo se medesimo riferimento
-                    if (!oRef.Wref.IsAlive)
-                    {
-                        //Oggetto scaduto: lo reimpostiamo e usciamo
-                        oRef.Wref.Target = value;
-                        return;
-                    }
                 }
-                else
-                {
-                    //Non esiste: lo aggiungiamo ma creando un solo riferimento
-                    if (oRefItem == null)
-                        oRefItem = new InnerReference(System.Threading.Interlocked.Increment(ref this.mRefCounter), key, value);
-
-                    this.mStore.Add(key, oRefItem);
-                }
+            }
+            else
+            {
+                //Non esiste: lo aggiungiamo ma creando un solo riferimento
+                this.mStore.Add(key, new InnerReference(System.Threading.Interlocked.Increment(ref this.mRefCounter), key, value));
             }
         }
 
-
-        ///// <summary>
-        ///// imposta oggetto con chiavi multiple
-        ///// </summary>
-        ///// <param name="keys"></param>
-        ///// <param name="value"></param>
-        //public void SetM(IEnumerable<TKEY> keys, TVALUE value)
-        //{
-        //    lock (this.mSyncRoot)
-        //    {
-        //        if (!this.mIsActive)
-        //            return;
-
-        //        InnerReference oRefItem = null;
-
-        //        foreach (var key in keys)
-        //        {
-        //            InnerReference oRef = null;
-        //            if (this.mStore.TryGetValue(key, out oRef))
-        //            {
-        //                //esiste, verifichiamo se medesimo riferimento
-        //                if (!oRef.Wref.IsAlive)
-        //                {
-        //                    //Oggetto scaduto: lo reimpostiamo e usciamo
-        //                    oRef.Wref.Target = value;
-        //                    return;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                //Non esiste: lo aggiungiamo ma creando un solo riferimento
-        //                if (oRefItem == null)
-        //                    oRefItem = new InnerReference(System.Threading.Interlocked.Increment(ref this.mRefCounter), keys, value);
-
-        //                this.mStore.Add(key, oRefItem);
-        //            } 
-        //        }
-        //    }
-        //}
 
 
         /// <summary>
@@ -233,44 +116,32 @@ namespace Business.Data.Objects.Core.Utils
         /// <returns></returns>
         public TVALUE Get(TKEY key)
         {
-            lock (this.mSyncRoot)
-            {
-                if (!this.mIsActive)
-                    return default(TVALUE);
-
-                InnerReference oRef = null;
-
-                if (this.mStore.TryGetValue(key, out oRef))
-                {
-                    //esiste, verifichiamo se medesimo riferimento
-                    if (oRef.Wref.IsAlive)
-                        //oggetto vivo: lo ritorniamo
-                        return (TVALUE)oRef.Wref.Target;
-                    else
-                        //Oggetto scaduto: lo eliminiamo
-                        this.mStore.Remove(key);
-                }
-
+            if (!this.IsActive)
                 return default(TVALUE);
+
+            if (this.mStore.TryGetValue(key, out var oRef))
+            {
+                //esiste, verifichiamo se medesimo riferimento
+                if (oRef.Wref.IsAlive)
+                    //oggetto vivo: lo ritorniamo
+                    return (TVALUE)oRef.Wref.Target;
+                else
+                    //Oggetto scaduto: lo eliminiamo
+                    this.mStore.Remove(key);
             }
 
+            return default(TVALUE);
         }
 
         /// <summary>
         /// Esegue pulizia entry non più referenziate
         /// </summary>
-        /// <param name="issync"></param>
-        public void CleanDeadEntries(bool issync)
+        public void CleanDeadEntries()
         {
-            if (issync)
-            {
-                this.performCleanDeadEntries();
-            }
-            else
-            {
-                System.Threading.ThreadStart pr = this.performCleanDeadEntries;
-                pr.BeginInvoke(null, null);
-            }
+            if (!this.IsActive)
+                return;
+
+            this.performCleanDeadEntries();
         }
 
         /// <summary>
@@ -302,21 +173,7 @@ namespace Business.Data.Objects.Core.Utils
         /// </summary>
         private void performCleanDeadEntries()
         {
-            lock (this.mSyncRoot)
-            {
-                List<TKEY> lstRemove = new List<TKEY>(10);
-                //Scan
-                foreach (var pair in this.mStore)
-                {
-                    if (pair.Value.Wref.IsAlive)
-                        lstRemove.Add(pair.Value.Key);
-                }
-                //Remove
-                for (int i = 0; i < lstRemove.Count; i++)
-                {
-                    this.Remove(lstRemove[i]);
-                }
-            }
+            this.mStore.Where(x => x.Value.Wref.IsAlive).AsParallel().ToList().ForEach(x => this.mStore.Remove(x.Key));
         }
 
         #endregion

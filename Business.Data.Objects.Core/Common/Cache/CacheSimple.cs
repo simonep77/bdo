@@ -1,4 +1,7 @@
+using Business.Data.Objects.Core.Schema.Definition;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 /*==================================================================================================
@@ -93,15 +96,14 @@ namespace Business.Data.Objects.Common.Cache
         /// <remarks></remarks>
         public void SetObject(TKey key, T value)
         {
-            T oNode;
-
+            
             lock (this.mSyncLock)
             {
                 //In caso di eccesso elementi timuove il 20 %
                 if (this.mDictionary.Count >= this.mCacheMaxSize)
-                    this.FreeCacheSlots(this.mCacheMaxSize / 20);
+                    this.FreeCacheSlots((this.mCacheMaxSize / 100) * 20);
 
-                if (!this.mDictionary.TryGetValue(key, out oNode))
+                if (!this.mDictionary.ContainsKey(key))
                     this.mDictionary.Add(key, value);
             }
 
@@ -135,8 +137,7 @@ namespace Business.Data.Objects.Common.Cache
         {
             lock (this.mSyncLock)
             {
-                if (this.mDictionary.ContainsKey(key))
-                    this.mDictionary.Remove(key);
+                this.mDictionary.Remove(key);
             }
         }
 
@@ -213,23 +214,13 @@ namespace Business.Data.Objects.Common.Cache
         {
             lock (this.mSyncLock)
             {
+                var values = this.mDictionary.Take(numSlots).ToList();
                 //Deve scrivere warning
-                //System.Console.WriteLine("{0} Attenzione! La cache ha superato il numero di oggetti consentiti ({1}). Verra' eseguita una cancellazione di {2} oggetti.", this.GetType().Name, this.mCacheMaxSize, numSlots);
+                Console.WriteLine("{0} ha superato il numero di oggetti consentiti ({1}). Verra' eseguita una cancellazione di {2} oggetti.", this.GetType().Name, this.mCacheMaxSize, numSlots);
 
-                while (numSlots > 0 && this.mDictionary.Count > 0)
+                foreach (var item in values)
                 {
-                    TKey key = default(TKey);
-
-                    foreach (var item in this.mDictionary)
-                    {
-                        key = item.Key;
-                        break;
-                    }
-
-                    this.RemoveObject(key);
-
-                    //Decrementa
-                    numSlots--;
+                    this.RemoveObject(item.Key);
                 }
             }
         }

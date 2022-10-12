@@ -38,9 +38,10 @@ namespace Business.Data.WinFormTest
             this.qUERYMAPSPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.qUERYMAPPERSBENCHToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTLOGICALDELETEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.tESTCacheresultConLinqToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTCacheResultSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.tESTCacheSimpleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,7 +66,8 @@ namespace Business.Data.WinFormTest
             this.qUERYMAPPERSBENCHToolStripMenuItem,
             this.tESTLOGICALDELETEToolStripMenuItem,
             this.tESTCacheresultConLinqToolStripMenuItem,
-            this.tESTCacheResultSizeToolStripMenuItem});
+            this.tESTCacheResultSizeToolStripMenuItem,
+            this.tESTCacheSimpleToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -114,19 +116,6 @@ namespace Business.Data.WinFormTest
             this.tESTLOGICALDELETEToolStripMenuItem.Text = "TEST LOGICAL DELETE";
             this.tESTLOGICALDELETEToolStripMenuItem.Click += new System.EventHandler(this.tESTLOGICALDELETEToolStripMenuItem_Click);
             // 
-            // txtLog
-            // 
-            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLog.Location = new System.Drawing.Point(12, 28);
-            this.txtLog.MaxLength = 0;
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(776, 410);
-            this.txtLog.TabIndex = 1;
-            // 
             // tESTCacheresultConLinqToolStripMenuItem
             // 
             this.tESTCacheresultConLinqToolStripMenuItem.Name = "tESTCacheresultConLinqToolStripMenuItem";
@@ -140,6 +129,26 @@ namespace Business.Data.WinFormTest
             this.tESTCacheResultSizeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
             this.tESTCacheResultSizeToolStripMenuItem.Text = "TEST CacheResult Size";
             this.tESTCacheResultSizeToolStripMenuItem.Click += new System.EventHandler(this.tESTCacheResultSizeToolStripMenuItem_Click);
+            // 
+            // txtLog
+            // 
+            this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLog.Location = new System.Drawing.Point(12, 28);
+            this.txtLog.MaxLength = 0;
+            this.txtLog.Multiline = true;
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtLog.Size = new System.Drawing.Size(776, 410);
+            this.txtLog.TabIndex = 1;
+            // 
+            // tESTCacheSimpleToolStripMenuItem
+            // 
+            this.tESTCacheSimpleToolStripMenuItem.Name = "tESTCacheSimpleToolStripMenuItem";
+            this.tESTCacheSimpleToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTCacheSimpleToolStripMenuItem.Text = "TEST Cache Simple";
+            this.tESTCacheSimpleToolStripMenuItem.Click += new System.EventHandler(this.tESTCacheSimpleToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -170,5 +179,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem tESTLOGICALDELETEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tESTCacheresultConLinqToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tESTCacheResultSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tESTCacheSimpleToolStripMenuItem;
     }
 }
