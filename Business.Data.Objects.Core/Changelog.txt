@@ -154,5 +154,11 @@ LoopMT con gestione automatica dei thread
 CreateList(page, offset)
 CacheResult senza limitazioni
 
-[11/10/2022] - 5.0.48 - Simone Pelaia
-Rimosso event manager
+[17/10/2022] - 5.0.48 - Simone Pelaia
+Rimosso event manager 
+Fix sulle cache
+Semplificata gestione interna proprietà mappate
+Fix SimpleAES
+
+[17/10/2022] - 5.0.49 - Simone Pelaia
+Fix ExtraData

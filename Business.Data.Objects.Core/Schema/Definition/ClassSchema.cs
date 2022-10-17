@@ -17,7 +17,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public long InternalID;
         public Type OriginalType;
 
-        public byte ObjCount;
         public KeyDictionary Keys = new KeyDictionary();
         public PropertyDictionary Properties;
         public PropertyList AutoProperties = new PropertyList(3);

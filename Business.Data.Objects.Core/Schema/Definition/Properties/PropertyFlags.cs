@@ -14,7 +14,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         None = 0,
         Changed = 1 << 1,
         Loaded = 1 << 2,
-        ObjLoaded = 1 << 3
     }
 
 }

@@ -320,7 +320,18 @@ namespace Business.Data.WinFormTest
                 //ss1.OnUserInfoRequired += getUserInfoFromSlot;
                 this.WriteLog("Avvio");
 
-                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > 1000);
+                var lst = ss1.CreateList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > 1000);
+
+                //lst.Select(x => x.Anagrafica).ToList().ForEach(x => this.WriteLog(x.ToJSON()));
+
+                this.WriteLog(lst.First().ToJSON());
+                this.WriteLog(lst.First().Anagrafica.ToJSON());
+
+                lst.First().AnagraficaId = lst.Last().AnagraficaId;
+
+                this.WriteLog(lst.First().ToJSON());
+                this.WriteLog(lst.First().Anagrafica.ToJSON());
+
 
                 this.WriteLog(lst.ToJSON());
 
@@ -404,6 +415,17 @@ namespace Business.Data.WinFormTest
 
 
 
+        }
+
+        private void tESTSimpleAESToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var s = new SimpleAes("pippi");
+
+            var enc = s.Encrypt("Forza Roma");
+
+            this.WriteLog(enc);
+
+            this.WriteLog(s.Decrypt(enc));
         }
     }
 }

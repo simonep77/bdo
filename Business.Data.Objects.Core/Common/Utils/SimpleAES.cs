@@ -62,7 +62,7 @@ namespace Business.Data.Objects.Common.Utils
             // IV is prepended to cryptotext
 
             var iv = new byte[IvBytes];
-            buffer.CopyTo(iv, 0);
+            Array.Copy(buffer, 0, iv, 0, iv.Length);
 
             using (ICryptoTransform decryptor = _rijndael.CreateDecryptor(_rijndael.Key, iv))
             {

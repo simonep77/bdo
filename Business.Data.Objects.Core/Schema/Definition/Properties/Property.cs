@@ -40,7 +40,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         #region PROPERTIES
 
-        public abstract object DefaultValue { get; protected set; }
+        public virtual object DefaultValue { get; protected set; }
 
         /// <summary>
         /// Indica se presenti property map

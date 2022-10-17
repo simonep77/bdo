@@ -16,9 +16,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
     {
 
         #region PROPERTIES
-        public byte ObjectIndex { get; set; }
 
-        public override object DefaultValue { get; protected set; }
 
         public override bool ExcludeSelect { get; } = true;
 
@@ -27,10 +25,9 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         #region CONSTRUCTORS
 
-        public PropertyObject(string name, Type type, byte objIndex)
+        public PropertyObject(string name, Type type)
             : base(name, type)
         {
-            this.ObjectIndex = objIndex;
         }
 
         #endregion
@@ -128,11 +125,13 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <returns></returns>
         public override object GetValue(DataObjectBase obj)
         {
-            DataObjectBase oRet = obj.mDataSchema.Objects[this.ObjectIndex];
-
-            if (oRet == null && !obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.ObjLoaded))
+            //Se valorizzato o comunque caricato
+            if (obj.mDataSchema.Values[this.PropertyIndex] == null && !obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
             {
-                //Se property 0 e' nulla esce
+                //In qualunque caso imposta come caricato
+                obj.mDataSchema.SetFlags(this.PropertyIndex, DataFlags.Loaded, true);
+
+                //Se property 0 e' nulla esce avendo comunque impostato come caricato
                 if (this.PropertyMap[0].IsNull(this.PropertyMap[0].GetValue(obj)))
                     return null;
 
@@ -144,17 +143,12 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
 
                 //Se array OK definito ed il primo valore non nullo imposta oggetto
-                if (arrPk != null && arrPk[0] != null)
-                    oRet = obj.GetSlot().LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.Type, true, arrPk);
-
-                //Carica oggetto e imposta come caricato
-                obj.mDataSchema.Objects[this.ObjectIndex] = (DataObjectBase)oRet;
-                //In qualunque caso imposta come caricato
-                obj.mDataSchema.SetFlags(this.PropertyIndex, DataFlags.ObjLoaded, true);
+                obj.mDataSchema.Values[this.PropertyIndex] = obj.GetSlot().LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.Type, true, arrPk);
             }
 
-            //Caso Base
-            return oRet;
+            //Carica oggetto e imposta come caricato
+            return obj.mDataSchema.Values[this.PropertyIndex];
+
         }
 
 

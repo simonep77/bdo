@@ -74,18 +74,36 @@ namespace Business.Data.Objects.Core.Base
         /// <param name="key"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        internal object ExtraDataGet(string key, object defaultValue)
+        public object ExtraDataGet(string key, object defaultValue)
         {
             //Assicura extradata
             this.extraDataTouch();
 
-            object oRet;
-
             //Cerca valore
-            if (!this.mExtraData.TryGetValue(key, out oRet))
+            if (!this.mExtraData.TryGetValue(key, out object oRet))
                 return defaultValue;
 
             return oRet;
+        }
+
+
+        /// <summary>
+        /// Ritorna dati aggiuntivi tipizzati
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public object ExtraDataGet<T>(string key, T defaultValue)
+        {
+            //Assicura extradata
+            this.extraDataTouch();
+
+            //Cerca valore
+            if (!this.mExtraData.TryGetValue(key, out object oRet))
+                return defaultValue;
+
+            return Convert.ChangeType(oRet, typeof(T));
         }
 
 

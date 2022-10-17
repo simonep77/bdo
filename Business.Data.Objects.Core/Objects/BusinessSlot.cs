@@ -1268,7 +1268,7 @@ namespace Business.Data.Objects.Core
             {
 
                 //Crea dataschema 
-                oNewObj.mDataSchema = new DataSchema(oNewObj.mClassSchema.Properties.Count, oNewObj.mClassSchema.ObjCount);
+                oNewObj.mDataSchema = new DataSchema(oNewObj.mClassSchema.Properties.Count);
 
                 //carica
                 oNewObj.LoadBySchemaKey(oKey, values);

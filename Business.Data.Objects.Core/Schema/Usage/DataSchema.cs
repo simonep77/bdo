@@ -17,8 +17,6 @@ namespace Business.Data.Objects.Core.Schema.Usage
 
         private DataFlags[] PropFlags;
 
-        internal DataObjectBase[] Objects;
-
         internal string PkHash;
 
         internal EObjectState ObjectState = EObjectState.New;
@@ -39,11 +37,10 @@ namespace Business.Data.Objects.Core.Schema.Usage
         /// Crea dataschema a partire da class schema
         /// </summary>
         /// <param name="schema"></param>
-        internal DataSchema(int PropCount, int ObjCount)
+        internal DataSchema(int PropCount)
         {
             this.Values = new object[PropCount];
             this.PropFlags = new DataFlags[PropCount];
-            this.Objects = new DataObjectBase[ObjCount];
         }
 
 
@@ -83,7 +80,7 @@ namespace Business.Data.Objects.Core.Schema.Usage
         /// <returns></returns>
         internal DataSchema Clone(bool includeObjects, bool includeKeyHash)
         {
-            DataSchema other = new DataSchema(this.Values.Length, this.Objects.Length);
+            DataSchema other = new DataSchema(this.Values.Length);
 
             //Imposta stato
             other.ObjectState = this.ObjectState;
@@ -99,44 +96,32 @@ namespace Business.Data.Objects.Core.Schema.Usage
                 //Copia flags
                 other.PropFlags[i] = this.PropFlags[i];
 
-                //Se non dobbiamo includere gli oggetti allora impostiamo come non caricati
-                if (!includeObjects)
-                    other.SetFlags(i, DataFlags.ObjLoaded, false);
-
                 if (this.Values[i] == null) //NULL
                 {
                     continue;
+                }
+                else if (this.Values[i] is DataObjectBase)
+                {
+                    if (!includeObjects)
+                        other.SetFlags(i, DataFlags.Loaded, false);
+                    else
+                        other.Values[i] = ((SlotAwareObject)this.Values[i]).GetSlot().CloneObject((DataObjectBase)this.Values[i]);
                 }
                 else if (!(this.Values[i] is Array)) //VALORE
                 {
                     //valore UNBOXED
                     other.Values[i] = Convert.ChangeType(this.Values[i], this.Values[i].GetType());
                 }
+                else if (this.Values[i] is byte[]) //VALORE
+                {
+                    byte[] arrInput = (byte[])this.Values[i];
+                    byte[] arrOutput = new byte[arrInput.Length];
+                    Array.Copy(arrInput, arrOutput, arrInput.Length);
+                    other.Values[i] = arrOutput;
+                }
                 else //ARRAY
                 {
-                    //Byte array
-                    if (this.Values[i] is byte[])
-                    {
-                        byte[] arrInput = (byte[])this.Values[i];
-                        byte[] arrOutput = new byte[arrInput.Length];
-                        Array.Copy(arrInput, arrOutput, arrInput.Length);
-                        other.Values[i] = arrOutput;
-                    }
-                    else
-                    {
-                        //Errore altri
-                        throw new ObjectException("DataSchema: Array di tipo {0} non ammesso!", this.Values[i].GetType().Name);
-                    }
-                }
-            }
-
-            if (includeObjects)
-            {
-                //Copia oggetti
-                for (int i = 0; i < this.Objects.Length; i++)
-                {
-                    if (this.Objects[i] != null)
-                        other.Objects[i] = this.Objects[i].GetSlot().CloneObject(this.Objects[i]);
+                    throw new ObjectException($"DataSchema: Array di tipo {this.Values[i].GetType().Name} non ammesso!");
                 }
             }
 

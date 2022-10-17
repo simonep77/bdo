@@ -24,8 +24,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public List<Attributes.BaseModifierAttribute> AttrModifiers { get; set; }
         public List<Attributes.BaseValidatorAttribute> AttrValidators { get; set; }
 
-        public override object DefaultValue { get; protected set; }
-
         /// <summary>
         /// Indica se presenti validatori
         /// </summary>
@@ -285,8 +283,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     for (int i = 0; i < this.PropertyMap.Count; i++)
                     {
                         //Azzera tutti i mappings dipendenti
-                        obj.mDataSchema.Objects[((PropertyObject)this.PropertyMap[i]).ObjectIndex] = null;
-                        obj.mDataSchema.SetFlags(this.PropertyMap[i].PropertyIndex, DataFlags.ObjLoaded, false);
+                        obj.mDataSchema.Values[this.PropertyMap[i].PropertyIndex] = null;
+                        obj.mDataSchema.SetFlags(this.PropertyMap[i].PropertyIndex, DataFlags.Loaded, false);
                     }
                 }
 

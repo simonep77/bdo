@@ -295,8 +295,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                 //Verifica il tipo di proprietà
                 if (propInfo.PropertyType.IsSubclassOf(typeof(DataObjectBase)))
                 {
-                    oProp = new PropertyObject(propInfo.Name, propInfo.PropertyType, oSchema.ObjCount);
-                    oSchema.ObjCount++; //Incrementa contatore generale
+                    oProp = new PropertyObject(propInfo.Name, propInfo.PropertyType);
                 }
                 else
                     oProp = new PropertySimple(propInfo.Name, propInfo.PropertyType);

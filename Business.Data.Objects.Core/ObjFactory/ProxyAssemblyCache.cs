@@ -207,7 +207,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                 o.ObjectRefId = this.NewObjeRefId();
 
                 if (withData)
-                    o.mDataSchema = new Schema.Usage.DataSchema(o.mClassSchema.Properties.Count, o.mClassSchema.ObjCount);
+                    o.mDataSchema = new Schema.Usage.DataSchema(o.mClassSchema.Properties.Count);
 
                 //Ritorna
                 return o;
