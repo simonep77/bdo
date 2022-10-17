@@ -94,7 +94,7 @@ namespace Business.Data.Objects.Core.Base
         /// <param name="key"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public object ExtraDataGet<T>(string key, T defaultValue)
+        public T ExtraDataGet<T>(string key, T defaultValue)
         {
             //Assicura extradata
             this.extraDataTouch();
@@ -103,7 +103,7 @@ namespace Business.Data.Objects.Core.Base
             if (!this.mExtraData.TryGetValue(key, out object oRet))
                 return defaultValue;
 
-            return Convert.ChangeType(oRet, typeof(T));
+            return (T)Convert.ChangeType(oRet, typeof(T));
         }
 
 

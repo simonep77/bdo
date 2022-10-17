@@ -160,5 +160,5 @@ Fix sulle cache
 Semplificata gestione interna proprietà mappate
 Fix SimpleAES
 
-[17/10/2022] - 5.0.49 - Simone Pelaia
+[17/10/2022] - 5.0.50 - Simone Pelaia
 Fix ExtraData
