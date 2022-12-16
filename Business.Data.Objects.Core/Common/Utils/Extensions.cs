@@ -12,6 +12,8 @@ namespace Business.Data.Objects.Common.Utils
     /// </summary>
     public static class Extensions
     {
+
+
         /// <summary>
         /// Operatore IN applicabile ad array parametrico
         /// </summary>

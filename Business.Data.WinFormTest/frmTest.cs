@@ -15,6 +15,7 @@ using System.Linq.Expressions;
 using Business.Data.Objects.TestClass.BIZ;
 using Business.Data.Objects.TestClass.DTO;
 using Business.Data.Objects.Common.Cache;
+using System.Diagnostics;
 
 namespace Business.Data.WinFormTest
 {
@@ -397,16 +398,25 @@ namespace Business.Data.WinFormTest
                 ss1.LiveTrackingEnabled = true;
                 ss1.ChangeTrackingEnabled = true;
                 ss1.UserName = "Simone";
+                
 
-                var c = new CacheSimple<string, int>(2000);
+                var sw = new Stopwatch();
+                sw.Start();
 
-                for (int i = 0; i < 100000; i++)
+                var c2 = new LruCache<string, int>(20000);
+
+                //for (int i = 0; i < 1000000; i++)
+                //{
+                //    c2.AddOrUpdate(i.ToString(), i);
+                //}
+                //this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+                for (int i = 0; i < 1000000; i++)
                 {
-                    c.SetObject(i.ToString(), i);
+                    c2.TryGet(i.ToString(), out var k);
                 }
-
-                this.WriteLog(ss1.GetCurrentElapsed().ToString());
-
+                this.WriteLog(sw.Elapsed.ToString());
+                //this.WriteLog(ss1.GetCurrentElapsed().ToString());
 
                 //this.WriteLog(c2.Print());
             }

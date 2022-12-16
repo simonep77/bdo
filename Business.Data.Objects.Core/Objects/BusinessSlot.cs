@@ -20,6 +20,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,13 +51,13 @@ namespace Business.Data.Objects.Core
         internal ReferenceManager<string, DataObjectBase> mLiveTrackingStore;
 
         //Static Data
-        private static ICache<string, DataSchema> _GlobalCache;
-        internal static CacheTimed<string, DataTable> _ListCache;
+        private static LruCache<string, object> _GlobalCache;
+        internal static LruCache<string, object> _ListCache;
         private static LoggerBase _SharedLog;
         private static LoggerBase _DatabaseLog;
         private static SlotConfig _StaticConf;
         private static int _StaticConfCount = 0;
-
+        private static LruCache<string, LruCache<string, object>> _StaticCaches = new LruCache<string, LruCache<string, object>>(30, TimeSpan.Zero);
 
         #endregion
 
@@ -259,21 +260,6 @@ namespace Business.Data.Objects.Core
             get
             {
                 return this.mDbList.Count;
-            }
-        }
-
-        /// <summary>
-        /// Ottiene/Imposta i minuti di timeout da utilizzare nella cache delle liste. La modifica impatta solo i nuovi oggetti
-        /// </summary>
-        public int ListCacheTimeoutMinuti
-        {
-            get
-            {
-                return _ListCache.DefaultTimeoutMinuti;
-            }
-            set
-            {
-                _ListCache.DefaultTimeoutMinuti = (value > 0) ? value : 20;
             }
         }
 
@@ -677,11 +663,62 @@ namespace Business.Data.Objects.Core
         #region CACHING
 
         /// <summary>
+        /// Registra una cache globale identificata da un nome
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="capacity"></param>
+        /// <param name="expire"></param>
+        /// <returns></returns>
+        public static LruCache<string, object> StaticCacheRegister(string name, int capacity, TimeSpan expire)
+        {
+            if (_StaticCaches.ContainsKey(name))
+                throw new BusinessSlotException($"Esiste già una cache denominata '{name}'");
+
+            //Crea la cache
+            var c = new LruCache<string, object>(capacity, expire);
+            //La registra
+            _StaticCaches.AddOrUpdate(name, c);
+
+            //La ritorna
+            return c;
+        }
+
+        /// <summary>
+        /// Rimuove una cache registrata
+        /// </summary>
+        /// <param name="name"></param>
+        public static void StaticCacheUnRegister(string name)
+        {
+            _StaticCaches.Remove(name);
+        }
+
+        /// <summary>
+        /// Esegue il rese
+        /// </summary>
+        /// <param name="name"></param>
+        public static void StaticCacheClearOne(string name)
+        {
+            _StaticCaches.Get(name)?.Clear();
+        }
+
+        /// <summary>
+        /// Azzera tutte le cache registrate
+        /// </summary>
+        public static void StaticCacheClearAll()
+        {
+            //Azzera tutte le cache
+            foreach (var name in _StaticCaches.AllKeys)
+            {
+                StaticCacheClearOne(name);
+            }
+        }
+
+        /// <summary>
         /// Svuota cache globale delle liste
         /// </summary>
         public void ResetListGlobal()
         {
-            _ListCache.Reset();
+            _ListCache.Clear();
         }
 
         /// <summary>
@@ -689,7 +726,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public void ResetCacheGlobal()
         {
-            _GlobalCache.Reset();
+            _GlobalCache.Clear();
         }
 
 
@@ -1997,20 +2034,25 @@ namespace Business.Data.Objects.Core
             //Scrive info cache locale e globale
             sb.AppendLine();
             sb.AppendLine("** CACHE INFO **");
-            sb.Append("Global Object Cache: ");
-            sb.Append(BusinessSlot._GlobalCache.CurrentSize.ToString());
-            sb.Append("/");
-            sb.AppendLine(BusinessSlot._GlobalCache.MaxSize.ToString());
+            sb.AppendLine($"Static Caches: {_StaticCaches.CurrentSize}");
 
+            var i = 0;
+            foreach (var item in _StaticCaches.AllKeys)
+            {
+                if (_StaticCaches.TryGet(item, out var c))
+                {
+                    i++;
+                    sb.AppendLine();
+                    sb.AppendLine($"Cache {i}: {item}");
+                    sb.AppendLine($"  > Size: {c.CurrentSize}/{c.Capacity}");
+                }
 
-            sb.Append("Global List Cache: ");
-            sb.Append(BusinessSlot._ListCache.CurrentSize.ToString());
-            sb.Append("/");
-            sb.AppendLine(BusinessSlot._ListCache.MaxSize.ToString());
+            }
 
             if (this.LiveTrackingEnabled)
             {
-                sb.Append("Live Objects: ");
+                sb.AppendLine();
+                sb.Append("Live Tracking Objects: ");
                 sb.AppendLine(this.mLiveTrackingStore.Count.ToString());
             }
 
@@ -2018,7 +2060,7 @@ namespace Business.Data.Objects.Core
             sb.AppendLine();
             sb.AppendLine("** DATABASE INFO **");
             //Per ogni database
-            foreach (KeyValuePair<string, IDataBase> opair in this.mDbList)
+            foreach (var opair in this.mDbList)
             {
                 sb.Append("#Connessione ");
                 sb.AppendLine(opair.Key);
@@ -2027,7 +2069,7 @@ namespace Business.Data.Objects.Core
                 sb.Append(opair.Value.Stats.ToString());
                 sb.AppendLine();
             }
-                      
+
             return sb.ToString();
         }
 
@@ -2369,27 +2411,24 @@ namespace Business.Data.Objects.Core
             if (!this.IsCacheable(sc))
                 return null;
 
-            DataSchema oData = null;
-
             //1) Cerca in cache locale (Global o Slot)
             if (sc.GlobalCache)
             {
                 //Cerca in cache
-                oData = _GlobalCache.GetObject(uniqueKey);
-
                 //se non nullo utilizza un clone ed esce
-                if (oData != null)
+                if (_GlobalCache.TryGet(uniqueKey, out var item))
                 {
-                    var newData = oData.Clone(false, true);
+                    var newData = ((DataSchema)item).Clone(false, true);
                     newData.ObjectSource = EObjectSource.GlobalCache;
 
                     //Restituisce un clone per sicurezza
                     return newData;
                 }
+
             }
 
             //Non trovato
-            return oData;
+            return null;
         }
 
 
@@ -2406,19 +2445,7 @@ namespace Business.Data.Objects.Core
             //1) Salva in cache locale
             if (obj.mClassSchema.GlobalCache)
             {
-                lock (_GlobalCache)
-                {
-                    //Se qualcun altro lo ha creato prima esce
-                    if (_GlobalCache.ContainsObject(obj.GetHashBaseString()))
-                        return;
-
-                    //Crea una versione clonata senza oggetti da salvare in cache
-                    var oClonedData = obj.mDataSchema.Clone(false, true);
-
-                    //Salva lo schema in cache per chiave
-                    _GlobalCache.SetObject(obj.GetHashBaseString(), oClonedData);
-
-                }
+                _GlobalCache.GetOrAdd(obj.GetHashBaseString(), () => obj.mDataSchema.Clone(false, true));
             }
 
         }
@@ -2529,8 +2556,9 @@ namespace Business.Data.Objects.Core
                 _StaticConf = conf;
 
                 //Inizializza 
-                BusinessSlot._GlobalCache = new CacheSimple<string, DataSchema>(conf.CacheGlobalSize);
-                BusinessSlot._ListCache = new CacheTimed<string, DataTable>(conf.CacheGlobalSize / 2);
+                BusinessSlot._StaticCaches.Clear();
+                BusinessSlot._GlobalCache = StaticCacheRegister(@"Bdo.Global", conf.CacheGlobalSize, TimeSpan.Zero);
+                BusinessSlot._ListCache = StaticCacheRegister(@"Bdo.Global.List", conf.CacheGlobalSize / 2, TimeSpan.FromMinutes(20));
 
                 //Se impostata directory di log
                 if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))

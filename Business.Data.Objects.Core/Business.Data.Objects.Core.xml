@@ -2097,11 +2097,6 @@
             Indica il numero di istanze database definite
             </summary>
         </member>
-        <member name="P:Business.Data.Objects.Core.BusinessSlot.ListCacheTimeoutMinuti">
-            <summary>
-            Ottiene/Imposta i minuti di timeout da utilizzare nella cache delle liste. La modifica impatta solo i nuovi oggetti
-            </summary>
-        </member>
         <member name="P:Business.Data.Objects.Core.BusinessSlot.LazyStore">
             <summary>
             Ritorna istanza del lazystore per i dati accessibili on-demand
@@ -2253,6 +2248,32 @@
             Ritorna tutte le chiavi di proprieta' + chiavi ConfigurationManager.AppSettings definite
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticCacheRegister(System.String,System.Int32,System.TimeSpan)">
+            <summary>
+            Registra una cache globale identificata da un nome
+            </summary>
+            <param name="name"></param>
+            <param name="capacity"></param>
+            <param name="expire"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticCacheUnRegister(System.String)">
+            <summary>
+            Rimuove una cache registrata
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticCacheClearOne(System.String)">
+            <summary>
+            Esegue il rese
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticCacheClearAll">
+            <summary>
+            Azzera tutte le cache registrate
+            </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.ResetListGlobal">
             <summary>
@@ -4381,6 +4402,107 @@
         <member name="M:Business.Data.Objects.Common.Cache.ICache`2.Print">
             <summary>
             Ritorna stringa con rappresentazione contenuto cache
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Cache.LruCache`2">
+            <summary>
+            Cache di tipo LRU
+            </summary>
+            <typeparam name="K"></typeparam>
+            <typeparam name="V"></typeparam>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.LruCache`2.Capacity">
+            <summary>
+            Dimensione massima
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.LruCache`2.Expire">
+            <summary>
+            tempo di scadenza oggetti
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.LruCache`2.DoExpire">
+            <summary>
+            Indica se attiva la scadenza
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Common.Cache.LruCache`2.CacheItem`2">
+            <summary>
+            Oggetto mantenuto in cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.LruCache`2.CurrentSize">
+            <summary>
+            Dimensione corrente
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.Cache.LruCache`2.AllKeys">
+            <summary>
+            Ritorna tutte le chiavi registrate
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.#ctor(System.Int32,System.TimeSpan)">
+            <summary>
+            Crea una cache LRU.
+            </summary>
+            <param name="capacity">Numero massimo elementi</param>
+            <param name="expire">Dopo quanto un elemento viene considerato scaduto. Default nessuna scadenza</param>
+            <param name="refreshOnAccess">Indica se aggiornare la scadenza ad ogni accesso</param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.Clear">
+            <summary>
+            Svuota completamente cache
+            </summary>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.performClean">
+            <summary>
+            Libera % slot da cache
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.AddOrUpdate(`0,`1)">
+            <summary>
+            Aggiunge o Aggiorna oggetto in cache
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="span"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.Get(`0)">
+            <summary>
+            Ritorna valore o default
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.TryGet(`0,`1@)">
+            <summary>
+            Tenta di leggere il valore e ritorna true o false se trovato. 
+            In caso positivo value contiene il valore trovato altrimenti il valore di default del tipo
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.Remove(`0)">
+            <summary>
+            Elimina oggetto da Cache se presente
+            </summary>
+            <param name="key"></param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.ContainsKey(`0)">
+            <summary>
+            Verifica se oggetto già presente in cache
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.Print">
+            <summary>
+            Ritorna stringa con rappresentazione dei dati contenuti
             </summary>
             <returns></returns>
         </member>

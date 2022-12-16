@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Text;
+using System.Data;
 
 namespace Business.Data.Objects.Core.Base
 {
@@ -237,13 +238,12 @@ namespace Business.Data.Objects.Core.Base
                         sQueryHash = db.GetCurrentQueryHashString(0, 0);
 
                     //Cerca in cache, se trovata datatable allora crea reader associato
-                    var dt = BusinessSlot._ListCache.GetObject(sQueryHash);
-                    if (dt != null)
+                    if (BusinessSlot._ListCache.TryGet(sQueryHash, out var item))
                     {
                         //Resetta il db per evitare di lasciare i parametri allocati
                         db.Reset();
                         //Crea datareader da datatable
-                        rd = dt.CreateDataReader();
+                        rd = ((DataTable)item).CreateDataReader();
                     }
                 }
 
@@ -271,7 +271,7 @@ namespace Business.Data.Objects.Core.Base
                             dt.Load(rd);
                         }
                         //Salva in cache
-                        BusinessSlot._ListCache.SetObject(sQueryHash, dt);
+                        BusinessSlot._ListCache.GetOrAdd(sQueryHash, () => dt);
                         //Ricrea il reader dalla tabella
                         rd = dt.CreateDataReader();
                     }
