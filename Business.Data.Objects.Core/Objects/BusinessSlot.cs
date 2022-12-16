@@ -34,7 +34,8 @@ namespace Business.Data.Objects.Core
     /// </summary>
     public class BusinessSlot : IComparable<BusinessSlot>, IEquatable<BusinessSlot>, IDisposable
     {
-
+        private const string CACHE_GLOBAL_NAME =@"Bdo.Global";
+        private const string CACHE_GLOBAL_LIST_NAME = @"Bdo.Global.List";
         #region PRIVATE FIELDS
 
         //Private vars
@@ -689,16 +690,28 @@ namespace Business.Data.Objects.Core
         /// <param name="name"></param>
         public static void StaticCacheUnRegister(string name)
         {
+            if (name == CACHE_GLOBAL_NAME || name == CACHE_GLOBAL_LIST_NAME)
+                throw new BusinessSlotException($"Il nome cache '{name}' è riservato");
+
             _StaticCaches.Remove(name);
         }
 
         /// <summary>
-        /// Esegue il rese
+        /// Esegue il reset di una cache specifica
         /// </summary>
         /// <param name="name"></param>
         public static void StaticCacheClearOne(string name)
         {
             _StaticCaches.Get(name)?.Clear();
+        }
+
+        /// <summary>
+        /// Ritorna una cache by name. Se non esiste torna null
+        /// </summary>
+        /// <param name="name"></param>
+        public static void StaticCacheGet(string name)
+        {
+            _StaticCaches.Get(name);
         }
 
         /// <summary>
@@ -2557,8 +2570,8 @@ namespace Business.Data.Objects.Core
 
                 //Inizializza 
                 BusinessSlot._StaticCaches.Clear();
-                BusinessSlot._GlobalCache = StaticCacheRegister(@"Bdo.Global", conf.CacheGlobalSize, TimeSpan.Zero);
-                BusinessSlot._ListCache = StaticCacheRegister(@"Bdo.Global.List", conf.CacheGlobalSize / 2, TimeSpan.FromMinutes(20));
+                BusinessSlot._GlobalCache = StaticCacheRegister(CACHE_GLOBAL_NAME, conf.CacheGlobalSize, TimeSpan.Zero);
+                BusinessSlot._ListCache = StaticCacheRegister(CACHE_GLOBAL_LIST_NAME, conf.CacheGlobalSize / 2, TimeSpan.FromMinutes(20));
 
                 //Se impostata directory di log
                 if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))

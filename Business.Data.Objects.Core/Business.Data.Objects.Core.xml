@@ -2266,7 +2266,13 @@
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticCacheClearOne(System.String)">
             <summary>
-            Esegue il rese
+            Esegue il reset di una cache specifica
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.StaticCacheGet(System.String)">
+            <summary>
+            Ritorna una cache by name. Se non esiste torna null
             </summary>
             <param name="name"></param>
         </member>
@@ -4237,174 +4243,6 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "T:Business.Data.Objects.Core.Utils.JSONWriter" -->
-        <member name="T:Business.Data.Objects.Common.Cache.CacheSimple`2.CacheItem`2">
-            <summary>
-            Oggetto mantenuto in cache
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.Reset">
-            <summary>
-            Svuota completamente cache
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.AddAlternateKey(`0,`0)">
-            <summary>
-            Aggiunge un'altra chiave di riferimento per un oggetto gia' in cache
-            </summary>
-            <param name="keyBase"></param>
-            <param name="keyNew"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.SetObject(`0,`1)">
-            <summary>
-            Aggiunge o Aggiorna oggetto in cache
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.GetObject(`0)">
-            <summary>
-            Ritorna Oggetto
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.RemoveObject(`0)">
-            <summary>
-            Elimina oggetto da Cache se presente
-            </summary>
-            <param name="key"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.ContainsObject(`0)">
-            <summary>
-            Verifica se oggetto già presente in cache
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.Print">
-            <summary>
-            Ritorna stringa con rappresentazione dei dati contenuti
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheSimple`2.FreeCacheSlots(System.Int32)">
-            <summary>
-            Se la cache ha raggiunto il massimo inizia ad eliminare elementi
-            E' possibile specificare il numero di elementi da liberare
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="T:Business.Data.Objects.Common.Cache.CacheTimed`2.CacheItem`2">
-            <summary>
-            Oggetto mantenuto in cache
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.Reset">
-            <summary>
-            Svuota completamente cache
-            </summary>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.SetObject(`0,`1)">
-            <summary>
-            Aggiunge o Aggiorna oggetto in cache
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-            <param name="span"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.GetObject(`0)">
-            <summary>
-            Ritorna Oggetto
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.RemoveObject(`0)">
-            <summary>
-            Elimina oggetto da Cache se presente
-            </summary>
-            <param name="key"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.ContainsObject(`0)">
-            <summary>
-            Verifica se oggetto già presente in cache
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.CacheTimed`2.Print">
-            <summary>
-            Ritorna stringa con rappresentazione dei dati contenuti
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Business.Data.Objects.Common.Cache.ICache`2">
-            <summary>
-            Interfaccia per cache
-            </summary>
-            <typeparam name="TKey">Chiave di ricerca</typeparam>
-            <typeparam name="T">Oggetto in cache</typeparam>
-        </member>
-        <member name="P:Business.Data.Objects.Common.Cache.ICache`2.CurrentSize">
-            <summary>
-            Dimensione attuale
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Common.Cache.ICache`2.MaxSize">
-            <summary>
-            Dimensione massima
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.Reset">
-            <summary>
-            Svuota Cache
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.SetObject(`0,`1)">
-            <summary>
-            Aggiunge o Aggiorna oggetto in cache
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.ContainsObject(`0)">
-            <summary>
-            Verifica se oggetto è già presente in cache 
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.GetObject(`0)">
-            <summary>
-            Ritorna Oggetto
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.RemoveObject(`0)">
-            <summary>
-            Elimina oggetto da Cache se presente
-            </summary>
-            <param name="key"></param>
-            <remarks></remarks>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Cache.ICache`2.Print">
-            <summary>
-            Ritorna stringa con rappresentazione contenuto cache
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Business.Data.Objects.Common.Cache.LruCache`2">
             <summary>
             Cache di tipo LRU
