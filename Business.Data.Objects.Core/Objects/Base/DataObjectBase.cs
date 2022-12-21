@@ -53,6 +53,11 @@ namespace Business.Data.Objects.Core.Base
         /// Indica lo stato interno dell'oggetto
         /// </summary>
         public EObjectState ObjectState => this.mDataSchema.ObjectState;
+        
+        /// <summary>
+        /// Ritorna l'esito effettivo dell'ultimo salvataggio eseguito
+        /// </summary>
+        public ESaveResult SaveResult => this.mDataSchema.SaveResult;
 
 
         #endregion
@@ -176,7 +181,7 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Salva l'oggetto nel database
         /// </summary>
-        internal ESaveResult DoSave()
+        internal void DoSave()
         {
             //Gia' eliminato
             if (this.mDataSchema.ObjectState == EObjectState.Deleted)
@@ -192,28 +197,27 @@ namespace Business.Data.Objects.Core.Base
             if (this.mClassSchema.IsReadOnly)
                 throw new ObjectException(ObjectMessages.OperationFail_SaveOrDelete, this.GetType().Name);
 
+            //Resetta info salvataggio
+            this.mDataSchema.SaveResult = ESaveResult.Unset;
             //Esegue
-            var eSaveRes = ESaveResult.Unset;
 
             switch (this.mDataSchema.ObjectState)
             {
                 case EObjectState.New:
                     //esegue
-                    eSaveRes = this.performDbInsert();
+                    this.mDataSchema.SaveResult = this.performDbInsert();
 
                     //Se effettuato salvataggio deve ricalcolare hash della PK
-                    if (eSaveRes == ESaveResult.SaveDone)
+                    if (this.mDataSchema.SaveResult == ESaveResult.SaveDone)
                         this.mDataSchema.PkHash = ObjectHelper.GetObjectHashString(this);
 
                     break;
                 case EObjectState.Loaded:
                     //esegue
-                    eSaveRes = this.performDbUpdate();
+                    this.mDataSchema.SaveResult = this.performDbUpdate();
                     break;
             }
 
-
-            return eSaveRes;
         }
 
 

@@ -1652,10 +1652,10 @@ namespace Business.Data.Objects.Core
                 return;
 
             //Salva oggetto
-            bool isChanged = (obj.DoSave() == ESaveResult.SaveDone);
+            obj.DoSave();
 
             //Se non e' avvenuta una modifica esce e non esegue il resto
-            if (!isChanged)
+            if (obj.mDataSchema.SaveResult != ESaveResult.SaveDone)
                 return;
 
             //Se tracking lo salva

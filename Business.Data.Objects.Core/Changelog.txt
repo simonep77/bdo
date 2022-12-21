@@ -165,3 +165,6 @@ Fix ExtraData
 
 [16/12/2022] - 5.0.52 - Simone Pelaia
 Centralizzazione cache statiche su slot
+
+[21/12/2022] - 5.0.53 - Simone Pelaia
+Esposto esito ultimo salvataggio come proprietà dello slot

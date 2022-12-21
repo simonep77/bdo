@@ -23,6 +23,8 @@ namespace Business.Data.Objects.Core.Schema.Usage
 
         internal EObjectSource ObjectSource = EObjectSource.None;
 
+        internal ESaveResult SaveResult = ESaveResult.Unset;
+
         #region PUBLIC METHODS
 
         /// <summary>
@@ -85,6 +87,7 @@ namespace Business.Data.Objects.Core.Schema.Usage
             //Imposta stato
             other.ObjectState = this.ObjectState;
             other.ObjectSource = this.ObjectSource;
+            other.SaveResult = this.SaveResult;
 
             //Se inclusione chiavi
             if (includeKeyHash)
