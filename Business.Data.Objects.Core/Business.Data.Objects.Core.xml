@@ -1545,6 +1545,11 @@
             Indica lo stato interno dell'oggetto
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataObjectBase.SaveResult">
+            <summary>
+            Ritorna l'esito effettivo dell'ultimo salvataggio eseguito
+            </summary>
+        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.firePropertyChanged(Business.Data.Objects.Core.Schema.Definition.Property)">
             <summary>
             Esegue l'evento di property change del databindings

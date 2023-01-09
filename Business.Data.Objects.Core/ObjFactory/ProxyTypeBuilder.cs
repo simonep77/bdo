@@ -28,10 +28,6 @@ namespace Business.Data.Objects.Core.ObjFactory
         private static Type TYPE_BIZ_FACTORY_INTERFACE = typeof(IBusinessObjFactory);
         private static Type TYPE_DATA_OBJ_BASE = typeof(DataObjectBase);
         private static Type TYPE_DATA_LIST_BASE = typeof(DataListBase);
-        private static Type[] TYPE_ARR_BASE = { typeof(Type) };
-        private static Type[] TYPE_ARR_DATAOBJ = { typeof(DataObjectBase) };
-        private static object[] ARR_EMPTY = { };
-        private static Type[] TYPE_ARR_SERIAL = { typeof(System.Runtime.Serialization.SerializationInfo), typeof(System.Runtime.Serialization.StreamingContext) };
 
 
         #endregion
@@ -87,43 +83,40 @@ namespace Business.Data.Objects.Core.ObjFactory
 
             //Imposta oggetto output base 
             outProxy.DynAss = dapx.PxAssemblyBuilder;
-            
-            //Controlla ogni tipo definito nell'Assembly
-            foreach (Type tOriginal in outProxy.SrcAss.GetTypes())
-            {
-                bool bCreateSchema = tOriginal.IsSubclassOf(TYPE_DATA_OBJ_BASE);
-                bool bIsBdoItem = (bCreateSchema || tOriginal.IsSubclassOf(TYPE_DATA_LIST_BASE));
-                PropertyInfo[] arrPropInfo = null;
 
-                //Se non BDO allora skip
-                if (!bIsBdoItem)
-                    continue;
+            //Controlla ogni tipo definito nell'Assembly
+            var types = outProxy.SrcAss.GetExportedTypes()
+                .Where(x => x.IsSubclassOf(TYPE_DATA_OBJ_BASE) || x.IsSubclassOf(TYPE_DATA_LIST_BASE))
+                .Select(x => new
+                {
+                    CreateSchema = x.IsSubclassOf(TYPE_DATA_OBJ_BASE),
+                    Type = x,
+                });
+            foreach (var tOriginal in types)
+            {
+                PropertyInfo[] arrPropInfo = null;
 
                 //Ok, BDO
                 try
                 {
-                    long iOriginalTypeHandle = tOriginal.TypeHandle.Value.ToInt64();
+                    long iOriginalTypeHandle = tOriginal.Type.TypeHandle.Value.ToInt64();
                     int iPropertyIndex = 0; //Indice interno della proprietà
-                    string sOrigFullTypeName = tOriginal.FullName;
-
-                    //la classe deve essere pubblica
-                    if (tOriginal.IsNotPublic)
-                        throw new TypeFactoryException("La classe '{0}' deve essere definita PUBLIC.", sOrigFullTypeName);
+                    string sOrigFullTypeName = tOriginal.Type.FullName;
 
                     //Definisce TypeBuilder
-                    TypeBuilder typeBuild = dapx.PxModuleBuilder.DefineType(string.Concat(STR_BDO_SUFFIX, sOrigFullTypeName), TypeAttributes.Public | TypeAttributes.Sealed, tOriginal);
+                    TypeBuilder typeBuild = dapx.PxModuleBuilder.DefineType(string.Concat(STR_BDO_SUFFIX, sOrigFullTypeName), TypeAttributes.Public | TypeAttributes.Sealed, tOriginal.Type);
                     ConstructorBuilder cbDefault = typeBuild.DefineDefaultConstructor(MethodAttributes.Public);
 
                     //Se non necessario schema va ad aggiunta entry
-                    if (!bCreateSchema)
+                    if (!tOriginal.CreateSchema)
                         goto ADD_TYPE_ENTRY;
 
                     //Carica i Metodi Custom per GET e SET
-                    MethodInfo myGetCustom = tOriginal.GetMethod("GetProperty", BindingFlags.Instance | BindingFlags.Public);
-                    MethodInfo mySetCustom = tOriginal.GetMethod("SetProperty", BindingFlags.Instance | BindingFlags.Public);
+                    MethodInfo myGetCustom = tOriginal.Type.GetMethod(@"GetProperty", BindingFlags.Instance | BindingFlags.Public);
+                    MethodInfo mySetCustom = tOriginal.Type.GetMethod(@"SetProperty", BindingFlags.Instance | BindingFlags.Public);
 
                     //Carica elenco proprieta'
-                    var properties = tOriginal.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                    var properties = tOriginal.Type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
                     
                     //Ordina le proprieta' per come sono definite
                     arrPropInfo = properties.OrderBy(p => p.MetadataToken).ToArray();
@@ -209,9 +202,9 @@ namespace Business.Data.Objects.Core.ObjFactory
                     oTypeEntry.ProxyType = typeBuild.CreateTypeInfo().AsType();
                     oTypeEntry.Create = createFastConstructor(oTypeEntry.ProxyType, dapx.PxModuleBuilder);
                     //Crea schema dei soli oggetti singoli
-                    if (bCreateSchema)
+                    if (tOriginal.CreateSchema)
                     {
-                        oTypeEntry.ClassSchema = readClassSchemaWithSQL(tOriginal, iOriginalTypeHandle, arrPropInfo);
+                        oTypeEntry.ClassSchema = readClassSchemaWithSQL(tOriginal.Type, iOriginalTypeHandle, arrPropInfo);
                     }
 
                     //Aggiunge a lista su proxy

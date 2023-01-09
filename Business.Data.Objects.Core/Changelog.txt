@@ -168,3 +168,6 @@ Centralizzazione cache statiche su slot
 
 [21/12/2022] - 5.0.53 - Simone Pelaia
 Esposto esito ultimo salvataggio come proprietà dello slot
+
+[09/01/2023] - 5.0.54 - Simone Pelaia
+Scansione assembly solo per tipi pubblici (GetExportedTypes())
