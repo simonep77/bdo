@@ -171,3 +171,6 @@ Esposto esito ultimo salvataggio come proprietà dello slot
 
 [09/01/2023] - 5.0.54 - Simone Pelaia
 Scansione assembly solo per tipi pubblici (GetExportedTypes())
+
+[15/01/2023] - 5.0.55 - Simone Pelaia
+Scansione assembly solo per tipi pubblici anche per biz objects (GetExportedTypes())

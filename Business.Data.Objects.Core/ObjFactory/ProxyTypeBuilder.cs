@@ -537,7 +537,7 @@ namespace Business.Data.Objects.Core.ObjFactory
             var bizCacheLocal = new ProxyEntryBizDic(30);
 
             //Controlla ogni tipo definito nell'Assembly
-            foreach (Type tOriginal in outProxy.SrcAss.GetTypes())
+            foreach (Type tOriginal in outProxy.SrcAss.GetExportedTypes())
             {
                 //Se e' biz lo segna
                 if (tOriginal.IsSubclassOf(TYPE_BIZ_OBJ_BASE))
