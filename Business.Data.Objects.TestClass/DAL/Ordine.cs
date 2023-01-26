@@ -37,7 +37,7 @@ namespace Business.Data.Objects.TestClass.DAL
         //[MaxLength(50), AcceptNull, UserInfo]
         //public abstract string Utente { get; }
 
-        //[LogicalDelete]
-        //public abstract bool Cancellato { get; }
+        [LogicalDelete]
+        public abstract bool Flag_Canc { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace Business.Data.Objects.Core.Common.Resources {
     // tramite uno strumento quale ResGen o Visual Studio.
     // Per aggiungere o rimuovere un membro, modificare il file con estensione ResX ed eseguire nuovamente ResGen
     // con l'opzione /str oppure ricompilare il progetto VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ObjectMessages {
@@ -489,6 +489,15 @@ namespace Business.Data.Objects.Core.Common.Resources {
         public static string Property_Cannot_Set {
             get {
                 return ResourceManager.GetString("Property_Cannot_Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a {0} - L&apos;oggetto non prevede la cancellazione logica.
+        /// </summary>
+        public static string Undelete_Only_Logical_Delete {
+            get {
+                return ResourceManager.GetString("Undelete_Only_Logical_Delete", resourceCulture);
             }
         }
         

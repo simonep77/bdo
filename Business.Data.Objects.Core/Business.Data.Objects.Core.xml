@@ -668,6 +668,11 @@
               Cerca una stringa localizzata simile a {0} - La proprieta&apos; {1} non puo&apos; essere impostata poiche&apos; in sola lettura oppure gestita automaticamente..
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Undelete_Only_Logical_Delete">
+            <summary>
+              Cerca una stringa localizzata simile a {0} - L&apos;oggetto non prevede la cancellazione logica.
+            </summary>
+        </member>
         <member name="P:Business.Data.Objects.Core.Common.Resources.ObjectMessages.Validate_IntRange">
             <summary>
               Cerca una stringa localizzata simile a {0} - Il valore della proprieta&apos; {1} non rientra nell&apos;intervallo imposto {2}-{3}..
@@ -1548,6 +1553,11 @@
         <member name="P:Business.Data.Objects.Core.Base.DataObjectBase.SaveResult">
             <summary>
             Ritorna l'esito effettivo dell'ultimo salvataggio eseguito
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Base.DataObjectBase.IsLogicallyDeleted">
+            <summary>
+            Indica se l'oggetto è cancellato logicamente
             </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.firePropertyChanged(Business.Data.Objects.Core.Schema.Definition.Property)">
@@ -2637,6 +2647,14 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="obj"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.UnDeleteObject``1(``0)">
+            <summary>
+            Annulla eventuale cancellazione logica. Richiamato su un oggetto non cancellato non fa nulla
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="obj"></param>
+            <exception cref="T:Business.Data.Objects.Common.Exceptions.ObjectException"></exception>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.DeleteObject``1(``0,System.Boolean)">
             <summary>

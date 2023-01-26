@@ -421,10 +421,6 @@ namespace Business.Data.WinFormTest
                 //this.WriteLog(c2.Print());
             }
 
-
-
-
-
         }
 
         private void tESTSimpleAESToolStripMenuItem_Click(object sender, EventArgs e)
@@ -436,6 +432,27 @@ namespace Business.Data.WinFormTest
             this.WriteLog(enc);
 
             this.WriteLog(s.Decrypt(enc));
+        }
+
+        private void tESTUndeleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                var ord = ss1.CreateList<OrdineLista>(1, 1).SearchAllObjects().FirstOrDefault();
+
+                ss1.DeleteObject(ord);
+
+                ss1.UnDeleteObject(ord);
+
+                //this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+                //this.WriteLog(c2.Print());
+            }
         }
     }
 }

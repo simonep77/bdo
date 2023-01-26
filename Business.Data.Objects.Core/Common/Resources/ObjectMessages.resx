@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Base_Delete_Null" xml:space="preserve">
     <value>{0} - Impossibile eseguire eliminare un oggetto nullo.</value>
@@ -278,5 +278,8 @@
   </data>
   <data name="Prop_Enc_Wrong_Length" xml:space="preserve">
     <value>{0} - La codifica del valore della proprieta' eccede la massima dimensione del campo specificata ({1})</value>
+  </data>
+  <data name="Undelete_Only_Logical_Delete" xml:space="preserve">
+    <value>{0} - L'oggetto non prevede la cancellazione logica</value>
   </data>
 </root>

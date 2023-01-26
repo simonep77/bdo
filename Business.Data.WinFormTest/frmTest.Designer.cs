@@ -41,9 +41,10 @@ namespace Business.Data.WinFormTest
             this.tESTCacheresultConLinqToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTCacheResultSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTCacheSimpleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.txtLog = new System.Windows.Forms.TextBox();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tESTSimpleAESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.tESTUndeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,7 +72,8 @@ namespace Business.Data.WinFormTest
             this.tESTCacheresultConLinqToolStripMenuItem,
             this.tESTCacheResultSizeToolStripMenuItem,
             this.tESTCacheSimpleToolStripMenuItem,
-            this.tESTSimpleAESToolStripMenuItem});
+            this.tESTSimpleAESToolStripMenuItem,
+            this.tESTUndeleteToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -141,6 +143,22 @@ namespace Business.Data.WinFormTest
             this.tESTCacheSimpleToolStripMenuItem.Text = "TEST Cache Simple";
             this.tESTCacheSimpleToolStripMenuItem.Click += new System.EventHandler(this.tESTCacheSimpleToolStripMenuItem_Click);
             // 
+            // tESTSimpleAESToolStripMenuItem
+            // 
+            this.tESTSimpleAESToolStripMenuItem.Name = "tESTSimpleAESToolStripMenuItem";
+            this.tESTSimpleAESToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTSimpleAESToolStripMenuItem.Text = "TEST SimpleAES";
+            this.tESTSimpleAESToolStripMenuItem.Click += new System.EventHandler(this.tESTSimpleAESToolStripMenuItem_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            // 
             // txtLog
             // 
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -154,21 +172,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // toolStripButton1
+            // tESTUndeleteToolStripMenuItem
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            // 
-            // tESTSimpleAESToolStripMenuItem
-            // 
-            this.tESTSimpleAESToolStripMenuItem.Name = "tESTSimpleAESToolStripMenuItem";
-            this.tESTSimpleAESToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.tESTSimpleAESToolStripMenuItem.Text = "TEST SimpleAES";
-            this.tESTSimpleAESToolStripMenuItem.Click += new System.EventHandler(this.tESTSimpleAESToolStripMenuItem_Click);
+            this.tESTUndeleteToolStripMenuItem.Name = "tESTUndeleteToolStripMenuItem";
+            this.tESTUndeleteToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTUndeleteToolStripMenuItem.Text = "TEST Undelete";
+            this.tESTUndeleteToolStripMenuItem.Click += new System.EventHandler(this.tESTUndeleteToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -202,5 +211,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem tESTCacheSimpleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tESTSimpleAESToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripMenuItem tESTUndeleteToolStripMenuItem;
     }
 }

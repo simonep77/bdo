@@ -13,6 +13,8 @@ using System.Data;
 using System.Data.Common;
 using System.Text;
 using Business.Data.Objects.Core.Attributes;
+using System.Linq;
+using System.Collections;
 
 namespace Business.Data.Objects.Core.Base
 {
@@ -53,12 +55,16 @@ namespace Business.Data.Objects.Core.Base
         /// Indica lo stato interno dell'oggetto
         /// </summary>
         public EObjectState ObjectState => this.mDataSchema.ObjectState;
-        
+
         /// <summary>
         /// Ritorna l'esito effettivo dell'ultimo salvataggio eseguito
         /// </summary>
         public ESaveResult SaveResult => this.mDataSchema.SaveResult;
 
+        /// <summary>
+        /// Indica se l'oggetto è cancellato logicamente
+        /// </summary>
+        public bool IsLogicallyDeleted => this.mClassSchema.LogicalDeletes.Any(x => Comparer.DefaultInvariant.Compare(x.GetValue(this), x.DefaultValue) > 0);
 
         #endregion
 
@@ -153,7 +159,7 @@ namespace Business.Data.Objects.Core.Base
         /// <param name="propertyName"></param>
         /// <returns></returns>
         public bool IsChanged(string propertyName) => this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex, DataFlags.Changed);
- 
+
 
         /// <summary>
         /// Ritorna elenco di proprieta' modificate
@@ -418,7 +424,6 @@ namespace Business.Data.Objects.Core.Base
                 //Richiama il caricamento della singola proprietà
                 oProp.SetValueFromReader(this, dr);
             }
-
 
             //Imposta stato oggetto caricato
             this.mDataSchema.ObjectState = EObjectState.Loaded;

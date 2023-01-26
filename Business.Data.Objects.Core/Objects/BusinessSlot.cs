@@ -1665,6 +1665,31 @@ namespace Business.Data.Objects.Core
         }
 
         /// <summary>
+        /// Annulla eventuale cancellazione logica. Richiamato su un oggetto non cancellato non fa nulla
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <exception cref="ObjectException"></exception>
+        public void UnDeleteObject<T>(T obj) where T : DataObjectBase
+        {
+            if (obj is null)
+                throw new ArgumentException();
+
+            if (!obj.mClassSchema.LogicalDeletes.Any())
+                throw new ObjectException(ObjectMessages.Undelete_Only_Logical_Delete, obj.mClassSchema.ClassName);
+
+            //Se non e' cancellato allora esce
+            if (!obj.IsLogicallyDeleted) 
+                return;
+
+            //Azzera dati di cancellazione logica
+            obj.mClassSchema.LogicalDeletes.ForEach(x => x.SetValue(obj, x.DefaultValue));
+           
+            //Esegue aggiornamento
+            this.SaveObject(obj);
+        }
+
+        /// <summary>
         /// Elimina oggetto utilizzando questa sessione
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -1706,9 +1731,6 @@ namespace Business.Data.Objects.Core
                 //Esegue aggiornamento
                 this.SaveObject(obj);
 
-                //Forziamo indicazione di oggetto eliminato??
-                //Imposta stato eliminato
-                obj.mDataSchema.ObjectState = EObjectState.Deleted;
             }
 
             //Se tracking lo salva
