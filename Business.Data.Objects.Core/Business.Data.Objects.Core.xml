@@ -5258,12 +5258,10 @@
             Indica se presenti messaggi di errore
             </summary>
         </member>
-        <member name="M:Business.Data.Objects.Common.Utils.MessageList.CountForSeverity(Business.Data.Objects.Common.ESeverity)">
+        <member name="P:Business.Data.Objects.Common.Utils.MessageList.HasWarnings">
             <summary>
-            Ritorna il numero di messaggi di una certa severità
+            Indica se presenti warning
             </summary>
-            <param name="severity"></param>
-            <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Common.Utils.MessageList.Add(System.Int32,System.String,Business.Data.Objects.Common.ESeverity,System.String)">
             <summary>
@@ -5344,15 +5342,6 @@
             Aggiunge messaggio solo testuale
             </summary>
             <param name="message"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Common.Utils.MessageList.AddFormat(System.Int32,Business.Data.Objects.Common.ESeverity,System.String,System.Object[])">
-            <summary>
-            Aggiunge messaggio con codice, sevarita' e messaggio in notazione String.Format
-            </summary>
-            <param name="code"></param>
-            <param name="severity"></param>
-            <param name="messageFmt"></param>
-            <param name="args"></param>
         </member>
         <member name="T:Business.Data.Objects.Common.Utils.PasswordGen">
             <summary>

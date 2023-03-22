@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Business.Data.Objects.Common.Utils
 {
@@ -11,40 +12,13 @@ namespace Business.Data.Objects.Common.Utils
         /// <summary>
         /// Indica se presenti messaggi di errore
         /// </summary>
-        public bool HasErrors
-        {
-            get
-            {
-                for (int i = 0; i < this.Count; i++)
-                {
-                    if (this[i].Severity == ESeverity.Error)
-                        return true;
-                }
-
-                return false;
-            }
-        }
-
+        public bool HasErrors => this.Any(x => x.Severity == ESeverity.Error);
 
         /// <summary>
-        /// Ritorna il numero di messaggi di una certa severità
+        /// Indica se presenti warning
         /// </summary>
-        /// <param name="severity"></param>
-        /// <returns></returns>
-        public int CountForSeverity(ESeverity severity)
-        {
-            int iTemp = 0;
+        public bool HasWarnings => this.Any(x => x.Severity == ESeverity.Warn);
 
-            for (int i = 0; i < this.Count; i++)
-            {
-                if (this[i].Severity == severity)
-                {
-                    iTemp++;
-                }
-            }
-
-            return iTemp;
-        }
 
         /// <summary>
         /// Aggiunge messaggio di tipo impostabile
@@ -126,7 +100,7 @@ namespace Business.Data.Objects.Common.Utils
         /// <param name="message"></param>
         public void AddInfo(string message)
         {
-            this.Add(-1, message, ESeverity.Info, string.Empty);
+            this.Add( 0, message, ESeverity.Info, string.Empty);
         }
 
         /// <summary>
@@ -160,16 +134,9 @@ namespace Business.Data.Objects.Common.Utils
         }
 
 
-         /// <summary>
-         /// Aggiunge messaggio con codice, sevarita' e messaggio in notazione String.Format
-         /// </summary>
-         /// <param name="code"></param>
-         /// <param name="severity"></param>
-         /// <param name="messageFmt"></param>
-         /// <param name="args"></param>
-        public void AddFormat(int code, ESeverity severity, string messageFmt, params object[] args)
+        public override string ToString()
         {
-            this.Add(code, string.Format(messageFmt, args), severity, string.Empty);
+            return string.Join(" | ", this.Select(x => $"[{x.Severity}] {x.Text}"));
         }
     }
 }

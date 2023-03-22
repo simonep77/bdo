@@ -9,20 +9,20 @@ namespace Business.Data.Objects.Common.Utils
     /// </summary>
     public class Message
     {
-        private Dictionary<string, string> mParams = new Dictionary<string,string>();
+        private Dictionary<string, string> mParams = new Dictionary<string, string>();
 
         #region PROPERTY
 
-        public int Code {get; set;}
+        public int Code { get; set; }
 
 
-        public string Text {get; set;}
+        public string Text { get; set; }
 
 
-        public string UiField {get; set;}
+        public string UiField { get; set; }
 
 
-        public ESeverity Severity {get; set;}
+        public ESeverity Severity { get; set; }
 
 
         public Dictionary<string, string> Params
@@ -35,6 +35,11 @@ namespace Business.Data.Objects.Common.Utils
 
         #endregion
 
+        public Message()
+            : this(1, string.Empty, ESeverity.Error, string.Empty, null)
+        {
+        }
+
         public Message(string text)
             : this(1, text, ESeverity.Error, string.Empty, null)
         {
@@ -46,7 +51,7 @@ namespace Business.Data.Objects.Common.Utils
         }
 
         public Message(int code, string text, ESeverity severity)
-            :this(code,text,severity, string.Empty, null)
+            : this(code, text, severity, string.Empty, null)
         {
         }
 
@@ -71,6 +76,6 @@ namespace Business.Data.Objects.Common.Utils
             }
         }
 
-    
+
     }
 }

@@ -177,3 +177,6 @@ Scansione assembly solo per tipi pubblici anche per biz objects (GetExportedType
 
 [15/01/2023] - 5.0.56 - Simone Pelaia
 Metodo slot Undelete per ripristinare gli oggetti cancellati logicamente
+
+[22/03/2023] - 5.0.57 - Simone Pelaia
+Modifica alle classi messaggio per renderle serializzabili + facilmente
