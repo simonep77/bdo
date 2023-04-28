@@ -15,6 +15,7 @@ using System.Text;
 using Business.Data.Objects.Core.Attributes;
 using System.Linq;
 using System.Collections;
+using Business.Data.Objects.Core.Objects;
 
 namespace Business.Data.Objects.Core.Base
 {
@@ -69,6 +70,20 @@ namespace Business.Data.Objects.Core.Base
         #endregion
 
         #region PUBLIC METHODS
+
+
+
+        /// <summary>
+        /// Metodo overridable per ritornare la chiave di alto livello dell'entità principale legata alla classe
+        /// </summary>
+        /// <returns></returns>
+        public virtual HistoryRef HistoryGetTopLevelEntityRef() => null;
+
+        /// <summary>
+        /// Metodo overridable per indicare al sistema di storico qual'è il tipo e valore del collegamento principale
+        /// </summary>
+        /// <returns></returns>
+        public virtual HistoryRef HistoryGetMainForeignLink() => null;
 
         /// <summary>
         /// Esegue l'evento di property change del databindings

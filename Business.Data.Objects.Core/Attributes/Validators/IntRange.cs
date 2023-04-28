@@ -17,7 +17,7 @@ namespace Business.Data.Objects.Core.Attributes
 
         internal override bool CanApplyToProperty(Property propIn)
         {
-            return TypeHelper.IsIntegerType(propIn.Type);
+            return propIn.Type.IsIntegerType();
         }
 
         public IntRange(int from, int to, string customMessage)

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using Business.Data.Objects.Core;
 using Business.Data.Objects.Core.Attributes;
+using Business.Data.Objects.Core.Attributes.Structure;
 
 namespace Business.Data.Objects.TestClass.DAL
 {
     [Table(@"ordini")]
+    [History]
     public abstract class Ordine: DataObject<Ordine>
     {
         [PrimaryKey, AutoIncrement]

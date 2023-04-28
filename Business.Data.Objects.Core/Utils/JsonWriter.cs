@@ -25,7 +25,7 @@ namespace Business.Data.Objects.Core.Utils
             return stringBuilder.ToString();
         }
 
-        private static void AppendValue(StringBuilder stringBuilder, object item)
+        internal static void AppendValue(StringBuilder stringBuilder, object item)
         {
             if (item == null)
             {
@@ -34,25 +34,25 @@ namespace Business.Data.Objects.Core.Utils
             }
 
             Type type = item.GetType();
-            if (type == typeof(string))
+            if (type.IsString())
             {
                 stringBuilder.Append('\"');
                 stringBuilder.Append(((string)item).Replace("\\", "\\\\"));
                 stringBuilder.Append('\"');
             }
-            else if (TypeHelper.IsIntegerType(type))
+            else if (type.IsIntegerType())
             {
                 stringBuilder.Append(item.ToString());
             }
-            else if (TypeHelper.IsDecimalType(type))
+            else if (type.IsDecimalType())
             {
                 stringBuilder.AppendFormat(System.Globalization.CultureInfo.InvariantCulture, "{0:F}", item);
             }
-            else if (type == typeof(bool))
+            else if (type.IsBool())
             {
                 stringBuilder.Append(((bool)item) ? "true" : "false");
             }
-            else if (type == typeof(DateTime))
+            else if (type.IsDate())
             {
                 DateTime dt = (DateTime)item;
                 stringBuilder.Append('\"');
@@ -64,6 +64,12 @@ namespace Business.Data.Objects.Core.Utils
                 }
                 //"2019-09-26T07:58:30.996+0200"
 
+                stringBuilder.Append('\"');
+            }
+            else if (type.IsGuid())
+            {
+                stringBuilder.Append('\"');
+                stringBuilder.Append(((Guid)item).ToString());
                 stringBuilder.Append('\"');
             }
             else if (item is IList)

@@ -58,7 +58,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         public override void ValidateDefinition()
         {
             //Consentito solo byte array
-            if (this.Type.IsArray && !TypeHelper.IsByteArray(this.Type))
+            if (this.Type.IsArray && !this.Type.IsByteArray())
                 throw new SchemaReaderException(this, SchemaMessages.Prop_NoArrayBytes);
 
             //Imposta tipo default se non presente
@@ -91,7 +91,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                     this.ExcludeUpdate = true;
 
                     //Deve essere numerico e almeno Int32
-                    if (!TypeHelper.IsIntegerType(this.Type) || TypeHelper.IntegerSize(this.Type) < 4)
+                    if (!this.Type.IsIntegerType() || this.Type.IntegerSize() < 4)
                         throw new SchemaReaderException(this, SchemaMessages.Prop_AutoInc_32_Bit);
                 }
                 //AUTO INSERT TIMESTAMP
@@ -155,7 +155,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //Proprieta' criptata su DB
             else if (attr is Encrypted)
             {
-                if (!TypeHelper.IsString(this.Type))
+                if (!this.Type.IsString())
                     throw new SchemaReaderException(this, SchemaMessages.Prop_Encryped_Only_String);
 
                 this.mEncAttr = (Encrypted)attr;

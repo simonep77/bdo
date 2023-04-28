@@ -21,6 +21,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace Business.Data.Objects.Core
     /// </summary>
     public class BusinessSlot : IComparable<BusinessSlot>, IEquatable<BusinessSlot>, IDisposable
     {
-        private const string CACHE_GLOBAL_NAME =@"Bdo.Global";
+        private const string CACHE_GLOBAL_NAME = @"Bdo.Global";
         private const string CACHE_GLOBAL_LIST_NAME = @"Bdo.Global.List";
         #region PRIVATE FIELDS
 
@@ -98,6 +99,8 @@ namespace Business.Data.Objects.Core
         public delegate object UserInfoRequestHandler(BusinessSlot slot);
 
 
+
+
         /// <summary>
         /// Evento da agganciare per specificare il dato dell'utente da salvare nel campo identificato dall'attributo "Username"
         /// </summary>
@@ -112,6 +115,75 @@ namespace Business.Data.Objects.Core
             return this.OnUserInfoRequired?.Invoke(this) ?? this.UserName;
         }
 
+        #region History
+
+        /// <summary>
+        /// Delegato per la gestione dell'evento di history
+        /// </summary>
+        /// <param name="slot"></param>
+        /// <param name="entry"></param>
+        public delegate void HistoryRaiseHandler(BusinessSlot slot, HistoryEntry entry);
+
+        /// <summary>
+        /// Evento per la gestione dell'history
+        /// </summary>
+        public event HistoryRaiseHandler OnHistoryRaised;
+
+
+        /// <summary>
+        /// Metodo che esegue il lancio dell'evento OnHistoryRaised
+        /// </summary>
+        /// <param name="operation"></param>
+        /// <param name="obj"></param>
+        internal void HistoryRaiseEvent(OpType operation, DataObjectBase obj)
+        {
+            //Se non gestito il raise è inutile procedere oltre
+            if (this.OnHistoryRaised == null)
+                return;
+
+            var db = this.DbGet(obj.mClassSchema);
+
+            //Crea entry di storico andando a destrutturare le info principali
+            var hist = new HistoryEntry()
+            {
+                SlotId = this.ToString(),
+                DataObject = obj,
+                Operation = operation,
+                PrimaryRef = new HistoryRef()
+                {
+                    PrimaryType = obj.mClassSchema.OriginalType,
+                    PrimaryKey = obj.mClassSchema.PrimaryKey.GetValues(obj).First(),
+                },
+                ForeignRef = obj.HistoryGetMainForeignLink(),
+                TopLevelEntityRef = obj.HistoryGetTopLevelEntityRef(),
+                SlimObject = obj.mClassSchema.Properties.Where(x => x is PropertySimple).ToDictionary(x => x.Name, x => x.GetValue(obj))
+            };
+
+            //Se siamo in transazione attendiamo la fine e rilanciamo
+            if (db.IsInTransaction)
+            {
+                TransactionEventHandler handler = null;
+
+                db.OnCommitTransaction += handler = (d) =>
+                {
+                    //Rimuoviamo evento per non riscatenarlo
+                    db.OnCommitTransaction -= handler;
+                    //Rilanciamo chiamata
+                    this.OnHistoryRaised.Invoke(this, hist);
+                };
+                //Il rollback viene buttato
+            }
+            else
+            {
+                this.OnHistoryRaised.Invoke(this, hist);
+            }
+            
+        }
+
+        #endregion
+
+
+
 
         #endregion
 
@@ -121,7 +193,7 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// ID Univoco Sessione
         /// </summary>
-        public string SlotId { get; } = Guid.NewGuid().ToString();
+        public Guid SlotId { get; } = Guid.NewGuid();
 
 
         /// <summary>
@@ -1645,10 +1717,10 @@ namespace Business.Data.Objects.Core
             //Richiama salvataggio oggetto
             obj.SetSlot(this);
 
-            bool bCancel = false;
+            bool bNew = obj.ObjectState == EObjectState.New;
 
             //Se simulazione non esegue
-            if (bCancel || this.Simulate)
+            if (this.Simulate)
                 return;
 
             //Salva oggetto
@@ -1661,6 +1733,10 @@ namespace Business.Data.Objects.Core
             //Se tracking lo salva
             if (this.LiveTrackingEnabled)
                 this.liveTrackingSet(obj);
+
+            //Se attivo il tracciamento
+            if (obj.mClassSchema.History)
+                this.HistoryRaiseEvent(bNew ? OpType.Insert : OpType.Update, obj);
 
         }
 
@@ -1679,12 +1755,12 @@ namespace Business.Data.Objects.Core
                 throw new ObjectException(ObjectMessages.Undelete_Only_Logical_Delete, obj.mClassSchema.ClassName);
 
             //Se non e' cancellato allora esce
-            if (!obj.IsLogicallyDeleted) 
+            if (!obj.IsLogicallyDeleted)
                 return;
 
             //Azzera dati di cancellazione logica
             obj.mClassSchema.LogicalDeletes.ForEach(x => x.SetValue(obj, x.DefaultValue));
-           
+
             //Esegue aggiornamento
             this.SaveObject(obj);
         }
@@ -1716,6 +1792,9 @@ namespace Business.Data.Objects.Core
                 //Elimina fisicamente
                 obj.DoDelete();
 
+                //Se storicizzato allora richiama routine
+                if (obj.mClassSchema.History)
+                    this.HistoryRaiseEvent(OpType.Delete, obj);
             }
             else
             {
@@ -2025,7 +2104,7 @@ namespace Business.Data.Objects.Core
             StringBuilder sb = new StringBuilder(1000);
             sb.AppendLine("** SLOT INFO **");
             sb.Append("SlotID: ");
-            sb.Append(this.SlotId);
+            sb.Append(this.SlotId.ToString());
             sb.AppendLine();
             sb.Append("Start Time: ");
             sb.Append(this.StartDate.ToString("dd/MM/yyyy HH:mm:ss"));
@@ -2260,7 +2339,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Concat("Slot ", this.SlotId);
+            return this.LazyStore.Get(nameof(ToString), () => string.Concat("Slot ", this.SlotId));
         }
 
 
@@ -2665,16 +2744,10 @@ namespace Business.Data.Objects.Core
 
         public bool Equals(BusinessSlot other)
         {
-            if (other == null)
-            {
-                return false;
-            }
-
             if (object.ReferenceEquals(this, other))
-            {
                 return true;
-            }
-            return (string.Equals(this.SlotId, other.SlotId));
+
+            return false;
         }
 
         #endregion
@@ -2723,6 +2796,13 @@ namespace Business.Data.Objects.Core
                     }
                 }
 
+                if (this.OnHistoryRaised != null)
+                {
+                    foreach (var item in this.OnHistoryRaised.GetInvocationList())
+                    {
+                        this.OnHistoryRaised -= (HistoryRaiseHandler)item;
+                    }
+                }
 
                 _SharedLog.Dispose();
             }

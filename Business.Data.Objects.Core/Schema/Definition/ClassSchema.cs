@@ -1,6 +1,7 @@
 using Business.Data.Objects.Core.Common.Resources;
 using Business.Data.Objects.Core.Attributes;
 using System;
+using Business.Data.Objects.Core.Attributes.Structure;
 
 namespace Business.Data.Objects.Core.Schema.Definition
 {
@@ -39,6 +40,11 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// Indica se la classe e' in sola lettura
         /// </summary>
         public bool IsReadOnly { get; set; }
+        
+        /// <summary>
+        /// Indica se attiva la gestione dello storico
+        /// </summary>
+        public bool History { get; set; }
 
         /// <summary>
         /// Indica se utilizza la connessione db di default
@@ -160,6 +166,11 @@ namespace Business.Data.Objects.Core.Schema.Definition
             {
                 //Disabilita accessi in scrittura
                 this.IsReadOnly = true;
+            }
+            else if (att is History)
+            {
+                //Attiva eventi storicizzazione
+                this.History = true;
             }
             else if (att is DbConnection)
             {

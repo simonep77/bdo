@@ -16,7 +16,7 @@ namespace Business.Data.Objects.Core.Attributes
 
         internal override bool CanApplyToProperty(Schema.Definition.Property propIn)
         {
-            return TypeHelper.IsDecimalType(propIn.Type);
+            return propIn.Type.IsDecimalType();
         }
 
         public DecimalRange(decimal from, decimal to, string customMessage)

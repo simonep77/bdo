@@ -23,7 +23,7 @@ namespace Business.Data.Objects.Core.Attributes
         /// <returns></returns>
         internal override bool CanApplyToProperty(Property propIn)
         {
-            return TypeHelper.IsString(propIn.Type);
+            return propIn.Type.IsString();
         }
 
         public ValidateRegex(string regex, string customMessage)

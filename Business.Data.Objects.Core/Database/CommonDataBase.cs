@@ -299,8 +299,27 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Isolamento di default della transazione
         /// </summary>
-        public virtual IsolationLevel TransactionDefaultIsolation { get; set; } = IsolationLevel.ReadCommitted;
+        public virtual System.Data.IsolationLevel TransactionDefaultIsolation { get; set; } = System.Data.IsolationLevel.ReadCommitted;
 
+
+        #endregion
+
+        #region Eventi
+
+        /// <summary>
+        /// Evento scatenato in caso di begin
+        /// </summary>
+        public event TransactionEventHandler OnBeginTransaction;
+
+        /// <summary>
+        /// Evento scatenato in caso di commit
+        /// </summary>
+        public event TransactionEventHandler OnCommitTransaction;
+
+        /// <summary>
+        /// Evento scatenato in caso di rollback
+        /// </summary>
+        public event TransactionEventHandler OnRollbackTransaction;
 
         #endregion
 
@@ -426,6 +445,9 @@ namespace Business.Data.Objects.Database
                     {
                         this.TraceStatement("BeginTransaction " + level.ToString(), exLog);
                     }
+
+                    //Infine richiama evento
+                    this.OnBeginTransaction?.Invoke(this);
                 }
             }
 
@@ -472,6 +494,9 @@ namespace Business.Data.Objects.Database
                     //Autoclose ?
                     this.checkAutoCloseConnection();
                 }
+
+                //Infine richiama evento
+                this.OnCommitTransaction?.Invoke(this);
             }
 	
 		}
@@ -519,7 +544,10 @@ namespace Business.Data.Objects.Database
                     //Autoclose ?
                     this.checkAutoCloseConnection();
                 }
-                
+
+                //Infine richiama evento
+                this.OnRollbackTransaction?.Invoke(this);
+
             }
 		}
 
@@ -1341,6 +1369,32 @@ namespace Business.Data.Objects.Database
                 }
             }
 
+            //Sgancia eventi
+            if (this.OnBeginTransaction != null)
+            {
+                foreach (Delegate d in OnBeginTransaction.GetInvocationList())
+                {
+                    this.OnBeginTransaction -= (TransactionEventHandler)d;
+                }
+            }
+
+            if (this.OnCommitTransaction != null)
+            {
+                foreach (Delegate d in OnCommitTransaction.GetInvocationList())
+                {
+                    this.OnCommitTransaction -= (TransactionEventHandler)d;
+                }
+            }
+
+            if (this.OnRollbackTransaction != null)
+            {
+                foreach (Delegate d in OnRollbackTransaction.GetInvocationList())
+                {
+                    this.OnRollbackTransaction -= (TransactionEventHandler)d;
+                }
+            }
+
+
             //Chiude file di trace
             this.DisableTrace();
 
@@ -1482,7 +1536,7 @@ namespace Business.Data.Objects.Database
         /// Crea nuova transazione
         /// </summary>
         /// <returns></returns>
-        protected DbTransaction createNewTransaction(IsolationLevel level)
+        protected DbTransaction createNewTransaction(System.Data.IsolationLevel level)
         {
             return this._dbconn.BeginTransaction(level);
         }

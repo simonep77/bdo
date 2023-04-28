@@ -443,12 +443,15 @@ namespace Business.Data.WinFormTest
                 ss1.ChangeTrackingEnabled = true;
                 ss1.UserName = "Simone";
 
+                ss1.DB.BeginTransaction();
+
                 var ord = ss1.CreateList<OrdineLista>(1, 1).SearchAllObjects().FirstOrDefault();
 
                 ss1.DeleteObject(ord);
 
                 ss1.UnDeleteObject(ord);
 
+                ss1.DB.CommitTransaction();
                 //this.WriteLog(ss1.GetCurrentElapsed().ToString());
 
                 //this.WriteLog(c2.Print());

@@ -17,7 +17,7 @@ namespace Business.Data.Objects.Core.Attributes
 
         internal override bool CanApplyToProperty(Property propIn)
         {
-            return TypeHelper.IsDecimalType(propIn.Type);
+            return propIn.Type.IsDecimalType();
         }
 
         public DoubleRange(double from, double to, string customMessage)

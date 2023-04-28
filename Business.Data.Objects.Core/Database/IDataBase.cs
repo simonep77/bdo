@@ -10,15 +10,39 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Transactions;
 
 namespace Business.Data.Objects.Database 
 {
-	/// <summary>
-	/// Interfaccia IDataBase.
-	/// Fornisce i metodi e le proprietà per accedere ad un database, a prescindere dal tipo
-	/// </summary>
-	public interface IDataBase: IDisposable 
+
+    /// <summary>
+    /// Delegato per la gestione degli eventi relativi alle transazioni
+    /// </summary>
+    /// <param name="db"></param>
+    /// <returns></returns>
+    public delegate void TransactionEventHandler(IDataBase db);
+
+    /// <summary>
+    /// Interfaccia IDataBase.
+    /// Fornisce i metodi e le proprietà per accedere ad un database, a prescindere dal tipo
+    /// </summary>
+    public interface IDataBase: IDisposable 
 	{
+        /// <summary>
+        /// Evento scatenato in caso di begin
+        /// </summary>
+        event TransactionEventHandler OnBeginTransaction;
+
+        /// <summary>
+        /// Evento scatenato in caso di commit
+        /// </summary>
+        event TransactionEventHandler OnCommitTransaction;
+
+        /// <summary>
+        /// Evento scatenato in caso di rollback
+        /// </summary>
+        event TransactionEventHandler OnRollbackTransaction;
+
         /// <summary>
         /// Nome funzione che ritorna ultimo Id inserito automaticamente
         /// </summary>
@@ -77,7 +101,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Indica il livello di isolamento delle transazioni per il db
         /// </summary>
-        IsolationLevel TransactionDefaultIsolation { get; set; }
+        System.Data.IsolationLevel TransactionDefaultIsolation { get; set; }
 
 
         /// <summary>
@@ -167,7 +191,7 @@ namespace Business.Data.Objects.Database
         /// Inizia una transazione con un dato IsolationLevel
         /// </summary>
         /// <param name="level"></param>
-        void BeginTransaction(IsolationLevel level);
+        void BeginTransaction(System.Data.IsolationLevel level);
 		
 		
 		/// <summary>

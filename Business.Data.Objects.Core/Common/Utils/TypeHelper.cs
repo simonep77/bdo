@@ -7,7 +7,7 @@ namespace Business.Data.Objects.Common.Utils
     /// <summary>
     /// Contiene metodi statici di supporto alla gestione dei tipi 
     /// </summary>
-    public class TypeHelper
+    public static class TypeHelper
     {
 
         #region TYPE UTILITY
@@ -19,30 +19,14 @@ namespace Business.Data.Objects.Common.Utils
         /// <returns></returns>
         public static bool IsNumericType(Type type)
         {
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.Byte:
-                case TypeCode.SByte:
-                case TypeCode.UInt16:
-                case TypeCode.UInt32:
-                case TypeCode.UInt64:
-                case TypeCode.Int16:
-                case TypeCode.Int32:
-                case TypeCode.Int64:
-                case TypeCode.Decimal:
-                case TypeCode.Double:
-                case TypeCode.Single:
-                    return true;
-                default:
-                    return false;
-            }
+            return type.IsIntegerType() || type.IsDecimalType();
         }
 
         /// <summary>
         /// Indica se tipo stringa
         /// </summary>
         /// <returns></returns>
-        public static bool IsString(Type type)
+        public static bool IsString(this Type type)
         {
             return (Type.GetTypeCode(type) == TypeCode.String);
         }
@@ -51,9 +35,19 @@ namespace Business.Data.Objects.Common.Utils
         /// Indica se il tipo e' una data
         /// </summary>
         /// <returns></returns>
-        public static bool IsDate(Type type)
+        public static bool IsDate(this Type type)
         {
             return (Type.GetTypeCode(type) == TypeCode.DateTime);
+        }
+
+        /// <summary>
+        /// Indica se un tipo e' boolean
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsBool(this Type type)
+        {
+            return (Type.GetTypeCode(type) == TypeCode.Boolean);
         }
 
 
@@ -61,7 +55,7 @@ namespace Business.Data.Objects.Common.Utils
         /// Indica se tipo decimale (decimal, float, double)
         /// </summary>
         /// <returns></returns>
-        public static bool IsDecimalType(Type type)
+        public static bool IsDecimalType(this Type type)
         {
             switch (Type.GetTypeCode(type))
             {
@@ -75,10 +69,20 @@ namespace Business.Data.Objects.Common.Utils
         }
 
         /// <summary>
+        /// Indica se tipo è guid
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsGuid(this Type type)
+        {
+            return type.Equals(typeof(Guid));
+        }
+
+        /// <summary>
         /// Indica se tipo intero (byte, int16, int32, int64, ...)
         /// </summary>
         /// <returns></returns>
-        public static bool IsIntegerType(Type type)
+        public static bool IsIntegerType(this Type type)
         {
             switch (Type.GetTypeCode(type))
             {
@@ -101,7 +105,7 @@ namespace Business.Data.Objects.Common.Utils
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static int IntegerSize(Type type)
+        public static int IntegerSize(this Type type)
         {
             switch (Type.GetTypeCode(type))
             {
@@ -131,7 +135,7 @@ namespace Business.Data.Objects.Common.Utils
         /// Indica se trattasi di array di byte
         /// </summary>
         /// <returns></returns>
-        public static bool IsByteArray(Type type)
+        public static bool IsByteArray(this Type type)
         {
             return (type.IsArray && type.Equals(typeof(byte[])));
         }
