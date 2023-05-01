@@ -5,17 +5,55 @@ using Business.Data.Objects.Core.Base;
 using Business.Data.Objects.Core.Schema.Definition;
 using Business.Data.Objects.Core.Utils;
 using System;
+using System.Linq;
 
 namespace Business.Data.Objects.Core.Schema.Usage
 {
+
+    internal class PropValue
+    {
+        public bool Loaded { get; set; }
+        public bool Changed { get; set; }
+        public object Value { get; set; }
+
+        public void CopyFrom(PropValue other, bool includeDal)
+        {
+            this.Loaded = other.Loaded;
+            this.Changed = other.Changed;
+
+            if (other.Value != null)
+            {
+                if (!(other.Value is Array))
+                {
+                    if (!(other.Value is DataObjectBase))
+                    {
+                        this.Value = other.Value;
+                    }
+                    else
+                    {
+                        if (includeDal)
+                            this.Value = ((SlotAwareObject)other.Value).GetSlot().CloneObject((DataObjectBase)other.Value);
+                        else
+                            this.Loaded = false;
+                    }
+                }
+                else
+                {
+                    this.Value = ((Array)other.Value).Clone();
+                }
+
+            }
+            this.Value = other.Value;
+        }
+    }
+
     /// <summary>
     /// Classe contenente i dati di un oggetto business
     /// </summary>
     internal class DataSchema
     {
-        internal object[] Values;
+        internal PropValue[] PropValues;
 
-        private DataFlags[] PropFlags;
 
         internal string PkHash;
 
@@ -41,39 +79,16 @@ namespace Business.Data.Objects.Core.Schema.Usage
         /// <param name="schema"></param>
         internal DataSchema(int PropCount)
         {
-            this.Values = new object[PropCount];
-            this.PropFlags = new DataFlags[PropCount];
+            this.PropValues = new PropValue[PropCount];
+            this.PropValues.Initialize();
         }
 
-
         /// <summary>
-        /// Ottien valore di uno o gruppo di flag
+        /// Ritorna propertyvalue by property
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="flag"></param>
+        /// <param name="prop"></param>
         /// <returns></returns>
-        internal bool GetFlagsAll(int index, DataFlags flags)
-        {
-            return ((this.PropFlags[index] & flags) == flags);
-        }
-
-        /// <summary>
-        /// Imposta valore flag
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="flag"></param>
-        /// <param name="value"></param>
-        internal void SetFlags(int index, DataFlags flags, bool value)
-        {
-            if (value)
-                //Imposta
-                this.PropFlags[index] |= flags;
-            else
-                //Deimposta
-                this.PropFlags[index] &= ~flags;
-        }
-
-
+        internal PropValue GetByProperty(Property prop) => this.PropValues[prop.PropertyIndex];
 
         /// <summary>
         /// Genera clone del dataschema (per valore)
@@ -82,7 +97,7 @@ namespace Business.Data.Objects.Core.Schema.Usage
         /// <returns></returns>
         internal DataSchema Clone(bool includeObjects, bool includeKeyHash)
         {
-            DataSchema other = new DataSchema(this.Values.Length);
+            DataSchema other = new DataSchema(this.PropValues.Length);
 
             //Imposta stato
             other.ObjectState = this.ObjectState;
@@ -94,38 +109,10 @@ namespace Business.Data.Objects.Core.Schema.Usage
                 other.PkHash = this.PkHash;
 
             //Copia valori
-            for (int i = 0; i < this.Values.Length; i++)
+            for (int i = 0; i < this.PropValues.Length; i++)
             {
-                //Copia flags
-                other.PropFlags[i] = this.PropFlags[i];
-
-                if (this.Values[i] == null) //NULL
-                {
-                    continue;
-                }
-                else if (this.Values[i] is DataObjectBase)
-                {
-                    if (!includeObjects)
-                        other.SetFlags(i, DataFlags.Loaded, false);
-                    else
-                        other.Values[i] = ((SlotAwareObject)this.Values[i]).GetSlot().CloneObject((DataObjectBase)this.Values[i]);
-                }
-                else if (!(this.Values[i] is Array)) //VALORE
-                {
-                    //valore UNBOXED
-                    other.Values[i] = Convert.ChangeType(this.Values[i], this.Values[i].GetType());
-                }
-                else if (this.Values[i] is byte[]) //VALORE
-                {
-                    byte[] arrInput = (byte[])this.Values[i];
-                    byte[] arrOutput = new byte[arrInput.Length];
-                    Array.Copy(arrInput, arrOutput, arrInput.Length);
-                    other.Values[i] = arrOutput;
-                }
-                else //ARRAY
-                {
-                    throw new ObjectException($"DataSchema: Array di tipo {this.Values[i].GetType().Name} non ammesso!");
-                }
+                
+                other.PropValues[i].CopyFrom(this.PropValues[i], includeObjects);
             }
 
             //ritorna
@@ -140,17 +127,12 @@ namespace Business.Data.Objects.Core.Schema.Usage
         /// <returns></returns>
         public override string ToString()
         {
-            return ObjectHelper.ObjectArrayToStringRecursive(this.Values);
+            return ObjectHelper.ObjectArrayToStringRecursive(this.PropValues.Select(x => x.Value).ToArray());
         }
 
 
         #endregion
 
-        #region PRIVATE METHODS
-
-
-
-        #endregion
 
 
     }

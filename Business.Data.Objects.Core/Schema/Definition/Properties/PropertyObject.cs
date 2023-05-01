@@ -125,11 +125,13 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <returns></returns>
         public override object GetValue(DataObjectBase obj)
         {
+            var pv = obj.mDataSchema.GetByProperty(this);
+
             //Se valorizzato o comunque caricato
-            if (obj.mDataSchema.Values[this.PropertyIndex] == null && !obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
+            if (pv.Value == null && !pv.Loaded)
             {
                 //In qualunque caso imposta come caricato
-                obj.mDataSchema.SetFlags(this.PropertyIndex, DataFlags.Loaded, true);
+                pv.Loaded = true;
 
                 //Se property 0 e' nulla esce avendo comunque impostato come caricato
                 if (this.PropertyMap[0].IsNull(this.PropertyMap[0].GetValue(obj)))
@@ -143,11 +145,11 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
 
                 //Se array OK definito ed il primo valore non nullo imposta oggetto
-                obj.mDataSchema.Values[this.PropertyIndex] = obj.GetSlot().LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.Type, true, arrPk);
+                pv.Value = obj.GetSlot().LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.Type, true, arrPk);
             }
 
             //Carica oggetto e imposta come caricato
-            return obj.mDataSchema.Values[this.PropertyIndex];
+            return pv.Value;
 
         }
 

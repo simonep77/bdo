@@ -176,10 +176,9 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <returns></returns>
         public override object GetValue(DataObjectBase obj)
         {
-            //Se null ritorna valore default
-            object oRet = obj.mDataSchema.Values[this.PropertyIndex];
+            var pv = obj.mDataSchema.GetByProperty(this);
 
-            if (oRet == null)
+            if (pv.Value == null)
             {
                 if (!this.LoadOnAccess)
                 {
@@ -188,18 +187,15 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
                 else
                 {
-                    if (!obj.mDataSchema.GetFlagsAll(this.PropertyIndex, DataFlags.Loaded))
+                    if (!pv.Loaded)
                     {
                         //Deve Caricare property
                         obj.LoadPropertyFromDB(this);
-
-                        //Reimposta il valore
-                        oRet = obj.mDataSchema.Values[this.PropertyIndex];
                     }
                 }
             }
 
-            return oRet;
+            return pv.Value;
         }
 
 
@@ -259,15 +255,15 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //Di base imposta modifica a true
             bool bChanged = true;
 
+            var pv = obj.mDataSchema.GetByProperty(this);
+
             //Se attivato il real change tracking 
             if (obj.GetSlot().Conf.ChangeTrackingEnabled)
             {
-                var oCurrVal = obj.mDataSchema.Values[this.PropertyIndex];
-
-                if (this.AcceptNull && this.IsNull(oCurrVal) && this.IsNull(value))
+                if (this.AcceptNull && this.IsNull(pv.Value) && this.IsNull(value))
                     bChanged = false;
                 else
-                    bChanged = !object.Equals(oCurrVal, value);
+                    bChanged = !object.Equals(pv.Value, value);
             }
 
 
@@ -275,21 +271,22 @@ namespace Business.Data.Objects.Core.Schema.Definition
             if (bChanged)
             {
                 //Imposta
-                obj.mDataSchema.Values[this.PropertyIndex] = value;
+                pv.Value = value;
 
                 //Property Map
                 if (this.HasPropertyMaps)
                 {
                     for (int i = 0; i < this.PropertyMap.Count; i++)
                     {
+                        var pvm = obj.mDataSchema.GetByProperty(this.PropertyMap[i]);
                         //Azzera tutti i mappings dipendenti
-                        obj.mDataSchema.Values[this.PropertyMap[i].PropertyIndex] = null;
-                        obj.mDataSchema.SetFlags(this.PropertyMap[i].PropertyIndex, DataFlags.Loaded, false);
+                        pvm.Value = null;
+                        pvm.Loaded = false;
                     }
                 }
 
                 //Imposta flag modifica solo se true
-                obj.mDataSchema.SetFlags(this.PropertyIndex, DataFlags.Changed, true);
+                pv.Changed = true;
 
                 //Lancia evento bindings
                 obj.firePropertyChanged(this);
@@ -321,6 +318,8 @@ namespace Business.Data.Objects.Core.Schema.Definition
         {
             object oTemp = dr[this.Column.NormalizedName];
 
+            var pv = obj.mDataSchema.GetByProperty(this);
+
             if (DBNull.Value.Equals(oTemp) || oTemp == null)
                 oTemp = null;
             else
@@ -331,7 +330,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             }
 
             //imposta Flag caricato
-            obj.mDataSchema.SetFlags(this.PropertyIndex, DataFlags.Loaded, true);
+            pv.Loaded = true;
 
             //Se proprieta' e' criptata allora esegue decrypt
             if (oTemp != null && this.mEncAttr != null)
@@ -340,7 +339,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             }
 
             //Imposta comunque dato semplice
-            obj.mDataSchema.Values[this.PropertyIndex] = oTemp;
+            pv.Value = oTemp;
         }
 
         #endregion

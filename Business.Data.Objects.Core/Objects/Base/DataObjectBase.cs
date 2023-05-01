@@ -173,7 +173,7 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public bool IsChanged(string propertyName) => this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex, DataFlags.Changed);
+        public bool IsChanged(string propertyName) => this.mDataSchema.PropValues[this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex].Changed;
 
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Business.Data.Objects.Core.Base
 
             for (int i = 0; i < this.mClassSchema.Properties.Count; i++)
             {
-                if (this.mDataSchema.GetFlagsAll(this.mClassSchema.Properties[i].PropertyIndex, DataFlags.Changed))
+                if (this.mDataSchema.PropValues[this.mClassSchema.Properties[i].PropertyIndex].Changed)
                     oListRet.Add(this.mClassSchema.Properties[i].Name);
             }
 
@@ -468,11 +468,10 @@ namespace Business.Data.Objects.Core.Base
                 //Verifica modifica alla PK in modifica
                 foreach (var oPropKey in this.mClassSchema.PrimaryKey.Properties)
                 {
-                    //Check changed flag
-                    bChanged = this.mDataSchema.GetFlagsAll(oPropKey.PropertyIndex, DataFlags.Changed);
+                    var pv = this.mDataSchema.PropValues[oPropKey.PropertyIndex];
 
                     //La primary key non può essere modificata in aggiornamento
-                    if (this.mDataSchema.GetFlagsAll(oPropKey.PropertyIndex, DataFlags.Changed))
+                    if (pv.Changed)
                         throw new ObjectException(ObjectMessages.Validate_PrimaryKeyModified, this.mClassSchema.ClassName, oPropKey.Name);
 
                 }
@@ -483,14 +482,11 @@ namespace Business.Data.Objects.Core.Base
             {
                 //Get property definition
                 oProp = this.mClassSchema.Properties[iPropIndex];
+                var pv = this.mDataSchema.PropValues[oProp.PropertyIndex];
                 try
                 {
-                    //Check changed flag
-                    bChanged = this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed);
-
-
                     //skip object not new and not changed
-                    if (this.mDataSchema.ObjectState == EObjectState.Loaded && !bChanged)
+                    if (this.mDataSchema.ObjectState == EObjectState.Loaded && !pv.Changed)
                         continue;
 
                     //Verifica se necessario skip di alcune casistiche
@@ -562,9 +558,10 @@ namespace Business.Data.Objects.Core.Base
                 for (int iPropIndex = 0; iPropIndex < this.mClassSchema.Properties.Count; iPropIndex++)
                 {
                     oProp = this.mClassSchema.Properties[iPropIndex];
+                    var pv = this.mDataSchema.GetByProperty(oProp);
 
                     //In generale e' necessario impostare tutti i campi come non modificati
-                    this.mDataSchema.SetFlags(oProp.PropertyIndex, DataFlags.Changed, false);
+                    pv.Changed = false;
 
                     //Esclusione esplicita
                     if (oProp.ExcludeInsert || oProp.IsAutomatic)
@@ -577,7 +574,7 @@ namespace Business.Data.Objects.Core.Base
                     oDbParams.Add(db.CreateParameter(oProp.Column.ParamName, oValue, oProp.Column.DbType));
 
                     //Aggiorna
-                    this.mDataSchema.SetFlags(oProp.PropertyIndex, DataFlags.Loaded, true);
+                    pv.Loaded = true;
                 }
 
                 //Imposta SQL base
@@ -679,6 +676,7 @@ namespace Business.Data.Objects.Core.Base
                 {
                     //Imposta proprieta'
                     oProp = this.mClassSchema.Properties[iPropIndex];
+                    var pv = this.mDataSchema.GetByProperty(oProp);
 
                     //Se da escludere passa a successiva
                     if (oProp.ExcludeUpdate)
@@ -699,7 +697,7 @@ namespace Business.Data.Objects.Core.Base
                         this.mClassSchema.UserInfo?.SetValue(this, this.Slot.GetUserInfo());
 
                     //PROPRIETA' 
-                    if (!this.mDataSchema.GetFlagsAll(oProp.PropertyIndex, DataFlags.Changed))
+                    if (!pv.Changed)
                         continue;
 
                     //Incrementa lista di proprieta' incluse nell'update
@@ -717,7 +715,7 @@ namespace Business.Data.Objects.Core.Base
                     oDbParams.Add(db.CreateParameter(oProp.Column.ParamName, oValue, oProp.Column.DbType));
 
                     //TODO: Attenzione impostando qui il flag, in caso di errore rimane l'oggetto sporco!!!!
-                    this.mDataSchema.SetFlags(oProp.PropertyIndex, DataFlags.Changed, false);
+                    pv.Changed = false;
                 }
 
                 //NON C'È NULLA DA MODIFICARE ESCE (nessun campo modificato oppure )
