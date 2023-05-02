@@ -9,39 +9,30 @@ using System.Linq;
 
 namespace Business.Data.Objects.Core.Schema.Usage
 {
-
+    /// <summary>
+    /// Valore di una proprietà BDO
+    /// </summary>
     internal class PropValue
     {
         public bool Loaded { get; set; }
         public bool Changed { get; set; }
         public object Value { get; set; }
 
-        public void CopyFrom(PropValue other, bool includeDal)
+        public void CopyFrom(PropValue other)
         {
             this.Loaded = other.Loaded;
             this.Changed = other.Changed;
 
             if (other.Value != null)
             {
-                if (!(other.Value is Array))
-                {
-                    if (!(other.Value is DataObjectBase))
-                    {
-                        this.Value = other.Value;
-                    }
-                    else
-                    {
-                        if (includeDal)
-                            this.Value = ((SlotAwareObject)other.Value).GetSlot().CloneObject((DataObjectBase)other.Value);
-                        else
-                            this.Loaded = false;
-                    }
-                }
-                else
-                {
-                    this.Value = ((Array)other.Value).Clone();
-                }
+                var t = other.GetType();
 
+                if (t.IsValueType || t.IsString())
+                    this.Value = other.Value;
+                else if (t.IsBdoDalType())
+                    this.Loaded = false;
+                else if (t.IsByteArray())
+                    this.Value = ((Array)other.Value).Clone();
             }
             this.Value = other.Value;
         }
@@ -52,8 +43,7 @@ namespace Business.Data.Objects.Core.Schema.Usage
     /// </summary>
     internal class DataSchema
     {
-        internal PropValue[] PropValues;
-
+        private PropValue[] PropValues;
 
         internal string PkHash;
 
@@ -80,7 +70,11 @@ namespace Business.Data.Objects.Core.Schema.Usage
         internal DataSchema(int PropCount)
         {
             this.PropValues = new PropValue[PropCount];
-            this.PropValues.Initialize();
+            
+            for (int i = 0; i < PropCount; i++)
+            {
+                this.PropValues[i] = new PropValue();
+            }
         }
 
         /// <summary>
@@ -95,7 +89,7 @@ namespace Business.Data.Objects.Core.Schema.Usage
         /// </summary>
         /// <param name="oSlotIn"></param>
         /// <returns></returns>
-        internal DataSchema Clone(bool includeObjects, bool includeKeyHash)
+        internal DataSchema Clone(bool includeKeyHash)
         {
             DataSchema other = new DataSchema(this.PropValues.Length);
 
@@ -111,14 +105,12 @@ namespace Business.Data.Objects.Core.Schema.Usage
             //Copia valori
             for (int i = 0; i < this.PropValues.Length; i++)
             {
-                
-                other.PropValues[i].CopyFrom(this.PropValues[i], includeObjects);
+                other.PropValues[i].CopyFrom(this.PropValues[i]);
             }
 
             //ritorna
             return other;
         }
-
 
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace Business.Data.Objects.Core.Objects
         /// <summary>
         /// Operazione esguita
         /// </summary>
-        public OpType Operation { get; set; }
+        public HistoryOpType Operation { get; set; }
 
         /// <summary>
         /// Indicazione principale dell'oggetto di history
@@ -50,15 +50,20 @@ namespace Business.Data.Objects.Core.Objects
     }
 
 
+    /// <summary>
+    /// Entity di riferimento
+    /// </summary>
     public class HistoryRef
     {
-        public Type PrimaryType { get; set;}
+        public Type Type { get; set;}
 
-        public object PrimaryKey { get; set;}
+        public string Value { get; set;}
     }
 
-
-    public enum OpType : short
+    /// <summary>
+    /// Tipo Operazione
+    /// </summary>
+    public enum HistoryOpType : short
     {
         Insert = 1,
         Update = 2,

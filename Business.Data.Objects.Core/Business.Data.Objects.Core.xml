@@ -332,6 +332,11 @@
             </summary>
             <param name="name"></param>
         </member>
+        <member name="T:Business.Data.Objects.Core.Attributes.Structure.History">
+            <summary>
+            Indica che la classe è soggetta a storicizzazione
+            </summary>
+        </member>
         <member name="P:Business.Data.Objects.Core.Attributes.Table.IsSimpleTableName">
             <summary>
             Indica se il nome tabella e' utilizzabile da solo e non necessita di aggiunte di nomi db
@@ -1106,6 +1111,11 @@
             Indica se la classe e' in sola lettura
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Core.Schema.Definition.ClassSchema.History">
+            <summary>
+            Indica se attiva la gestione dello storico
+            </summary>
+        </member>
         <member name="P:Business.Data.Objects.Core.Schema.Definition.ClassSchema.IsDefaultDb">
             <summary>
             Indica se utilizza la connessione db di default
@@ -1339,6 +1349,11 @@
             <param name="obj"></param>
             <param name="dr"></param>
         </member>
+        <member name="T:Business.Data.Objects.Core.Schema.Usage.PropValue">
+            <summary>
+            Valore di una proprietà BDO
+            </summary>
+        </member>
         <member name="T:Business.Data.Objects.Core.Schema.Usage.DataSchema">
             <summary>
             Classe contenente i dati di un oggetto business
@@ -1355,23 +1370,14 @@
             </summary>
             <param name="schema"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.GetFlagsAll(System.Int32,Business.Data.Objects.Core.Schema.Definition.DataFlags)">
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.GetByProperty(Business.Data.Objects.Core.Schema.Definition.Property)">
             <summary>
-            Ottien valore di uno o gruppo di flag
+            Ritorna propertyvalue by property
             </summary>
-            <param name="index"></param>
-            <param name="flag"></param>
+            <param name="prop"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.SetFlags(System.Int32,Business.Data.Objects.Core.Schema.Definition.DataFlags,System.Boolean)">
-            <summary>
-            Imposta valore flag
-            </summary>
-            <param name="index"></param>
-            <param name="flag"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.Clone(System.Boolean,System.Boolean)">
+        <member name="M:Business.Data.Objects.Core.Schema.Usage.DataSchema.Clone(System.Boolean)">
             <summary>
             Genera clone del dataschema (per valore)
             </summary>
@@ -1560,6 +1566,18 @@
             Indica se l'oggetto è cancellato logicamente
             </summary>
         </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.HistoryGetTopLevelEntityRef">
+            <summary>
+            Metodo overridable per ritornare la chiave di alto livello dell'entità principale legata alla classe
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.HistoryGetMainForeignLink">
+            <summary>
+            Metodo overridable per indicare al sistema di storico qual'è il tipo e valore del collegamento principale
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.firePropertyChanged(Business.Data.Objects.Core.Schema.Definition.Property)">
             <summary>
             Esegue l'evento di property change del databindings
@@ -1583,6 +1601,12 @@
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToString">
             <summary>
             Ritorna la rappresentazione in stringa dell'oggetto
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDictionary">
+            <summary>
+            Ritorna dictionary con i soli valori dell'oggetto (no mappati)
             </summary>
             <returns></returns>
         </member>
@@ -2023,6 +2047,25 @@
             Ritorna le informazioni sull'utente (id o username o altro) dall'evento relativo o, se nullo, dal campo username dello slot
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.BusinessSlot.HistoryRaiseHandler">
+            <summary>
+            Delegato per la gestione dell'evento di history
+            </summary>
+            <param name="slot"></param>
+            <param name="entry"></param>
+        </member>
+        <member name="E:Business.Data.Objects.Core.BusinessSlot.OnHistoryRaised">
+            <summary>
+            Evento per la gestione dell'history
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.HistoryRaiseEvent(Business.Data.Objects.Core.Objects.HistoryOpType,Business.Data.Objects.Core.Base.DataObjectBase)">
+            <summary>
+            Metodo che esegue il lancio dell'evento OnHistoryRaised
+            </summary>
+            <param name="operation"></param>
+            <param name="obj"></param>
         </member>
         <member name="P:Business.Data.Objects.Core.BusinessSlot.SlotId">
             <summary>
@@ -2472,15 +2515,6 @@
             </summary>
             <param name="e"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.loadObjectComplete(Business.Data.Objects.Core.Base.DataObjectBase,System.Boolean,System.String)">
-            <summary>
-            Finalizza il caricamento. Se ritorna false significa che l'oggetto non e' stato caricato
-            </summary>
-            <param name="obj"></param>
-            <param name="raiseNotFound"></param>
-            <param name="raiseMessage"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByCustomWhere(System.Type,System.Boolean,System.String,Business.Data.Objects.Core.OrderBy)">
             <summary>
             Carica da espressione linq. Se raiseNotFound=false e non trovato ritorna un nuovo oggetto
@@ -2518,6 +2552,20 @@
             <param name="keyName"></param>
             <param name="origType"></param>
             <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectByDictionary(System.Type,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Carica un dataobject generico a partire da un type e da un dizionario
+            </summary>
+            <param name="input"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectByDictionary``1(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Carica un oggetto tipizzato da dictionary
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByPK``1(System.Object[])">
@@ -3739,6 +3787,56 @@
             Default.  Ripristina il default
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Objects.HistoryEntry">
+            <summary>
+            Classe che rappresenta una voce di storico da inviare al gestore
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.SlotId">
+            <summary>
+            Identificativo dello slot che ha registrato la modifica
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.Operation">
+            <summary>
+            Operazione esguita
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.PrimaryRef">
+            <summary>
+            Indicazione principale dell'oggetto di history
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.TopLevelEntityRef">
+            <summary>
+            Chiave dell'entità principale del dato
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.ForeignRef">
+            <summary>
+            Collegamento ad entità principale collegata
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.DataObject">
+            <summary>
+            Oggetto Movimentato
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.Objects.HistoryEntry.SlimObject">
+            <summary>
+            Oggetto Movimentato in notazione dictionary con le sole proprietà "semplici" e senza dati di servizio
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Objects.HistoryRef">
+            <summary>
+            Entity di riferimento
+            </summary>
+        </member>
+        <member name="T:Business.Data.Objects.Core.Objects.HistoryOpType">
+            <summary>
+            Tipo Operazione
+            </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.Objects.LinqQueryTranslator`1.VisitBinary(System.Linq.Expressions.BinaryExpression)">
             <summary>
@@ -5434,6 +5532,13 @@
             Contiene metodi statici di supporto alla gestione dei tipi 
             </summary>
         </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsBdoDalType(System.Type)">
+            <summary>
+            Indica se tipo è un oggetto Dal
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsNumericType(System.Type)">
             <summary>
             Verifica se trattasi di tipo numerico
@@ -5452,10 +5557,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsBool(System.Type)">
+            <summary>
+            Indica se un tipo e' boolean
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsDecimalType(System.Type)">
             <summary>
             Indica se tipo decimale (decimal, float, double)
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsGuid(System.Type)">
+            <summary>
+            Indica se tipo è guid
+            </summary>
+            <param name="type"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Common.Utils.TypeHelper.IsIntegerType(System.Type)">
@@ -5605,6 +5724,21 @@
         <member name="P:Business.Data.Objects.Database.CommonDataBase.TransactionDefaultIsolation">
             <summary>
             Isolamento di default della transazione
+            </summary>
+        </member>
+        <member name="E:Business.Data.Objects.Database.CommonDataBase.OnBeginTransaction">
+            <summary>
+            Evento scatenato in caso di begin
+            </summary>
+        </member>
+        <member name="E:Business.Data.Objects.Database.CommonDataBase.OnCommitTransaction">
+            <summary>
+            Evento scatenato in caso di commit
+            </summary>
+        </member>
+        <member name="E:Business.Data.Objects.Database.CommonDataBase.OnRollbackTransaction">
+            <summary>
+            Evento scatenato in caso di rollback
             </summary>
         </member>
         <member name="M:Business.Data.Objects.Database.CommonDataBase.#ctor(System.String)">
@@ -6162,10 +6296,32 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Business.Data.Objects.Database.TransactionEventHandler">
+            <summary>
+            Delegato per la gestione degli eventi relativi alle transazioni
+            </summary>
+            <param name="db"></param>
+            <returns></returns>
+        </member>
         <member name="T:Business.Data.Objects.Database.IDataBase">
             <summary>
             Interfaccia IDataBase.
             Fornisce i metodi e le proprietà per accedere ad un database, a prescindere dal tipo
+            </summary>
+        </member>
+        <member name="E:Business.Data.Objects.Database.IDataBase.OnBeginTransaction">
+            <summary>
+            Evento scatenato in caso di begin
+            </summary>
+        </member>
+        <member name="E:Business.Data.Objects.Database.IDataBase.OnCommitTransaction">
+            <summary>
+            Evento scatenato in caso di commit
+            </summary>
+        </member>
+        <member name="E:Business.Data.Objects.Database.IDataBase.OnRollbackTransaction">
+            <summary>
+            Evento scatenato in caso di rollback
             </summary>
         </member>
         <member name="P:Business.Data.Objects.Database.IDataBase.LastAutoIdFunction">

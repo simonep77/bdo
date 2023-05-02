@@ -157,7 +157,7 @@ namespace Business.Data.WinFormTest
                 var dtOgg = DateTime.Now;
                 // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
                 // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
-                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
+                var lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
 
                 foreach (var item in lst)
                 {
@@ -450,6 +450,10 @@ namespace Business.Data.WinFormTest
                 ss1.DeleteObject(ord);
 
                 ss1.UnDeleteObject(ord);
+
+                var a = ord.ToDictionary();
+
+                var b = ss1.LoadObjectByDictionary<Ordine>(a);
 
                 ss1.DB.CommitTransaction();
                 //this.WriteLog(ss1.GetCurrentElapsed().ToString());

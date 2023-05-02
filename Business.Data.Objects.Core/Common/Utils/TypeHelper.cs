@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Business.Data.Objects.Core.Base;
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Business.Data.Objects.Common.Utils
@@ -12,6 +14,15 @@ namespace Business.Data.Objects.Common.Utils
 
         #region TYPE UTILITY
 
+        /// <summary>
+        /// Indica se tipo è un oggetto Dal
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static bool IsBdoDalType(this Type type)
+        {
+            return type.IsSubclassOf(typeof(DataObjectBase));
+        }
 
         /// <summary>
         /// Verifica se trattasi di tipo numerico
@@ -139,6 +150,7 @@ namespace Business.Data.Objects.Common.Utils
         {
             return (type.IsArray && type.Equals(typeof(byte[])));
         }
+
 
         #endregion
 

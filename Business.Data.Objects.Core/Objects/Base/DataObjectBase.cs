@@ -132,7 +132,11 @@ namespace Business.Data.Objects.Core.Base
         public override string ToString() => $"{this.mClassSchema.ClassName} ({ObjectHelper.ObjectEnumerableToString(this.mClassSchema.PrimaryKey.GetValues(this))})";
 
 
-
+        /// <summary>
+        /// Ritorna dictionary con i soli valori dell'oggetto (no mappati)
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, object> ToDictionary() => this.mClassSchema.Properties.Where(x => x is PropertySimple).ToDictionary(x => x.Name, x => x.GetValue(this));
 
 
         /// <summary>
@@ -173,7 +177,7 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="propertyName"></param>
         /// <returns></returns>
-        public bool IsChanged(string propertyName) => this.mDataSchema.PropValues[this.mClassSchema.Properties.GetPropertyByName(propertyName).PropertyIndex].Changed;
+        public bool IsChanged(string propertyName) => this.mDataSchema.GetByProperty(this.mClassSchema.Properties.GetPropertyByName(propertyName)).Changed;
 
 
         /// <summary>
@@ -187,7 +191,7 @@ namespace Business.Data.Objects.Core.Base
 
             for (int i = 0; i < this.mClassSchema.Properties.Count; i++)
             {
-                if (this.mDataSchema.PropValues[this.mClassSchema.Properties[i].PropertyIndex].Changed)
+                if (this.mDataSchema.GetByProperty(this.mClassSchema.Properties[i]).Changed)
                     oListRet.Add(this.mClassSchema.Properties[i].Name);
             }
 
@@ -468,7 +472,7 @@ namespace Business.Data.Objects.Core.Base
                 //Verifica modifica alla PK in modifica
                 foreach (var oPropKey in this.mClassSchema.PrimaryKey.Properties)
                 {
-                    var pv = this.mDataSchema.PropValues[oPropKey.PropertyIndex];
+                    var pv = this.mDataSchema.GetByProperty(oPropKey);
 
                     //La primary key non può essere modificata in aggiornamento
                     if (pv.Changed)
@@ -482,7 +486,7 @@ namespace Business.Data.Objects.Core.Base
             {
                 //Get property definition
                 oProp = this.mClassSchema.Properties[iPropIndex];
-                var pv = this.mDataSchema.PropValues[oProp.PropertyIndex];
+                var pv = this.mDataSchema.GetByProperty(oProp);
                 try
                 {
                     //skip object not new and not changed

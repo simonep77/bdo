@@ -181,5 +181,5 @@ Metodo slot Undelete per ripristinare gli oggetti cancellati logicamente
 [22/03/2023] - 5.0.57 - Simone Pelaia
 Modifica alle classi messaggio per renderle serializzabili + facilmente
 
-[01/05/2023] - 5.0.58 - Simone Pelaia
+[02/05/2023] - 5.0.59 - Simone Pelaia
 Motore gestione storicizzazione

@@ -135,7 +135,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="operation"></param>
         /// <param name="obj"></param>
-        internal void HistoryRaiseEvent(OpType operation, DataObjectBase obj)
+        internal void HistoryRaiseEvent(HistoryOpType operation, DataObjectBase obj)
         {
             //Se non gestito il raise è inutile procedere oltre
             if (this.OnHistoryRaised == null)
@@ -151,12 +151,12 @@ namespace Business.Data.Objects.Core
                 Operation = operation,
                 PrimaryRef = new HistoryRef()
                 {
-                    PrimaryType = obj.mClassSchema.OriginalType,
-                    PrimaryKey = obj.mClassSchema.PrimaryKey.GetValues(obj).First(),
+                    Type = obj.mClassSchema.OriginalType,
+                    Value = ObjectHelper.ObjectEnumerableToString(obj.mClassSchema.PrimaryKey.GetValues(obj)),
                 },
                 ForeignRef = obj.HistoryGetMainForeignLink(),
                 TopLevelEntityRef = obj.HistoryGetTopLevelEntityRef(),
-                SlimObject = obj.mClassSchema.Properties.Where(x => x is PropertySimple).ToDictionary(x => x.Name, x => x.GetValue(obj))
+                SlimObject = obj.ToDictionary()
             };
 
             //Se siamo in transazione attendiamo la fine e rilanciamo
@@ -166,6 +166,9 @@ namespace Business.Data.Objects.Core
 
                 db.OnCommitTransaction += handler = (d) =>
                 {
+                    if (d.IsInTransaction)
+                        return;
+
                     //Rimuoviamo evento per non riscatenarlo
                     db.OnCommitTransaction -= handler;
                     //Rilanciamo chiamata
@@ -177,7 +180,7 @@ namespace Business.Data.Objects.Core
             {
                 this.OnHistoryRaised.Invoke(this, hist);
             }
-            
+
         }
 
         #endregion
@@ -1212,34 +1215,6 @@ namespace Business.Data.Objects.Core
 
         #region LOADING OBJECTS
 
-        /// <summary>
-        /// Finalizza il caricamento. Se ritorna false significa che l'oggetto non e' stato caricato
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="raiseNotFound"></param>
-        /// <param name="raiseMessage"></param>
-        /// <returns></returns>
-        private bool loadObjectComplete(DataObjectBase obj, bool raiseNotFound, string raiseMessage)
-        {
-            //Se lo stato risulta non caricato gestisce casistica
-            if (obj.ObjectState != EObjectState.Loaded)
-            {
-                if (raiseNotFound)
-                    //Richiesta eccezione
-                    throw new ObjectNotFoundException(raiseMessage, obj.mClassSchema.ClassName);
-                else
-                    //Richiesto valore null
-                    return false;
-            }
-
-            //Imposta source
-            obj.mDataSchema.ObjectSource = EObjectSource.Database;
-
-            //Prova ad inserire nelle cache
-            this.CacheSetAny(obj);
-
-            return true;
-        }
 
         /// <summary>
         /// Carica da espressione linq. Se raiseNotFound=false e non trovato ritorna un nuovo oggetto
@@ -1462,6 +1437,57 @@ namespace Business.Data.Objects.Core
 
             //Ritorna
             return obj;
+        }
+
+
+
+        /// <summary>
+        /// Carica un dataobject generico a partire da un type e da un dizionario
+        /// </summary>
+        /// <param name="input"></param>
+        public DataObjectBase LoadObjectByDictionary(Type dalType, Dictionary<string, object> input)
+        {
+            if (dalType == null)
+                throw new ArgumentException($"{nameof(dalType)} nullo");
+            if (!dalType.IsBdoDalType())
+                throw new ArgumentException($"Il tipo {dalType.Name} non è un DAL valido!");
+            if (dalType == null)
+                throw new ArgumentException($"{nameof(input)} nullo");
+
+
+            var obj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(dalType, true);
+            //Imposta slot
+            obj.SetSlot(this);
+
+            obj.mDataSchema.ObjectSource = EObjectSource.DTO;
+            obj.mDataSchema.ObjectState = EObjectState.Loaded;
+
+            foreach (var prop in obj.mClassSchema.Properties.Where(x => x is PropertySimple))
+            {
+                if (input.TryGetValue(prop.Name, out object item))
+                {
+                    var pv = obj.mDataSchema.GetByProperty(prop);
+                    pv.Changed = false;
+                    pv.Loaded = true;
+                    pv.Value = Convert.ChangeType(item, prop.Type);
+                }
+            }
+
+            this.cacheSetPipeline(obj);
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Carica un oggetto tipizzato da dictionary
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public T LoadObjectByDictionary<T>(Dictionary<string, object> input)
+            where T : DataObjectBase
+        {
+            return (T)this.LoadObjectByDictionary(typeof(T), input);
         }
 
 
@@ -1736,7 +1762,7 @@ namespace Business.Data.Objects.Core
 
             //Se attivo il tracciamento
             if (obj.mClassSchema.History)
-                this.HistoryRaiseEvent(bNew ? OpType.Insert : OpType.Update, obj);
+                this.HistoryRaiseEvent(bNew ? HistoryOpType.Insert : HistoryOpType.Update, obj);
 
         }
 
@@ -1794,7 +1820,7 @@ namespace Business.Data.Objects.Core
 
                 //Se storicizzato allora richiama routine
                 if (obj.mClassSchema.History)
-                    this.HistoryRaiseEvent(OpType.Delete, obj);
+                    this.HistoryRaiseEvent(HistoryOpType.Delete, obj);
             }
             else
             {
@@ -1935,7 +1961,7 @@ namespace Business.Data.Objects.Core
 
 
             T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(other.mClassSchema.OriginalType);
-            o.mDataSchema = other.mDataSchema.Clone(true, true);
+            o.mDataSchema = other.mDataSchema.Clone(true);
             o.SetSlot(this);
             return o;
         }
@@ -1953,7 +1979,7 @@ namespace Business.Data.Objects.Core
                 throw new ObjectException(ObjectMessages.Base_Null_Input, typeof(T).Name);
 
             T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(other.mClassSchema.OriginalType);
-            o.mDataSchema = other.mDataSchema.Clone(false, false);
+            o.mDataSchema = other.mDataSchema.Clone(false);
             //Imposta Sorgente e Stato a nuovo
             o.mDataSchema.ObjectSource = EObjectSource.None;
             o.mDataSchema.ObjectState = EObjectState.New;
@@ -2532,7 +2558,7 @@ namespace Business.Data.Objects.Core
                 //se non nullo utilizza un clone ed esce
                 if (_GlobalCache.TryGet(uniqueKey, out var item))
                 {
-                    var newData = ((DataSchema)item).Clone(false, true);
+                    var newData = ((DataSchema)item).Clone(true);
                     newData.ObjectSource = EObjectSource.GlobalCache;
 
                     //Restituisce un clone per sicurezza
@@ -2559,7 +2585,7 @@ namespace Business.Data.Objects.Core
             //1) Salva in cache locale
             if (obj.mClassSchema.GlobalCache)
             {
-                _GlobalCache.GetOrAdd(obj.GetHashBaseString(), () => obj.mDataSchema.Clone(false, true));
+                _GlobalCache.GetOrAdd(obj.GetHashBaseString(), () => obj.mDataSchema.Clone(true));
             }
 
         }
