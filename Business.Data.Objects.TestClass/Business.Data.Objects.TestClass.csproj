@@ -50,6 +50,7 @@
     <Compile Include="DAL\OrdineLista.cs" />
     <Compile Include="DAL\OrdineStato.cs" />
     <Compile Include="DAL\OrdineStatoLista.cs" />
+    <Compile Include="DAL\Prova_SQLServer.cs" />
     <Compile Include="DTO\SP_GT005_CAP_FIND_RESULT.cs" />
     <Compile Include="DTO\Ordine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

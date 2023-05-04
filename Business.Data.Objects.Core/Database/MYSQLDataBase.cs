@@ -135,23 +135,28 @@ namespace Business.Data.Objects.Database
         private void setQueryPaged(int positionIn, int offsetIn)
         {
             this.setTotPagedRecords(0);
+
+            string sTemp;
             //Manipola Query aggiungendo direttiva conteggio
-            String sTemp = _PAGED_REGEX.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
+            if (this.SQL.StartsWith("WITH cteq1"))
+            {
+                //Inserisce la calc nell'ultima query finale
+                var r = new Regex(_PAGED_REGEX.ToString(), RegexOptions.RightToLeft | RegexOptions.IgnoreCase | RegexOptions.Compiled );
+                sTemp = r.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
 
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(sTemp.Length + 300);
-            //Manipola Query
-            sb.Append(sTemp);
+                //Inserisce la limit nella prima query per velocizzre
+                var r2 = new Regex(@"[\s]*(WITH cteq1 AS [(])(.*)([)], cteq2.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+                sTemp = r2.Replace(this.SQL, $"$1 $2 LIMIT {positionIn},{offsetIn} $3 ", 1);
+            }
+            else
+            {
+                //Senza cte
+                sTemp = _PAGED_REGEX.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
+            }
+         
             //Scrive query di conteggio record
-            sb.Append(@" LIMIT ");
-            sb.Append(positionIn);
-            sb.Append(@",");
-            sb.Append(offsetIn);
-            sb.Append(@";");
-
-            sb.Append(@"SELECT FOUND_ROWS() ");
-
             //Imposta query
-            this.SQL = sb.ToString();
+            this.SQL = string.Concat(sTemp, $" LIMIT {positionIn},{offsetIn}; SELECT FOUND_ROWS()");
         }
 
 
@@ -166,7 +171,6 @@ namespace Business.Data.Objects.Database
             this.BeginThreadSafeWork();
             try
             {
-
                 this.setQueryPaged(positionIn, offsetIn);
 
                 //Crea tab

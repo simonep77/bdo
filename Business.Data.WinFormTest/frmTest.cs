@@ -398,7 +398,7 @@ namespace Business.Data.WinFormTest
                 ss1.LiveTrackingEnabled = true;
                 ss1.ChangeTrackingEnabled = true;
                 ss1.UserName = "Simone";
-                
+
 
                 var sw = new Stopwatch();
                 sw.Start();
@@ -460,6 +460,49 @@ namespace Business.Data.WinFormTest
 
                 //this.WriteLog(c2.Print());
             }
+        }
+
+        private void tESTCustomQueryFullRecordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+
+                var ord = ss1.CreateList<OrdineLista>(1, 10).CercaProva();
+
+                this.WriteLog(ord.First().ToJSON());
+                //this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+                //this.WriteLog(c2.Print());
+
+
+            }
+
+
+            using (var ss2 = new BusinessSlot("MSSQL2005Database", "Server=sql.svil.casagit.it;Database=GESTIONALE;User Id=gestionale;Password=Sviluppo1"))
+            {
+                ss2.DB.AutoCloseConnection = true;
+                ss2.LiveTrackingEnabled = true;
+                ss2.ChangeTrackingEnabled = true;
+                ss2.UserName = "Simone";
+
+
+                var ord = ss2.CreateList<ANAGRAFICA_PF_Lista>(1, 10).CercaTipiSoggettoEtaIntervallo(1, 46, new DateTime(2023, 1, 1), new DateTime(2023, 12, 31));
+
+                this.WriteLog(ord.First().ToJSON());
+                //this.WriteLog(ss1.GetCurrentElapsed().ToString());
+
+                //this.WriteLog(c2.Print());
+
+
+            }
+
+
         }
     }
 }

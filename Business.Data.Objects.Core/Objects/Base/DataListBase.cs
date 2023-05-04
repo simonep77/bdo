@@ -12,6 +12,8 @@ using System.ComponentModel;
 using System.Data.Common;
 using System.Text;
 using System.Data;
+using System.Linq;
+using System.Xml;
 
 namespace Business.Data.Objects.Core.Base
 {
@@ -82,7 +84,7 @@ namespace Business.Data.Objects.Core.Base
 
             while (reader.Read())
             {
-                //Imposta totale records da ultima colonna della query. Se non oertinente allora imposta -1
+                //Imposta totale records da ultima colonna della query. Se non pertinente allora imposta -1
                 if (this.IsPaged && this.Pager.TotRecords == 0)
                 {
                     var oTotRecs = reader[reader.FieldCount - 1];
@@ -102,16 +104,6 @@ namespace Business.Data.Objects.Core.Base
                         oItem.PkValues[i] = null;
                     else
                         oItem.PkValues[i] = reader.GetValue(i);
-                }
-
-                //Se presenti valori oltre la pk li salva (se non prefetch)
-                if (!this.mIsSearch && iFieldCount > this.mObjSchema.PrimaryKey.Properties.Count)
-                {
-                    oItem.ExtraData = new Dictionary<string, object>();
-                    for (int i = this.mObjSchema.PrimaryKey.Properties.Count; i < iFieldCount; i++)
-                    {
-                        oItem.ExtraData.Add(reader.GetName(i), reader[i]);
-                    }
                 }
 
                 //Se trattasi di ricerca BDO allora prova a caricare il singolo oggetto dal reader e lo imposta nell'Item
@@ -135,7 +127,18 @@ namespace Business.Data.Objects.Core.Base
                         //Prova ad inserire nelle cache
                         this.Slot.CacheSetAny(oItem.Object);
                     }
-
+                }
+                else
+                {
+                    //Se presenti valori oltre la pk li salva (se non prefetch)
+                    if (iFieldCount > this.mObjSchema.PrimaryKey.Properties.Count)
+                    {
+                        oItem.ExtraData = new Dictionary<string, object>();
+                        for (int i = this.mObjSchema.PrimaryKey.Properties.Count; i < iFieldCount; i++)
+                        {
+                            oItem.ExtraData.Add(reader.GetName(i), reader[i]);
+                        }
+                    }
                 }
 
                 //Aggiunge a lista
@@ -221,6 +224,41 @@ namespace Business.Data.Objects.Core.Base
 
                 //Appoggia sessione
                 IDataBase db = this.Slot.DbGet(this.mObjSchema);
+
+                //Qui potrebbe gestire la sostituzione SQL per includere tutti i campi del DAL
+                if (!this.mIsSearch)
+                {
+                    var sb = new StringBuilder("WITH cteq1 as (");
+                    sb.Append(db.SQL);
+                    sb.Append("), ");
+                    sb.Append("cteq2 as ( ");
+                    sb.Append("SELECT cteq1.* ");
+                    foreach (var item in this.mObjSchema.Properties.Where(x => !x.ExcludeSelect && !this.mObjSchema.PrimaryKey.Properties.Any(y => y.PropertyIndex == x.PropertyIndex)))
+                    {
+                        sb.Append(", b.");
+                        sb.Append(item.Column.Name);
+                    }
+                    sb.Append(" FROM cteq1 ");
+                    sb.Append(" INNER JOIN ");
+                    sb.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
+                    sb.Append(" b ON ");
+                    for (int i = 0; i < this.mObjSchema.PrimaryKey.Properties.Count; i++)
+                    {
+                        sb.Append("cteq1.");
+                        sb.Append(this.mObjSchema.PrimaryKey.Properties[i].Name);
+                        sb.Append(" = b.");
+                        sb.Append(this.mObjSchema.PrimaryKey.Properties[i].Name);
+
+                        if (i < (this.mObjSchema.PrimaryKey.Properties.Count - 1) )
+                            sb.Append(", ");
+                    }
+                    
+                    sb.Append(") ");
+                    sb.Append("SELECT * FROM cteq2 ");
+
+                    db.SQL = sb.ToString();
+                }
+
 
                 //Appende ORDER BY a query
                 db.SQL = string.Concat(db.SQL, this.mOrderBy.ToString());

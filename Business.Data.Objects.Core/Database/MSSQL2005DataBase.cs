@@ -50,24 +50,36 @@ namespace Business.Data.Objects.Database
             //Azzera contatore record
             this.setTotPagedRecords(0);
             //Sostituisce qualunque "SELECT" con "SELECT TOP 10000000000" per consentire gli order BY
-            String sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ", 1);
+            String sTemp;
 
- 
-            //NEW
             System.Text.StringBuilder sb = new System.Text.StringBuilder(400);
-            sb.Append("WITH __VarTabName AS ( ");
-            sb.Append("SELECT *, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) AS [__RowNum] ");
-            sb.Append("FROM ( ");
-            sb.Append(sTemp);
-            sb.Append(") AS tmpTab ");
-            sb.Append(") ");
-            sb.Append("SELECT *, (SELECT COUNT(*) FROM __VarTabName) AS TotRecords ");
-            sb.Append("FROM __VarTabName ");
-            sb.AppendFormat("WHERE [__RowNum] > {0} ", positionIn);
-            sb.AppendFormat("AND [__RowNum] <= {0} ", positionIn + offsetIn);
-            sb.Append("ORDER BY [__RowNum] ASC ");
 
-            this.SQL = sb.ToString();
+            if (this.SQL.StartsWith(@"WITH cteq1"))
+            {
+                sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum], ", 1);
+                //SELECT COUNT(*) FROM cteq2
+                //TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum]
+                this.SQL = string.Concat(sTemp.Substring(0, sTemp.Length - 20), " SELECT *, (SELECT COUNT(*) FROM cteq2) AS TotRecords FROM cteq2 ");
+            }
+            else
+            {
+                sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ", 1);
+                //Caso standard
+                sb.Append("WITH __VarTabName AS ( ");
+                sb.Append("SELECT *, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) AS [__RowNum] ");
+                sb.Append("FROM ( ");
+                sb.Append(sTemp);
+                sb.Append(") AS tmpTab ");
+                sb.Append(") ");
+                sb.Append("SELECT *, (SELECT COUNT(*) FROM __VarTabName) AS TotRecords ");
+                sb.Append("FROM __VarTabName ");
+                sb.Append($"WHERE [__RowNum] > {positionIn} ");
+                sb.Append($"AND [__RowNum] <= {positionIn + offsetIn} ");
+                sb.Append("ORDER BY [__RowNum] ASC ");
+
+                this.SQL = sb.ToString();
+            }
+
         }
 
 

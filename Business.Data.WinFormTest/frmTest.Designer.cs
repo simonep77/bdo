@@ -42,9 +42,10 @@ namespace Business.Data.WinFormTest
             this.tESTCacheResultSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTCacheSimpleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTSimpleAESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tESTUndeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.tESTUndeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tESTCustomQueryFullRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,7 +74,8 @@ namespace Business.Data.WinFormTest
             this.tESTCacheResultSizeToolStripMenuItem,
             this.tESTCacheSimpleToolStripMenuItem,
             this.tESTSimpleAESToolStripMenuItem,
-            this.tESTUndeleteToolStripMenuItem});
+            this.tESTUndeleteToolStripMenuItem,
+            this.tESTCustomQueryFullRecordToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -83,72 +85,79 @@ namespace Business.Data.WinFormTest
             // lINQ2SQLToolStripMenuItem
             // 
             this.lINQ2SQLToolStripMenuItem.Name = "lINQ2SQLToolStripMenuItem";
-            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.lINQ2SQLToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.lINQ2SQLToolStripMenuItem.Text = "LINQ 2 SQL";
             this.lINQ2SQLToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLToolStripMenuItem_Click);
             // 
             // jSONTOEFROMToolStripMenuItem
             // 
             this.jSONTOEFROMToolStripMenuItem.Name = "jSONTOEFROMToolStripMenuItem";
-            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.jSONTOEFROMToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.jSONTOEFROMToolStripMenuItem.Text = "JSON TO e FROM";
             this.jSONTOEFROMToolStripMenuItem.Click += new System.EventHandler(this.jSONTOEFROMToolStripMenuItem_Click);
             // 
             // lINQ2SQLENHANCEToolStripMenuItem
             // 
             this.lINQ2SQLENHANCEToolStripMenuItem.Name = "lINQ2SQLENHANCEToolStripMenuItem";
-            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.lINQ2SQLENHANCEToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.lINQ2SQLENHANCEToolStripMenuItem.Text = "QUERY MAPPERS";
             this.lINQ2SQLENHANCEToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLENHANCEToolStripMenuItem_Click);
             // 
             // qUERYMAPSPToolStripMenuItem
             // 
             this.qUERYMAPSPToolStripMenuItem.Name = "qUERYMAPSPToolStripMenuItem";
-            this.qUERYMAPSPToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.qUERYMAPSPToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.qUERYMAPSPToolStripMenuItem.Text = "QUERY MAP SP";
             this.qUERYMAPSPToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPSPToolStripMenuItem_Click);
             // 
             // qUERYMAPPERSBENCHToolStripMenuItem
             // 
             this.qUERYMAPPERSBENCHToolStripMenuItem.Name = "qUERYMAPPERSBENCHToolStripMenuItem";
-            this.qUERYMAPPERSBENCHToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.qUERYMAPPERSBENCHToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.qUERYMAPPERSBENCHToolStripMenuItem.Text = "QUERY MAPPERS BENCH";
             this.qUERYMAPPERSBENCHToolStripMenuItem.Click += new System.EventHandler(this.qUERYMAPPERSBENCHToolStripMenuItem_Click);
             // 
             // tESTLOGICALDELETEToolStripMenuItem
             // 
             this.tESTLOGICALDELETEToolStripMenuItem.Name = "tESTLOGICALDELETEToolStripMenuItem";
-            this.tESTLOGICALDELETEToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTLOGICALDELETEToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.tESTLOGICALDELETEToolStripMenuItem.Text = "TEST LOGICAL DELETE";
             this.tESTLOGICALDELETEToolStripMenuItem.Click += new System.EventHandler(this.tESTLOGICALDELETEToolStripMenuItem_Click);
             // 
             // tESTCacheresultConLinqToolStripMenuItem
             // 
             this.tESTCacheresultConLinqToolStripMenuItem.Name = "tESTCacheresultConLinqToolStripMenuItem";
-            this.tESTCacheresultConLinqToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTCacheresultConLinqToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.tESTCacheresultConLinqToolStripMenuItem.Text = "TEST Cacheresult con Linq";
             this.tESTCacheresultConLinqToolStripMenuItem.Click += new System.EventHandler(this.tESTCacheresultConLinqToolStripMenuItem_Click);
             // 
             // tESTCacheResultSizeToolStripMenuItem
             // 
             this.tESTCacheResultSizeToolStripMenuItem.Name = "tESTCacheResultSizeToolStripMenuItem";
-            this.tESTCacheResultSizeToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTCacheResultSizeToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.tESTCacheResultSizeToolStripMenuItem.Text = "TEST CacheResult Size";
             this.tESTCacheResultSizeToolStripMenuItem.Click += new System.EventHandler(this.tESTCacheResultSizeToolStripMenuItem_Click);
             // 
             // tESTCacheSimpleToolStripMenuItem
             // 
             this.tESTCacheSimpleToolStripMenuItem.Name = "tESTCacheSimpleToolStripMenuItem";
-            this.tESTCacheSimpleToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTCacheSimpleToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.tESTCacheSimpleToolStripMenuItem.Text = "TEST Cache Simple";
             this.tESTCacheSimpleToolStripMenuItem.Click += new System.EventHandler(this.tESTCacheSimpleToolStripMenuItem_Click);
             // 
             // tESTSimpleAESToolStripMenuItem
             // 
             this.tESTSimpleAESToolStripMenuItem.Name = "tESTSimpleAESToolStripMenuItem";
-            this.tESTSimpleAESToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
+            this.tESTSimpleAESToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.tESTSimpleAESToolStripMenuItem.Text = "TEST SimpleAES";
             this.tESTSimpleAESToolStripMenuItem.Click += new System.EventHandler(this.tESTSimpleAESToolStripMenuItem_Click);
+            // 
+            // tESTUndeleteToolStripMenuItem
+            // 
+            this.tESTUndeleteToolStripMenuItem.Name = "tESTUndeleteToolStripMenuItem";
+            this.tESTUndeleteToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.tESTUndeleteToolStripMenuItem.Text = "TEST Undelete";
+            this.tESTUndeleteToolStripMenuItem.Click += new System.EventHandler(this.tESTUndeleteToolStripMenuItem_Click);
             // 
             // toolStripButton1
             // 
@@ -172,12 +181,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // tESTUndeleteToolStripMenuItem
+            // tESTCustomQueryFullRecordToolStripMenuItem
             // 
-            this.tESTUndeleteToolStripMenuItem.Name = "tESTUndeleteToolStripMenuItem";
-            this.tESTUndeleteToolStripMenuItem.Size = new System.Drawing.Size(212, 22);
-            this.tESTUndeleteToolStripMenuItem.Text = "TEST Undelete";
-            this.tESTUndeleteToolStripMenuItem.Click += new System.EventHandler(this.tESTUndeleteToolStripMenuItem_Click);
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Name = "tESTCustomQueryFullRecordToolStripMenuItem";
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Text = "TEST Custom Query FullRecord";
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Click += new System.EventHandler(this.tESTCustomQueryFullRecordToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -212,5 +221,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem tESTSimpleAESToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem tESTUndeleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tESTCustomQueryFullRecordToolStripMenuItem;
     }
 }
