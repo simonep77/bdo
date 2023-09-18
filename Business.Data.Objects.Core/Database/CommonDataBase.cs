@@ -22,20 +22,21 @@ using Business.Data.Objects.Common;
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using Business.Data.Objects.Core.Common.Utils;
+using System.Diagnostics;
 
 namespace Business.Data.Objects.Database
 {
-	/// <summary>
-	/// Classe Astratta da cui derivano quelle specializzate: gran parte delle proprietà
-	/// e dei Metodi risiedono qui
-	/// </summary>
-	public abstract class CommonDataBase: IDataBase 
-	{
-		/// <summary>
+    /// <summary>
+    /// Classe Astratta da cui derivano quelle specializzate: gran parte delle proprietà
+    /// e dei Metodi risiedono qui
+    /// </summary>
+    public abstract class CommonDataBase : IDataBase
+    {
+        /// <summary>
         /// Assembly di riferimento del provider
         /// </summary>
         protected abstract string ProviderAssembly { get; }
-        
+
         /// <summary>
         /// Classe del factory provider
         /// </summary>
@@ -51,36 +52,33 @@ namespace Business.Data.Objects.Database
         /// </summary>
         public virtual DbTypeMapper TypeMapper { get; } = new DbTypeMapper();
 
+        /// <summary>
+        /// Timer interno per il tracciamento dei tempi di esecuzione di ogni statetment
+        /// </summary>
+        private Stopwatch Timer { get; set; } = new Stopwatch();
+
+        /// <summary>
+        /// Tempi esecuzione ultimo statement 
+        /// </summary>
+        public TimeSpan LastExecutionElaps => this.Timer.Elapsed;
 
         /// <summary>
         /// Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
         /// </summary>
-        private static Dictionary<string, DbProviderFactory > AssFactoryDictionary = new Dictionary<string, DbProviderFactory>();
+        private static Dictionary<string, DbProviderFactory> AssFactoryDictionary = new Dictionary<string, DbProviderFactory>(3);
 
         protected const string TABLE_NAME = @"Table1";
-		private object _GlobalLock = new object(); //Utilizzato per condividere una unica connection
-		private DbConnection _dbconn;
-		private DbCommand	_command;
+        private DbConnection _dbconn;
+        private DbCommand _command;
         private Stack _tranQ = new Stack(1);
-        private string _connStr = string.Empty;
-        private int _TotRecordQueryPaginata;
-        private bool _AutoCloseConnection;
-        private DBStats _Stats = new DBStats();
         private LoggerBase _TraceLog;
-        private UInt32 _HashCode;
         private Dictionary<string, object> _LockAcquired; //Istanziato al primo utilizzo
         private IsolationLevel _PendingTransactionLevel = IsolationLevel.Unspecified;
 
         #region "PROPERTY"
 
 
-        protected virtual bool PagedReaderLastRow
-        {
-            get
-            {
-                return true; ;
-            }
-        }
+        protected virtual bool PagedReaderLastRow => true;
 
 
         /// <summary>
@@ -97,27 +95,17 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Statistiche di utilizzo
         /// </summary>
-        public DBStats Stats
-        {
-            get {
-                return this._Stats;
-            }
-        }
+        public DBStats Stats { get; } = new DBStats();
 
         /// <summary>
         /// Ritorna tipo database
         /// </summary>
-        public string DbType
-        {
-            get { return this.GetType().Name; }
-        }
-		
+        public string DbType => this.GetType().Name;
+
         /// <summary>
         /// Ritorna connection string utilizzata
         /// </summary>
-		public string ConnectionString {
-			get { return _connStr; }
-		}
+        public string ConnectionString { get; private set; }
 
 
         /// <summary>
@@ -125,8 +113,8 @@ namespace Business.Data.Objects.Database
         /// </summary>
         public int ExecutionTimeout
         {
-            get { return this._command.CommandTimeout; }
-            set { this._command.CommandTimeout = value; }
+            get => this._command.CommandTimeout;
+            set => this._command.CommandTimeout = value;
         }
 
         /// <summary>
@@ -135,24 +123,12 @@ namespace Business.Data.Objects.Database
         /// - Stored Procedure
         /// - Tabella diretta
         /// </summary>
-        public CommandType CommandType
-        {
-            get { return this._command.CommandType; }
-            set { this._command.CommandType = value; }
-        }
+        public CommandType CommandType { get; set; }
 
         /// <summary>
         /// ottiene o imposta il comportamento della connessione
         /// </summary>
-        public bool AutoCloseConnection
-        {
-            get {
-                return this._AutoCloseConnection;
-            }
-            set {
-                this._AutoCloseConnection = value;
-            }
-        }
+        public bool AutoCloseConnection { get; set; }
 
 
         /// <summary>
@@ -160,58 +136,30 @@ namespace Business.Data.Objects.Database
         /// </summary>
         public DbParameterCollection Parameters
         {
-            get
-            {
-                lock (this._GlobalLock)
-                {
-                    return this._command.Parameters;
-                }
-            }
+            get => this._command.Parameters;
         }
 
         /// <summary>
         /// SQL da eseguire (o eseguito)
         /// </summary>
         public virtual string SQL
-		{
-			get{
-                lock (this._GlobalLock)
-                {
-                    return this._command.CommandText;
-                }
-			}
-			set{
-                lock (this._GlobalLock)
-                {
-                    this._command.CommandText = value;
-                }
-			}
-		}
-		
-		
-		/// <summary>
-		/// Numero Totale Records calcolati dopo l'ultima OpenQuery paginata
-		/// </summary>
-		public int TotRecordQueryPaginata {
-			get 
-			{
-                lock (this._GlobalLock)
-                {
-                    return _TotRecordQueryPaginata;
-                }
-			}
-		}
+        {
+            get => this._command.CommandText;
+            set => this._command.CommandText = value;
+        }
+
+
+        /// <summary>
+        /// Numero Totale Records calcolati dopo l'ultima OpenQuery paginata
+        /// </summary>
+        public int TotRecordQueryPaginata { get; private set; }
+
 
         /// <summary>
         /// Abilita o disabilita la registrazione dei dati di esecuzione
         /// </summary>
-        public bool TraceON
-        {
-            get
-            {
-                return (this._TraceLog != null);
-            }
-        }
+        public bool TraceON => this._TraceLog != null;
+
 
         /// <summary>
         /// Se TraceON abilita il trace dei soli
@@ -223,56 +171,34 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Indica se si e' in un contesto transazionale
         /// </summary>
-        public bool IsInTransaction
-        {
-            get 
-            {
-                return (this._command.Transaction != null || this.IsPendingTransaction);
-            }
-        }
+        public bool IsInTransaction => this._command.Transaction != null || this.IsPendingTransaction;
 
 
         /// <summary>
         /// Indica se presenti lock in atto
         /// </summary>
-        public bool HasAcquiredLocks
-        {
-            get
-            {
-                return (this._LockAcquired != null && this._LockAcquired.Count > 0);
-            }
-        }
+        public bool HasAcquiredLocks => this._LockAcquired != null && this._LockAcquired.Count > 0;
 
         /// <summary>
         /// Indica se e' stato richiesto avvio transazione ma effettivamente ancora non e' stata aperta in quanto non eseguita la connessione
         /// </summary>
-        internal bool IsPendingTransaction
-        {
-            get
-            {
-                return (this._PendingTransactionLevel != IsolationLevel.Unspecified);
-            }
-        }
+        internal bool IsPendingTransaction => this._PendingTransactionLevel != IsolationLevel.Unspecified;
 
         /// <summary>
         /// Indica se la connessione e' attiva
         /// </summary>
-        public bool IsConnectionOpen
-        {
-            get
-            {
-                return (this._dbconn != null && this._dbconn.State == ConnectionState.Open);
-            }
-        }
+        public bool IsConnectionOpen => this._dbconn != null && this._dbconn.State == ConnectionState.Open;
+
 
         /// <summary>
         /// Indica se possibile chiudere la connessione
         /// </summary>
         public bool CanAutoCloseConnection
         {
-            get {
+            get
+            {
                 //Se autoclose non attivo non chiude
-                if (!this._AutoCloseConnection)
+                if (!this.AutoCloseConnection)
                     return false;
 
                 //Se transazione aperta non chiude
@@ -292,8 +218,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Codice hash della connessione
         /// </summary>
-        public UInt32 HashCode
-        { get { return this._HashCode; } }
+        public UInt32 HashCode { get; private set; }
 
 
         /// <summary>
@@ -330,13 +255,13 @@ namespace Business.Data.Objects.Database
         /// </summary>
         /// <param name="connString"></param>
         public CommonDataBase(string connString)
-		{
+        {
             this.ProviderFactory = this.GetDbFactory();
-            this._connStr = connString;
-            this._HashCode = BdoHash.Instance.Hash(connString);
+            this.ConnectionString = connString;
+            this.HashCode = BdoHash.Instance.Hash(connString);
 
             this.InitByFactory();
-		}
+        }
 
         public CommonDataBase(DbConnection conn, DbTransaction tran)
             : this(conn.ConnectionString)
@@ -350,8 +275,9 @@ namespace Business.Data.Objects.Database
         /// Clona una connessione DB
         /// </summary>
         /// <returns></returns>
-        public IDataBase Clone() {
-            IDataBase dbOut = DataBaseFactory.CreaDataBase(this.GetType().Name, this._connStr);
+        public IDataBase Clone()
+        {
+            IDataBase dbOut = DataBaseFactory.CreaDataBase(this.GetType().Name, this.ConnectionString);
             dbOut.AutoCloseConnection = this.AutoCloseConnection;
             if (this.TraceON)
                 dbOut.EnableTrace(this._TraceLog, this.TraceOnlyErrors);
@@ -393,14 +319,14 @@ namespace Business.Data.Objects.Database
 
             this._TraceLog = null;
         }
-		
-		/// <summary>
-		/// Inizia nuova transazione
-		/// </summary>
-		public virtual void BeginTransaction()
-		{
+
+        /// <summary>
+        /// Inizia nuova transazione
+        /// </summary>
+        public virtual void BeginTransaction()
+        {
             this.BeginTransaction(this.TransactionDefaultIsolation);
-		}
+        }
 
         /// <summary>
         /// Inizia nuova transazione con specifica dell'isolation level
@@ -409,147 +335,137 @@ namespace Business.Data.Objects.Database
         public void BeginTransaction(IsolationLevel level)
         {
             Exception exLog = null;
-             
-            lock (this._GlobalLock)
+
+            //Al di fuori del log imposta eventuale pending della transazione
+            if (!this.IsConnectionOpen)
             {
-                //Al di fuori del log imposta eventuale pending della transazione
-                if (!this.IsConnectionOpen)
+                this.pendingTransSet(level);
+            }
+            else
+            {
+                try
                 {
-                    this.pendingTransSet(level);
+                    this.OpenConnection();
+
+                    //Crea la nuova transazione (se il db non supporta annidate lancia eccezione)
+                    DbTransaction newTran = this.createNewTransaction(level);
+
+                    //Ok esegue accodamento
+                    if (this._command.Transaction != null)
+                        this._tranQ.Push(this._command.Transaction);
+
+                    //Imposta nuova transazione
+                    this._command.Transaction = newTran;
+
+                    //Aggiorna stats
+                    this.Stats.Increment(DBStats.EStatement.Begin);
                 }
-                else
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        this.OpenConnection();
-
-                        //Crea la nuova transazione (se il db non supporta annidate lancia eccezione)
-                        DbTransaction newTran = this.createNewTransaction(level);
-
-                        //Ok esegue accodamento
-                        if (this._command.Transaction != null)
-                            this._tranQ.Push(this._command.Transaction);
-
-                        //Imposta nuova transazione
-                        this._command.Transaction = newTran;
-
-                        //Aggiorna stats
-                        this._Stats.Increment(DBStats.EStatement.Begin);
-                    }
-                    catch (Exception ex)
-                    {
-                        exLog = ex;
-                        throw;
-                    }
-                    finally
-                    {
-                        this.TraceStatement("BeginTransaction " + level.ToString(), exLog);
-                    }
-
-                    //Infine richiama evento
-                    this.OnBeginTransaction?.Invoke(this);
+                    exLog = ex;
+                    throw;
                 }
+                finally
+                {
+                    this.TraceStatement("BeginTransaction " + level.ToString(), exLog);
+                }
+
+                //Infine richiama evento
+                this.OnBeginTransaction?.Invoke(this);
             }
 
         }
-		
-		/// <summary>
-		/// Esegue Commit
-		/// </summary>
-		public void CommitTransaction()
-		{
+
+        /// <summary>
+        /// Esegue Commit
+        /// </summary>
+        public void CommitTransaction()
+        {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            //Se transazione non realmente aperta
+            if (this.IsPendingTransaction)
             {
-                //Se transazione non realmente aperta
-                if (this.IsPendingTransaction)
-                {
-                    this.pendingTransReset();
-                    return;
-                }
-
-                //Verifica esistenza
-                if (this._command.Transaction == null)
-                    throw new DataBaseException(DatabaseMessages.Transaction_Not_Open);
-
-                try
-                {
-                    //Esegue Commit transazione corrente
-                    this._command.Transaction.Commit();
-
-                    //Aggiorna stats
-                    this._Stats.Increment(DBStats.EStatement.Commit);
-                }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("CommitTransaction", exLog);
-                    //Imposta Transazione successiva
-                    this._command.Transaction = this.getNextTransaction();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
-
-                //Infine richiama evento
-                this.OnCommitTransaction?.Invoke(this);
+                this.pendingTransReset();
+                return;
             }
-	
-		}
-		
-		
-		/// <summary>
-		/// Esegue rollback
-		/// </summary>
-		public void RollbackTransaction()
-		{
+
+            //Verifica esistenza
+            if (this._command.Transaction == null)
+                throw new DataBaseException(DatabaseMessages.Transaction_Not_Open);
+
+            try
+            {
+                //Esegue Commit transazione corrente
+                this._command.Transaction.Commit();
+
+                //Aggiorna stats
+                this.Stats.Increment(DBStats.EStatement.Commit);
+            }
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("CommitTransaction", exLog);
+                //Imposta Transazione successiva
+                this._command.Transaction = this.getNextTransaction();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
+            }
+
+            //Infine richiama evento
+            this.OnCommitTransaction?.Invoke(this);
+
+        }
+
+
+        /// <summary>
+        /// Esegue rollback
+        /// </summary>
+        public void RollbackTransaction()
+        {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            //Se transazione non realmente aperta
+            if (this.IsPendingTransaction)
             {
-                //Se transazione non realmente aperta
-                if (this.IsPendingTransaction)
-                {
-                    this.pendingTransReset();
-                    return;
-                }
+                this.pendingTransReset();
+                return;
+            }
 
-                //Verifica esistenza
-                if (this._command.Transaction == null)
-                    throw new DataBaseException(DatabaseMessages.Transaction_Not_Open);
+            //Verifica esistenza
+            if (this._command.Transaction == null)
+                throw new DataBaseException(DatabaseMessages.Transaction_Not_Open);
 
-                try
-                {
-                    //Esegue Commit transazione corrente
-                    this._command.Transaction.Rollback();
+            try
+            {
+                //Esegue Commit transazione corrente
+                this._command.Transaction.Rollback();
 
-                    //Aggiorna stats
-                    this._Stats.Increment(DBStats.EStatement.Rollback);
-
-                }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("RollbackTransaction", exLog);
-                    //Imposta Transazione successiva
-                    this._command.Transaction = this.getNextTransaction();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
-
-                //Infine richiama evento
-                this.OnRollbackTransaction?.Invoke(this);
+                //Aggiorna stats
+                this.Stats.Increment(DBStats.EStatement.Rollback);
 
             }
-		}
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("RollbackTransaction", exLog);
+                //Imposta Transazione successiva
+                this._command.Transaction = this.getNextTransaction();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
+            }
+
+            //Infine richiama evento
+            this.OnRollbackTransaction?.Invoke(this);
+        }
 
 
         /// <summary>
@@ -571,138 +487,129 @@ namespace Business.Data.Objects.Database
         {
             throw new NotImplementedException(string.Format(DatabaseMessages.Not_Implemented, this.GetType().Name));
         }
-		
-		
-		/// <summary>
+
+
+        /// <summary>
         /// esegue una query non di selezione (INSERT, UPDATE, DELETE, DDL, ..)
-		/// </summary>
-		/// <returns></returns>
-		public int ExecQuery()
-		{
+        /// </summary>
+        /// <returns></returns>
+        public int ExecQuery()
+        {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            try
             {
-                try
-                {
-                    //Controlla presenza query
-                    if (string.IsNullOrEmpty(this.SQL))
-                        throw new DataBaseException(DatabaseMessages.Query_Empty);
+                //Controlla presenza query
+                if (string.IsNullOrEmpty(this.SQL))
+                    throw new DataBaseException(DatabaseMessages.Query_Empty);
 
-                    this.OpenConnection();
+                this.OpenConnection();
 
-                    int ret = this._command.ExecuteNonQuery();
+                int ret = this._command.ExecuteNonQuery();
 
-                    //Aggiorna Stats
-                    this.updateStatsFromSQL(this._command.CommandText);
+                //Aggiorna Stats
+                this.updateStatsFromSQL(this._command.CommandText);
 
-                    //Ritorna
-                    return ret;
+                //Ritorna
+                return ret;
 
-                }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("ExecQuery", exLog);
-                    //Resetta comando
-                    this.clearCommand();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
             }
-		}
-		
-		
-		/// <summary>
-		/// esegue una query selezione tornando solo la prima colonna della prima riga (oppure null)
-		/// </summary>
-		/// <returns></returns>
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("ExecQuery", exLog);
+                //Resetta comando
+                this.clearCommand();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
+            }
+        }
+
+
+        /// <summary>
+        /// esegue una query selezione tornando solo la prima colonna della prima riga (oppure null)
+        /// </summary>
+        /// <returns></returns>
         public object ExecScalar()
-		{
+        {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            try
             {
-                try
-                {
-                    //Controlla presenza query
-                    if (string.IsNullOrEmpty(this.SQL))
-                        throw new DataBaseException(DatabaseMessages.Query_Empty);
+                //Controlla presenza query
+                if (string.IsNullOrEmpty(this.SQL))
+                    throw new DataBaseException(DatabaseMessages.Query_Empty);
 
-                    this.OpenConnection();
-                    //Esegue
-                    object ret =  this._command.ExecuteScalar();
+                this.OpenConnection();
+                //Esegue
+                object ret = this._command.ExecuteScalar();
 
-                    //Aggiorna Stats
-                    this._Stats.Increment(DBStats.EStatement.Select);
+                //Aggiorna Stats
+                this.Stats.Increment(DBStats.EStatement.Select);
 
-                    //Ritorna
-                    return ret;
-                }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("ExecScalar", exLog);
-                    //Resetta comando
-                    this.clearCommand();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
+                //Ritorna
+                return ret;
             }
-		}
-		
-		
-		/// <summary>
-		/// esegue una query selezione tornando un DbDataReader
-		/// </summary>
-		/// <returns>
-		/// DataReader Associato ai dati
-		/// </returns>
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("ExecScalar", exLog);
+                //Resetta comando
+                this.clearCommand();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
+            }
+        }
+
+
+        /// <summary>
+        /// esegue una query selezione tornando un DbDataReader
+        /// </summary>
+        /// <returns>
+        /// DataReader Associato ai dati
+        /// </returns>
         public DbDataReader ExecReader()
-		{
+        {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            try
             {
-                try
-                {
-                    //Controlla presenza query
-                    if (string.IsNullOrEmpty(this.SQL))
-                        throw new DataBaseException(DatabaseMessages.Query_Empty);
+                //Controlla presenza query
+                if (string.IsNullOrEmpty(this.SQL))
+                    throw new DataBaseException(DatabaseMessages.Query_Empty);
 
-                    this.OpenConnection();
+                this.OpenConnection();
 
-                    //Esegue
-                    DbDataReader dr = this._command.ExecuteReader(this.CanAutoCloseConnection ? CommandBehavior.CloseConnection : CommandBehavior.Default);
+                //Esegue
+                DbDataReader dr = this._command.ExecuteReader(this.CanAutoCloseConnection ? CommandBehavior.CloseConnection : CommandBehavior.Default);
 
-                    //Aggiorna Stats
-                    this.updateStatsFromSQL(this._command.CommandText);
+                //Aggiorna Stats
+                this.updateStatsFromSQL(this._command.CommandText);
 
-                    //Ritorna
-                    return dr;
-                }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("ExecReader", exLog);
-                    //Resetta comando
-                    this.clearCommand();
-                    //Non fa autoclose poiche' impostato su reader
-                }
+                //Ritorna
+                return dr;
             }
-		}
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("ExecReader", exLog);
+                //Resetta comando
+                this.clearCommand();
+                //Non fa autoclose poiche' impostato su reader
+            }
+        }
 
 
         /// <summary>
@@ -724,47 +631,44 @@ namespace Business.Data.Objects.Database
         {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            try
             {
-                try
+                //Controlla presenza query
+                if (string.IsNullOrEmpty(this.SQL))
+                    throw new DataBaseException(DatabaseMessages.Query_Empty);
+
+                //Controlla se connessione aperta
+                this.OpenConnection();
+                //Crea tab
+                DataTable oRetTab = new DataTable(TABLE_NAME);
+
+                using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
                 {
-                    //Controlla presenza query
-                    if (string.IsNullOrEmpty(this.SQL))
-                        throw new DataBaseException(DatabaseMessages.Query_Empty);
+                    //imposta adapter
+                    dA.SelectCommand = this._command;
 
-                    //Controlla se connessione aperta
-                    this.OpenConnection();
-                    //Crea tab
-                    DataTable oRetTab = new DataTable(TABLE_NAME);
-
-                    using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
-                    {
-                        //imposta adapter
-                        dA.SelectCommand = this._command;
-
-                        //esegue query e riempie
-                        dA.Fill(oRetTab);
-                    }
-                    //Aggiorna Stats
-                    this._Stats.Increment(DBStats.EStatement.Select);
-
-                    //Ritorna
-                    return oRetTab;
+                    //esegue query e riempie
+                    dA.Fill(oRetTab);
                 }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("Select", exLog);
-                    //Resetta comando
-                    this.clearCommand();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
-            }       
+                //Aggiorna Stats
+                this.Stats.Increment(DBStats.EStatement.Select);
+
+                //Ritorna
+                return oRetTab;
+            }
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("Select", exLog);
+                //Resetta comando
+                this.clearCommand();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
+            }
         }
 
 
@@ -776,46 +680,43 @@ namespace Business.Data.Objects.Database
         {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            try
             {
-                try
+                //Controlla presenza query
+                if (string.IsNullOrEmpty(this.SQL))
+                    throw new DataBaseException(DatabaseMessages.Query_Empty);
+
+                //Controlla se connessione aperta
+                this.OpenConnection();
+                //Crea tab
+                var ds = new DataSet();
+
+                using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
                 {
-                    //Controlla presenza query
-                    if (string.IsNullOrEmpty(this.SQL))
-                        throw new DataBaseException(DatabaseMessages.Query_Empty);
+                    //imposta adapter
+                    dA.SelectCommand = this._command;
 
-                    //Controlla se connessione aperta
-                    this.OpenConnection();
-                    //Crea tab
-                    var ds = new DataSet();
-
-                    using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
-                    {
-                        //imposta adapter
-                        dA.SelectCommand = this._command;
-
-                        //esegue query e riempie
-                        dA.Fill(ds);
-                    }
-                    //Aggiorna Stats
-                    this._Stats.Increment(DBStats.EStatement.Select);
-
-                    //Ritorna
-                    return ds;
+                    //esegue query e riempie
+                    dA.Fill(ds);
                 }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("Select", exLog);
-                    //Resetta comando
-                    this.clearCommand();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
+                //Aggiorna Stats
+                this.Stats.Increment(DBStats.EStatement.Select);
+
+                //Ritorna
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("Select", exLog);
+                //Resetta comando
+                this.clearCommand();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
             }
         }
 
@@ -833,59 +734,56 @@ namespace Business.Data.Objects.Database
         {
             Exception exLog = null;
 
-            lock (this._GlobalLock)
+            try
             {
-                try
+                //Controlla presenza query
+                if (string.IsNullOrEmpty(this.SQL))
+                    throw new DataBaseException(DatabaseMessages.Query_Empty);
+
+                //Azzera contatore record
+                this.TotRecordQueryPaginata = 0;
+
+                //Controlla se connessione aperta
+                this.OpenConnection();
+
+                DataTable oRetTab = new DataTable(TABLE_NAME);
+                using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
                 {
-                    //Controlla presenza query
-                    if (string.IsNullOrEmpty(this.SQL))
-                        throw new DataBaseException(DatabaseMessages.Query_Empty);
-
-                    //Azzera contatore record
-                    this._TotRecordQueryPaginata = 0;
-                   
-                    //Controlla se connessione aperta
-                    this.OpenConnection();
-
-                    DataTable oRetTab = new DataTable(TABLE_NAME);
-                    using (DbDataAdapter dA = this.ProviderFactory.CreateDataAdapter())
-                    {
-                        //imposta adapter
-                        dA.SelectCommand = this._command;
-                        //esegue query e riempie
-                        dA.Fill(positionIn, offsetIn, oRetTab);
-                    }
-
-                    //Aggiorna Stats 1o statement
-                    this._Stats.Increment(DBStats.EStatement.Select);
-                    //Trace lo statement
-                    this.TraceStatement("SelectPag", null);
-                    //quindi esegue query per numero record:
-                    // -- cerca ultima clausola ORDER BY
-                    int orderPos = this._command.CommandText.ToUpper().LastIndexOf(" ORDER ");
-                    // -- esegue parsing
-                    this._command.CommandText = string.Format("SELECT COUNT(*) FROM ( {0} ) AS CNTTAB", this._command.CommandText.Substring(0, (orderPos != -1) ? orderPos : this._command.CommandText.Length));
-                    // -- esegue query
-                    this._TotRecordQueryPaginata = Convert.ToInt32(this._command.ExecuteScalar());
-                    //Aggiorna Stats
-                    this._Stats.Increment(DBStats.EStatement.Select);
-
-                    //Ritorna
-                    return oRetTab;
+                    //imposta adapter
+                    dA.SelectCommand = this._command;
+                    //esegue query e riempie
+                    dA.Fill(positionIn, offsetIn, oRetTab);
                 }
-                catch (Exception ex)
-                {
-                    exLog = ex;
-                    throw;
-                }
-                finally
-                {
-                    this.TraceStatement("SelectPag", exLog);
-                    //Resetta comando
-                    this.clearCommand();
-                    //Autoclose ?
-                    this.checkAutoCloseConnection();
-                }
+
+                //Aggiorna Stats 1o statement
+                this.Stats.Increment(DBStats.EStatement.Select);
+                //Trace lo statement
+                this.TraceStatement("SelectPag", null);
+                //quindi esegue query per numero record:
+                // -- cerca ultima clausola ORDER BY
+                int orderPos = this._command.CommandText.ToUpper().LastIndexOf(" ORDER ");
+                // -- esegue parsing
+                this._command.CommandText = string.Format("SELECT COUNT(*) FROM ( {0} ) AS CNTTAB", this._command.CommandText.Substring(0, (orderPos != -1) ? orderPos : this._command.CommandText.Length));
+                // -- esegue query
+                this.TotRecordQueryPaginata = Convert.ToInt32(this._command.ExecuteScalar());
+                //Aggiorna Stats
+                this.Stats.Increment(DBStats.EStatement.Select);
+
+                //Ritorna
+                return oRetTab;
+            }
+            catch (Exception ex)
+            {
+                exLog = ex;
+                throw;
+            }
+            finally
+            {
+                this.TraceStatement("SelectPag", exLog);
+                //Resetta comando
+                this.clearCommand();
+                //Autoclose ?
+                this.checkAutoCloseConnection();
             }
         }
 
@@ -920,8 +818,6 @@ namespace Business.Data.Objects.Database
 
             using (var rd = this.ExecReaderPaged(res.Pager.Position, res.Pager.Offset))
             {
-
-
                 while (rd.Read())
                 {
                     //Imposta totale records da ultima colonna della query. Se non pertinente allora imposta -1
@@ -938,7 +834,7 @@ namespace Business.Data.Objects.Database
 
                     res.Result.Add(obj);
                 }
-                
+
                 //Se presente un resultset aggiuntivo allora assume che sia il numero di record
                 if (!this.PagedReaderLastRow && rd.NextResult())
                 {
@@ -1012,21 +908,21 @@ namespace Business.Data.Objects.Database
             if (baseName.StartsWith("@"))
                 //Non è necessario prependere nulla
                 return baseName;
-            
+
             //Prepende @
             return string.Concat("@", baseName);
         }
 
-		
-		/// <summary>
-		/// Aggiunge parametro con nome e valore
-		/// </summary>
-		/// <param name="name"></param>
-		/// <param name="value"></param>
+
+        /// <summary>
+        /// Aggiunge parametro con nome e valore
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
         public virtual DbParameter AddParameter(string name, object value)
-		{
+        {
             return this.AddParameter(name, value, value?.GetType());
-		}
+        }
 
         /// <summary>
         /// Aggiunge parametro con nome e valore e tipo
@@ -1053,13 +949,7 @@ namespace Business.Data.Objects.Database
         /// Aggiunge parametro
         /// </summary>
         /// <param name="parameter"></param>
-        public virtual void AddParameter(DbParameter parameter)
-        {
-            lock (this._GlobalLock)
-            {
-                this._command.Parameters.Add(parameter);
-            }
-        }
+        public virtual void AddParameter(DbParameter parameter) => this._command.Parameters.Add(parameter);
 
 
         /// <summary>
@@ -1081,10 +971,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Elimina tutti i parametri
         /// </summary>
-        public void ClearParameters()
-        {
-            this._command.Parameters.Clear();
-        }
+        public void ClearParameters() => this._command.Parameters.Clear();
 
 
         /// <summary>
@@ -1137,67 +1024,38 @@ namespace Business.Data.Objects.Database
         /// </summary>
         /// <param name="rollbackUnCommitted"></param>
         public void CloseConnection(bool rollbackUnCommitted)
-		{
-            lock (this._GlobalLock)
-            {
-                //Se siamo in pending significa che la connessione e' chiusa
-                if (this.IsPendingTransaction)
-                {
-                    this.pendingTransReset();
-                    return;
-                }
-                    
-
-                //Chiude la connessione se aperta
-                if (this.IsConnectionOpen)
-                {
-
-                    //se la transazione è aperta esegue rollback e la elimina
-                    while (this.IsInTransaction)
-                    {
-                            if (rollbackUnCommitted)
-                                //RollBAck tutte le transazioni
-                                this.RollbackTransaction();
-                            else
-                                //Commit tutte le transazioni
-                                this.CommitTransaction();
-                    }
-
-                    //Quindi Chiude Connessione
-                    this._dbconn.Close();
-             
-                }
-            }
-		}
-		
-		
-		/// <summary>
-		/// Inizia una sessione Atomica di lavoro
-		/// </summary>
-        public void BeginThreadSafeWork()
-		{
-            Monitor.Enter(this._GlobalLock);
-		}
-		
-		
-		/// <summary>
-		/// Termina una sessione atomica di lavoro
-		/// </summary>
-        public void EndThreadSafeWork()
-		{
-            Monitor.Exit(this._GlobalLock);
-		}
-
-
-        public bool HasLock(string lockName)
         {
-            //Lock non inizializzato
-            if (this._LockAcquired == null)
-                return false;
+            //Se siamo in pending significa che la connessione e' chiusa
+            if (this.IsPendingTransaction)
+            {
+                this.pendingTransReset();
+                return;
+            }
 
-            //Verifica
-            return  this._LockAcquired.ContainsKey(lockName);
+
+            //Chiude la connessione se aperta
+            if (this.IsConnectionOpen)
+            {
+
+                //se la transazione è aperta esegue rollback e la elimina
+                while (this.IsInTransaction)
+                {
+                    if (rollbackUnCommitted)
+                        //RollBAck tutte le transazioni
+                        this.RollbackTransaction();
+                    else
+                        //Commit tutte le transazioni
+                        this.CommitTransaction();
+                }
+
+                //Quindi Chiude Connessione
+                this._dbconn.Close();
+
+            }
         }
+
+
+        public bool HasLock(string lockName) => this._LockAcquired != null && this._LockAcquired.ContainsKey(lockName);
 
 
         /// <summary>
@@ -1269,7 +1127,7 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public UInt32 GetCurrentQueryHashCode(int pos, int offset)
         {
-           return BdoHash.Instance.Hash(this.GetCurrentQueryHashString(pos,offset));
+            return BdoHash.Instance.Hash(this.GetCurrentQueryHashString(pos, offset));
         }
 
         /// <summary>
@@ -1401,9 +1259,9 @@ namespace Business.Data.Objects.Database
         }
 
 
-		#endregion
-		
-		#region "PROTECTED"
+        #endregion
+
+        #region "PROTECTED"
 
         /// <summary>
         /// Registra il lock nella classe database in modo da tenerne traccia
@@ -1439,6 +1297,8 @@ namespace Business.Data.Objects.Database
         /// <param name="sqlIn"></param>
         protected void updateStatsFromSQL(string sqlIn)
         {
+            //Stoppa il timer di esecuzione
+            this.Timer.Stop();
             for (int i = 0; i < sqlIn.Length; i++)
             {
                 //Aggiorna Stats
@@ -1447,44 +1307,46 @@ namespace Business.Data.Objects.Database
 
                     case 'u':
                     case 'U':
-                        this._Stats.Increment(DBStats.EStatement.Update);
+                        this.Stats.Increment(DBStats.EStatement.Update);
                         return;
                     case 'i':
                     case 'I':
-                        this._Stats.Increment(DBStats.EStatement.Insert);
+                        this.Stats.Increment(DBStats.EStatement.Insert);
                         return;
                     case 'd':
                     case 'D':
                         if (sqlIn.Length > 1 && char.ToUpper(sqlIn[i + 1]) != 'E')
                             break;
-                        this._Stats.Increment(DBStats.EStatement.Delete);
+                        this.Stats.Increment(DBStats.EStatement.Delete);
                         return;
                     case 's':
                     case 'S':
-                        this._Stats.Increment(DBStats.EStatement.Select);
+                        this.Stats.Increment(DBStats.EStatement.Select);
                         return;
                     case ' ':
                         break;
                     default:
-                        this._Stats.Increment(DBStats.EStatement.Other);
+                        this.Stats.Increment(DBStats.EStatement.Other);
                         return;
-                }  
+                }
             }
         }
-		
-		
-		
-		/// <summary>
-		/// Apre la connessione al database
-		/// </summary>
-		public void OpenConnection()
-		{
-			//apre connessione
-			if (!this.IsConnectionOpen){
-				this._command.Transaction = null;
-				this._dbconn.Open();
 
-                if(this.IsPendingTransaction)
+
+
+        /// <summary>
+        /// Apre la connessione al database
+        /// </summary>
+        public void OpenConnection()
+        {
+            this.Timer.Restart();
+            //apre connessione
+            if (!this.IsConnectionOpen)
+            {
+                this._command.Transaction = null;
+                this._dbconn.Open();
+
+                if (this.IsPendingTransaction)
                 {
                     //Recupera il livello richiesto
                     var level = this._PendingTransactionLevel;
@@ -1493,8 +1355,8 @@ namespace Business.Data.Objects.Database
                     //Avvia transazione
                     this.BeginTransaction(level);
                 }
-			}
-		}
+            }
+        }
 
 
         /// <summary>
@@ -1509,17 +1371,17 @@ namespace Business.Data.Objects.Database
             //OK chiude
             this.CloseConnection(true);
         }
-		
+
         /// <summary>
         /// Pulizia comando
         /// </summary>
-		protected virtual void clearCommand()
-		{
+        protected virtual void clearCommand()
+        {
             //Pulisce
             this._command.CommandText = "";
             this._command.CommandType = CommandType.Text;
             this._command.Parameters.Clear();
-		}
+        }
 
 
         /// <summary>
@@ -1528,7 +1390,7 @@ namespace Business.Data.Objects.Database
         /// <param name="numRecords"></param>
         protected void setTotPagedRecords(int numRecords)
         {
-            this._TotRecordQueryPaginata = numRecords;
+            this.TotRecordQueryPaginata = numRecords;
         }
 
 
@@ -1555,7 +1417,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Scrive Riga Su File di Trace
         /// </summary>
-        protected void TraceLog( string messageFmt, params object[] args )
+        protected void TraceLog(string messageFmt, params object[] args)
         {
             if (this._TraceLog == null)
                 return;
@@ -1573,7 +1435,7 @@ namespace Business.Data.Objects.Database
             //Se non e' abilitato trace non scrive
             if (this._TraceLog == null || (this.TraceOnlyErrors && ex == null))
                 return;
-            
+
             //Scrive con lock comune
             this._TraceLog.BeginSafeWrite();
             try
@@ -1639,7 +1501,7 @@ namespace Business.Data.Objects.Database
 
             if (!CommonDataBase.AssFactoryDictionary.TryGetValue(this.ProviderAssembly, out fact))
             {
-                lock (_GlobalLock)
+                lock (CommonDataBase.AssFactoryDictionary)
                 {
                     //Se qualcuno ha fatto prima!!
                     if (CommonDataBase.AssFactoryDictionary.TryGetValue(this.ProviderAssembly, out fact))
@@ -1676,7 +1538,7 @@ namespace Business.Data.Objects.Database
         {
             //Imposta i Dati specifici per il tipo database definito
             this._dbconn = this.ProviderFactory.CreateConnection();
-            this._dbconn.ConnectionString = this._connStr;
+            this._dbconn.ConnectionString = this.ConnectionString;
             this._command = this._dbconn.CreateCommand();
         }
 
@@ -1697,6 +1559,6 @@ namespace Business.Data.Objects.Database
                 this._tranQ.Push(tran);
         }
 
-		#endregion
-	}
+        #endregion
+    }
 }

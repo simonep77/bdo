@@ -77,26 +77,18 @@ namespace Business.Data.Objects.Database
         /// <param name="lockName"></param>
         public override void GetLock(string lockName, int timeoutsec)
         {
-            this.BeginThreadSafeWork();
-            try
-            {
-                //Preregistra il lock
-                this.registerLock(lockName);
+            //Preregistra il lock
+            this.registerLock(lockName);
 
-                this.SQL = @"SELECT COALESCE(GET_LOCK(@LOCKNAME, @LOCKTM), 0)";
-                this.AddParameter("@LOCKNAME", lockName);
-                this.AddParameter("@LOCKTM", timeoutsec);
-                int iRet = Convert.ToInt32(this.ExecScalar());
+            this.SQL = @"SELECT COALESCE(GET_LOCK(@LOCKNAME, @LOCKTM), 0)";
+            this.AddParameter("@LOCKNAME", lockName);
+            this.AddParameter("@LOCKTM", timeoutsec);
+            int iRet = Convert.ToInt32(this.ExecScalar());
 
-                if (iRet == 0)
-                {
-                    this.TraceLog(DatabaseMessages.Cannot_Get_lock, lockName);
-                    throw new DataBaseException(DatabaseMessages.Cannot_Get_lock, lockName);
-                }
-            }
-            finally
+            if (iRet == 0)
             {
-                this.EndThreadSafeWork();
+                this.TraceLog(DatabaseMessages.Cannot_Get_lock, lockName);
+                throw new DataBaseException(DatabaseMessages.Cannot_Get_lock, lockName);
             }
 
         }
@@ -108,26 +100,19 @@ namespace Business.Data.Objects.Database
         /// <param name="lockName"></param>
         public override void ReleaseLock(string lockName)
         {
-            this.BeginThreadSafeWork();
-            try
-            {
-                //Deregistra il lock
-                this.unregisterLock(lockName);
 
-                this.SQL = @"SELECT COALESCE(RELEASE_LOCK(@LOCKNAME), 2)";
-                this.AddParameter("@LOCKNAME", lockName);
-                int iRet = Convert.ToInt32(this.ExecScalar());
+            //Deregistra il lock
+            this.unregisterLock(lockName);
 
-                //Il lock esiste ed appartiene ad altro thread
-                if (iRet == 0)
-                {
-                    this.TraceLog(DatabaseMessages.Cannot_Release_Lock, lockName);
-                    throw new DataBaseException(DatabaseMessages.Cannot_Release_Lock, lockName);
-                }
-            }
-            finally
+            this.SQL = @"SELECT COALESCE(RELEASE_LOCK(@LOCKNAME), 2)";
+            this.AddParameter("@LOCKNAME", lockName);
+            int iRet = Convert.ToInt32(this.ExecScalar());
+
+            //Il lock esiste ed appartiene ad altro thread
+            if (iRet == 0)
             {
-                this.EndThreadSafeWork();
+                this.TraceLog(DatabaseMessages.Cannot_Release_Lock, lockName);
+                throw new DataBaseException(DatabaseMessages.Cannot_Release_Lock, lockName);
             }
 
         }
@@ -138,22 +123,22 @@ namespace Business.Data.Objects.Database
 
             string sTemp;
             //Manipola Query aggiungendo direttiva conteggio
-            if (this.SQL.StartsWith("WITH cteq1"))
-            {
-                //Inserisce la calc nell'ultima query finale
-                var r = new Regex(_PAGED_REGEX.ToString(), RegexOptions.RightToLeft | RegexOptions.IgnoreCase | RegexOptions.Compiled );
-                sTemp = r.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
+            //if (this.SQL.StartsWith("WITH cteq1"))
+            //{
+            //    //Inserisce la calc nell'ultima query finale
+            //    var r = new Regex(_PAGED_REGEX.ToString(), RegexOptions.RightToLeft | RegexOptions.IgnoreCase | RegexOptions.Compiled );
+            //    sTemp = r.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
 
-                //Inserisce la limit nella prima query per velocizzre
-                var r2 = new Regex(@"[\s]*(WITH cteq1 AS [(])(.*)([)], cteq2.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-                sTemp = r2.Replace(this.SQL, $"$1 $2 LIMIT {positionIn},{offsetIn} $3 ", 1);
-            }
-            else
-            {
-                //Senza cte
-                sTemp = _PAGED_REGEX.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
-            }
-         
+            //    //Inserisce la limit nella prima query per velocizzre
+            //    var r2 = new Regex(@"[\s]*(WITH cteq1 AS [(])(.*)([)], cteq2.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            //    sTemp = r2.Replace(this.SQL, $"$1 $2 LIMIT {positionIn},{offsetIn} $3 ", 1);
+            //}
+            //else
+            //{
+            //Senza cte
+            sTemp = _PAGED_REGEX.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
+            //}
+
             //Scrive query di conteggio record
             //Imposta query
             this.SQL = string.Concat(sTemp, $" LIMIT {positionIn},{offsetIn}; SELECT FOUND_ROWS()");
@@ -168,27 +153,19 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public override DataTable Select(int positionIn, int offsetIn)
         {
-            this.BeginThreadSafeWork();
-            try
-            {
-                this.setQueryPaged(positionIn, offsetIn);
+            this.setQueryPaged(positionIn, offsetIn);
 
-                //Crea tab
-                var ds = this.SelectM();
+            //Crea tab
+            var ds = this.SelectM();
 
-                //Imposta dati paginazione
-                this.setTotPagedRecords(Convert.ToInt32(ds.Tables[1].Rows[0][0]));
+            //Imposta dati paginazione
+            this.setTotPagedRecords(Convert.ToInt32(ds.Tables[1].Rows[0][0]));
 
-                //Rimuove tabella paginazione
-                ds.Tables.RemoveAt(1);
+            //Rimuove tabella paginazione
+            ds.Tables.RemoveAt(1);
 
-                //Ritorna
-                return ds.Tables[0];
-            }
-            finally
-            {
-                this.EndThreadSafeWork();
-            }
+            //Ritorna
+            return ds.Tables[0];
         }
 
 
@@ -200,23 +177,17 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
         {
-            this.BeginThreadSafeWork();
-            try
-            {
-                this.setQueryPaged(positionIn, offsetIn);
 
-                //Ritorna
-                return this.ExecReader();
-            }
-            finally
-            {
-                this.EndThreadSafeWork();
-            }
+            this.setQueryPaged(positionIn, offsetIn);
+
+            //Ritorna
+            return this.ExecReader();
+
         }
 
         #endregion
 
-        
+
     }
 
 

@@ -183,3 +183,7 @@ Modifica alle classi messaggio per renderle serializzabili + facilmente
 
 [02/05/2023] - 5.0.59 - Simone Pelaia
 Motore gestione storicizzazione
+
+[14/09/2023] - 5.0.60 - Simone Pelaia
+Introduzione motore db Micorsoft.Data
+Pulizia classi db

@@ -5622,6 +5622,16 @@
             Mappatore tipi .NET -> tipi DB
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.Timer">
+            <summary>
+            Timer interno per il tracciamento dei tempi di esecuzione di ogni statetment
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Database.CommonDataBase.LastExecutionElaps">
+            <summary>
+            Tempi esecuzione ultimo statement 
+            </summary>
+        </member>
         <member name="F:Business.Data.Objects.Database.CommonDataBase.AssFactoryDictionary">
             <summary>
             Contiene la lista di tutti gli assembli Ado caricati nell'Applicazione (Web o Client) corrente
@@ -5948,16 +5958,6 @@
             Chiude la connessione (se aperta)
             </summary>
             <param name="rollbackUnCommitted"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Database.CommonDataBase.BeginThreadSafeWork">
-            <summary>
-            Inizia una sessione Atomica di lavoro
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Database.CommonDataBase.EndThreadSafeWork">
-            <summary>
-            Termina una sessione atomica di lavoro
-            </summary>
         </member>
         <member name="M:Business.Data.Objects.Database.CommonDataBase.GetLock(System.String,System.Int32)">
             <summary>
@@ -6324,6 +6324,11 @@
             Evento scatenato in caso di rollback
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Database.IDataBase.LastExecutionElaps">
+            <summary>
+            Indica i tempi
+            </summary>
+        </member>
         <member name="P:Business.Data.Objects.Database.IDataBase.LastAutoIdFunction">
             <summary>
             Nome funzione che ritorna ultimo Id inserito automaticamente
@@ -6604,16 +6609,6 @@
             Forza apertura connessione
             </summary>
         </member>
-        <member name="M:Business.Data.Objects.Database.IDataBase.BeginThreadSafeWork">
-            <summary>
-            Inizia una sessione thread-safe di lavoro
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Database.IDataBase.EndThreadSafeWork">
-            <summary>
-            Termina una sessione thread-safe di lavoro
-            </summary>
-        </member>
         <member name="M:Business.Data.Objects.Database.IDataBase.GetLock(System.String,System.Int32)">
             <summary>
             Ottiene un lock globale a livello di applicazione
@@ -6726,44 +6721,6 @@
             <param name="offsetIn"></param>
             <returns></returns>
         </member>
-        <member name="T:Business.Data.Objects.Database.MSSQL2012DataBase">
-            <summary>
-            Description of MSSQLDataBase.
-            </summary>
-        </member>
-        <member name="F:Business.Data.Objects.Database.MSSQL2012DataBase._PAGED_REGEX">
-            <summary>
-            Regex per cercare primo statement di select che puo' avere o meno distinct e top
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.String)">
-            <summary>
-            Costruttore base 
-            </summary>
-            <param name="connString"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
-            <summary>
-            Costruttore specifico
-            </summary>
-            <param name="conn"></param>
-            <param name="tran"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.preparePagedQuery(System.Int32,System.Int32)">
-            <summary>
-            Imposta query paginata
-            </summary>
-            <param name="positionIn"></param>
-            <param name="offsetIn"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.Select(System.Int32,System.Int32)">
-            <summary>
-            Esegue query paginata
-            </summary>
-            <param name="positionIn"></param>
-            <param name="offsetIn"></param>
-            <returns></returns>
-        </member>
         <member name="T:Business.Data.Objects.Database.MSSQLDataBase">
             <summary>
             Description of MSSQLDataBase.
@@ -6793,6 +6750,24 @@
             Rilascia lock precedentemente acquisito
             </summary>
             <param name="lockName"></param>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQLMDDataBase">
+            <summary>
+            Accesso dati sql server con driver Microsoft.Data
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLMDDataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQLMDDataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
         </member>
         <member name="T:Business.Data.Objects.Database.MYSQLDataBase">
             <summary>
@@ -7164,14 +7139,6 @@
             Hash 64 di una stringa
             </summary>
             <param name="data"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Tact.Reflection.EfficientInvoker.ForMethodNoCached(System.Type,System.Reflection.MethodInfo)">
-            <summary>
-            Crea un invoker senza gestione della cache interna
-            </summary>
-            <param name="type"></param>
-            <param name="method"></param>
             <returns></returns>
         </member>
     </members>

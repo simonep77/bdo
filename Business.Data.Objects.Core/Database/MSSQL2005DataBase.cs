@@ -11,24 +11,24 @@ using System.Text.RegularExpressions;
 
 namespace Business.Data.Objects.Database
 {
-	/// <summary>
-	/// Description of MSSQLDataBase.
-	/// </summary>
-	public class MSSQL2005DataBase: MSSQLDataBase  
-	{
+    /// <summary>
+    /// Description of MSSQLDataBase.
+    /// </summary>
+    public class MSSQL2005DataBase : MSSQLDataBase
+    {
         /// <summary>
         /// Regex per cercare primo statement di selct che puo' avere o meno distinct e top
         /// </summary>
         private static Regex _PAGED_REGEX = new Regex(@"[\s]*(SELECT)[\s]+(?:(DISTINCT)[\s]+)?(?:(TOP[\s]+[\d]+)[\s]+)?", System.Text.RegularExpressions.RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        
+
         /// <summary>
         /// Costruttore base 
         /// </summary>
         /// <param name="connString"></param>
         public MSSQL2005DataBase(string connString)
             : base(connString)
-		{
-		}
+        {
+        }
 
         /// <summary>
         /// Costruttore specifico
@@ -52,33 +52,32 @@ namespace Business.Data.Objects.Database
             //Sostituisce qualunque "SELECT" con "SELECT TOP 10000000000" per consentire gli order BY
             String sTemp;
 
+            //if (this.SQL.StartsWith(@"WITH cteq1"))
+            //{
+            //    sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum], ", 1);
+            //    //SELECT COUNT(*) FROM cteq2
+            //    //TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum]
+            //    this.SQL = string.Concat(sTemp.Substring(0, sTemp.Length - 20), " SELECT *, (SELECT COUNT(*) FROM cteq2) AS TotRecords FROM cteq2 ");
+            //}
+            //else
+            //{
             System.Text.StringBuilder sb = new System.Text.StringBuilder(400);
+            sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ", 1);
+            //Caso standard
+            sb.Append("WITH __VarTabName AS ( ");
+            sb.Append("SELECT *, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) AS [__RowNum] ");
+            sb.Append("FROM ( ");
+            sb.Append(sTemp);
+            sb.Append(") AS tmpTab ");
+            sb.Append(") ");
+            sb.Append("SELECT *, (SELECT COUNT(*) FROM __VarTabName) AS TotRecords ");
+            sb.Append("FROM __VarTabName ");
+            sb.Append($"WHERE [__RowNum] > {positionIn} ");
+            sb.Append($"AND [__RowNum] <= {positionIn + offsetIn} ");
+            sb.Append("ORDER BY [__RowNum] ASC ");
 
-            if (this.SQL.StartsWith(@"WITH cteq1"))
-            {
-                sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum], ", 1);
-                //SELECT COUNT(*) FROM cteq2
-                //TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum]
-                this.SQL = string.Concat(sTemp.Substring(0, sTemp.Length - 20), " SELECT *, (SELECT COUNT(*) FROM cteq2) AS TotRecords FROM cteq2 ");
-            }
-            else
-            {
-                sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ", 1);
-                //Caso standard
-                sb.Append("WITH __VarTabName AS ( ");
-                sb.Append("SELECT *, ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) AS [__RowNum] ");
-                sb.Append("FROM ( ");
-                sb.Append(sTemp);
-                sb.Append(") AS tmpTab ");
-                sb.Append(") ");
-                sb.Append("SELECT *, (SELECT COUNT(*) FROM __VarTabName) AS TotRecords ");
-                sb.Append("FROM __VarTabName ");
-                sb.Append($"WHERE [__RowNum] > {positionIn} ");
-                sb.Append($"AND [__RowNum] <= {positionIn + offsetIn} ");
-                sb.Append("ORDER BY [__RowNum] ASC ");
-
-                this.SQL = sb.ToString();
-            }
+            this.SQL = sb.ToString();
+            //}
 
         }
 
@@ -111,9 +110,7 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public override DataTable Select(int positionIn, int offsetIn)
         {
-            this.BeginThreadSafeWork();
-            try
-            {
+
                 //Imposta
                 this.preparePagedQuery(positionIn, offsetIn);
 
@@ -129,11 +126,7 @@ namespace Business.Data.Objects.Database
 
                 //Ritorna
                 return oRetTab;
-            }
-            finally
-            {
-                this.EndThreadSafeWork();
-            }
+
         }
 
         /// <summary>
@@ -144,20 +137,14 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
         {
-            this.BeginThreadSafeWork();
-            try
-            {
+
                 //Imposta
                 this.preparePagedQuery(positionIn, offsetIn);
 
                 //Esegue
                 return this.ExecReader();
-            }
-            finally
-            {
-                this.EndThreadSafeWork();
-            }
+
         }
 
-	}
+    }
 }

@@ -44,6 +44,12 @@ namespace Business.Data.Objects.Database
         event TransactionEventHandler OnRollbackTransaction;
 
         /// <summary>
+        /// Indica i tempi
+        /// </summary>
+        TimeSpan LastExecutionElaps { get; }
+
+
+        /// <summary>
         /// Nome funzione che ritorna ultimo Id inserito automaticamente
         /// </summary>
         string LastAutoIdFunction { get; }
@@ -338,20 +344,7 @@ namespace Business.Data.Objects.Database
         /// Forza apertura connessione
         /// </summary>
         void OpenConnection();
-		
-		
-		/// <summary>
-		/// Inizia una sessione thread-safe di lavoro
-		/// </summary>
-		void BeginThreadSafeWork();
-		
-		
-		
-		/// <summary>
-        /// Termina una sessione thread-safe di lavoro
-		/// </summary>
-        void EndThreadSafeWork();
-
+	
 
         /// <summary>
         /// Ottiene un lock globale a livello di applicazione
