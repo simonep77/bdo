@@ -123,7 +123,11 @@ namespace Business.Data.Objects.Database
         /// - Stored Procedure
         /// - Tabella diretta
         /// </summary>
-        public CommandType CommandType { get; set; }
+        public CommandType CommandType
+        {
+            get => this._command.CommandType;
+            set => this._command.CommandType = value;
+        }
 
         /// <summary>
         /// ottiene o imposta il comportamento della connessione

@@ -187,3 +187,6 @@ Motore gestione storicizzazione
 [14/09/2023] - 5.0.60 - Simone Pelaia
 Introduzione motore db Micorsoft.Data
 Pulizia classi db
+
+[19/09/2023] - 5.0.61 - Simone Pelaia
+Fix bug command type
