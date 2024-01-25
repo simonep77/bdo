@@ -190,3 +190,6 @@ Pulizia classi db
 
 [19/09/2023] - 5.0.61 - Simone Pelaia
 Fix bug command type
+
+[25/01/2024] - 5.0.62 - Simone Pelaia
+Fix bug su proprietà LoadOnAccess in inserimento

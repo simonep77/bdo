@@ -187,7 +187,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
                 else
                 {
-                    if (!pv.Loaded)
+                    if (obj.ObjectState == EObjectState.Loaded && !pv.Loaded)
                     {
                         //Deve Caricare property
                         obj.LoadPropertyFromDB(this);
