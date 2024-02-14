@@ -25,6 +25,10 @@ namespace Business.Data.Objects.Core
             get { return this.mObject; }
         }
 
+        /// <summary>
+        /// Indica se siamo in inserimento o appena stato inserito. Utile nelle routine di saveExec...
+        /// </summary>
+        public bool IsInsert { get; private set; }
 
         #endregion
 
@@ -64,6 +68,9 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public void Save()
         {
+            //Imposta contesto inserimento
+            this.IsInsert = this.DataObj.ObjectState == Data.Objects.Common.EObjectState.New;
+
             //Esegue before
             this.saveExecBefore();
 
@@ -91,6 +98,9 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public void Delete()
         {
+            //Imposta contesto inserimento
+            this.IsInsert = false;
+
             //Esegue before
             this.deleteExecBefore();
 

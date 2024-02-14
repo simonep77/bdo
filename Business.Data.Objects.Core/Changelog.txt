@@ -193,3 +193,7 @@ Fix bug command type
 
 [25/01/2024] - 5.0.62 - Simone Pelaia
 Fix bug su proprietà LoadOnAccess in inserimento
+
+[14/02/2024] - 5.0.63 - Simone Pelaia
+Nuova classe PagedList per liste con paginatore associato (Creato anche metodo di query dedicato con questo oggetto)
+Proprietà sul businessobject che indica l'inserimento avvenuto. Utile per non gestirsi l'info in autonomia

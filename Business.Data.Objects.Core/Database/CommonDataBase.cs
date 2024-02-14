@@ -805,6 +805,7 @@ namespace Business.Data.Objects.Database
         /// <param name="page"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
+        [Obsolete("Utilizzare QueryPaged")]
         public virtual PageableResult<T> Query<T>(int page, int offset)
            where T : new()
         {
@@ -837,6 +838,60 @@ namespace Business.Data.Objects.Database
                     _DtoBinder.MapSingle<T>(tInfo, obj, rd);
 
                     res.Result.Add(obj);
+                }
+
+                //Se presente un resultset aggiuntivo allora assume che sia il numero di record
+                if (!this.PagedReaderLastRow && rd.NextResult())
+                {
+                    if (rd.Read())
+                        res.Pager.TotRecords = rd.GetInt32(0);
+                }
+
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// Esegue query mappata su lista che espone anche un pager
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="page"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public virtual PagedList<T> QueryPaged<T>(int page, int offset)
+           where T : new()
+        {
+            //Se sp allora errore
+            if (this.CommandType != CommandType.Text)
+                throw new ArgumentException("E' possibile paginare solo una query SQL standard!");
+
+            //Crea la classe di lettura info
+            var tInfo = _DtoBinder.GetTypeMapper<T>();
+
+            var res = new PagedList<T>() { Pager = new DataPager() };
+
+            res.Pager.Page = page;
+            res.Pager.Offset = offset;
+
+            using (var rd = this.ExecReaderPaged(res.Pager.Position, res.Pager.Offset))
+            {
+                while (rd.Read())
+                {
+                    //Imposta totale records da ultima colonna della query. Se non pertinente allora imposta -1
+                    if (res.Pager.TotRecords == 0 && this.PagedReaderLastRow)
+                    {
+                        var oTotRecs = rd[rd.FieldCount - 1];
+                        if (oTotRecs is Int32)
+                            res.Pager.TotRecords = (Int32)oTotRecs;
+                    }
+
+                    T obj = new T();
+
+                    _DtoBinder.MapSingle<T>(tInfo, obj, rd);
+
+                    res.Add(obj);
                 }
 
                 //Se presente un resultset aggiuntivo allora assume che sia il numero di record
