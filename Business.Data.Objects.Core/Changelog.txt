@@ -197,3 +197,8 @@ Fix bug su proprietà LoadOnAccess in inserimento
 [14/02/2024] - 5.0.63 - Simone Pelaia
 Nuova classe PagedList per liste con paginatore associato (Creato anche metodo di query dedicato con questo oggetto)
 Proprietà sul businessobject che indica l'inserimento avvenuto. Utile per non gestirsi l'info in autonomia
+
+[12/04/2024] - 5.0.64 - Simone Pelaia
+Estesa pagedList con costruttore per collezione e pager
+Estesa classe datalist con metodi ToBizObjectPagedList per liste paginate
+Rimosso metodo ToPagedList da datalist visto che con Linq è facilmente riproducibile

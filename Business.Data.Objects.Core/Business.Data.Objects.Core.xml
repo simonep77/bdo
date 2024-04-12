@@ -1528,14 +1528,6 @@
             Svuota la lista
             </summary>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.toPagedList(System.Int32,System.Int32)">
-            <summary>
-            Data una lista ritorna una sottolista paginata
-            </summary>
-            <param name="page"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
         <member name="T:Business.Data.Objects.Core.Base.DataObjectBase">
             <summary>
             Classe base per la gestione degli oggetti persistenti
@@ -1913,6 +1905,11 @@
         <member name="P:Business.Data.Objects.Core.BusinessObject`1.DataObj">
             <summary>
             Oggetto dati associato
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessObject`1.IsInsert">
+            <summary>
+            Indica se siamo in inserimento o appena stato inserito. Utile nelle routine di saveExec...
             </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessObject`1.#ctor(`0)">
@@ -3086,14 +3083,6 @@
             <param name="predicate"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.ToPagedList(System.Int32,System.Int32)">
-            <summary>
-            Data una lista ritorna una sottolista paginata
-            </summary>
-            <param name="page"></param>
-            <param name="offset"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.ToBizObjectList``1">
             <summary>
             Ritorna una lista di BusinessObjects a partire da questa lista
@@ -3105,6 +3094,22 @@
             <summary>
             Ritorna una lista di BusinessObjects a partire da questa lista
             con la possibilità di eseguire un'azione specifica su ciascun oggetto creato
+            </summary>
+            <typeparam name="TB"></typeparam>
+            <param name="act"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToBizObjectPagedList``1">
+            <summary>
+            Ritorna una lista di BusinessObjects Paginata a partire da questa lista
+            </summary>
+            <typeparam name="TB"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.DataList`2.ToBizObjectPagedList``1(System.Action{``0})">
+            <summary>
+            Ritorna una lista di BusinessObjects Paginata a partire da questa lista
+            con la possibilità di eseguire un'azione specifica su ciascun oggetto creato.
             </summary>
             <typeparam name="TB"></typeparam>
             <param name="act"></param>
@@ -4540,6 +4545,16 @@
             paginatore
             </summary>
         </member>
+        <member name="T:Business.Data.Objects.Common.PagedList`1">
+            <summary>
+            Classe lista con pager associato
+            </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Common.PagedList`1.Pager">
+            <summary>
+            paginatore
+            </summary>
+        </member>
         <member name="T:Business.Data.Objects.Common.EObjectSource">
             <summary>
             Enumerazione provenienza oggetto
@@ -5880,6 +5895,16 @@
             <param name="page"></param>
             <param name="offset"></param>
             <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Database.CommonDataBase.QueryPaged``1(System.Int32,System.Int32)">
+            <summary>
+            Esegue query mappata su lista che espone anche un pager
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="page"></param>
+            <param name="offset"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="M:Business.Data.Objects.Database.CommonDataBase.Query``1">
             <summary>

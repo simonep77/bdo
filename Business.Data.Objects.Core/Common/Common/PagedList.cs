@@ -15,6 +15,10 @@ namespace Business.Data.Objects.Common
 
         public PagedList(IEnumerable<T> coll): base(coll) { }
 
+        public PagedList(IEnumerable<T> coll, DataPager pager): base(coll) { 
+            this.Pager = pager;
+        }
+
         /// <summary>
         /// paginatore
         /// </summary>

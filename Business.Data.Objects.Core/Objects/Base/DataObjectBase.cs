@@ -137,6 +137,12 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <returns></returns>
         public Dictionary<string, object> ToDictionary() => this.mClassSchema.Properties.Where(x => x is PropertySimple).ToDictionary(x => x.Name, x => x.GetValue(this));
+        
+        /// <summary>
+        /// Reimposta le proprietà da dictionary
+        /// </summary>
+        /// <param name="input"></param>
+        //public void FromDictionary(Dictionary<string, object> input) => input.Keys.ToList().ForEach(x => this.mClassSchema.Properties.GetPropertyByName(x).SetValue(this, input[x]));
 
 
         /// <summary>

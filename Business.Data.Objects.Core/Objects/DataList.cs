@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using Business.Data.Objects.Common;
 
 namespace Business.Data.Objects.Core
 {
@@ -224,29 +225,6 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Data una lista ritorna una sottolista paginata
-        /// </summary>
-        /// <param name="page"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
-        public TL ToPagedList(int page, int offset)
-        {
-            TL newList = this.Slot.CreateList<TL>(page, offset);
-            newList.Pager.TotRecords = this.Count;
-
-            int idxBegin = newList.Pager.Position;
-            int idxEnd = Math.Min(idxBegin + offset, this.Count);
-
-            for (int i = idxBegin; i < idxEnd; i++)
-            {
-                newList.mInnerList.Add(this.mInnerList[i]);
-            }
-
-            return newList;
-        }
-
-
-        /// <summary>
         /// Ritorna una lista di BusinessObjects a partire da questa lista
         /// </summary>
         /// <typeparam name="TB"></typeparam>
@@ -265,11 +243,35 @@ namespace Business.Data.Objects.Core
         /// <param name="act"></param>
         /// <returns></returns>
         public List<TB> ToBizObjectList<TB>(Action<TB> act)
-    where TB : BusinessObject<T>
+            where TB : BusinessObject<T>
         {
             return this.Slot.ToBizObjectList<TB, T>(this, act);
         }
 
+
+        /// <summary>
+        /// Ritorna una lista di BusinessObjects Paginata a partire da questa lista
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <returns></returns>
+        public PagedList<TB> ToBizObjectPagedList<TB>()
+            where TB : BusinessObject<T>
+        {
+            return new PagedList<TB>(this.Slot.ToBizObjectList<TB, T>(this, null), this.Pager);
+        }
+
+        /// <summary>
+        /// Ritorna una lista di BusinessObjects Paginata a partire da questa lista
+        /// con la possibilità di eseguire un'azione specifica su ciascun oggetto creato.
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <param name="act"></param>
+        /// <returns></returns>
+        public PagedList<TB> ToBizObjectPagedList<TB>(Action<TB> act)
+            where TB : BusinessObject<T>
+        {
+            return new PagedList<TB>(this.Slot.ToBizObjectList<TB, T>(this, act), this.Pager);
+        }
 
 
         #endregion
