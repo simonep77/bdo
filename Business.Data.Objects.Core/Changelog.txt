@@ -202,3 +202,6 @@ Proprietà sul businessobject che indica l'inserimento avvenuto. Utile per non g
 Estesa pagedList con costruttore per collezione e pager
 Estesa classe datalist con metodi ToBizObjectPagedList per liste paginate
 Rimosso metodo ToPagedList da datalist visto che con Linq è facilmente riproducibile
+
+[12/04/2024] - 5.0.65 - Simone Pelaia
+Modificato operatore In non tipizzato per eseguire il type cast all'occorrenza

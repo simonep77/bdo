@@ -504,5 +504,15 @@ namespace Business.Data.WinFormTest
 
 
         }
+
+        private void tESTOperatoreINToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            short a = 3;
+            var b = a.In(2, (short)4);
+            var b1 = a.In(2, (long)3);
+            var b2 = a.In(2, 3m);
+            var b4 = a.In(2, 3f);
+
+        }
     }
 }

@@ -43,9 +43,10 @@ namespace Business.Data.WinFormTest
             this.tESTCacheSimpleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTSimpleAESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTUndeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tESTCustomQueryFullRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.tESTCustomQueryFullRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tESTOperatoreINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,7 +76,8 @@ namespace Business.Data.WinFormTest
             this.tESTCacheSimpleToolStripMenuItem,
             this.tESTSimpleAESToolStripMenuItem,
             this.tESTUndeleteToolStripMenuItem,
-            this.tESTCustomQueryFullRecordToolStripMenuItem});
+            this.tESTCustomQueryFullRecordToolStripMenuItem,
+            this.tESTOperatoreINToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -159,6 +161,13 @@ namespace Business.Data.WinFormTest
             this.tESTUndeleteToolStripMenuItem.Text = "TEST Undelete";
             this.tESTUndeleteToolStripMenuItem.Click += new System.EventHandler(this.tESTUndeleteToolStripMenuItem_Click);
             // 
+            // tESTCustomQueryFullRecordToolStripMenuItem
+            // 
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Name = "tESTCustomQueryFullRecordToolStripMenuItem";
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Text = "TEST Custom Query FullRecord";
+            this.tESTCustomQueryFullRecordToolStripMenuItem.Click += new System.EventHandler(this.tESTCustomQueryFullRecordToolStripMenuItem_Click);
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -181,12 +190,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // tESTCustomQueryFullRecordToolStripMenuItem
+            // tESTOperatoreINToolStripMenuItem
             // 
-            this.tESTCustomQueryFullRecordToolStripMenuItem.Name = "tESTCustomQueryFullRecordToolStripMenuItem";
-            this.tESTCustomQueryFullRecordToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.tESTCustomQueryFullRecordToolStripMenuItem.Text = "TEST Custom Query FullRecord";
-            this.tESTCustomQueryFullRecordToolStripMenuItem.Click += new System.EventHandler(this.tESTCustomQueryFullRecordToolStripMenuItem_Click);
+            this.tESTOperatoreINToolStripMenuItem.Name = "tESTOperatoreINToolStripMenuItem";
+            this.tESTOperatoreINToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.tESTOperatoreINToolStripMenuItem.Text = "TEST operatore IN";
+            this.tESTOperatoreINToolStripMenuItem.Click += new System.EventHandler(this.tESTOperatoreINToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -222,5 +231,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem tESTUndeleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tESTCustomQueryFullRecordToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tESTOperatoreINToolStripMenuItem;
     }
 }

@@ -43,12 +43,26 @@ namespace Business.Data.Objects.Common.Utils
             return args.Contains(obj);
         }
 
+        /// <summary>
+        /// Operatore in per oggetti non tipizzati. Viene eseguito internamente la conversione ove necessario
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static bool In(this IComparable obj, params IComparable[] args)
         {
             if (args == null || args.Length == 0)
                 return false;
 
-            return args.Contains(obj);
+            var tipo = obj.GetType();
+
+            foreach (var item in args)
+            {
+                if (obj.Equals(item.GetType().Equals(tipo) ? item : Convert.ChangeType(item, tipo)))
+                    return true;
+            }
+
+            return false;
         }
 
 

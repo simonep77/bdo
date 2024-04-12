@@ -5178,6 +5178,14 @@
             <param name="args"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.In(System.IComparable,System.IComparable[])">
+            <summary>
+            Operatore in per oggetti non tipizzati. Viene eseguito internamente la conversione ove necessario
+            </summary>
+            <param name="obj"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Common.Utils.Extensions.Between``1(``0,``0,``0)">
             <summary>
             Operatore BEETWEEN
