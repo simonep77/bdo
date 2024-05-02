@@ -5391,7 +5391,7 @@
             <param name="code"></param>
             <param name="message"></param>
             <param name="severity"></param>
-            <param name="uifiled"></param>
+            <param name="uifield"></param>
         </member>
         <member name="M:Business.Data.Objects.Common.Utils.MessageList.Add(System.Int32,System.String,Business.Data.Objects.Common.ESeverity)">
             <summary>

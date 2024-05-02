@@ -531,7 +531,7 @@ namespace Business.Data.Objects.Core.Base
                     //Message list enabled
                     if (this.Slot.Conf.ObjectValidationUseMessageList)
                         //Add to list
-                        this.Slot.MessageList.Add(new Message(1, ex.Message, ESeverity.Error, oProp.Name));
+                        this.Slot.MessageList.AddError(1, ex.Message, oProp.Name);
                     else
                         //Non si utilizza la listamessaggi, ci si ferma comunque al primo errore lanciando eccezione
                         //di validazione
