@@ -107,14 +107,14 @@ namespace Business.Data.WinFormTest
 
                 var count = 500;
 
-                WriteLog("Elabrazione FILTER");
-                var el3 = ss1.GetCurrentElapsed();
-                for (int i = 0; i < count; i++)
-                {
-                    var l1 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByColumn(Filter.In(nameof(Ordine.StatoId), 1, 3).And(Filter.Betw(nameof(Ordine.DataInserimento), new DateTime(2000, 1, 1), DateTime.Today)));
-                }
-                var el4 = ss1.GetCurrentElapsed();
-                this.WriteLog(el4.Subtract(el3).TotalMilliseconds.ToString());
+                //WriteLog("Elabrazione FILTER");
+                //var el3 = ss1.GetCurrentElapsed();
+                //for (int i = 0; i < count; i++)
+                //{
+                //    var l1 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByColumn(Filter.In(nameof(Ordine.StatoId), 1, 3).And(Filter.Betw(nameof(Ordine.DataInserimento), new DateTime(2000, 1, 1), DateTime.Today)));
+                //}
+                //var el4 = ss1.GetCurrentElapsed();
+                //this.WriteLog(el4.Subtract(el3).TotalMilliseconds.ToString());
 
 
                 WriteLog("Elabrazione LINQ");

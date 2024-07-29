@@ -151,18 +151,18 @@ namespace Business.Data.Objects.Core
             return (TL)this.searchByColumn(null);
         }
 
-        /// <summary>
-        /// Esegue ricerca oggetti a partire da un valore di colonna applicando l'operatore impostato
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <param name="op">Se [IsNull, IsNotNull] il valore non viene considerato</param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare SearchByLinq")]
-        public TL SearchByColumn(string columnName, EOperator op, object value)
-        {
-            return (TL)this.searchByColumn(new Filter(columnName, op, value));
-        }
+        ///// <summary>
+        ///// Esegue ricerca oggetti a partire da un valore di colonna applicando l'operatore impostato
+        ///// </summary>
+        ///// <param name="columnName"></param>
+        ///// <param name="op">Se [IsNull, IsNotNull] il valore non viene considerato</param>
+        ///// <param name="value"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare SearchByLinq")]
+        //public TL SearchByColumn(string columnName, EOperator op, object value)
+        //{
+        //    return (TL)this.searchByColumn(new Filter(columnName, op, value));
+        //}
 
 
         /// <summary>

@@ -501,9 +501,15 @@ namespace Business.Data.Objects.Core
                 sb.AppendLine("Si sono verificati i seguenti errori nell'esecuzione del loop: ");
                 foreach (var item in errorSlices)
                 {
-                    sb.AppendFormat($"Thd {item.Runtask.Id}, porzione {item.Page} di {pager.TotPages}: {item.Exception.Message}");
+                    var ex = item.Exception;
+                    sb.AppendFormat($"Thd {item.Runtask.Id}, porzione {item.Page} di {pager.TotPages}: {ex.Message}");
                     sb.AppendLine();
-                    sb.AppendLine(item.Exception.StackTrace);
+                    while (ex.InnerException != null)
+                    {
+                        sb.AppendLine($"Inner exception: {ex.GetType().Name} - " + ex.Message);
+                        ex = ex.InnerException;
+                    }
+                    sb.AppendLine(ex.StackTrace);
                 }
 
                 //Lancia eccezione unica
@@ -1269,42 +1275,42 @@ namespace Business.Data.Objects.Core
         /// <param name="filter"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        internal DataObjectBase LoadObjectInternalByFILTER(Type origType, bool raiseNotFound, IFilter filter, OrderBy order)
-        {
+        //internal DataObjectBase LoadObjectInternalByFILTER(Type origType, bool raiseNotFound, IFilter filter, OrderBy order)
+        //{
 
-            //Verifica dati passati
-            if (filter == null)
-                throw new BusinessSlotException(SessionMessages.LoadObj_Filter_Null);
+        //    //Verifica dati passati
+        //    if (filter == null)
+        //        throw new BusinessSlotException(SessionMessages.LoadObj_Filter_Null);
 
-            //Crea oggetto vuoto
-            DataObjectBase oNewObj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(origType, true);
+        //    //Crea oggetto vuoto
+        //    DataObjectBase oNewObj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(origType, true);
 
-            //Imposta slot
-            oNewObj.SetSlot(this);
+        //    //Imposta slot
+        //    oNewObj.SetSlot(this);
 
-            //carica
-            oNewObj.LoadByFilter(filter, order);
+        //    //carica
+        //    oNewObj.LoadByFilter(filter, order);
 
-            //Se lo stato risulta non caricato gestisce casistica
-            if (oNewObj.ObjectState != EObjectState.Loaded)
-            {
-                if (raiseNotFound)
-                    //Richiesta eccezione
-                    throw new ObjectNotFoundException(ObjectMessages.Base_Record_Filter_NotFound, oNewObj.mClassSchema.ClassName);
-                else
-                    //Richiesto valore null
-                    return null;
-            }
+        //    //Se lo stato risulta non caricato gestisce casistica
+        //    if (oNewObj.ObjectState != EObjectState.Loaded)
+        //    {
+        //        if (raiseNotFound)
+        //            //Richiesta eccezione
+        //            throw new ObjectNotFoundException(ObjectMessages.Base_Record_Filter_NotFound, oNewObj.mClassSchema.ClassName);
+        //        else
+        //            //Richiesto valore null
+        //            return null;
+        //    }
 
-            //Imposta source
-            oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
+        //    //Imposta source
+        //    oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
 
-            //Prova ad inserire nelle cache
-            this.CacheSetAny(oNewObj);
+        //    //Prova ad inserire nelle cache
+        //    this.CacheSetAny(oNewObj);
 
-            //Ritorna
-            return oNewObj;
-        }
+        //    //Ritorna
+        //    return oNewObj;
+        //}
 
 
         /// <summary>
@@ -1504,18 +1510,18 @@ namespace Business.Data.Objects.Core
         }
 
 
-        /// <summary>
-        /// Carica oggetto da chiave secondaria
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="keyName"></param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare LoadObjByLinq")]
-        public T LoadObjByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), true, values);
-        }
+        ///// <summary>
+        ///// Carica oggetto da chiave secondaria
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="keyName"></param>
+        ///// <param name="values"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare LoadObjByLinq")]
+        //public T LoadObjByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
+        //{
+        //    return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), true, values);
+        //}
 
         /// <summary>
         /// Carica oggetto da PK e se non esiste ritorna null
@@ -1529,19 +1535,19 @@ namespace Business.Data.Objects.Core
         }
 
 
-        /// <summary>
-        /// Carica oggetto da chiave definita
-        /// </summary>
-        /// <param name="keyName">
-        /// Nome della chiave definita sull'oggetto
-        /// </param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare LoadObjByLinq")]
-        public T LoadObjNullByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), false, values);
-        }
+        ///// <summary>
+        ///// Carica oggetto da chiave definita
+        ///// </summary>
+        ///// <param name="keyName">
+        ///// Nome della chiave definita sull'oggetto
+        ///// </param>
+        ///// <param name="values"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare LoadObjByLinq")]
+        //public T LoadObjNullByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
+        //{
+        //    return (T)this.LoadObjectInternalByKEY(keyName, typeof(T), false, values);
+        //}
 
 
 
@@ -1559,64 +1565,64 @@ namespace Business.Data.Objects.Core
         }
 
 
-        /// <summary>
-        /// Carica oggetto da chiave definita e se non esiste ritorna nuovo oggetto precaricato con i valori
-        /// richiesti
-        /// </summary>
-        /// <param name="keyName">
-        /// Nome della chiave definita sull'oggetto
-        /// </param>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare LoadObjByLinq")]
-        public T LoadObjOrNewByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
-        {
-            return (T)this.LoadObjOrNewInternalByKEY(keyName, typeof(T), values);
-        }
+        ///// <summary>
+        ///// Carica oggetto da chiave definita e se non esiste ritorna nuovo oggetto precaricato con i valori
+        ///// richiesti
+        ///// </summary>
+        ///// <param name="keyName">
+        ///// Nome della chiave definita sull'oggetto
+        ///// </param>
+        ///// <param name="values"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare LoadObjByLinq")]
+        //public T LoadObjOrNewByKEY<T>(string keyName, params object[] values) where T : DataObjectBase
+        //{
+        //    return (T)this.LoadObjOrNewInternalByKEY(keyName, typeof(T), values);
+        //}
 
 
 
         #region LOADBYFILTER
 
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato lancia eccezione.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare LoadObjByLinq")]
-        public T LoadObjByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
-        }
+        ///// <summary>
+        ///// Carica oggetto da filtro custom.
+        ///// Se non trovato lancia eccezione.
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="filter"></param>
+        ///// <param name="order"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare LoadObjByLinq")]
+        //public T LoadObjByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        //{
+        //    return (T)this.LoadObjectInternalByFILTER(typeof(T), true, filter, order);
+        //}
 
-        /// <summary>
-        /// Carica oggetto da filtro custom.
-        /// Se non trovato ritorn NULL.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare LoadObjByLinq")]
-        public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
-        {
-            return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
-        }
+        ///// <summary>
+        ///// Carica oggetto da filtro custom.
+        ///// Se non trovato ritorn NULL.
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="filter"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare LoadObjByLinq")]
+        //public T LoadObjNullByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        //{
+        //    return (T)this.LoadObjectInternalByFILTER(typeof(T), false, filter, order);
+        //}
 
-        /// <summary>
-        /// Carica oggetto da filtro custom e se non esiste ritorna un nuovo oggetto vuoto
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="filter"></param>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        [Obsolete("Utilizzare LoadObjByLinq")]
-        public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
-        {
-            return LoadObjNullByFILTER<T>(filter, order) ?? this.CreateObject<T>();
-        }
+        ///// <summary>
+        ///// Carica oggetto da filtro custom e se non esiste ritorna un nuovo oggetto vuoto
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="filter"></param>
+        ///// <param name="order"></param>
+        ///// <returns></returns>
+        //[Obsolete("Utilizzare LoadObjByLinq")]
+        //public T LoadObjOrNewByFILTER<T>(IFilter filter, OrderBy order = null) where T : DataObjectBase
+        //{
+        //    return LoadObjNullByFILTER<T>(filter, order) ?? this.CreateObject<T>();
+        //}
 
         #endregion
 

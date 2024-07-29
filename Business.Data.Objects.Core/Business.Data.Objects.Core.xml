@@ -1590,6 +1590,20 @@
             <param name="propertyIndex"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetPropertyValueByName(System.String)">
+            <summary>
+            Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.SetPropertyValueByName(System.String,System.Object)">
+            <summary>
+            Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
+        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToString">
             <summary>
             Ritorna la rappresentazione in stringa dell'oggetto
@@ -1601,6 +1615,12 @@
             Ritorna dictionary con i soli valori dell'oggetto (no mappati)
             </summary>
             <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.FromDictionary(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Imposta tutte le proprietà per nome presenti nel dizionatio in input
+            </summary>
+            <param name="value"></param>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToJSON">
             <summary>
@@ -1666,13 +1686,6 @@
             Esegue la query impostata ed carica dati su oggetto
             </summary>
             <param name="db"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadByFilter(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto a partire da un filtro custom
-            </summary>
-            <param name="filter"></param>
-            <param name="order"></param>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.LoadByCustomWhere(System.String,Business.Data.Objects.Core.OrderBy)">
             <summary>
@@ -2522,16 +2535,6 @@
             <param name="order"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByFILTER(System.Type,System.Boolean,Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto a partire da un filtro fornito. Se non trovato lancia eccesione se raiseNotFound è true oppure ritorna oggetto nuovo
-            </summary>
-            <param name="origType"></param>
-            <param name="raiseNotFound"></param>
-            <param name="filter"></param>
-            <param name="order"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByKEY(System.String,System.Type,System.Boolean,System.Object[])">
             <summary>
             Routine di caricamento oggetto con 
@@ -2574,30 +2577,11 @@
             <param name="values"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByKEY``1(System.String,System.Object[])">
-            <summary>
-            Carica oggetto da chiave secondaria
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="keyName"></param>
-            <param name="values"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByPK``1(System.Object[])">
             <summary>
             Carica oggetto da PK e se non esiste ritorna null
             </summary>
             <typeparam name="T"></typeparam>
-            <param name="values"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByKEY``1(System.String,System.Object[])">
-            <summary>
-            Carica oggetto da chiave definita
-            </summary>
-            <param name="keyName">
-            Nome della chiave definita sull'oggetto
-            </param>
             <param name="values"></param>
             <returns></returns>
         </member>
@@ -2608,45 +2592,6 @@
             </summary>
             <typeparam name="T"></typeparam>
             <param name="values"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByKEY``1(System.String,System.Object[])">
-            <summary>
-            Carica oggetto da chiave definita e se non esiste ritorna nuovo oggetto precaricato con i valori
-            richiesti
-            </summary>
-            <param name="keyName">
-            Nome della chiave definita sull'oggetto
-            </param>
-            <param name="values"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto da filtro custom.
-            Se non trovato lancia eccezione.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
-            <param name="order"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjNullByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto da filtro custom.
-            Se non trovato ritorn NULL.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewByFILTER``1(Business.Data.Objects.Core.IFilter,Business.Data.Objects.Core.OrderBy)">
-            <summary>
-            Carica oggetto da filtro custom e se non esiste ritorna un nuovo oggetto vuoto
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filter"></param>
-            <param name="order"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.CreateObjectByType(System.Type)">
@@ -3042,15 +2987,6 @@
             <summary>
             Esegue ricerca semplice di tutti gli oggetti
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.SearchByColumn(System.String,Business.Data.Objects.Core.EOperator,System.Object)">
-            <summary>
-            Esegue ricerca oggetti a partire da un valore di colonna applicando l'operatore impostato
-            </summary>
-            <param name="columnName"></param>
-            <param name="op">Se [IsNull, IsNotNull] il valore non viene considerato</param>
-            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.SearchByColumn(Business.Data.Objects.Core.IFilter)">

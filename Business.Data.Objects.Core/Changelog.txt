@@ -208,3 +208,8 @@ Modificato operatore In non tipizzato per eseguire il type cast all'occorrenza
 
 [02/05/2024] - 5.0.66 - Simone Pelaia
 Rese più serializzabili le classi Message e MessageList
+
+[29/07/2024] - 5.0.67 - Simone Pelaia
+Introdotti metodi su dataobject per leggere o impostare il valore di proprietà fornendo il nome in stringa della stessa
+Rimossa load by filter su dataobject
+Rimosso load by key su dataobject

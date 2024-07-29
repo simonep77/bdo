@@ -104,10 +104,8 @@ namespace Business.Data.Objects.Core.Base
         public void SetProperty(int propertyIndex, object value)
         {
             //Ottiene property associata
-            Property oProp = this.GetPropertyDefinition(propertyIndex);
+            this.GetPropertyDefinition(propertyIndex).SetValue(this, value);
 
-            //Imposta valore
-            oProp.SetValue(this, value);
         }
 
         /// <summary>
@@ -117,13 +115,32 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         public object GetProperty(int propertyIndex)
         {
-            //Ottiene property associata
-            Property oProp = this.GetPropertyDefinition(propertyIndex);
-
-            return oProp.GetValue(this);
+            return this.GetPropertyDefinition(propertyIndex).GetValue(this);
         }
 
+        /// <summary>
+        /// Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public object GetPropertyValueByName(string name)
+        {
+            //Ottiene property associata
+            return this.mClassSchema.Properties.GetPropertyByName(name).GetValue(this);
 
+        }
+
+        /// <summary>
+        /// Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void SetPropertyValueByName(string name, object value)
+        {
+            //Ottiene property associata
+            this.mClassSchema.Properties.GetPropertyByName(name).SetValue(this, value);
+
+        }
 
         /// <summary>
         /// Ritorna la rappresentazione in stringa dell'oggetto
@@ -137,12 +154,12 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <returns></returns>
         public Dictionary<string, object> ToDictionary() => this.mClassSchema.Properties.Where(x => x is PropertySimple).ToDictionary(x => x.Name, x => x.GetValue(this));
-        
+
         /// <summary>
-        /// Reimposta le proprietà da dictionary
+        /// Imposta tutte le proprietà per nome presenti nel dizionatio in input
         /// </summary>
-        /// <param name="input"></param>
-        //public void FromDictionary(Dictionary<string, object> input) => input.Keys.ToList().ForEach(x => this.mClassSchema.Properties.GetPropertyByName(x).SetValue(this, input[x]));
+        /// <param name="value"></param>
+        public void FromDictionary(Dictionary<string, object> value) => value?.Keys.ToList().ForEach(x => this.SetPropertyValueByName(x, value[x]));
 
 
         /// <summary>
@@ -191,17 +208,9 @@ namespace Business.Data.Objects.Core.Base
         /// Attenzione! Dopo il salvataggio le proprieta' risultano non modificate!
         /// </summary>
         /// <returns></returns>
-        public List<string> GetCurrentChanges()
+        public IEnumerable<string> GetCurrentChanges()
         {
-            List<string> oListRet = new List<string>();
-
-            for (int i = 0; i < this.mClassSchema.Properties.Count; i++)
-            {
-                if (this.mDataSchema.GetByProperty(this.mClassSchema.Properties[i]).Changed)
-                    oListRet.Add(this.mClassSchema.Properties[i].Name);
-            }
-
-            return oListRet;
+            return this.mClassSchema.Properties.Where(x => x is PropertySimple && this.mDataSchema.GetByProperty(x).Changed).Select(x => x.Name);
         }
 
         /// <summary>
@@ -348,34 +357,34 @@ namespace Business.Data.Objects.Core.Base
             }
         }
 
-        /// <summary>
-        /// Carica oggetto a partire da un filtro custom
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="order"></param>
-        [Obsolete("Utilizzare LoadByLinq")]
-        internal void LoadByFilter(IFilter filter, OrderBy order)
-        {
-            IDataBase db = this.Slot.DbGet(this.mClassSchema);
+        ///// <summary>
+        ///// Carica oggetto a partire da un filtro custom
+        ///// </summary>
+        ///// <param name="filter"></param>
+        ///// <param name="order"></param>
+        //[Obsolete("Utilizzare LoadByLinq")]
+        //internal void LoadByFilter(IFilter filter, OrderBy order)
+        //{
+        //    IDataBase db = this.Slot.DbGet(this.mClassSchema);
 
-            //SQL DIRETTO
-            var sb = new StringBuilder(this.mClassSchema.TableDef.SQL_Select_Item);
-            sb.Append(this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef));
-            sb.Append(@" WHERE ");
+        //    //SQL DIRETTO
+        //    var sb = new StringBuilder(this.mClassSchema.TableDef.SQL_Select_Item);
+        //    sb.Append(this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef));
+        //    sb.Append(@" WHERE ");
 
-            //Imposta parametri WHERE
-            ((FilterBase)filter).appendFilterSqlInternal(db, this.Slot, this.mClassSchema, sb, 0);
+        //    //Imposta parametri WHERE
+        //    ((FilterBase)filter).appendFilterSqlInternal(db, this.Slot, this.mClassSchema, sb, 0);
 
-            //Se valorizzato include l'order by
-            if (order != null)
-                sb.Append(order.ToString());
+        //    //Se valorizzato include l'order by
+        //    if (order != null)
+        //        sb.Append(order.ToString());
 
-            //imposta query
-            db.SQL = sb.ToString();
+        //    //imposta query
+        //    db.SQL = sb.ToString();
 
-            //Imposta dati dopo query
-            this.ExecQueryAndLoadObj(db);
-        }
+        //    //Imposta dati dopo query
+        //    this.ExecQueryAndLoadObj(db);
+        //}
 
 
         /// <summary>
@@ -471,7 +480,6 @@ namespace Business.Data.Objects.Core.Base
             bool bIsValid = true;
             Property oProp;
             object oValue;
-            bool bChanged;
 
             if (!isInsert)
             {
