@@ -20,7 +20,7 @@ namespace Business.Data.Objects.TestClass.DAL
         [MaxLength(50)]
         public virtual string Cognome { get; set; }
 
-        [MaxLength(20), SearchKey(KEY_CF), CustomDbType(System.Data.DbType.AnsiString)]
+        [MaxLength(20), CustomDbType(System.Data.DbType.AnsiString)]
         public virtual string CodiceFiscale { get; set; }
 
         public virtual DateTime DataNascita { get; set; }

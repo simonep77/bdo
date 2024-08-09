@@ -7,13 +7,12 @@ namespace Business.Data.Objects.Core.Attributes
     /// Definizione di proprieta PrimaryKey
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
-    public class PrimaryKey: SearchKey   
+    public class PrimaryKey: BaseAttribute   
     {
         /// <summary>
         /// Costruttore
         /// </summary>
         public PrimaryKey()
-            : base(ClassSchema.PRIMARY_KEY)
         {  }
 
     }

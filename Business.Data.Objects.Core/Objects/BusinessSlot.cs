@@ -156,7 +156,7 @@ namespace Business.Data.Objects.Core
                 },
                 ForeignRef = obj.HistoryGetMainForeignLink(),
                 TopLevelEntityRef = obj.HistoryGetTopLevelEntityRef(),
-                SlimObject = obj.ToDictionary()
+                SlimObject = obj.ToDictionary(false)
             };
 
             //Se siamo in transazione attendiamo la fine e rilanciamo
@@ -1321,39 +1321,34 @@ namespace Business.Data.Objects.Core
         /// <param name="raiseNotFound"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        internal DataObjectBase LoadObjectInternalByKEY(string keyName, Type origType, bool raiseNotFound, object[] values)
+        internal DataObjectBase LoadObjectInternalByPK(Type origType, bool raiseNotFound, object[] values)
         {
             //Verifica dati passati
             if (values == null || values.Length == 0)
-                throw new ObjectException(ObjectMessages.Base_NoValueForKey, origType.Name, keyName);
+                throw new ObjectException(ObjectMessages.Base_NoValueForKey, origType.Name, nameof(ClassSchema.PrimaryKey));
 
             //Carica schema
             var schema = ProxyAssemblyCache.Instance.GetClassSchema(origType);
-            var oKey = schema.Keys[keyName];
-            var bIsPk = (oKey.KeyIndex == schema.PrimaryKey.KeyIndex);
+            var oKey = schema.PrimaryKey;
             string uPkHash = null;
 
             //Verifico numero parametri rispetto alla chiave specificata
             if (values.Length < oKey.Properties.Count)
-                throw new ObjectException(ObjectMessages.Base_KeyValuesLessThanFields, origType.Name, keyName, oKey.Properties.Count);
+                throw new ObjectException(ObjectMessages.Base_KeyValuesLessThanFields, origType.Name, nameof(schema.PrimaryKey), oKey.Properties.Count);
 
 
-            //Se pk
-            if (bIsPk)
+            //Calcola hash pk
+            uPkHash = ObjectHelper.GetObjectHashString(this, schema, values);
+
+            //Verifica subito tracking
+            if (this.LiveTrackingEnabled)
             {
-                //Calcola hash pk
-                uPkHash = ObjectHelper.GetObjectHashString(this, schema, values);
+                //Calcola hash chiave
+                DataObjectBase obj = this.liveTrackingGet(uPkHash);
 
-                //Verifica subito tracking
-                if (this.LiveTrackingEnabled)
-                {
-                    //Calcola hash chiave
-                    DataObjectBase obj = this.liveTrackingGet(uPkHash);
-
-                    //Trovato
-                    if (obj != null)
-                        return obj;
-                }
+                //Trovato
+                if (obj != null)
+                    return obj;
             }
 
 
@@ -1363,8 +1358,7 @@ namespace Business.Data.Objects.Core
             oNewObj.SetSlot(this);
 
             //Cerca in cache se previsto
-            if (bIsPk)
-                oNewObj.mDataSchema = this.cacheGetPipeline(uPkHash, oNewObj.mClassSchema);
+            oNewObj.mDataSchema = this.cacheGetPipeline(uPkHash, oNewObj.mClassSchema);
 
             //Deve caricare oggetto
             if (oNewObj.mDataSchema == null)
@@ -1390,8 +1384,7 @@ namespace Business.Data.Objects.Core
                 oNewObj.mDataSchema.ObjectSource = EObjectSource.Database;
 
                 //Se PL impostiamo hash gia' calcolato (evitiamo un calcolo inutile)
-                if (bIsPk)
-                    oNewObj.mDataSchema.PkHash = string.Intern(uPkHash);
+                oNewObj.mDataSchema.PkHash = string.Intern(uPkHash);
 
                 //Salva in cache se previsto solo per oggetti caricati dal db
                 this.cacheSetPipeline(oNewObj);
@@ -1418,20 +1411,18 @@ namespace Business.Data.Objects.Core
         /// <param name="origType"></param>
         /// <param name="values"></param>
         /// <returns></returns>
-        internal DataObjectBase LoadObjOrNewInternalByKEY(string keyName, Type origType, params object[] values)
+        internal DataObjectBase LoadObjOrNewInternalByPK(Type origType, params object[] values)
         {
-            var obj = this.LoadObjectInternalByKEY(keyName, origType, false, values);
+            var obj = this.LoadObjectInternalByPK(origType, false, values);
 
             if (obj == null)
             {
                 //Crea istanza
                 obj = this.CreateObjectByType(origType);
 
-                Key oKey = obj.mClassSchema.Keys[keyName];
-
-                for (int i = 0; i < oKey.Properties.Count; i++)
+                for (int i = 0; i < obj.mClassSchema.PrimaryKey.Properties.Count; i++)
                 {
-                    Property oProp = oKey.Properties[i];
+                    Property oProp = obj.mClassSchema.PrimaryKey.Properties[i];
 
                     //Controlla se possibile impostare la proprieta'
                     if (!oProp.IsAutomatic)
@@ -1506,7 +1497,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public T LoadObjByPK<T>(params object[] values) where T : DataObjectBase
         {
-            return (T)this.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, typeof(T), true, values);
+            return (T)this.LoadObjectInternalByPK(typeof(T), true, values);
         }
 
 
@@ -1531,7 +1522,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public T LoadObjNullByPK<T>(params object[] values) where T : DataObjectBase
         {
-            return (T)this.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, typeof(T), false, values);
+            return (T)this.LoadObjectInternalByPK(typeof(T), false, values);
         }
 
 
@@ -1561,7 +1552,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public T LoadObjOrNewByPK<T>(params object[] values) where T : DataObjectBase
         {
-            return (T)this.LoadObjOrNewInternalByKEY(ClassSchema.PRIMARY_KEY, typeof(T), values);
+            return (T)this.LoadObjOrNewInternalByPK(typeof(T), values);
         }
 
 
@@ -1992,14 +1983,8 @@ namespace Business.Data.Objects.Core
             //Imposto slot
             o.SetSlot(this);
 
-            //Azzera Chiavi univoche
-            foreach (var key in o.mClassSchema.Keys.Values)
-            {
-                foreach (var prop in key.Properties)
-                {
-                    prop.SetValue(o, prop.DefaultValue);
-                }
-            }
+            //Azzera Primary key
+            o.mClassSchema.PrimaryKey.Properties.ForEach(x => x.SetValue(o, x.DefaultValue));
 
             return o;
         }
@@ -2301,7 +2286,7 @@ namespace Business.Data.Objects.Core
         public T BizNewWithCreateObj<T>()
             where T : BusinessObjectBase
         {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, null, null);
+            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, false, null);
         }
 
 
@@ -2314,23 +2299,8 @@ namespace Business.Data.Objects.Core
         public T BizNewWithLoadByPK<T>(params object[] args)
             where T : BusinessObjectBase
         {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, ClassSchema.PRIMARY_KEY, args);
+            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, true, args);
         }
-
-
-        /// <summary>
-        /// Crea una biz con LoadByKEY
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="keyName"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public T BizNewWithLoadByKEY<T>(string keyName, params object[] args)
-            where T : BusinessObjectBase
-        {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, keyName, args);
-        }
-
 
 
         /// <summary>
@@ -2342,21 +2312,7 @@ namespace Business.Data.Objects.Core
         public T BizNewWithLoadOrNewByPK<T>(params object[] args)
             where T : BusinessObjectBase
         {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, true, ClassSchema.PRIMARY_KEY, args);
-        }
-
-
-        /// <summary>
-        /// Crea una biz con LoadOrNewByKEY
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="keyName"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public T BizNewWithLoadOrNewByKEY<T>(string keyName, params object[] args)
-            where T : BusinessObjectBase
-        {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, true, keyName, args);
+            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, true, true, args);
         }
 
 

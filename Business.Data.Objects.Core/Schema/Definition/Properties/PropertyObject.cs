@@ -145,7 +145,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
 
                 //Se array OK definito ed il primo valore non nullo imposta oggetto
-                pv.Value = obj.GetSlot().LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.Type, true, arrPk);
+                pv.Value = obj.GetSlot().LoadObjectInternalByPK(this.Type, true, arrPk);
             }
 
             //Carica oggetto e imposta come caricato
@@ -161,7 +161,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// <param name="value"></param>
         public override void SetValue(DataObjectBase obj, object value)
         {
-            throw new NotImplementedException();
+            throw new ObjectException("Impossibile impostare il valore di una proprietà mappata");
         }
 
 

@@ -178,13 +178,9 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         internal protected DataObjectBase getItem(int index)
         {
-            //var oInnerItem = this.mInnerList[index];
-
-            //if (oInnerItem.Object == null)
-            //    oInnerItem.Object = this.Slot.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.mObjSchema.OriginalType, true, oInnerItem.PkValues);
 
             //Ritorna
-            return this.mInnerList[index].Object ?? this.Slot.LoadObjectInternalByKEY(ClassSchema.PRIMARY_KEY, this.mObjSchema.OriginalType, true, this.mInnerList[index].PkValues);
+            return this.mInnerList[index].Object ?? this.Slot.LoadObjectInternalByPK(this.mObjSchema.OriginalType, true, this.mInnerList[index].PkValues);
 
         }
 
@@ -224,41 +220,6 @@ namespace Business.Data.Objects.Core.Base
 
                 //Appoggia sessione
                 IDataBase db = this.Slot.DbGet(this.mObjSchema);
-
-                //Qui potrebbe gestire la sostituzione SQL per includere tutti i campi del DAL
-                //if (!this.mIsSearch)
-                //{
-                //    var sb = new StringBuilder("WITH cteq1 as (");
-                //    sb.Append(db.SQL);
-                //    sb.Append("), ");
-                //    sb.Append("cteq2 as ( ");
-                //    sb.Append("SELECT cteq1.* ");
-                //    foreach (var item in this.mObjSchema.Properties.Where(x => !x.ExcludeSelect && !this.mObjSchema.PrimaryKey.Properties.Any(y => y.PropertyIndex == x.PropertyIndex)))
-                //    {
-                //        sb.Append(", b.");
-                //        sb.Append(item.Column.Name);
-                //    }
-                //    sb.Append(" FROM cteq1 ");
-                //    sb.Append(" INNER JOIN ");
-                //    sb.Append(this.Slot.DbPrefixGetTableName(this.mObjSchema.TableDef));
-                //    sb.Append(" b ON ");
-                //    for (int i = 0; i < this.mObjSchema.PrimaryKey.Properties.Count; i++)
-                //    {
-                //        sb.Append("cteq1.");
-                //        sb.Append(this.mObjSchema.PrimaryKey.Properties[i].Name);
-                //        sb.Append(" = b.");
-                //        sb.Append(this.mObjSchema.PrimaryKey.Properties[i].Name);
-
-                //        if (i < (this.mObjSchema.PrimaryKey.Properties.Count - 1) )
-                //            sb.Append(", ");
-                //    }
-                    
-                //    sb.Append(") ");
-                //    sb.Append("SELECT * FROM cteq2 ");
-
-                //    db.SQL = sb.ToString();
-                //}
-
 
                 //Appende ORDER BY a query
                 db.SQL = string.Concat(db.SQL, this.mOrderBy.ToString());

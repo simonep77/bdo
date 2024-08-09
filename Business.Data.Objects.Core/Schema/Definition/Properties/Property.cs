@@ -18,7 +18,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
         //Schema comuni
         public ClassSchema Schema { get; set; }
-        public short PropertyIndex { get; set; }
+        public int PropertyIndex { get; set; }
         public string Name { get; set; }
         public Type Type { get; set; }
         public Column Column { get; set; }

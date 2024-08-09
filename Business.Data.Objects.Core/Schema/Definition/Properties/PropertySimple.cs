@@ -86,7 +86,6 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 //AUTOINCREMENT
                 if (attr is AutoIncrement)
                 {
-                    this.Schema.AutoIncPk = true;
                     this.ExcludeInsert = true;
                     this.ExcludeUpdate = true;
 

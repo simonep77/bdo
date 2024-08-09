@@ -66,7 +66,8 @@ namespace Business.Data.Objects.Core.ObjFactory
             //Definisce Modulo dinamico
             ModuleBuilder pxModBuilder = assBuilder.DefineDynamicModule(STR_MODULE_NAME);
 
-            return new DynAssemblyProxy() { 
+            return new DynAssemblyProxy()
+            {
                 PxAssemblyBuilder = assBuilder,
                 PxModuleBuilder = pxModBuilder
             };
@@ -117,7 +118,7 @@ namespace Business.Data.Objects.Core.ObjFactory
 
                     //Carica elenco proprieta'
                     var properties = tOriginal.Type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                    
+
                     //Ordina le proprieta' per come sono definite
                     arrPropInfo = properties.OrderBy(p => p.MetadataToken).ToArray();
 
@@ -132,7 +133,7 @@ namespace Business.Data.Objects.Core.ObjFactory
 
                         MethodBuilder newGetMethod = null;
                         MethodBuilder newSetMethod = null;
-                        
+
                         //Crea i nuovi metodi
                         //GET
                         if ((getMethod != null) && (getMethod.IsAbstract || getMethod.IsVirtual))
@@ -188,7 +189,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                             iPropertyIndex++;
                         }
                         else
-                        { 
+                        {
                             //Si tratta di proprieta' non mappata, quindi la imposta a null
                             arrPropInfo[i] = null;
                         }
@@ -233,7 +234,7 @@ namespace Business.Data.Objects.Core.ObjFactory
             return (ProxyEntryDAO.FastConstructor)dm.CreateDelegate(typeof(ProxyEntryDAO.FastConstructor));
         }
 
-       
+
         #endregion
 
         #region SCHEMA MANAGEMENT
@@ -249,11 +250,11 @@ namespace Business.Data.Objects.Core.ObjFactory
         private static ClassSchema readClassSchemaWithSQL(Type originalType, long InternalID, PropertyInfo[] properties)
         {
             short iPropertyIndex = 0;
-            List<SearchKey> oListKeys = new List<SearchKey>(2);
-            StringBuilder sbSqlSelect = new StringBuilder(1000);
-            StringBuilder sbSqlReload = new StringBuilder(100);
-            StringBuilder sbSqlInsertF = new StringBuilder(400);
-            StringBuilder sbSqlInsertP = new StringBuilder(400);
+            PrimaryKey pk = null;
+            var sbSqlSelect = new StringBuilder(1000);
+            var sbSqlReload = new StringBuilder(100);
+            var sbSqlInsertF = new StringBuilder(400);
+            var sbSqlInsertP = new StringBuilder(400);
             sbSqlSelect.Append("SELECT ");
             sbSqlReload.Append("SELECT ");
 
@@ -270,7 +271,7 @@ namespace Business.Data.Objects.Core.ObjFactory
             }
 
             //Nome tabella insert
-          
+
             //Legge definizione campi
             for (int i = 0; i < properties.Length; i++)
             {
@@ -280,7 +281,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                     continue;
 
                 //Azzera variabili ciclo
-                oListKeys.Clear();
+                pk = null;
 
                 //Crea nuova Property
                 Property oProp;
@@ -292,7 +293,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                 }
                 else
                     oProp = new PropertySimple(propInfo.Name, propInfo.PropertyType);
-                
+
                 oProp.Schema = oSchema;
                 oProp.IsReadonly = !propInfo.CanWrite;
 
@@ -303,10 +304,9 @@ namespace Business.Data.Objects.Core.ObjFactory
                         continue;
 
                     //Primary Key, UniqueKey o SearchKey
-                    if (attr is SearchKey)
-                    {
-                        oListKeys.Add((SearchKey)attr);
-                    }
+                    if (attr is PrimaryKey)
+                        pk = (PrimaryKey)attr;
+
                     //ALTRI ATTRIBUTI
                     else
                     {
@@ -336,21 +336,19 @@ namespace Business.Data.Objects.Core.ObjFactory
                 }
 
                 //Gestisce una o più chiavi
-                for (int j = 0; j < oListKeys.Count; j++)
-                {
-                    fillKeyAttribute(oSchema, oProp, oListKeys[j]);
-                }
+                if (pk != null)
+                    fillKeyAttribute(oSchema, oProp);
 
                 //Esegue validazione proprietà
                 oProp.ValidateDefinition();
 
                 //Imposta indice e incrementa
-                oProp.PropertyIndex = iPropertyIndex++; 
+                oProp.PropertyIndex = iPropertyIndex++;
 
                 //Aggiunge a schema
                 oSchema.Properties.Add(oProp);
 
-     
+
                 //Imposta flag di nuovo caricamento
                 if (oProp.IsAutomatic)
                     oSchema.MustReload = true;
@@ -392,7 +390,7 @@ namespace Business.Data.Objects.Core.ObjFactory
                         }
                     }
 
-                }                
+                }
 
                 //FINE LOOP PROPRIETA'
             }
@@ -407,43 +405,37 @@ namespace Business.Data.Objects.Core.ObjFactory
 
             oSchema.TableDef.SQL_Select_Item = sbSqlSelect.ToString();
             //SQLSELECT - Per ogni chiave prepara la where
-            foreach (var key in oSchema.Keys.Values)
+            sbSqlSelect.Length = 0;//Resetta 
+            sbSqlSelect.Append(@" WHERE ");
+            for (int i = 0; i < oSchema.PrimaryKey.Properties.Count; i++)
             {
-                sbSqlSelect.Length = 0;//Resetta 
-                sbSqlSelect.Append(@" WHERE ");
-                for (int i = 0; i < key.Properties.Count; i++)
-                {
-                    sbSqlSelect.Append(key.Properties[i].Column.Name);
-                    sbSqlSelect.Append(@"=");
-                    sbSqlSelect.Append(key.Properties[i].Column.GetKeyParamName());
-                    sbSqlSelect.Append(@" AND ");
+                sbSqlSelect.Append(oSchema.PrimaryKey.Properties[i].Column.Name);
+                sbSqlSelect.Append(@"=");
+                sbSqlSelect.Append(oSchema.PrimaryKey.Properties[i].Column.GetKeyParamName());
+                sbSqlSelect.Append(@" AND ");
 
-                }
-
-                sbSqlSelect.Remove(sbSqlSelect.Length - 5, 5);
-                
-                //Imposta SQL completo
-                key.SQL_Where_Clause = sbSqlSelect.ToString();
-                
-                //Se PK genera query base per lista 
-                if (key.Name.Equals(ClassSchema.PRIMARY_KEY))
-                {
-                    //Prepara la query base per la lista
-                    sbSqlSelect.Length = 0;//Resetta 
-                    sbSqlSelect.Append(@"SELECT ");
-                    for (int i = 0; i < key.Properties.Count; i++)
-                    {
-                        sbSqlSelect.Append(key.Properties[i].Column.Name);
-                        sbSqlSelect.Append(@", ");
-
-                    }
-                    sbSqlSelect.Remove(sbSqlSelect.Length - 2, 2);
-                    sbSqlSelect.Append(@" FROM ");
-
-                    //Aggiunge
-                    oSchema.TableDef.SQL_Select_List = sbSqlSelect.ToString();
-                }
             }
+
+            sbSqlSelect.Remove(sbSqlSelect.Length - 5, 5);
+
+            //Imposta SQL completo
+            oSchema.PrimaryKey.SQL_Where_Clause = sbSqlSelect.ToString();
+
+            //Se PK genera query base per lista 
+
+            sbSqlSelect.Length = 0;//Resetta 
+            sbSqlSelect.Append(@"SELECT ");
+            for (int i = 0; i < oSchema.PrimaryKey.Properties.Count; i++)
+            {
+                sbSqlSelect.Append(oSchema.PrimaryKey.Properties[i].Column.Name);
+                sbSqlSelect.Append(@", ");
+
+            }
+            sbSqlSelect.Remove(sbSqlSelect.Length - 2, 2);
+            sbSqlSelect.Append(@" FROM ");
+
+            //Aggiunge
+            oSchema.TableDef.SQL_Select_List = sbSqlSelect.ToString();
 
 
             if (!oSchema.IsReadOnly)
@@ -479,30 +471,15 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// <param name="oProp"></param>
         /// <param name="oAttrKey"></param>
         /// <returns></returns>
-        private static Key fillKeyAttribute(ClassSchema oSchema, Property oProp, SearchKey oAttrKey) 
+        private static Key fillKeyAttribute(ClassSchema oSchema, Property oProp)
         {
-            Key oKey;
-            if (!oSchema.Keys.TryGetValue(oAttrKey.KeyName, out oKey))
+            if (oSchema.PrimaryKey == null)
             {
                 //Crea le key
-                oKey = new Key(oAttrKey.KeyName);
-                oKey.HashCode = BdoHash.Instance.Hash(string.Concat(oSchema.OriginalType.FullName, @".BdoKeys.", oKey.Name));
-                if (oAttrKey is PrimaryKey)
-                    //E' la Primary Key
-                    oSchema.PrimaryKey = oKey;
-
-                //Aggiunge ad elenco
-                oSchema.Keys.Add(oAttrKey.KeyName, oKey);
+                oSchema.PrimaryKey = new Key(@"PrimaryKey");
+                oSchema.PrimaryKey.HashCode = BdoHash.Instance.Hash(string.Concat(oSchema.OriginalType.FullName, @".BdoKeys.", oSchema.PrimaryKey.Name));
             }
-            else
-            {
-                //Controllo Anomalie
-                //1) Nome chiave PK
-                if (!(oAttrKey is PrimaryKey) && oKey.Name == ClassSchema.PRIMARY_KEY)
-                    throw new TypeFactoryException("{0} - Il nome di chiave '{1}' e' riservato", oProp.Fullname, ClassSchema.PRIMARY_KEY);
-
-            }
-
+         
             ////Chiave definita su proprieta' semplice
             //if (!(oProp is PropertySimple))
             //    throw new TypeFactoryException("{0}.{1} - E' ammesso definire una chiave su una proprieta' semplice (non mappata)", oSchema.ClassName, oProp.Name, ClassSchema.PRIMARY_KEY);
@@ -512,10 +489,10 @@ namespace Business.Data.Objects.Core.ObjFactory
                 throw new TypeFactoryException(SchemaMessages.Prop_KeyNeedValueQuery, oSchema.ClassName, oProp.Name);
 
             //Aggiunge property a key
-            oKey.AddProperty(oProp);
+            oSchema.PrimaryKey.AddProperty(oProp);
 
             //Ritorna Key
-            return oKey;
+            return oSchema.PrimaryKey;
         }
 
 
@@ -627,11 +604,11 @@ namespace Business.Data.Objects.Core.ObjFactory
             ilgen.Emit(OpCodes.Ret);
 
             var entry = new ProxyEntryBiz()
-                {
-                    TypeKey = iOriginalTypeHandle,
-                    DalType = tDal,
-                    Create = (ProxyEntryBiz.FastCreateBizObj)dm.CreateDelegate(typeof(ProxyEntryBiz.FastCreateBizObj))
-                };
+            {
+                TypeKey = iOriginalTypeHandle,
+                DalType = tDal,
+                Create = (ProxyEntryBiz.FastCreateBizObj)dm.CreateDelegate(typeof(ProxyEntryBiz.FastCreateBizObj))
+            };
 
             outProxy.TypeBizEntries.Add(iOriginalTypeHandle, entry);
 
@@ -648,6 +625,6 @@ namespace Business.Data.Objects.Core.ObjFactory
 
         #endregion
 
-        
+
     }
 }

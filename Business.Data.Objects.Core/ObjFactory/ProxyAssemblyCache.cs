@@ -333,7 +333,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// <param name="keyName"></param>
         /// <param name="args"></param>
         /// <returns></returns>
-        internal BusinessObjectBase CreateBizObj(Type tBiz, BusinessSlot slot, bool createNew,string keyName, params object[] args)
+        internal BusinessObjectBase CreateBizObj(Type tBiz, BusinessSlot slot, bool createNew,bool load, params object[] args)
         {
             try
             {
@@ -341,14 +341,14 @@ namespace Business.Data.Objects.Core.ObjFactory
 
                 DataObjectBase oDal;
 
-                if (string.IsNullOrEmpty(keyName))
+                if (!load)
                     oDal = slot.CreateObjectByType(entry.DalType);
                 else
                 {
                     if (createNew)
-                        oDal = slot.LoadObjOrNewInternalByKEY(keyName, entry.DalType, args);
+                        oDal = slot.LoadObjOrNewInternalByPK(entry.DalType, args);
                     else
-                        oDal = slot.LoadObjectInternalByKEY(keyName, entry.DalType, true, args);
+                        oDal = slot.LoadObjectInternalByPK(entry.DalType, true, args);
                 }
 
                 //Crea oggetto

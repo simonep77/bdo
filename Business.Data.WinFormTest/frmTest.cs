@@ -451,7 +451,7 @@ namespace Business.Data.WinFormTest
 
                 ss1.UnDeleteObject(ord);
 
-                var a = ord.ToDictionary();
+                var a = ord.ToDictionary(false);
 
                 var b = ss1.LoadObjectByDictionary<Ordine>(a);
 

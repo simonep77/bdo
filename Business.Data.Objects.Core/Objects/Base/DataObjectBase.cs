@@ -118,29 +118,6 @@ namespace Business.Data.Objects.Core.Base
             return this.GetPropertyDefinition(propertyIndex).GetValue(this);
         }
 
-        /// <summary>
-        /// Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public object GetPropertyValueByName(string name)
-        {
-            //Ottiene property associata
-            return this.mClassSchema.Properties.GetPropertyByName(name).GetValue(this);
-
-        }
-
-        /// <summary>
-        /// Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="value"></param>
-        public void SetPropertyValueByName(string name, object value)
-        {
-            //Ottiene property associata
-            this.mClassSchema.Properties.GetPropertyByName(name).SetValue(this, value);
-
-        }
 
         /// <summary>
         /// Ritorna la rappresentazione in stringa dell'oggetto
@@ -150,16 +127,22 @@ namespace Business.Data.Objects.Core.Base
 
 
         /// <summary>
-        /// Ritorna dictionary con i soli valori dell'oggetto (no mappati)
+        /// Ritorna dictionary con i soli valori dell'oggetto
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, object> ToDictionary() => this.mClassSchema.Properties.Where(x => x is PropertySimple).ToDictionary(x => x.Name, x => x.GetValue(this));
+        public Dictionary<string, object> ToDictionary(bool includeMapped) => this.mClassSchema.Properties.Where(x => x is PropertySimple || includeMapped).ToDictionary(x => x.Name, x => x is PropertySimple ? x.GetValue(this) : ((DataObjectBase)x.GetValue(this))?.ToDictionary(includeMapped));
 
         /// <summary>
-        /// Imposta tutte le proprietà per nome presenti nel dizionatio in input
+        /// Imposta tutte le proprietà per nome presenti nel dizionatio in input. Eventuali oggetti map
         /// </summary>
         /// <param name="value"></param>
-        public void FromDictionary(Dictionary<string, object> value) => value?.Keys.ToList().ForEach(x => this.SetPropertyValueByName(x, value[x]));
+        public void FromDictionary(Dictionary<string, object> value) => value?.Keys.ToList().ForEach(x =>
+        {
+            var p = this.mClassSchema.Properties.GetPropertyByName(x);
+
+            if (p is PropertySimple)
+                p.SetValue(this, value[x]);
+        });
 
 
         /// <summary>
@@ -609,7 +592,7 @@ namespace Business.Data.Objects.Core.Base
                     sbSql.Append(this.mClassSchema.TableDef.SQL_Select_Reload);
                     sbSql.Append(sTableFullName);
                     //Se autoinc imposta solo il nome della funzione
-                    if (this.mClassSchema.AutoIncPk)
+                    if (this.mClassSchema.PrimaryKey.Properties[0].IsAutomatic)
                     {
                         sbSql.Append(@" WHERE ");
                         sbSql.Append(this.mClassSchema.PrimaryKey.Properties[0].Column.Name);
@@ -925,6 +908,62 @@ namespace Business.Data.Objects.Core.Base
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
+
+        #region PROPERTY HANDLING
+
+        /// <summary>
+        /// Ritorna info su tutte le proprietà definite nel DataObject (abstract)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGetInfoAll()
+        {
+            return this.mClassSchema.Properties.Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: x is PropertySimple));
+        }
+
+        /// <summary>
+        /// Ritorna info sulle proprietà semplici (non mappate) del DataObject (abstract)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGeInfoSimple()
+        {
+            return this.mClassSchema.Properties.Where(x => x is PropertySimple).Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: true));
+        }
+
+        /// <summary>
+        /// Ritorna info sulle proprietà mappate del DataObject (abstract)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGetInfoMapped()
+        {
+            return this.mClassSchema.Properties.Where(x => x is PropertyObject).Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: false));
+        }
+
+        /// <summary>
+        /// Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public object PropertyGetValueByName(string name)
+        {
+            //Ottiene property associata
+            return this.mClassSchema.Properties.GetPropertyByName(name).GetValue(this);
+
+        }
+
+        /// <summary>
+        /// Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void PropertySetValueByName(string name, object value)
+        {
+            //Ottiene property associata
+            this.mClassSchema.Properties.GetPropertyByName(name).SetValue(this, value);
+
+        }
+
+        #endregion
+
 
     }
 }

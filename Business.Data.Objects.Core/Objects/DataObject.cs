@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System;
 using System.Reflection;
+using System.Linq;
+using System.Xml.Linq;
+using Business.Data.Objects.Core.Utils;
 
 namespace Business.Data.Objects.Core
 {
@@ -47,9 +50,7 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public bool EqualsDeep(T other)
         {
-            var oDiffList = this.Diff(other);
-
-            return (oDiffList.Count == 0);
+            return (!this.Diff(other).Any());
         }
 
 
@@ -59,13 +60,15 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public List<Tuple<string, object, object>> DiffSource()
+        public IEnumerable<(string Name, object Source, object Other)> DiffSource()
         {
             if (this.ObjectState != EObjectState.Loaded)
                 throw new ObjectException(ObjectMessages.Base_DiffSourceNotLoaded, this.mClassSchema.ClassName);
 
+            var oldLive = this.Slot.LiveTrackingEnabled;
+
             //Forza skip del tracking se attivo
-            if (this.Slot.LiveTrackingEnabled)
+            if (oldLive)
                 this.Slot.mLiveTrackingStore.IsActive = false;
             try
             {
@@ -75,21 +78,19 @@ namespace Business.Data.Objects.Core
             finally
             {
                 //riattiva tracking
-                if (this.Slot.LiveTrackingEnabled)
+                if (oldLive)
                     this.Slot.mLiveTrackingStore.IsActive = true;
             }
         }
 
 
         /// <summary>
-        /// Dati due oggetti ritorna elenco differenze. Item1 e' il nome della prorieta, item2 il valore dell'oggetto origine, item3 dell'oggetto confrontato
+        /// Dati due oggetti ritorna elenco differenze. Source è il valore dell'oggetto origine, Other dell'oggetto confrontato
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public List<Tuple<string, object, object>> Diff(T other)
+        public IEnumerable<(string Name, object Source, object Other)> Diff(T other)
         {
-            object oSource, oOther;
-
             //Se other null eccezione
             if (other == null)
                 throw new ObjectException(ObjectMessages.Diff_Null, this.mClassSchema.ClassName);
@@ -98,23 +99,9 @@ namespace Business.Data.Objects.Core
             if (this.mClassSchema.InternalID != other.mClassSchema.InternalID)
                 throw new ObjectException(ObjectMessages.Diff_WrongType, this.mClassSchema.ClassName, other.mClassSchema.ClassName);
 
-            var oDiffList = new List<Tuple<string, object, object>>();
-
-
-            foreach (var oProp in this.mClassSchema.Properties)
-            {
-                if (!(oProp is PropertySimple))
-                    continue;
-
-                oSource = oProp.GetValue(this);
-                oOther = oProp.GetValue(other);
-
-                //Proprietà normale
-                if (!object.Equals(oSource, oOther))
-                    oDiffList.Add(new Tuple<string, object, object>(oProp.Name, oSource, oOther));
-            }
-
-            return oDiffList;
+            return this.mClassSchema.Properties
+                .Where(x => x is PropertySimple && !object.Equals(x.GetValue(this), x.GetValue(other)))
+                .Select(x => (Name: x.Name, Source: x.GetValue(this), Other: x.GetValue(other)));
         }
 
 
@@ -138,45 +125,10 @@ namespace Business.Data.Objects.Core
         /// <typeparam name="TL"></typeparam>
         /// <returns></returns>
         public TL ToBizObject<TL>()
-            where TL: BusinessObject<T>
+            where TL : BusinessObject<T>
         {
             return (TL)ProxyAssemblyCache.Instance.CreateBizObj(ProxyAssemblyCache.Instance.GetBizEntry(typeof(TL)), this);
         }
-
-        ///// <summary>
-        ///// Ritorna un oggetto dinamico copiato dall'attuale
-        ///// </summary>
-        ///// <returns></returns>
-        //public dynamic ToDynamicObject()
-        //{
-        //    var o = new ExpandoObject();
-        //    var od = o as IDictionary<string, object>;
-        //    foreach (var prop in this.mClassSchema.Properties)
-        //    {
-        //        od[prop.Name] = prop.GetValue(this);
-        //    }
-        //    od[nameof(DataObjectBase.ObjectSource)] = this.mDataSchema.ObjectSource;
-        //    od[nameof(DataObjectBase.ObjectState)] = this.mDataSchema.ObjectState;
-
-        //    return o;
-        //}
-
-        ///// <summary>
-        ///// Carica i dati di un oggetto dinamico su quello corrente
-        ///// </summary>
-        ///// <param name="obj"></param>
-        //public void FromDynamicObject(dynamic obj)
-        //{
-        //    var od = obj as IDictionary<string, object>;
-
-        //    foreach (var prop in this.mClassSchema.Properties)
-        //    {
-        //        prop.SetValue(this, od[prop.Name]);
-        //    }
-
-        //    this.mDataSchema.ObjectSource = (EObjectSource)od[nameof(DataObjectBase.ObjectSource)];
-        //    this.mDataSchema.ObjectState = (EObjectState)od[nameof(DataObjectBase.ObjectState)];
-        //}
 
 
         /// <summary>
@@ -215,6 +167,8 @@ namespace Business.Data.Objects.Core
                 }
             }
         }
+
+                     
 
         #endregion
 

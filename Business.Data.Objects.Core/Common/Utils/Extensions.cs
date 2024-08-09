@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Business.Data.Objects.Core;
 
 namespace Business.Data.Objects.Common.Utils
 {
@@ -144,6 +145,28 @@ namespace Business.Data.Objects.Common.Utils
         {
             return Regex.IsMatch(obj, pattern);
         }
+
+
+        /// <summary>
+        /// Trasforma qualsiasi enumerabile di dataobject in BusinessObject List. Eventualmente è possibile eseguire del codice sul business object in creazione
+        /// </summary>
+        /// <typeparam name="TB"></typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input"></param>
+        /// <param name="act"></param>
+        /// <returns></returns>
+        public static List<TB> ToBizObjectList<TB, T>(this IEnumerable<T> input, Action<TB> act = null)
+            where T : DataObject<T>
+            where TB : BusinessObject<T>
+        {
+            return new List<TB>(input.Select(x =>
+            {
+                var bo = x.ToBizObject<TB>();
+                act?.Invoke(bo);
+                return bo;
+            }));
+        }
+
 
 
     }
