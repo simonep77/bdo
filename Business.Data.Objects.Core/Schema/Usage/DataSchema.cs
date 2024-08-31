@@ -10,7 +10,7 @@ using System.Linq;
 namespace Business.Data.Objects.Core.Schema.Usage
 {
     /// <summary>
-    /// Valore di una proprietà BDO
+    /// Valore di una proprietï¿½ BDO
     /// </summary>
     internal class PropValue
     {
@@ -34,7 +34,8 @@ namespace Business.Data.Objects.Core.Schema.Usage
                 else if (t.IsByteArray())
                     this.Value = ((Array)other.Value).Clone();
             }
-            this.Value = other.Value;
+            else
+                this.Value = null;
         }
     }
 

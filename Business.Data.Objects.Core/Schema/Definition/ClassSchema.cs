@@ -10,23 +10,17 @@ namespace Business.Data.Objects.Core.Schema.Definition
     /// </summary>
     class ClassSchema
     {
-        public const string PRIMARY_KEY = @"PrimaryKey";
-
         #region FIELDS
+
         public Table TableDef;
         public DbConnection DbConnDef;
         public long InternalID;
         public Type OriginalType;
-
-        public KeyDictionary Keys = new KeyDictionary();
         public PropertyDictionary Properties;
         public PropertyList AutoProperties = new PropertyList(3);
         public Key PrimaryKey;
-
         public bool GlobalCache;
         public bool MustReload;
-        public bool AutoIncPk;
-
         public PropertyList LogicalDeletes = new PropertyList(1);
         public Property UserInfo;
 
@@ -40,7 +34,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
         /// Indica se la classe e' in sola lettura
         /// </summary>
         public bool IsReadOnly { get; set; }
-        
+
         /// <summary>
         /// Indica se attiva la gestione dello storico
         /// </summary>
@@ -73,14 +67,14 @@ namespace Business.Data.Objects.Core.Schema.Definition
         internal void Validate()
         {
             //Se non presente definizione tabella la crea
-            if (this.TableDef==null)
+            if (this.TableDef == null)
                 this.TableDef = new Table(this.ClassName);
 
             //Se num prop = 0 - errore
             if (this.Properties.Count == 0)
                 throw new SchemaReaderException(this, SchemaMessages.Schema_NoProperties);
 
-            //Se la PK non contiene propriet‡ - errore
+            //Se la PK non contiene propriet√† - errore
             if (this.PrimaryKey == null || this.PrimaryKey.Properties.Count == 0)
                 throw new SchemaReaderException(this, SchemaMessages.Schema_NoPrimaryKey);
 
@@ -131,7 +125,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                         throw new SchemaReaderException(ldProp, SchemaMessages.Prop_LogicalDeleteWrongType);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -179,10 +173,10 @@ namespace Business.Data.Objects.Core.Schema.Definition
 
                 this.DbConnDef = (DbConnection)att;
             }
-            
+
 
         }
-        
+
         #endregion
 
 
