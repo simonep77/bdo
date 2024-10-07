@@ -144,7 +144,7 @@ namespace Business.Data.Objects.Core.Objects
             else if (m.Method.Name == nameof(Extensions.RawBdoLinqSql))
             {
                 this.sb.Append(@"(");
-                this.sb.Append((m.Arguments[0] as ConstantExpression).Value);
+                this.sb.Append(execExpression(m.Arguments[0]));
                 this.sb.Append(@")");
                 return m;
             }

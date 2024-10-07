@@ -4346,7 +4346,7 @@
             Libera % slot da cache
             </summary>
         </member>
-        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.AddOrUpdate(`0,`1)">
+        <member name="M:Business.Data.Objects.Common.Cache.LruCache`2.AddOrUpdate(`0,`1,System.Nullable{System.TimeSpan})">
             <summary>
             Aggiunge o Aggiorna oggetto in cache
             </summary>

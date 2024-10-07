@@ -530,11 +530,15 @@ namespace Business.Data.WinFormTest
 
                 this.WriteLog(l1.Count.ToString());
 
+                var sql = "EXISTS (SELECT 1)";
+
                 var f = new LinqFilter<Ordine>();
-                f.And(x => (x.StatoId.In(1, 3) && "EXISTS (SELECT 1)".RawBdoLinqSql()));
+                f.And(x => (x.StatoId.In(1, 3) && sql.RawBdoLinqSql()));
                 f.And(x => x.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
 
                 var l2 = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(f.Result);
+
+                this.WriteLog(l2.First().Anagrafica.Cognome);
 
             }
 

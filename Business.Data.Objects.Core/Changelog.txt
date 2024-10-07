@@ -219,5 +219,6 @@ Pulizia varia
 Metodi per elenco proprietà su dataobject
 Revisione diff con tuple nominali
 
-[07/10/2024] - 5.0.70 - Simone Pelaia
+[07/10/2024] - 5.0.71 - Simone Pelaia
 Possibilità di inserire codice sql arbitrario nelle query sql linq
+Cache lru override default Expire

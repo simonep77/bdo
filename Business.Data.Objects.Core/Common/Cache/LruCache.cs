@@ -99,22 +99,6 @@ namespace Business.Data.Objects.Common.Cache
         }
 
 
-        //public List<V> AllValues
-        //{
-        //    get
-        //    {
-        //        this.mRW.EnterReadLock();
-        //        try
-        //        {
-        //            return this.mDictionary.Values.Select(x => x.Value).ToList();
-        //        }
-        //        finally
-        //        {
-        //            this.mRW.ExitReadLock();
-        //        }
-        //    }
-        //}
-
         #endregion
 
         #region "PUBLIC"
@@ -190,7 +174,7 @@ namespace Business.Data.Objects.Common.Cache
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="span"></param>
-        public void AddOrUpdate(K key, V value)
+        public void AddOrUpdate(K key, V value, TimeSpan? customExpire = null)
         {
             this.mRW.EnterWriteLock();
             try
@@ -214,7 +198,7 @@ namespace Business.Data.Objects.Common.Cache
                 item.Value = value;
 
                 if (this.DoExpire)
-                    item.Ticks = DateTime.Now.Add(this.Expire).Ticks;
+                    item.Ticks = DateTime.Now.Add(customExpire ?? this.Expire).Ticks;
             }
             finally
             {
@@ -223,7 +207,7 @@ namespace Business.Data.Objects.Common.Cache
         }
 
 
-        public V GetOrAdd(K key, Func<V> fn)
+        public V GetOrAdd(K key, Func<V> fn, TimeSpan? customExpire = null)
         {
             this.mRW.EnterReadLock();
             try
@@ -254,7 +238,7 @@ namespace Business.Data.Objects.Common.Cache
 
                             //Imposta scadenza
                             if (this.DoExpire)
-                                item.Ticks = DateTime.Now.Add(this.Expire).Ticks;
+                                item.Ticks = DateTime.Now.Add(customExpire ?? this.Expire).Ticks;
 
                             return item.Value;
                         }
@@ -309,10 +293,6 @@ namespace Business.Data.Objects.Common.Cache
 
                     //aggiorna utilizzo
                     Interlocked.Increment(ref item.Hits);
-
-                    //Questa è soggetta a race...
-                    if (this.DoExpire)
-                        Interlocked.Exchange(ref item.Ticks, DateTime.Now.Ticks);
 
                     //Imposta
                     value = item.Value;
