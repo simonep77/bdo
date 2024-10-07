@@ -146,6 +146,15 @@ namespace Business.Data.Objects.Common.Utils
             return Regex.IsMatch(obj, pattern);
         }
 
+        /// <summary>
+        /// Metodo che non esegue nulla ma utile nelle linq sql bdo per indicare l'inserimento di codice sql raw
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string RawBdoLinqSql(this string input)
+        {
+            return string.Intern(input);
+        }
 
         /// <summary>
         /// Trasforma qualsiasi enumerabile di dataobject in BusinessObject List. Eventualmente è possibile eseguire del codice sul business object in creazione

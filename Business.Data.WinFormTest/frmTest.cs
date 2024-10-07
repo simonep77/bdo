@@ -194,7 +194,7 @@ namespace Business.Data.WinFormTest
 
                 ss1.DB.SQL = "SELECT * FROM ordini LIMIT 0, 1000";
 
-                var res = ss1.DB.Query<OrdineDTO>();
+                var res = ss1.DB.Query<(uint Id, uint AnagraficaId)>();
 
                 this.WriteLog(ss1.GetCurrentElapsed().ToString());
                 this.WriteLog(res.Count.ToString());

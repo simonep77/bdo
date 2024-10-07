@@ -145,22 +145,6 @@
             Costruttore
             </summary>
         </member>
-        <member name="T:Business.Data.Objects.Core.Attributes.SearchKey">
-            <summary>
-            Indica che una proprieta' fa parte di una chiave identificata dal nome fornito
-            </summary>
-        </member>
-        <member name="P:Business.Data.Objects.Core.Attributes.SearchKey.KeyName">
-            <summary>
-            Nome della chiave
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Attributes.SearchKey.#ctor(System.String)">
-            <summary>
-            Imposta chiave di ricerca con nome fornito e operatore di default (=)
-            </summary>
-            <param name="keyName"></param>
-        </member>
         <member name="T:Business.Data.Objects.Core.Attributes.PropertyMap">
             <summary>
             Consente di definire la dipendenza di una proprieta' rispetta ad una o piu'
@@ -1351,7 +1335,7 @@
         </member>
         <member name="T:Business.Data.Objects.Core.Schema.Usage.PropValue">
             <summary>
-            Valore di una proprietà BDO
+            Valore di una propriet� BDO
             </summary>
         </member>
         <member name="T:Business.Data.Objects.Core.Schema.Usage.DataSchema">
@@ -1590,35 +1574,21 @@
             <param name="propertyIndex"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetPropertyValueByName(System.String)">
-            <summary>
-            Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
-            </summary>
-            <param name="name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.SetPropertyValueByName(System.String,System.Object)">
-            <summary>
-            Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
-            </summary>
-            <param name="name"></param>
-            <param name="value"></param>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToString">
             <summary>
             Ritorna la rappresentazione in stringa dell'oggetto
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDictionary">
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.ToDictionary(System.Boolean)">
             <summary>
-            Ritorna dictionary con i soli valori dell'oggetto (no mappati)
+            Ritorna dictionary con i soli valori dell'oggetto
             </summary>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.FromDictionary(System.Collections.Generic.Dictionary{System.String,System.Object})">
             <summary>
-            Imposta tutte le proprietà per nome presenti nel dizionatio in input
+            Imposta tutte le proprietà per nome presenti nel dizionatio in input. Eventuali oggetti map
             </summary>
             <param name="value"></param>
         </member>
@@ -1740,6 +1710,38 @@
             </summary>
             <param name="other"></param>
             <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.PropertyGetInfoAll">
+            <summary>
+            Ritorna info su tutte le proprietà definite nel DataObject (abstract)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.PropertyGeInfoSimple">
+            <summary>
+            Ritorna info sulle proprietà semplici (non mappate) del DataObject (abstract)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.PropertyGetInfoMapped">
+            <summary>
+            Ritorna info sulle proprietà mappate del DataObject (abstract)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.PropertyGetValueByName(System.String)">
+            <summary>
+            Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.PropertySetValueByName(System.String,System.Object)">
+            <summary>
+            Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
+            </summary>
+            <param name="name"></param>
+            <param name="value"></param>
         </member>
         <member name="T:Business.Data.Objects.Core.Base.DbPrefixDictionary">
             <summary>
@@ -2535,7 +2537,7 @@
             <param name="order"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByKEY(System.String,System.Type,System.Boolean,System.Object[])">
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjectInternalByPK(System.Type,System.Boolean,System.Object[])">
             <summary>
             Routine di caricamento oggetto con 
             </summary>
@@ -2545,7 +2547,7 @@
             <param name="values"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewInternalByKEY(System.String,System.Type,System.Object[])">
+        <member name="M:Business.Data.Objects.Core.BusinessSlot.LoadObjOrNewInternalByPK(System.Type,System.Object[])">
             <summary>
             Carica oggetto da chiave definita e se non esiste ritorna nuovo oggetto precaricato con i valori utilizzando il type specificato
             </summary>
@@ -2764,29 +2766,11 @@
             <param name="args"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadByKEY``1(System.String,System.Object[])">
-            <summary>
-            Crea una biz con LoadByKEY
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="keyName"></param>
-            <param name="args"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadOrNewByPK``1(System.Object[])">
             <summary>
             Crea una biz con LoadOrNewByPK
             </summary>
             <typeparam name="T"></typeparam>
-            <param name="args"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Business.Data.Objects.Core.BusinessSlot.BizNewWithLoadOrNewByKEY``1(System.String,System.Object[])">
-            <summary>
-            Crea una biz con LoadOrNewByKEY
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="keyName"></param>
             <param name="args"></param>
             <returns></returns>
         </member>
@@ -3158,7 +3142,7 @@
         </member>
         <member name="M:Business.Data.Objects.Core.DataObject`1.Diff(`0)">
             <summary>
-            Dati due oggetti ritorna elenco differenze. Item1 e' il nome della prorieta, item2 il valore dell'oggetto origine, item3 dell'oggetto confrontato
+            Dati due oggetti ritorna elenco differenze. Source è il valore dell'oggetto origine, Other dell'oggetto confrontato
             </summary>
             <param name="other"></param>
             <returns></returns>
@@ -4014,7 +3998,7 @@
             <param name="type"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateBizObj(System.Type,Business.Data.Objects.Core.BusinessSlot,System.Boolean,System.String,System.Object[])">
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyAssemblyCache.CreateBizObj(System.Type,Business.Data.Objects.Core.BusinessSlot,System.Boolean,System.Boolean,System.Object[])">
             <summary>
             Crea istanza di BusinessObject utilizzando un costruttore dinamico
             </summary>
@@ -4138,7 +4122,7 @@
             <param name="properties"></param>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.fillKeyAttribute(Business.Data.Objects.Core.Schema.Definition.ClassSchema,Business.Data.Objects.Core.Schema.Definition.Property,Business.Data.Objects.Core.Attributes.SearchKey)">
+        <member name="M:Business.Data.Objects.Core.ObjFactory.ProxyTypeBuilder.fillKeyAttribute(Business.Data.Objects.Core.Schema.Definition.ClassSchema,Business.Data.Objects.Core.Schema.Definition.Property)">
             <summary>
             Gestione chiavi
             </summary>
@@ -5163,6 +5147,23 @@
             </summary>
             <param name="obj"></param>
             <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.RawBdoLinqSql(System.String)">
+            <summary>
+            Metodo che non esegue nulla ma utile nelle linq sql bdo per indicare l'inserimento di codice sql raw
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.ToBizObjectList``2(System.Collections.Generic.IEnumerable{``1},System.Action{``0})">
+            <summary>
+            Trasforma qualsiasi enumerabile di dataobject in BusinessObject List. Eventualmente è possibile eseguire del codice sul business object in creazione
+            </summary>
+            <typeparam name="TB"></typeparam>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <param name="act"></param>
             <returns></returns>
         </member>
         <member name="T:Business.Data.Objects.Common.Utils.LinqExt">

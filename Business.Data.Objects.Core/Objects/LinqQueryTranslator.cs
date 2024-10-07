@@ -141,6 +141,12 @@ namespace Business.Data.Objects.Core.Objects
 
                 return m;
             }
+            else if (m.Method.Name == nameof(Extensions.RawBdoLinqSql))
+            {
+                this.sb.Append(@"(");
+                this.Visit(m.Arguments[0]);
+                this.sb.Append(@")");
+            }
             //else if (m.Method.Name == "Take")
             //{
             //    if (this.ParseTakeExpression(m))
