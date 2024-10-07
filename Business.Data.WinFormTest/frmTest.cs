@@ -538,8 +538,12 @@ namespace Business.Data.WinFormTest
 
                 var l2 = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(f.Result);
 
-                this.WriteLog(l2.First().Anagrafica.Cognome);
+                var first = l2.First();
 
+                this.WriteLog(first.Anagrafica.Cognome);
+                this.WriteLog(first.Stato.Nome);
+
+                this.WriteLog(ss1.PrintInfo());
             }
 
 

@@ -25,7 +25,7 @@ namespace Business.Data.Objects.Core.Schema.Usage
 
             if (other.Value != null)
             {
-                var t = other.GetType();
+                var t = other.Value.GetType();
 
                 if (t.IsValueType || t.IsString())
                     this.Value = other.Value;
