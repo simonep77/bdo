@@ -151,9 +151,9 @@ namespace Business.Data.Objects.Common.Utils
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string RawBdoLinqSql(this string input)
+        public static bool RawBdoLinqSql(this string input)
         {
-            return string.Intern(input);
+            return false;
         }
 
         /// <summary>

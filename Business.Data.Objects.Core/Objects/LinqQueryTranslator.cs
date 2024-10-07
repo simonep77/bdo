@@ -144,25 +144,11 @@ namespace Business.Data.Objects.Core.Objects
             else if (m.Method.Name == nameof(Extensions.RawBdoLinqSql))
             {
                 this.sb.Append(@"(");
-                this.Visit(m.Arguments[0]);
+                this.sb.Append((m.Arguments[0] as ConstantExpression).Value);
                 this.sb.Append(@")");
+                return m;
             }
-            //else if (m.Method.Name == "Take")
-            //{
-            //    if (this.ParseTakeExpression(m))
-            //    {
-            //        Expression nextExpression = m.Arguments[0];
-            //        return this.Visit(nextExpression);
-            //    }
-            //}
-            //else if (m.Method.Name == "Skip")
-            //{
-            //    if (this.ParseSkipExpression(m))
-            //    {
-            //        Expression nextExpression = m.Arguments[0];
-            //        return this.Visit(nextExpression);
-            //    }
-            //}
+           
             else if (m.Method.Name == "OrderBy")
             {
                 if (this.ParseOrderByExpression(m, "ASC"))

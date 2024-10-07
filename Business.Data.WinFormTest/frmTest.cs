@@ -16,6 +16,7 @@ using Business.Data.Objects.TestClass.BIZ;
 using Business.Data.Objects.TestClass.DTO;
 using Business.Data.Objects.Common.Cache;
 using System.Diagnostics;
+using System.Threading.Tasks.Sources;
 
 namespace Business.Data.WinFormTest
 {
@@ -512,6 +513,31 @@ namespace Business.Data.WinFormTest
             var b1 = a.In(2, (long)3);
             var b2 = a.In(2, 3m);
             var b4 = a.In(2, 3f);
+
+        }
+
+        private void lINQ2SQLConRawSqlToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+
+                var l1 = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => (o.StatoId.In(1, 3) && o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today) && "EXISTS (SELECT 1)".RawBdoLinqSql()));
+
+                this.WriteLog(l1.Count.ToString());
+
+                var f = new LinqFilter<Ordine>();
+                f.And(x => (x.StatoId.In(1, 3) && "EXISTS (SELECT 1)".RawBdoLinqSql()));
+                f.And(x => x.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
+
+                var l2 = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(f.Result);
+
+            }
+
 
         }
     }

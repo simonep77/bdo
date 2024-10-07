@@ -44,9 +44,10 @@ namespace Business.Data.WinFormTest
             this.tESTSimpleAESToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTUndeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTCustomQueryFullRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tESTOperatoreINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.txtLog = new System.Windows.Forms.TextBox();
-            this.tESTOperatoreINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lINQ2SQLConRawSqlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,7 +78,8 @@ namespace Business.Data.WinFormTest
             this.tESTSimpleAESToolStripMenuItem,
             this.tESTUndeleteToolStripMenuItem,
             this.tESTCustomQueryFullRecordToolStripMenuItem,
-            this.tESTOperatoreINToolStripMenuItem});
+            this.tESTOperatoreINToolStripMenuItem,
+            this.lINQ2SQLConRawSqlToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -168,6 +170,13 @@ namespace Business.Data.WinFormTest
             this.tESTCustomQueryFullRecordToolStripMenuItem.Text = "TEST Custom Query FullRecord";
             this.tESTCustomQueryFullRecordToolStripMenuItem.Click += new System.EventHandler(this.tESTCustomQueryFullRecordToolStripMenuItem_Click);
             // 
+            // tESTOperatoreINToolStripMenuItem
+            // 
+            this.tESTOperatoreINToolStripMenuItem.Name = "tESTOperatoreINToolStripMenuItem";
+            this.tESTOperatoreINToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.tESTOperatoreINToolStripMenuItem.Text = "TEST operatore IN";
+            this.tESTOperatoreINToolStripMenuItem.Click += new System.EventHandler(this.tESTOperatoreINToolStripMenuItem_Click);
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -190,12 +199,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // tESTOperatoreINToolStripMenuItem
+            // lINQ2SQLConRawSqlToolStripMenuItem
             // 
-            this.tESTOperatoreINToolStripMenuItem.Name = "tESTOperatoreINToolStripMenuItem";
-            this.tESTOperatoreINToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.tESTOperatoreINToolStripMenuItem.Text = "TEST operatore IN";
-            this.tESTOperatoreINToolStripMenuItem.Click += new System.EventHandler(this.tESTOperatoreINToolStripMenuItem_Click);
+            this.lINQ2SQLConRawSqlToolStripMenuItem.Name = "lINQ2SQLConRawSqlToolStripMenuItem";
+            this.lINQ2SQLConRawSqlToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.lINQ2SQLConRawSqlToolStripMenuItem.Text = "LINQ 2 SQL Con rawSql";
+            this.lINQ2SQLConRawSqlToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLConRawSqlToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -232,5 +241,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem tESTUndeleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tESTCustomQueryFullRecordToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tESTOperatoreINToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lINQ2SQLConRawSqlToolStripMenuItem;
     }
 }
