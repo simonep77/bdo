@@ -847,7 +847,7 @@ namespace Business.Data.Objects.Core.Base
         public void Dispose()
         {
             //Sgancia sessione
-            this.SetSlot(null);
+            this.Slot = null;
 
             //Libera risorse
             //this.mSchema.Dispose();

@@ -61,8 +61,8 @@ namespace Business.Data.Objects.Database
             sb.Append(sTemp);
             sb.Append(" ) AS tmpTab ");
             sb.Append("ORDER BY CURRENT_TIMESTAMP ");
-            sb.AppendFormat("OFFSET {0} ROWS ", positionIn);
-            sb.AppendFormat("FETCH NEXT {0} ROWS ONLY ", offsetIn);
+            sb.Append($"OFFSET {positionIn} ROWS ");
+            sb.Append($"FETCH NEXT {offsetIn} ROWS ONLY ");
 
 
             this.SQL = sb.ToString();

@@ -1241,7 +1241,7 @@ namespace Business.Data.Objects.Core
             DataObjectBase oNewObj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(origType, true);
 
             //Imposta slot
-            oNewObj.SetSlot(this);
+            oNewObj.Slot = this;
 
             //carica
             oNewObj.LoadByCustomWhere(where, order);
@@ -1355,7 +1355,7 @@ namespace Business.Data.Objects.Core
             DataObjectBase oNewObj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(origType, false);
 
             //Imposta slot
-            oNewObj.SetSlot(this);
+            oNewObj.Slot = this;
 
             //Cerca in cache se previsto
             oNewObj.mDataSchema = this.cacheGetPipeline(uPkHash, oNewObj.mClassSchema);
@@ -1454,7 +1454,7 @@ namespace Business.Data.Objects.Core
 
             var obj = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(dalType, true);
             //Imposta slot
-            obj.SetSlot(this);
+            obj.Slot = this;
 
             obj.mDataSchema.ObjectSource = EObjectSource.DTO;
             obj.mDataSchema.ObjectState = EObjectState.Loaded;
@@ -1655,7 +1655,7 @@ namespace Business.Data.Objects.Core
         internal DataObjectBase CreateObjectByType(Type dalTypeIn)
         {
             DataObjectBase o = (DataObjectBase)ProxyAssemblyCache.Instance.CreateDaoObj(dalTypeIn, true);
-            o.SetSlot(this);
+            o.Slot = this;
 
             //Ritorna oggetto appena creato
             return o;
@@ -1669,7 +1669,7 @@ namespace Business.Data.Objects.Core
         public T CreateObject<T>() where T : DataObjectBase
         {
             T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(typeof(T), true);
-            o.SetSlot(this);
+            o.Slot = this;
 
             //Ritorna oggetto appena creato
             return o;
@@ -1682,7 +1682,7 @@ namespace Business.Data.Objects.Core
         public TL CreateList<TL>() where TL : DataListBase
         {
             TL oList = (TL)ProxyAssemblyCache.Instance.CreateDaoNoSchemaObj(typeof(TL));
-            oList.SetSlot(this);
+            oList.Slot = this;
 
             return oList;
         }
@@ -1738,7 +1738,7 @@ namespace Business.Data.Objects.Core
                 throw new ObjectException(ObjectMessages.Base_Save_Null, typeof(T).Name);
 
             //Richiama salvataggio oggetto
-            obj.SetSlot(this);
+            obj.Slot = this;
 
             bool bNew = obj.ObjectState == EObjectState.New;
 
@@ -1800,7 +1800,7 @@ namespace Business.Data.Objects.Core
                 throw new ObjectException(ObjectMessages.Base_Delete_Null, typeof(T).Name);
 
             //Richiama salvataggio oggetto
-            obj.SetSlot(this);
+            obj.Slot = this;
 
             bool bCancel = false;
 
@@ -1864,7 +1864,7 @@ namespace Business.Data.Objects.Core
             foreach (var item in list)
             {
                 //Imposta se stesso come slot
-                item.SetSlot(this);
+                item.Slot = this;
                 this.SaveObject(item);
             }
 
@@ -1886,7 +1886,7 @@ namespace Business.Data.Objects.Core
             foreach (var item in list)
             {
                 //Imposta se stesso come slot
-                item.SetSlot(this);
+                item.Slot = this;
                 this.DeleteObject(item);
             }
         }
@@ -1959,7 +1959,7 @@ namespace Business.Data.Objects.Core
 
             T o = (T)ProxyAssemblyCache.Instance.CreateDaoObj(other.mClassSchema.OriginalType);
             o.mDataSchema = other.mDataSchema.Clone(true);
-            o.SetSlot(this);
+            o.Slot = this;
             return o;
         }
 
@@ -1981,7 +1981,7 @@ namespace Business.Data.Objects.Core
             o.mDataSchema.ObjectSource = EObjectSource.None;
             o.mDataSchema.ObjectState = EObjectState.New;
             //Imposto slot
-            o.SetSlot(this);
+            o.Slot = this;
 
             //Azzera Primary key
             o.mClassSchema.PrimaryKey.Properties.ForEach(x => x.SetValue(o, x.DefaultValue));
@@ -2007,7 +2007,7 @@ namespace Business.Data.Objects.Core
             object[] values = oKey.GetValues(obj);
 
             //Imposta slot
-            obj.SetSlot(this);
+            obj.Slot = this;
 
             //Verifica caching
             bool bCacheable = this.IsCacheable(obj);
@@ -2082,8 +2082,8 @@ namespace Business.Data.Objects.Core
                 sbDump.AppendLine();
             }
 
-            string[] keysExtraData = obj.ExtraDataGetKeys();
-            if (keysExtraData.Length > 0)
+            var keysExtraData = obj.ExtraDataKeys();
+            if (keysExtraData.Any())
             {
                 sbDump.AppendLine();
                 sbDump.AppendLine("-- Dati Extra --");
@@ -2659,7 +2659,7 @@ namespace Business.Data.Objects.Core
 
                 //Inizializza 
                 BusinessSlot._StaticCaches.Clear();
-                BusinessSlot._GlobalCache = StaticCacheRegister(CACHE_GLOBAL_NAME, conf.CacheGlobalSize, TimeSpan.Zero);
+                BusinessSlot._GlobalCache = StaticCacheRegister(CACHE_GLOBAL_NAME, conf.CacheGlobalSize, TimeSpan.FromMinutes(120));
                 BusinessSlot._ListCache = StaticCacheRegister(CACHE_GLOBAL_LIST_NAME, conf.CacheGlobalSize / 2, TimeSpan.FromMinutes(20));
 
                 //Se impostata directory di log

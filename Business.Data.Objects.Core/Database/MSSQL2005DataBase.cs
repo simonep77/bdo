@@ -52,15 +52,6 @@ namespace Business.Data.Objects.Database
             //Sostituisce qualunque "SELECT" con "SELECT TOP 10000000000" per consentire gli order BY
             String sTemp;
 
-            //if (this.SQL.StartsWith(@"WITH cteq1"))
-            //{
-            //    sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum], ", 1);
-            //    //SELECT COUNT(*) FROM cteq2
-            //    //TOP 10000000000 ROW_NUMBER() OVER (ORDER BY CURRENT_TIMESTAMP) as [__RowNum]
-            //    this.SQL = string.Concat(sTemp.Substring(0, sTemp.Length - 20), " SELECT *, (SELECT COUNT(*) FROM cteq2) AS TotRecords FROM cteq2 ");
-            //}
-            //else
-            //{
             System.Text.StringBuilder sb = new System.Text.StringBuilder(400);
             sTemp = _PAGED_REGEX.Replace(this.SQL, @" $1 $2 TOP 10000000000 ", 1);
             //Caso standard

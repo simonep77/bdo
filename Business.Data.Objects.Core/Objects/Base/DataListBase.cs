@@ -490,13 +490,6 @@ namespace Business.Data.Objects.Core.Base
         #region PUBLIC METHODS
 
 
-        internal override void SetSlot(BusinessSlot slot)
-        {
-            base.SetSlot(slot);
-        }
-
-
-
         /// <summary>
         /// Imposta uno slot sulla lista corrente
         /// </summary>

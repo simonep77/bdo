@@ -258,7 +258,7 @@ namespace Business.Data.Objects.Core
                                     pk = new object[] { this.mValue }; //Crea array PK
 
                                 //Passato valore PK: crea relativo dataobject
-                                this.mValue = obj.GetSlot().LoadObjectInternalByPK(oProp.Type, true, pk);
+                                this.mValue = obj.Slot.LoadObjectInternalByPK(oProp.Type, true, pk);
                             }
                         }
                     }

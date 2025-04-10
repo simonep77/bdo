@@ -110,7 +110,7 @@ namespace Business.Data.Objects.Core.Utils
             if (obj == null)
                 return string.Empty;
 
-            return GetObjectHashString(obj.GetSlot(), 
+            return GetObjectHashString(obj.Slot, 
                 obj.mClassSchema, 
                 obj.mClassSchema.PrimaryKey.GetValues(obj));
         }

@@ -2,6 +2,7 @@
 using Business.Data.Objects.Core.Common.Resources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Data.Objects.Core.Base
@@ -11,28 +12,33 @@ namespace Business.Data.Objects.Core.Base
     /// </summary>
     public abstract class SlotAwareObject
     {
-        private BusinessSlot mSlot;
         private Dictionary<string, object> mExtraData;
+
+        /// <summary>
+        /// Espone i dati extra
+        /// </summary>
+        private Dictionary<string, object> ExtraData
+        {
+            get
+            {
+                if (this.mExtraData == null)
+                    this.mExtraData = new Dictionary<string, object>();
+                return this.mExtraData;
+            }
+        }
 
         #region SLOT HANDLING
 
         /// <summary>
         /// Slot associato all'oggetto (interno)
         /// </summary>
-        protected BusinessSlot Slot => this.mSlot;
+        public BusinessSlot Slot { get; internal set; }
 
-        /// <summary>
-        /// Imposta lo slot sull'oggetto
-        /// </summary>
-        /// <param name="slot"></param>
-        internal virtual void SetSlot(BusinessSlot slot)
-        {
-            this.mSlot = slot;
-        }
 
         /// <summary>
         /// Slot associato all'oggetto
         /// </summary>
+        [Obsolete("Il metodo verrà eliminato in quanto è esposta la proprietà Slot")]
         public BusinessSlot GetSlot() => this.Slot;
 
         #endregion
@@ -43,27 +49,14 @@ namespace Business.Data.Objects.Core.Base
         #region EXTRA DATA
 
         /// <summary>
-        /// Se non presente extra data viene creato
-        /// </summary>
-        private void extraDataTouch()
-        {
-            //Extradata non valorizzato: lo crea
-            if (this.mExtraData == null)
-                this.mExtraData = new Dictionary<string, object>();
-        }
-
-        /// <summary>
         /// Verifica se presenti dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         internal bool ExtraDataExist(string key)
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Verifica
-            return this.mExtraData.ContainsKey(key);
+            return this.ExtraData.ContainsKey(key);
 
         }
 
@@ -76,11 +69,8 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         public object ExtraDataGet(string key, object defaultValue)
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Cerca valore
-            if (!this.mExtraData.TryGetValue(key, out object oRet))
+            if (!this.ExtraData.TryGetValue(key, out object oRet))
                 return defaultValue;
 
             return oRet;
@@ -96,11 +86,8 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         public T ExtraDataGet<T>(string key, T defaultValue)
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Cerca valore
-            if (!this.mExtraData.TryGetValue(key, out object oRet))
+            if (!this.ExtraData.TryGetValue(key, out object oRet))
                 return defaultValue;
 
             return (T)Convert.ChangeType(oRet, typeof(T));
@@ -114,11 +101,8 @@ namespace Business.Data.Objects.Core.Base
         /// <param name="value"></param>
         public void ExtraDataSet(string key, object value)
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Imposta valore
-            this.mExtraData[key] = value;
+            this.ExtraData[key] = value;
         }
 
 
@@ -128,11 +112,8 @@ namespace Business.Data.Objects.Core.Base
         /// <param name="key"></param>
         public void ExtraDataRemove(string key)
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Rimuove
-            this.mExtraData.Remove(key);
+            this.ExtraData.Remove(key);
         }
 
 
@@ -142,11 +123,8 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         public int ExtraDataCount()
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Ritorna
-            return this.mExtraData.Count;
+            return this.ExtraData.Count;
         }
 
 
@@ -155,51 +133,26 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         public void ExtraDataClear()
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
             //Rimuove
-            this.mExtraData.Clear();
-        }
-
-
-        /// <summary>
-        /// Ritorna tutte le chiavi registrate per l'oggetto
-        /// </summary>
-        /// <returns></returns>
-        public string[] ExtraDataGetKeys()
-        {
-            //Extradata non valorizzato: ritorna array vuoto
-            var keys = this.ExtraDataKeys();
-
-            //Rimuove
-            string[] retArr = new string[keys.Count];
-            keys.CopyTo(retArr, 0);
-            return retArr;
+            this.ExtraData.Clear();
         }
 
         /// <summary>
         /// Ritorna collection di key extra data
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, object>.KeyCollection ExtraDataKeys()
+        public IEnumerable<string> ExtraDataKeys()
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
-            return this.mExtraData.Keys;
+            return this.ExtraData.Keys.Select(x => x);
         }
 
         /// <summary>
         /// Ritorna collection di valori extra data
         /// </summary>
         /// <returns></returns>
-        public Dictionary<string, object>.ValueCollection ExtraDataValues()
+        public IEnumerable<object> ExtraDataValues()
         {
-            //Assicura extradata
-            this.extraDataTouch();
-
-            return this.mExtraData.Values;
+            return this.mExtraData.Values.Select(x => x);
         }
 
         #endregion
@@ -214,7 +167,7 @@ namespace Business.Data.Objects.Core.Base
                 throw new ObjectException(ObjectMessages.Base_SwithToNullSession);
 
             //Imposta sessione
-            this.SetSlot(slotIn);
+            this.Slot = slotIn;
         }
 
         #endregion

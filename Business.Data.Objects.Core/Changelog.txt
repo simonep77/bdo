@@ -223,3 +223,6 @@ Revisione diff con tuple nominali
 Possibilità di inserire codice sql arbitrario nelle query sql linq
 Cache lru override default Expire
 Fix bug globalcache
+
+[17/02/2025] - 5.0.72 - Simone Pelaia
+GlobalCache a tempo (2 ore)

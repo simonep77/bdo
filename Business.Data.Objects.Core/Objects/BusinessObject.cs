@@ -16,14 +16,10 @@ namespace Business.Data.Objects.Core
 
         #region PROPRIETA'
 
-        private T mObject;
         /// <summary>
         /// Oggetto dati associato
         /// </summary>
-        public T DataObj
-        {
-            get { return this.mObject; }
-        }
+        public T DataObj { get; }
 
         /// <summary>
         /// Indica se siamo in inserimento o appena stato inserito. Utile nelle routine di saveExec...
@@ -43,8 +39,8 @@ namespace Business.Data.Objects.Core
                 throw new ObjectException($"{this.GetType().Name} - L'oggetto fornito in input risulta nullo.");
 
             //Imposta oggetto
-            this.mObject = obj;
-            this.SetSlot(obj.GetSlot());
+            this.DataObj = obj;
+            this.Slot = obj.Slot;
         }
 
 
