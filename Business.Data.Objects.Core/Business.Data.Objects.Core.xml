@@ -1816,25 +1816,19 @@
             Classe base per oggetti dipendenti da slot
             </summary>
         </member>
+        <member name="P:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraData">
+            <summary>
+            Espone i dati extra
+            </summary>
+        </member>
         <member name="P:Business.Data.Objects.Core.Base.SlotAwareObject.Slot">
             <summary>
             Slot associato all'oggetto (interno)
             </summary>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.SetSlot(Business.Data.Objects.Core.BusinessSlot)">
-            <summary>
-            Imposta lo slot sull'oggetto
-            </summary>
-            <param name="slot"></param>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.GetSlot">
             <summary>
             Slot associato all'oggetto
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.extraDataTouch">
-            <summary>
-            Se non presente extra data viene creato
             </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataExist(System.String)">
@@ -1885,12 +1879,6 @@
             <summary>
             Elimina tutti i dati extra
             </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataGetKeys">
-            <summary>
-            Ritorna tutte le chiavi registrate per l'oggetto
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataKeys">
             <summary>

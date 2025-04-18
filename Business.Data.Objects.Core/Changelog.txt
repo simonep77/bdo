@@ -226,3 +226,6 @@ Fix bug globalcache
 
 [17/02/2025] - 5.0.72 - Simone Pelaia
 GlobalCache a tempo (2 ore)
+
+[18/04/2025] - 5.0.73 - Simone Pelaia
+Fix BusinessObject IsInsert

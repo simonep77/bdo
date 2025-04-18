@@ -41,6 +41,7 @@ namespace Business.Data.Objects.Core
             //Imposta oggetto
             this.DataObj = obj;
             this.Slot = obj.Slot;
+            this.IsInsert = this.DataObj.ObjectState == Data.Objects.Common.EObjectState.New;
         }
 
 
@@ -64,7 +65,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         public void Save()
         {
-            //Imposta contesto inserimento
+            //Aggiorna contesto inserimento
             this.IsInsert = this.DataObj.ObjectState == Data.Objects.Common.EObjectState.New;
 
             //Esegue before
