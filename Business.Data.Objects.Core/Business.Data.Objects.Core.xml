@@ -1823,12 +1823,12 @@
         </member>
         <member name="P:Business.Data.Objects.Core.Base.SlotAwareObject.Slot">
             <summary>
-            Slot associato all'oggetto (interno)
+            Slot associato all'oggetto (interno), non esporre public pr evitare problemi di serializzazione. Utilizzare il metodo GetSlot()
             </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.GetSlot">
             <summary>
-            Slot associato all'oggetto
+            Slot associato all'oggetto. E' utilizzato un metodo per evitare serializzazione
             </summary>
         </member>
         <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.ExtraDataExist(System.String)">

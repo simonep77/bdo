@@ -229,3 +229,6 @@ GlobalCache a tempo (2 ore)
 
 [18/04/2025] - 5.0.73 - Simone Pelaia
 Fix BusinessObject IsInsert
+
+[30/04/2025] - 5.0.74 - Simone Pelaia
+Revert proprietà Slot pubblica per problemi di serializzazione. GetSlot non più obsoleto

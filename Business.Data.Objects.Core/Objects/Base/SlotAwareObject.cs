@@ -30,15 +30,14 @@ namespace Business.Data.Objects.Core.Base
         #region SLOT HANDLING
 
         /// <summary>
-        /// Slot associato all'oggetto (interno)
+        /// Slot associato all'oggetto (interno), non esporre public pr evitare problemi di serializzazione. Utilizzare il metodo GetSlot()
         /// </summary>
-        public BusinessSlot Slot { get; internal set; }
+        internal BusinessSlot Slot { get; set; }
 
 
         /// <summary>
-        /// Slot associato all'oggetto
+        /// Slot associato all'oggetto. E' utilizzato un metodo per evitare serializzazione
         /// </summary>
-        [Obsolete("Il metodo verrà eliminato in quanto è esposta la proprietà Slot")]
         public BusinessSlot GetSlot() => this.Slot;
 
         #endregion
