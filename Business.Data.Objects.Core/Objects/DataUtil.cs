@@ -21,7 +21,7 @@ namespace Business.Data.Objects.Core
         public DataUtil(BusinessSlot slotIn)
         {
             //Imposta oggetto
-            this.Slot = slotIn;
+            this.SetSlot(slotIn);
         }
     }
 }

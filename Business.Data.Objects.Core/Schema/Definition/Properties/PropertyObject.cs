@@ -145,7 +145,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
                 }
 
                 //Se array OK definito ed il primo valore non nullo imposta oggetto
-                pv.Value = obj.Slot.LoadObjectInternalByPK(this.Type, true, arrPk);
+                pv.Value = obj.GetSlot().LoadObjectInternalByPK(this.Type, true, arrPk);
             }
 
             //Carica oggetto e imposta come caricato

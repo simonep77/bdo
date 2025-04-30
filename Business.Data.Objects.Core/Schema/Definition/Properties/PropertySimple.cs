@@ -221,7 +221,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             {
                 try
                 {
-                    input = this.mEncAttr.Encrypt(obj.Slot, this, input.ToString());
+                    input = this.mEncAttr.Encrypt(obj.GetSlot(), this, input.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -257,7 +257,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             var pv = obj.mDataSchema.GetByProperty(this);
 
             //Se attivato il real change tracking 
-            if (obj.Slot.Conf.ChangeTrackingEnabled)
+            if (obj.GetSlot().Conf.ChangeTrackingEnabled)
             {
                 if (this.AcceptNull && this.IsNull(pv.Value) && this.IsNull(value))
                     bChanged = false;
@@ -334,7 +334,7 @@ namespace Business.Data.Objects.Core.Schema.Definition
             //Se proprieta' e' criptata allora esegue decrypt
             if (oTemp != null && this.mEncAttr != null)
             {
-                oTemp = this.mEncAttr.Decrypt(obj.Slot, this, oTemp.ToString());
+                oTemp = this.mEncAttr.Decrypt(obj.GetSlot(), this, oTemp.ToString());
             }
 
             //Imposta comunque dato semplice

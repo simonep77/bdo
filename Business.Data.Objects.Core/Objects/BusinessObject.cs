@@ -40,7 +40,7 @@ namespace Business.Data.Objects.Core
 
             //Imposta oggetto
             this.DataObj = obj;
-            this.Slot = obj.Slot;
+            this.SetSlot(obj.GetSlot());
             this.IsInsert = this.DataObj.ObjectState == Data.Objects.Common.EObjectState.New;
         }
 

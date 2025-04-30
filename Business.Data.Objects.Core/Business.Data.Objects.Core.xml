@@ -1826,6 +1826,12 @@
             Slot associato all'oggetto (interno), non esporre public pr evitare problemi di serializzazione. Utilizzare il metodo GetSlot()
             </summary>
         </member>
+        <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.SetSlot(Business.Data.Objects.Core.BusinessSlot)">
+            <summary>
+            Imposta lo slot
+            </summary>
+            <param name="slot"></param>
+        </member>
         <member name="M:Business.Data.Objects.Core.Base.SlotAwareObject.GetSlot">
             <summary>
             Slot associato all'oggetto. E' utilizzato un metodo per evitare serializzazione

@@ -32,8 +32,16 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Slot associato all'oggetto (interno), non esporre public pr evitare problemi di serializzazione. Utilizzare il metodo GetSlot()
         /// </summary>
-        internal BusinessSlot Slot { get; set; }
+        protected BusinessSlot Slot { get; private set; }
 
+        /// <summary>
+        /// Imposta lo slot
+        /// </summary>
+        /// <param name="slot"></param>
+        internal virtual void SetSlot(BusinessSlot slot)
+        {
+            this.Slot = slot;
+        }
 
         /// <summary>
         /// Slot associato all'oggetto. E' utilizzato un metodo per evitare serializzazione
