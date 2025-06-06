@@ -232,3 +232,6 @@ Fix BusinessObject IsInsert
 
 [30/04/2025] - 5.0.75 - Simone Pelaia
 Revert proprietà Slot pubblica per problemi di serializzazione. GetSlot non più obsoleto
+
+[06/06/2025] - 5.0.76 - Simone Pelaia
+Variata la cartella di default dei log -> <temp directory>/<executing assembly name>

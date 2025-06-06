@@ -18,8 +18,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -2665,9 +2667,7 @@ namespace Business.Data.Objects.Core
                 //Se impostata directory di log
                 if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))
                 {
-                    //Utilizza cartella di default dell'assembly
-                    Uri uri = new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase);
-                    _StaticConf.LogBaseDirectory = System.IO.Path.GetDirectoryName(uri.LocalPath);
+                    _StaticConf.LogBaseDirectory = Path.Combine(Path.GetTempPath(), Assembly.GetEntryAssembly().GetName().Name);
                 }
 
                 //Si assicura dell'esistenza della directory
