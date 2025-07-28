@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Data.Objects.Core.Common.Utils
@@ -7,11 +8,10 @@ namespace Business.Data.Objects.Core.Common.Utils
     /// <summary>
     /// Oggetto per caching Lazy
     /// </summary>
-    public class LazyStore
+    public class LazyStore: IDisposable
     {
 
-
-        private Dictionary<string, object> mLazyDic = new Dictionary<string, object>();
+        private Dictionary<string, object> LazyDic = new Dictionary<string, object>();
 
         /// <summary>
         /// Funzione di caricamento oggetto lazy tipizzato
@@ -29,10 +29,10 @@ namespace Business.Data.Objects.Core.Common.Utils
         /// <returns></returns>
         public T1 Get<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
         {
-            if (!mLazyDic.TryGetValue(uniqueKey, out object obj))
+            if (!this.LazyDic.TryGetValue(uniqueKey, out object obj))
             {
                 obj = fn();
-                mLazyDic.Add(uniqueKey, obj);
+                this.LazyDic.Add(uniqueKey, obj);
             }
 
             return (T1)obj;
@@ -45,7 +45,7 @@ namespace Business.Data.Objects.Core.Common.Utils
         /// <param name="uniqueKey"></param>
         public void Reset(string uniqueKey)
         {
-            this.mLazyDic.Remove(uniqueKey);
+            this.LazyDic.Remove(uniqueKey);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Business.Data.Objects.Core.Common.Utils
         /// <param name="uniqueKey"></param>
         public void ResetAll()
         {
-            this.mLazyDic.Clear();
+            this.LazyDic.Clear();
         }
 
         /// <summary>
@@ -65,8 +65,16 @@ namespace Business.Data.Objects.Core.Common.Utils
         /// <param name="value"></param>
         public void Set<T1>(string uniqueKey, T1 value)
         {
-            this.mLazyDic[uniqueKey] = value;
+            this.LazyDic[uniqueKey] = value;
         }
 
+        public void Dispose()
+        {
+            //Esegue il dispose di tutte le istanze Idisposable agganciate al lazy store
+            foreach (var item in this.LazyDic.Values)
+            {
+                (item as IDisposable)?.Dispose();
+            }
+        }
     }
 }

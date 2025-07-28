@@ -2759,6 +2759,9 @@ namespace Business.Data.Objects.Core
                     db.Dispose();
                 }
 
+                //Esegue il dispose del lazystore e di tutti gli oggetit eventualmente associati
+                this.mLazyStore?.Dispose();
+
                 //Rimuove eventuali eventi rimasti attaccati
                 if (this.OnLogDebugSent != null)
                 {
