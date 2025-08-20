@@ -33,20 +33,13 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public new void Add(string key, string value)
-        {
-            base.Add(key, this.dbNameNormalize(value));
-        }
+        public new void Add(string key, string value) => base.Add(key, this.dbNameNormalize(value));
 
         /// <summary>
         /// Normalizza il nome DB
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private string dbNameNormalize(string name)
-        {
-            return string.Concat(name.TrimEnd(C_POINT), C_POINT);
-        }
-
+        private string dbNameNormalize(string name) => string.Concat(name.TrimEnd(C_POINT), C_POINT);
     }
 }

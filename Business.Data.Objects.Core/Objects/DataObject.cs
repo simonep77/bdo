@@ -48,10 +48,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public bool EqualsDeep(T other)
-        {
-            return (!this.Diff(other).Any());
-        }
+        public bool EqualsDeep(T other) => !this.Diff(other).Any();
 
 
         /// <summary>
@@ -132,7 +129,7 @@ namespace Business.Data.Objects.Core
 
 
         /// <summary>
-        /// Prova a copiare i valori su un oggetto di outpu output
+        /// Prova a copiare i valori su un oggetto di output
         /// </summary>
         /// <param name="input"></param>
         /// <param name="output"></param>

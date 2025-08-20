@@ -38,24 +38,17 @@ namespace Business.Data.Objects.Core.Common.Utils
             return (T1)obj;
         }
 
-
         /// <summary>
         /// Resetta dei dati eventualmente cached sull'oggetto in modo che l'accesso successivo esegua il refresh
         /// </summary>
         /// <param name="uniqueKey"></param>
-        public void Reset(string uniqueKey)
-        {
-            this.LazyDic.Remove(uniqueKey);
-        }
+        public void Reset(string uniqueKey) => this.LazyDic.Remove(uniqueKey);
 
         /// <summary>
         /// Resetta tutti i dati cache
         /// </summary>
         /// <param name="uniqueKey"></param>
-        public void ResetAll()
-        {
-            this.LazyDic.Clear();
-        }
+        public void ResetAll() => this.LazyDic.Clear();
 
         /// <summary>
         /// Forza l'impostazione di un valore Lazy (per usi successivi)
@@ -63,10 +56,7 @@ namespace Business.Data.Objects.Core.Common.Utils
         /// <typeparam name="T1"></typeparam>
         /// <param name="uniqueKey"></param>
         /// <param name="value"></param>
-        public void Set<T1>(string uniqueKey, T1 value)
-        {
-            this.LazyDic[uniqueKey] = value;
-        }
+        public void Set<T1>(string uniqueKey, T1 value) => this.LazyDic[uniqueKey] = value;
 
         public void Dispose()
         {

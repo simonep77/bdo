@@ -180,11 +180,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        internal object CreateDaoObj(Type type)
-        {
-            return this.CreateDaoObj(type, false);
-        }
-
+        internal object CreateDaoObj(Type type) => this.CreateDaoObj(type, false);
 
         /// <summary>
         /// Crea un oggetto specificando se valorizzare o meno il dataschema
@@ -273,10 +269,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        internal ClassSchema GetClassSchema(Type type)
-        {
-            return this.GetDaoEntry(type).ClassSchema;
-        }
+        internal ClassSchema GetClassSchema(Type type) => this.GetDaoEntry(type).ClassSchema;
 
         #endregion
 
@@ -375,14 +368,7 @@ namespace Business.Data.Objects.Core.ObjFactory
         /// <param name="entry"></param>
         /// <param name="dalObj"></param>
         /// <returns></returns>
-        internal BusinessObjectBase CreateBizObj(ProxyEntryBiz entry, DataObjectBase dalObj)
-        {
-            if (entry.Factory == null)
-                return entry.Create(dalObj);
-            else
-                return entry.Factory.Create(dalObj);
-        }
-
+        internal BusinessObjectBase CreateBizObj(ProxyEntryBiz entry, DataObjectBase dalObj) => (entry.Factory == null) ? entry.Create(dalObj) : entry.Factory.Create(dalObj);
 
         #endregion
 

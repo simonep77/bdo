@@ -126,10 +126,7 @@ namespace Business.Data.Objects.Core
         /// <param name="uniqueKey"></param>
         /// <param name="fn"></param>
         /// <returns></returns>
-        protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
-        {
-            return this._lazyStore.Get<T1>(uniqueKey, fn);
-        }
+        protected T1 GetLazy<T1>(string uniqueKey, LazyLoadFunc<T1> fn) => this._lazyStore.Get<T1>(uniqueKey, fn);
 
         /// <summary>
         /// Ritorna oggetto precedentemente caricato oppure lo carica tramite la funzione in input e lo memorizza per accessi successivi
@@ -138,29 +135,19 @@ namespace Business.Data.Objects.Core
         /// <param name="uniqueKey"></param>
         /// <param name="fn"></param>
         /// <returns></returns>
-        protected T1 LazyGet<T1>(string uniqueKey, LazyLoadFunc<T1> fn)
-        {
-            return this._lazyStore.Get<T1>(uniqueKey, fn);
-        }
-
+        protected T1 LazyGet<T1>(string uniqueKey, LazyLoadFunc<T1> fn) => this._lazyStore.Get<T1>(uniqueKey, fn);
 
         /// <summary>
         /// Resetta dei dati eventualmente cached sull'oggetto in modo che l'accesso successivo esegua il refresh
         /// </summary>
         /// <param name="uniqueKey"></param>
-        protected void LazyReset(string uniqueKey)
-        {
-            this._lazyStore.Reset(uniqueKey);
-        }
+        protected void LazyReset(string uniqueKey) => this._lazyStore.Reset(uniqueKey);
 
         /// <summary>
         /// Resetta tutti i dati cache a livello di business object (tutti quelli caricati con le funzioni Lazy)
         /// </summary>
         /// <param name="uniqueKey"></param>
-        public void LazyResetALL()
-        {
-            this._lazyStore.ResetAll();
-        }
+        public void LazyResetALL() => this._lazyStore.ResetAll();
 
         /// <summary>
         /// Forza l'impostazione di un valore Lazy (per usi successivi)
@@ -168,11 +155,7 @@ namespace Business.Data.Objects.Core
         /// <typeparam name="T1"></typeparam>
         /// <param name="uniqueKey"></param>
         /// <param name="value"></param>
-        protected void LazySet<T1>(string uniqueKey, T1 value)
-        {
-            this._lazyStore.Set(uniqueKey, value);
-        }
-
+        protected void LazySet<T1>(string uniqueKey, T1 value) => this._lazyStore.Set(uniqueKey, value);
 
         #endregion
 

@@ -75,29 +75,25 @@ namespace Business.Data.Objects.Core
         }
 
         /// <summary>
-        /// Indica che gli oggetti vanno precaricati attraverso il risultato della query di lista
-        /// Attenzione! Al momento integrato direttamente solo sulle SearcBDO. Le query custom non possono eseguire il LoadFullObjects
-        /// in quanto andrebbero manipolate senza garanzia del risultato
-        /// </summary>
-        /// <returns></returns>
-        [Obsolete("Ormai il comportamento e' sempre questo")]
-        public TL LoadFullObjects()
-        {
-            return (TL)this;
-        }
-
-        /// <summary>
-        /// Istruisce la query successiva ad includere gli oggetti eliminati logicamente
+        /// Istruisce SOLO la query successiva ad includere gli oggetti eliminati logicamente
         /// </summary>
         /// <returns></returns>
         public TL IncludeDeleted()
         {
-            base.mIncludeDeleted = true;
+            return this.IncludeDeleted(true);
+        }
+
+        /// <summary>
+        /// Istruisce SOLO la query successiva ad includere o meno gli oggetti eliminati logicamente
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public TL IncludeDeleted(bool value)
+        {
+            base.mIncludeDeleted = value;
 
             return (TL)this;
         }
-
-
 
         /// <summary>
         /// Resetta campi orderBy
@@ -481,10 +477,18 @@ namespace Business.Data.Objects.Core
         /// <returns></returns>
         public int IndexOf(T item)
         {
-            if (item == null)
+            if (item == null || this.Count == 0)
                 return -1;
 
-            return this.getIndexOfByPK(item.mClassSchema.PrimaryKey.GetValues(item));
+            for (int i = 0; i < this.Count; i++)
+            {
+                //Trovato
+                if (this[i].Equals(item))
+                    return i;
+            }
+
+            //Non trovato
+            return -1;
         }
 
 
@@ -503,7 +507,6 @@ namespace Business.Data.Objects.Core
             this.mInnerList.Insert(index, new InnerDataListItem()
             {
                 Object = item,
-                PkHashCode = item.GetHashBaseString(),
                 PkValues = this.mObjSchema.PrimaryKey.GetValues(item)
             });
 
@@ -646,9 +649,9 @@ namespace Business.Data.Objects.Core
             this.CopyTo(array, index);
         }
 
-        public bool IsSynchronized => false;
+        public bool IsSynchronized { get; } = false;
 
-        public object SyncRoot => this.mSyncRoot;
+        public object SyncRoot { get; } = new object();
 
 
         #endregion

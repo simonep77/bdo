@@ -236,5 +236,9 @@ Revert proprietÃ  Slot pubblica per problemi di serializzazione. GetSlot non piÃ
 [06/06/2025] - 5.0.76 - Simone Pelaia
 Variata la cartella di default dei log -> <temp directory>/<executing assembly name>
 
-[28/07/2025] - 5.0.77 - Simone Pelaia
+[28/07/2025] - 5.0.78 - Simone Pelaia
 LazyStore IDisposable che esegue il dispose dei sottooggetti IDisposable
+
+[20/08/2025] - 5.0.79 - Simone Pelaia
+IncudeDeleted a livello di slot per includere tutti gli oggetti eliminati logicamente e non doverlo gestire per ogni lista
+Pulizia interna

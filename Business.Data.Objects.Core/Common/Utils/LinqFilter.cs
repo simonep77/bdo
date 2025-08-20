@@ -19,13 +19,7 @@ namespace Business.Data.Objects.Common.Utils
         /// Ritorna espressione risultato delle operazioni eseguite.
         /// In caso di nessuna operazione ritorna una generica espressione sempre vera (1=1)
         /// </summary>
-        public Expression<Func<T, bool>> Result
-        {
-            get
-            {
-                return this.mResult ?? ((t) => 1 == 1);
-            }
-        }
+        public Expression<Func<T, bool>> Result => this.mResult ?? ((t) => true);
 
         /// <summary>
         /// Aggiunge Condizione AND

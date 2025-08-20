@@ -28,24 +28,13 @@ namespace Business.Data.Objects.Core.Base
         //Variabili interne
         internal ClassSchema mClassSchema;
         internal DataSchema mDataSchema;
-        internal Int64 mObjectRefId;
 
         #region PUBLIC PROPERTIES
 
         /// <summary>
         /// Riferimento univoco assegnato all'istanza dell'oggetto
         /// </summary>
-        public Int64 ObjectRefId
-        {
-            get
-            {
-                return this.mObjectRefId;
-            }
-            internal set
-            {
-                this.mObjectRefId = value;
-            }
-        }
+        public Int64 ObjectRefId { get; internal set; }
 
         /// <summary>
         /// Indica la provenienza dell'oggetto
@@ -89,35 +78,21 @@ namespace Business.Data.Objects.Core.Base
         /// Esegue l'evento di property change del databindings
         /// </summary>
         /// <param name="propIn"></param>
-        internal void firePropertyChanged(Property propIn)
-        {
-            //Notifica per DataBindings
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propIn.Name));
-        }
+        internal void firePropertyChanged(Property propIn) => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propIn.Name));
 
         /// <summary>
         ///  Funzione per impostare il valore di proprietà
         /// </summary>
         /// <param name="propertyIndex"></param>
         /// <param name="value"></param>
-        public void SetProperty(int propertyIndex, object value)
-        {
-            //Ottiene property associata
-            this.GetPropertyDefinition(propertyIndex).SetValue(this, value);
-
-        }
+        public void SetProperty(int propertyIndex, object value) => this.mClassSchema.Properties[propertyIndex].SetValue(this, value);
 
         /// <summary>
         /// Funzione interna per ottenere il valore di proprietà
         /// </summary>
         /// <param name="propertyIndex"></param>
         /// <returns></returns>
-        public object GetProperty(int propertyIndex)
-        {
-            return this.GetPropertyDefinition(propertyIndex).GetValue(this);
-        }
-
+        public object GetProperty(int propertyIndex) => this.mClassSchema.Properties[propertyIndex].GetValue(this);
 
         /// <summary>
         /// Ritorna la rappresentazione in stringa dell'oggetto
@@ -191,10 +166,8 @@ namespace Business.Data.Objects.Core.Base
         /// Attenzione! Dopo il salvataggio le proprieta' risultano non modificate!
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetCurrentChanges()
-        {
-            return this.mClassSchema.Properties.Where(x => x is PropertySimple && this.mDataSchema.GetByProperty(x).Changed).Select(x => x.Name);
-        }
+        public IEnumerable<string> GetCurrentChanges() => this.mClassSchema.Properties.Where(x => x is PropertySimple && this.mDataSchema.GetByProperty(x).Changed).Select(x => x.Name);
+
 
         /// <summary>
         /// Da implementare per eseguire la validazione
@@ -340,35 +313,6 @@ namespace Business.Data.Objects.Core.Base
             }
         }
 
-        ///// <summary>
-        ///// Carica oggetto a partire da un filtro custom
-        ///// </summary>
-        ///// <param name="filter"></param>
-        ///// <param name="order"></param>
-        //[Obsolete("Utilizzare LoadByLinq")]
-        //internal void LoadByFilter(IFilter filter, OrderBy order)
-        //{
-        //    IDataBase db = this.Slot.DbGet(this.mClassSchema);
-
-        //    //SQL DIRETTO
-        //    var sb = new StringBuilder(this.mClassSchema.TableDef.SQL_Select_Item);
-        //    sb.Append(this.Slot.DbPrefixGetTableName(this.mClassSchema.TableDef));
-        //    sb.Append(@" WHERE ");
-
-        //    //Imposta parametri WHERE
-        //    ((FilterBase)filter).appendFilterSqlInternal(db, this.Slot, this.mClassSchema, sb, 0);
-
-        //    //Se valorizzato include l'order by
-        //    if (order != null)
-        //        sb.Append(order.ToString());
-
-        //    //imposta query
-        //    db.SQL = sb.ToString();
-
-        //    //Imposta dati dopo query
-        //    this.ExecQueryAndLoadObj(db);
-        //}
-
 
         /// <summary>
         /// Carica oggetto a partire da uno statement where custom
@@ -448,14 +392,6 @@ namespace Business.Data.Objects.Core.Base
 
 
         /// <summary>
-        /// Carica definizione di proprietà con controllo
-        /// </summary>
-        /// <param name="propertyName"></param>
-        /// <returns></returns>
-        private Property GetPropertyDefinition(int propertyIndex) => this.mClassSchema.Properties[propertyIndex];
-
-
-        /// <summary>
         /// Base properties validation (based on class definition)
         /// </summary>
         private void validateProperties(bool isInsert)
@@ -506,7 +442,6 @@ namespace Business.Data.Objects.Core.Base
                     oValue = oProp.GetValue(this);
 
                     //If property is not nullable (db) then cannot be null
-
                     if (!oProp.AcceptNull && oProp.IsNull(oValue))
                         throw new ObjectException(ObjectMessages.New_NullNotAllowed, this.mClassSchema.ClassName, oProp.Name);
 
@@ -858,10 +793,7 @@ namespace Business.Data.Objects.Core.Base
         #region IEquatable<BDBaseObject> Membri di
 
 
-        public override int GetHashCode()
-        {
-            return this.GetHashBaseString().GetHashCode();
-        }
+        public override int GetHashCode() => this.GetHashBaseString().GetHashCode();
 
 
         /// <summary>
@@ -914,52 +846,33 @@ namespace Business.Data.Objects.Core.Base
         /// Ritorna info su tutte le proprietà definite nel DataObject (abstract)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGetInfoAll()
-        {
-            return this.mClassSchema.Properties.Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: x is PropertySimple));
-        }
+        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGetInfoAll() => this.mClassSchema.Properties.Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: x is PropertySimple));
 
         /// <summary>
         /// Ritorna info sulle proprietà semplici (non mappate) del DataObject (abstract)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGeInfoSimple()
-        {
-            return this.mClassSchema.Properties.Where(x => x is PropertySimple).Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: true));
-        }
+        public IEnumerable<(string Name, int PropertyIndex)> PropertyGeInfoSimple() => this.mClassSchema.Properties.Where(x => x is PropertySimple).Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex));
 
         /// <summary>
         /// Ritorna info sulle proprietà mappate del DataObject (abstract)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<(string Name, int PropertyIndex, bool IsSimple)> PropertyGetInfoMapped()
-        {
-            return this.mClassSchema.Properties.Where(x => x is PropertyObject).Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex, IsSimple: false));
-        }
+        public IEnumerable<(string Name, int PropertyIndex)> PropertyGetInfoMapped() => this.mClassSchema.Properties.Where(x => x is PropertyObject).Select(x => (Name: x.Name, PropertyIndex: x.PropertyIndex));
 
         /// <summary>
         /// Ritorna il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public object PropertyGetValueByName(string name)
-        {
-            //Ottiene property associata
-            return this.mClassSchema.Properties.GetPropertyByName(name).GetValue(this);
-
-        }
+        public object PropertyGetValueByName(string name) => this.mClassSchema.Properties.GetPropertyByName(name).GetValue(this);
 
         /// <summary>
         /// Imposta il valore della proprietà ricercandola per nome in stringa. Utile per utilizzi dinamici in stile reflection.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void PropertySetValueByName(string name, object value)
-        {
-            //Ottiene property associata
-            this.mClassSchema.Properties.GetPropertyByName(name).SetValue(this, value);
-
-        }
+        public void PropertySetValueByName(string name, object value) => this.mClassSchema.Properties.GetPropertyByName(name).SetValue(this, value);
 
         #endregion
 

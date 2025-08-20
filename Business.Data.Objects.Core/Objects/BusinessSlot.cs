@@ -112,10 +112,7 @@ namespace Business.Data.Objects.Core
         /// Ritorna le informazioni sull'utente (id o username o altro) dall'evento relativo o, se nullo, dal campo username dello slot
         /// </summary>
         /// <returns></returns>
-        internal object GetUserInfo()
-        {
-            return this.OnUserInfoRequired?.Invoke(this) ?? this.UserName;
-        }
+        internal object GetUserInfo() => this.OnUserInfoRequired?.Invoke(this) ?? this.UserName;
 
         #region History
 
@@ -324,22 +321,13 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Il log utilizzabile per default
         /// </summary>
-        public static LoggerBase SharedLog
-        {
-            get { return BusinessSlot._SharedLog; }
-        }
+        public static LoggerBase SharedLog => BusinessSlot._SharedLog;
 
 
         /// <summary>
         /// Indica il numero di istanze database definite
         /// </summary>
-        public int DBCount
-        {
-            get
-            {
-                return this.mDbList.Count;
-            }
-        }
+        public int DBCount => this.mDbList.Count;
 
 
         /// <summary>
@@ -352,6 +340,12 @@ namespace Business.Data.Objects.Core
                 return this.mLazyStore != null ? this.mLazyStore : this.mLazyStore = new LazyStore();
             }
         }
+
+        /// <summary>
+        /// Istruisce tutte le query successive su liste oggetti ad includere gli oggetti eliminati logicamente. Default false.
+        /// </summary>
+        /// <returns></returns>
+        public bool IncludeDeleted { get; set; }
 
         #endregion
 
@@ -589,39 +583,27 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Elimina tutte le proprieta'
         /// </summary>
-        public void PropertyClear()
-        {
-            this.mProperties.Clear();
-        }
+        public void PropertyClear() => this.mProperties.Clear(); 
 
         /// <summary>
         /// Elimina proprieta'
         /// </summary>
         /// <param name="key"></param>
-        public void PropertyRemove(string key)
-        {
-            this.mProperties.Remove(key);
-        }
+        public void PropertyRemove(string key) => this.mProperties.Remove(key);
 
         /// <summary>
         /// Imposta proprieta'. Se gia' presente sostituisce il valore
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void PropertySet(string key, object value)
-        {
-            this.mProperties[key] = value;
-        }
+        public void PropertySet(string key, object value) => this.mProperties[key] = value;
 
         /// <summary>
         /// Verifica esistenza proprieta'
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public bool PropertyExist(string key)
-        {
-            return this.mProperties.ContainsKey(key);
-        }
+        public bool PropertyExist(string key) => this.mProperties.ContainsKey(key);
 
         #region PROPERTYGET SIMPLE
 
@@ -631,11 +613,7 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public object PropertyGet(string key)
-        {
-            return this.PropertyGet(key, false);
-        }
-
+        public object PropertyGet(string key) => this.PropertyGet(key, false);
 
         /// <summary>
         /// Ritorna proprieta' impostandone la priorita' di ricerca
@@ -685,21 +663,15 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T PropertyGetT<T>(string key)
-        {
-            return this.PropertyGetT<T>(key, false);
-        }
-
+        public T PropertyGetT<T>(string key) => this.PropertyGetT<T>(key, false);
+  
         /// <summary>
         /// Ritorna proprieta' impostandone la priorita' di ricerca
         /// </summary>
         /// <param name="key"></param>
         /// <param name="settingFirst"></param>
         /// <returns></returns>
-        public T PropertyGetT<T>(string key, bool settingFirst)
-        {
-            return (T)Convert.ChangeType(this.PropertyGet(key, settingFirst), typeof(T));
-        }
+        public T PropertyGetT<T>(string key, bool settingFirst) => (T)Convert.ChangeType(this.PropertyGet(key, settingFirst), typeof(T));
 
         /// <summary>
         /// Ritorna valore di proprieta' e, se inesistente, il valore di default
@@ -707,10 +679,7 @@ namespace Business.Data.Objects.Core
         /// <param name="key"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public T PropertyGetWithDefaultT<T>(string key, T defaultValue)
-        {
-            return (T)Convert.ChangeType(this.PropertyGetWithDefault(key, defaultValue), typeof(T));
-        }
+        public T PropertyGetWithDefaultT<T>(string key, T defaultValue) => (T)Convert.ChangeType(this.PropertyGetWithDefault(key, defaultValue), typeof(T));
 
         #endregion
 
@@ -719,27 +688,14 @@ namespace Business.Data.Objects.Core
         /// Ritorna numero di proprieta' definite + numero di chiavi ConfigurationManager.AppSettings
         /// </summary>
         /// <returns></returns>
-        public int PropertyCount()
-        {
-            return this.mProperties.Count;
-        }
+        public int PropertyCount() => this.mProperties.Count;
 
         /// <summary>
         /// Ritorna tutte le chiavi di proprieta' + chiavi ConfigurationManager.AppSettings definite
         /// </summary>
         /// <returns></returns>
-        public List<PropertyIdentifier> PropertyAllKeys()
-        {
-            List<PropertyIdentifier> outList = new List<PropertyIdentifier>(this.PropertyCount());
-
-            //Propereties
-            foreach (var item in this.mProperties.Keys)
-            {
-                outList.Add(new PropertyIdentifier { Key = item });
-            }
-
-            return outList;
-        }
+        public List<PropertyIdentifier> PropertyAllKeys() => this.mProperties.Keys.Select(item => new PropertyIdentifier { Key = item })
+                                                                                    .ToList();
 
         #endregion
 
@@ -783,59 +739,35 @@ namespace Business.Data.Objects.Core
         /// Esegue il reset di una cache specifica
         /// </summary>
         /// <param name="name"></param>
-        public static void StaticCacheClearOne(string name)
-        {
-            _StaticCaches.Get(name)?.Clear();
-        }
+        public static void StaticCacheClearOne(string name) => _StaticCaches.Get(name)?.Clear();
 
         /// <summary>
         /// Ritorna una cache by name. Se non esiste torna null
         /// </summary>
         /// <param name="name"></param>
-        public static void StaticCacheGet(string name)
-        {
-            _StaticCaches.Get(name);
-        }
+        public static void StaticCacheGet(string name) => _StaticCaches.Get(name);
 
         /// <summary>
         /// Azzera tutte le cache registrate
         /// </summary>
-        public static void StaticCacheClearAll()
-        {
-            //Azzera tutte le cache
-            foreach (var name in _StaticCaches.AllKeys)
-            {
-                StaticCacheClearOne(name);
-            }
-        }
+        public static void StaticCacheClearAll() => _StaticCaches.AllKeys.ForEach(x => StaticCacheClearOne(x));
 
         /// <summary>
         /// Svuota cache globale delle liste
         /// </summary>
-        public void ResetListGlobal()
-        {
-            _ListCache.Clear();
-        }
+        public void ResetListGlobal() => _ListCache.Clear();
 
         /// <summary>
         /// Pulisce il contenuto della cache globale
         /// </summary>
-        public void ResetCacheGlobal()
-        {
-            _GlobalCache.Clear();
-        }
-
+        public void ResetCacheGlobal() => _GlobalCache.Clear();
 
         /// <summary>
         /// Indica se un oggetto e' memorizzabile in una cache
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public bool IsCacheable<T>() where T : DataObject<T>
-        {
-            ClassSchema sc = ProxyAssemblyCache.Instance.GetClassSchema(typeof(T));
-            return this.IsCacheable(sc);
-        }
+        public bool IsCacheable<T>() where T : DataObject<T> => this.IsCacheable(ProxyAssemblyCache.Instance.GetClassSchema(typeof(T)));
 
         #endregion
 
@@ -847,31 +779,15 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Ritorna elenco nomi database registrati
         /// </summary>
-        public string[] DbGetNames()
-        {
-            string[] names = new string[this.mDbList.Count];
-            int iIndex = 0;
-
-            foreach (var opair in this.mDbList)
-            {
-                names[iIndex] = opair.Key;
-                iIndex++;
-            }
-
-            return names;
-        }
-
-
+        public string[] DbGetNames() => this.mDbList.Select(x => x.Key).ToArray();
+        
         /// <summary>
         /// Ottiene istanza db associata allo schema
         /// </summary>
         /// <param name="schema"></param>
         /// <returns></returns>
-        internal IDataBase DbGet(ClassSchema schema)
-        {
-            return schema.IsDefaultDb ? this.DB : this.DbGet(schema.DbConnDef.Name);
-        }
-
+        internal IDataBase DbGet(ClassSchema schema) => schema.IsDefaultDb ? this.DB : this.DbGet(schema.DbConnDef.Name);
+ 
         /// <summary>
         /// Ritorna il database identificato dal nome 
         /// </summary>
@@ -936,11 +852,7 @@ namespace Business.Data.Objects.Core
         /// <param name="dbType"></param>
         /// <param name="connectionString"></param>
         /// <returns></returns>
-        public IDataBase DbAdd(string name, string dbType, string connectionString)
-        {
-            return this.DbAdd(name, DataBaseFactory.CreaDataBase(dbType, connectionString));
-        }
-
+        public IDataBase DbAdd(string name, string dbType, string connectionString) => this.DbAdd(name, DataBaseFactory.CreaDataBase(dbType, connectionString));
 
         /// <summary>
         /// Rimuove database da elenco specificando se eventualmente eseguire rollback di transazioni appese
@@ -966,45 +878,28 @@ namespace Business.Data.Objects.Core
         /// Ritorna una statistica compelssiva di tutte le attività database
         /// </summary>
         /// <returns></returns>
-        public DBStats DbGetStatsAll()
-        {
-            return this.mDbList.GetAllStats();
-        }
-
+        public DBStats DbGetStatsAll() => this.mDbList.GetAllStats();
 
         /// <summary>
         /// Apre transazione su tutti i database collegati.
         /// Se fornito "Unspecified" viene utilizzato quello di default per ciascuna tipologia di db
         /// </summary>
-        public void DbBeginTransAll(IsolationLevel level)
-        {
-            this.mDbList.BeginTransAll(level);
-        }
-
+        public void DbBeginTransAll(IsolationLevel level) => this.mDbList.BeginTransAll(level);
+ 
         /// <summary>
         /// Apre transazione su tutti i db utilizzando l'isolamento di default per ciascuno
         /// </summary>
-        public void DbBeginTransAll()
-        {
-            this.mDbList.BeginTransAll(IsolationLevel.Unspecified);
-        }
+        public void DbBeginTransAll() => this.mDbList.BeginTransAll(IsolationLevel.Unspecified);
 
         /// <summary>
         /// Esegue il commit su tutti i database collegati
         /// </summary>
-        public void DbCommitAll()
-        {
-            this.mDbList.CommitAll();
-
-        }
+        public void DbCommitAll() => this.mDbList.CommitAll();
 
         /// <summary>
         /// Esegue il rollback su tutti i database collegati
         /// </summary>
-        public void DbRollBackAll()
-        {
-            this.mDbList.RollbackAll();
-        }
+        public void DbRollBackAll() => this.mDbList.RollbackAll();
 
 
         #endregion
@@ -1342,7 +1237,7 @@ namespace Business.Data.Objects.Core
             //Calcola hash pk
             uPkHash = ObjectHelper.GetObjectHashString(this, schema, values);
 
-            //Verifica subito tracking
+            //Verifica subito tracking ed eventualmente esce
             if (this.LiveTrackingEnabled)
             {
                 //Calcola hash chiave
@@ -1388,18 +1283,15 @@ namespace Business.Data.Objects.Core
                 //Se PL impostiamo hash gia' calcolato (evitiamo un calcolo inutile)
                 oNewObj.mDataSchema.PkHash = string.Intern(uPkHash);
 
-                //Salva in cache se previsto solo per oggetti caricati dal db
-                this.cacheSetPipeline(oNewObj);
+                //Salva in tutte le cache previste (global, LT)
+                this.CacheSetAny(oNewObj);
             }
             else
             {
-                //trovato in cache
+                //trovato in cache ma non in live tracking: provo ad inserirlo
+                if (this.LiveTrackingEnabled)
+                    this.liveTrackingSet(oNewObj);
             }
-
-            //Deve salvare tracking (anche per oggetti cached)
-            if (this.LiveTrackingEnabled)
-                this.liveTrackingSet(oNewObj);
-
 
             //Ritorna oggetto creato
             return oNewObj;
@@ -1915,8 +1807,8 @@ namespace Business.Data.Objects.Core
         /// <param name="act">Azione da eseguire</param>
         /// <returns></returns>
         public List<TB> ToBizObjectList<TB, T>(IEnumerable<T> list, Action<TB> act)
-    where TB : BusinessObject<T>
-    where T : DataObject<T>
+            where TB : BusinessObject<T>
+            where T : DataObject<T>
         {
             //Se null errore
             if (list == null)
@@ -2109,10 +2001,7 @@ namespace Business.Data.Objects.Core
         /// Utile per calcolare performance/altro
         /// </summary>
         /// <returns></returns>
-        public TimeSpan GetCurrentElapsed()
-        {
-            return this.mStopWatch.Elapsed;
-        }
+        public TimeSpan GetCurrentElapsed() => this.mStopWatch.Elapsed;
 
         /// <summary>
         /// Stampa Informazioni Relative
@@ -2122,46 +2011,23 @@ namespace Business.Data.Objects.Core
         {
             StringBuilder sb = new StringBuilder(1000);
             sb.AppendLine("** SLOT INFO **");
-            sb.Append("SlotID: ");
-            sb.Append(this.SlotId.ToString());
-            sb.AppendLine();
-            sb.Append("Start Time: ");
-            sb.Append(this.StartDate.ToString("dd/MM/yyyy HH:mm:ss"));
-            sb.AppendLine();
-            sb.Append("Elapsed Msec: ");
-            sb.Append(this.GetCurrentElapsed().ToString());
-            sb.AppendLine();
-            sb.Append("Elapsed Ticks: ");
-            sb.Append(this.GetCurrentElapsed().Ticks.ToString());
-            sb.AppendLine();
-            sb.Append("Authenticated: ");
-            sb.Append(this.IsAuthenticated);
-            sb.AppendLine();
-            sb.Append("User: ");
-            sb.Append(this.UserName);
-            sb.AppendLine();
-            sb.Append("User Type: ");
-            sb.Append(this.UserType);
-            sb.AppendLine();
-            sb.Append("Protection Level: ");
-            sb.AppendLine(this.ProtectionLevel.ToString());
-            sb.Append("Live Tracking Enabled: ");
-            sb.AppendLine(this.LiveTrackingEnabled.ToString());
-            sb.Append("Change Tracking Enabled: ");
-            sb.AppendLine(this.ChangeTrackingEnabled.ToString());
-            sb.Append("Shared Log: ");
-            sb.AppendLine(BusinessSlot._SharedLog.LogPath);
-            sb.Append("ObjeRefIdCounter: ");
-            sb.AppendLine(System.Threading.Interlocked.Read(ref ProxyAssemblyCache.Instance.ObjeRefIdCounter).ToString());
-
+            sb.AppendLine($"SlotID: {this.SlotId.ToString()}");
+            sb.AppendLine($"Start Time: {this.StartDate:dd/MM/yyyy HH:mm:ss}");
+            sb.AppendLine($"Elapsed Msec: {this.GetCurrentElapsed()}");
+            sb.AppendLine($"Elapsed Ticks: {this.GetCurrentElapsed().Ticks}");
+            sb.AppendLine($"Authenticated: {this.IsAuthenticated}");
+            sb.AppendLine($"User: {this.UserName}");
+            sb.AppendLine($"User Type: {this.UserType}");
+            sb.AppendLine($"Protection Level: {this.ProtectionLevel}");
+            sb.AppendLine($"Live Tracking Enabled: {this.LiveTrackingEnabled}");
+            sb.AppendLine($"Change Tracking Enabled: {this.ChangeTrackingEnabled}");
+            sb.AppendLine($"Shared Log: {BusinessSlot._SharedLog.LogPath}");
+            sb.AppendLine($"ObjeRefIdCounter: {System.Threading.Interlocked.Read(ref ProxyAssemblyCache.Instance.ObjeRefIdCounter)}");
 
             sb.AppendLine("** PROPERTIES **");
             foreach (var item in this.PropertyAllKeys())
             {
-                sb.AppendFormat("{0} ({1})", item.Key, (item.IsAppSetting ? "S" : "P"));
-                sb.Append(": ");
-                sb.AppendFormat("{0}", this.PropertyGet(item.Key, item.IsAppSetting));
-                sb.AppendLine();
+                sb.AppendLine($"{item.Key} ({(item.IsAppSetting ? "S" : "P")}): {this.PropertyGet(item.Key, item.IsAppSetting)}");
             }
 
             //Scrive info cache locale e globale
@@ -2185,8 +2051,7 @@ namespace Business.Data.Objects.Core
             if (this.LiveTrackingEnabled)
             {
                 sb.AppendLine();
-                sb.Append("Live Tracking Objects: ");
-                sb.AppendLine(this.mLiveTrackingStore.Count.ToString());
+                sb.AppendLine($"Live Tracking Objects: {this.mLiveTrackingStore.Count}");
             }
 
 
@@ -2195,11 +2060,9 @@ namespace Business.Data.Objects.Core
             //Per ogni database
             foreach (var opair in this.mDbList)
             {
-                sb.Append("#Connessione ");
-                sb.AppendLine(opair.Key);
-                sb.Append(" - Type: ");
-                sb.AppendLine(opair.Value.GetType().Name);
-                sb.Append(opair.Value.Stats.ToString());
+                sb.AppendLine($"#Connessione {opair.Key}");
+                sb.AppendLine($" - Type: {opair.Value.GetType().Name}");
+                sb.AppendLine(opair.Value.Stats.ToString());
                 sb.AppendLine();
             }
 
@@ -2219,12 +2082,9 @@ namespace Business.Data.Objects.Core
             sb.AppendLine();
             sb.AppendLine(BusinessSlot._GlobalCache.Print());
 
-
             sb.AppendLine("**** GLOBAL LIST CACHE ****");
             sb.AppendLine();
             sb.AppendLine(BusinessSlot._ListCache.Print());
-
-
 
             return sb.ToString();
         }
@@ -2239,9 +2099,9 @@ namespace Business.Data.Objects.Core
             StringBuilder sb = new StringBuilder(10000);
 
             sb.AppendLine("**** LIVE TRACKING ****");
+            sb.AppendLine($"Attivo: {this.LiveTrackingEnabled}");
             sb.AppendLine();
-            sb.AppendLine(this.mLiveTrackingStore.PrintDebug());
-
+            sb.AppendLine(this.mLiveTrackingStore?.PrintDebug());
 
             return sb.ToString();
         }
@@ -2255,25 +2115,12 @@ namespace Business.Data.Objects.Core
         /// <summary>
         /// Svuota la cache interna di tracking
         /// </summary>
-        public void LiveTrackingClear()
-        {
-            if (!this.LiveTrackingEnabled)
-                return;
-
-            //Svuota il tracking store
-            this.mLiveTrackingStore.Clear();
-        }
-
-
+        public void LiveTrackingClear() => this.mLiveTrackingStore?.Clear();
 
         /// <summary>
         /// Se attivo object live tracking allora rimuove tutte le entry i cui oggetti risultano morti (gc-ed)
         /// </summary>
-        public void LiveTrackingDeadScan()
-        {
-            if (this.Conf.LiveTrackingEnabled)
-                this.mLiveTrackingStore.CleanDeadEntries();
-        }
+        public void LiveTrackingDeadScan() => this.mLiveTrackingStore?.CleanDeadEntries();
 
         #endregion
 
@@ -2286,11 +2133,7 @@ namespace Business.Data.Objects.Core
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public T BizNewWithCreateObj<T>()
-            where T : BusinessObjectBase
-        {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, false, null);
-        }
-
+            where T : BusinessObjectBase => (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, false, null);
 
         /// <summary>
         /// Crea una biz con LoadByKEY
@@ -2299,10 +2142,7 @@ namespace Business.Data.Objects.Core
         /// <param name="args"></param>
         /// <returns></returns>
         public T BizNewWithLoadByPK<T>(params object[] args)
-            where T : BusinessObjectBase
-        {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, true, args);
-        }
+            where T : BusinessObjectBase => (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, false, true, args);
 
 
         /// <summary>
@@ -2312,10 +2152,7 @@ namespace Business.Data.Objects.Core
         /// <param name="args"></param>
         /// <returns></returns>
         public T BizNewWithLoadOrNewByPK<T>(params object[] args)
-            where T : BusinessObjectBase
-        {
-            return (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, true, true, args);
-        }
+            where T : BusinessObjectBase => (T)ProxyAssemblyCache.Instance.CreateBizObj(typeof(T), this, true, true, args);
 
 
         #endregion
@@ -2327,11 +2164,7 @@ namespace Business.Data.Objects.Core
         /// Ritorna rappresentazione in stringa
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return this.LazyStore.Get(nameof(ToString), () => string.Concat("Slot ", this.SlotId));
-        }
-
+        public override string ToString() => this.LazyStore.Get(nameof(ToString), () => string.Concat("Slot ", this.SlotId));
 
         /// <summary>
         /// Dato uno slot crea una copia conforme:
@@ -2362,6 +2195,7 @@ namespace Business.Data.Objects.Core
             oCloned.LiveTrackingEnabled = this.LiveTrackingEnabled;
             oCloned.Simulate = this.Simulate;
             oCloned.CachingEnabled = this.CachingEnabled;
+            oCloned.IncludeDeleted = this.IncludeDeleted;
 
             //Imposta props
             foreach (var item in this.mProperties)
@@ -2396,22 +2230,14 @@ namespace Business.Data.Objects.Core
         /// Crea istanza a partire da una classe database
         /// </summary>
         /// <param name="db"></param>
-        public BusinessSlot(IDataBase db)
-        {
-            //Crea istanza database associato
-            this.InitSlot(db);
-        }
+        public BusinessSlot(IDataBase db) => this.InitSlot(db);
 
         /// <summary>
         /// Crea istanza a partire da oggetti ADO
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="tran"></param>
-        public BusinessSlot(DbConnection conn, DbTransaction tran)
-        {
-            //Crea istanza database associato
-            this.InitSlot(DataBaseFactory.CreaDataBaseFromADO(conn, tran));
-        }
+        public BusinessSlot(DbConnection conn, DbTransaction tran) => this.InitSlot(DataBaseFactory.CreaDataBaseFromADO(conn, tran));
 
         /// <summary>
         /// Crea nuovo slot fornendo il Tipo Database e la connectionstring
@@ -2424,12 +2250,7 @@ namespace Business.Data.Objects.Core
         /// La stringa di connessione da utilizzare
         /// </param>
         /// <returns></returns>
-        public BusinessSlot(string dbType, string connectionString)
-        {
-            //Inizializza slot con istanza db creata
-            this.InitSlot(DataBaseFactory.CreaDataBase(dbType, connectionString));
-        }
-
+        public BusinessSlot(string dbType, string connectionString) => this.InitSlot(DataBaseFactory.CreaDataBase(dbType, connectionString)); 
 
         /// <summary>
         /// Inizializza dati vari slot
@@ -2497,11 +2318,8 @@ namespace Business.Data.Objects.Core
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal bool IsCacheable(DataObjectBase obj)
-        {
-            //Default
-            return this.IsCacheable(obj.mClassSchema) && obj.mDataSchema.ObjectSource == EObjectSource.Database;
-        }
+        internal bool IsCacheable(DataObjectBase obj) => this.IsCacheable(obj.mClassSchema) && obj.mDataSchema.ObjectSource == EObjectSource.Database;
+
 
         /// <summary>
         /// Ottiene schema da cache in cascata
@@ -2588,31 +2406,20 @@ namespace Business.Data.Objects.Core
         /// Imposta oggetto nello store del tracking
         /// </summary>
         /// <param name="obj"></param>
-        internal void liveTrackingSet(DataObjectBase obj)
-        {
-            //Salva tutte le chiavi con unico riferimento
-            this.mLiveTrackingStore.Set(obj.GetHashBaseString(), obj);
-
-        }
+        internal void liveTrackingSet(DataObjectBase obj) => this.mLiveTrackingStore.Set(obj.GetHashBaseString(), obj);
 
         /// <summary>
         /// Rimuove oggetto dallo store del tracking
         /// </summary>
         /// <param name="obj"></param>
-        internal void liveTrackingRemove(DataObjectBase obj)
-        {
-            this.mLiveTrackingStore.Remove(obj.GetHashBaseString());
-        }
+        internal void liveTrackingRemove(DataObjectBase obj) => this.mLiveTrackingStore.Remove(obj.GetHashBaseString());
 
         /// <summary>
         /// Ritorna oggetto dallo store del tracking
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        internal DataObjectBase liveTrackingGet(string key)
-        {
-            return this.mLiveTrackingStore.Get(key);
-        }
+        internal DataObjectBase liveTrackingGet(string key) => this.mLiveTrackingStore.Get(key);
 
         #endregion
 
@@ -2665,9 +2472,9 @@ namespace Business.Data.Objects.Core
                 BusinessSlot._ListCache = StaticCacheRegister(CACHE_GLOBAL_LIST_NAME, conf.CacheGlobalSize / 2, TimeSpan.FromMinutes(20));
 
                 //Se impostata directory di log
-                if (string.IsNullOrEmpty(_StaticConf.LogBaseDirectory))
+                if (string.IsNullOrWhiteSpace(_StaticConf.LogBaseDirectory))
                 {
-                    _StaticConf.LogBaseDirectory = Path.Combine(Path.GetTempPath(), Assembly.GetEntryAssembly().GetName().Name);
+                    _StaticConf.LogBaseDirectory = Path.Combine(Path.GetTempPath(), (Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly()).GetName().Name);
                 }
 
                 //Si assicura dell'esistenza della directory
@@ -2683,8 +2490,7 @@ namespace Business.Data.Objects.Core
                 };
 
                 //Chiude log database se aperto
-                if (_DatabaseLog != null)
-                    _DatabaseLog.Dispose();
+                _DatabaseLog?.Dispose();
 
                 //Crea logger per DB
                 if (_StaticConf.LogDatabaseActivity)
@@ -2695,7 +2501,6 @@ namespace Business.Data.Objects.Core
                         WriteThreadId = true
                     };
                 }
-
             }
             catch (Exception ex)
             {
@@ -2708,35 +2513,18 @@ namespace Business.Data.Objects.Core
 
         #region IComparable<BDSession> Membri di
 
-        public int CompareTo(BusinessSlot other)
-        {
-            return this.SlotId.CompareTo(other.SlotId);
-        }
+        public int CompareTo(BusinessSlot other) => this.SlotId.CompareTo(other.SlotId);
 
         #endregion
 
 
         #region IEquatable<BusinessSlot> Membri di
 
-        public override int GetHashCode()
-        {
-            return this.SlotId.GetHashCode();
-        }
+        public override int GetHashCode() => this.SlotId.GetHashCode();
 
-        public override bool Equals(object obj)
-        {
-            BusinessSlot other = (obj as BusinessSlot);
+        public override bool Equals(object obj) => this.Equals(obj as BusinessSlot);
 
-            return this.Equals(other);
-        }
-
-        public bool Equals(BusinessSlot other)
-        {
-            if (object.ReferenceEquals(this, other))
-                return true;
-
-            return false;
-        }
+        public bool Equals(BusinessSlot other) => object.ReferenceEquals(this, other);
 
         #endregion
 

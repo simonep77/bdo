@@ -363,7 +363,7 @@ namespace Business.Data.WinFormTest
 
                 for (int i = 0; i < 100000; i++)
                 {
-                    var irnd = rnd.Next(1, 10000);
+                    var irnd = rnd.Next(1, 100);
                     var lst = ss1.CreatePagedList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > irnd);
 
                     //this.WriteLog(ss1.DB.Stats.ToString());
@@ -547,6 +547,53 @@ namespace Business.Data.WinFormTest
             }
 
 
+        }
+
+        private void sLOTIncudeDeletedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+
+                var l1 = ss1.CreateList<OrdineLista>(1, 10)
+                    .SearchByLinq(o => o.Flag_Canc == true);
+
+                this.WriteLog(l1.Count.ToString());
+
+                ss1.IncludeDeleted = true;
+
+                var l2 = ss1.CreateList<OrdineLista>(1, 10)
+                    .SearchByLinq(o => o.Flag_Canc == true);
+
+                this.WriteLog(l2.Count.ToString());
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
+
+        private void lIVETRACKINGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = this.CreateSlot())
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+
+                var l1 = ss1.CreateList<OrdineLista>(1, 10)
+                    .SearchAllObjects();
+
+                l1.Select(x => x.Stato).ToList().ForEach(x => this.WriteLog(x.ToJSON()));
+
+                var o1 = ss1.LoadObjByPK<Ordine>(l1.First().Id);
+                var o2 = ss1.LoadObjByPK<Ordine>(l1.Last().Id);
+
+                this.WriteLog(ss1.PrintInfo());
+            }
         }
     }
 }

@@ -1437,13 +1437,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataListBase.getIndexOfByPK(System.Object[])">
-            <summary>
-            Trova un elemento fornendo valori PrimaryKey
-            </summary>
-            <param name="values"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataListBase.searchByColumn(Business.Data.Objects.Core.IFilter)">
             <summary>
             Ricerca attraverso un filtro di colonna
@@ -1677,13 +1670,6 @@
             </summary>
             <param name="dr"></param>
         </member>
-        <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.GetPropertyDefinition(System.Int32)">
-            <summary>
-            Carica definizione di proprietà con controllo
-            </summary>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Core.Base.DataObjectBase.validateProperties(System.Boolean)">
             <summary>
             Base properties validation (based on class definition)
@@ -1794,11 +1780,6 @@
         <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.PkValues">
             <summary>
             Values of PK
-            </summary>
-        </member>
-        <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.PkHashCode">
-            <summary>
-            Eventual Hash of PK values
             </summary>
         </member>
         <member name="F:Business.Data.Objects.Core.Base.InnerDataListItem.ExtraData">
@@ -2165,6 +2146,12 @@
             <summary>
             Ritorna istanza del lazystore per i dati accessibili on-demand
             </summary>
+        </member>
+        <member name="P:Business.Data.Objects.Core.BusinessSlot.IncludeDeleted">
+            <summary>
+            Istruisce tutte le query successive su liste oggetti ad includere gli oggetti eliminati logicamente. Default false.
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:Business.Data.Objects.Core.BusinessSlot.EObjectEvent">
             <summary>
@@ -2919,18 +2906,17 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.LoadFullObjects">
+        <member name="M:Business.Data.Objects.Core.DataList`2.IncludeDeleted">
             <summary>
-            Indica che gli oggetti vanno precaricati attraverso il risultato della query di lista
-            Attenzione! Al momento integrato direttamente solo sulle SearcBDO. Le query custom non possono eseguire il LoadFullObjects
-            in quanto andrebbero manipolate senza garanzia del risultato
+            Istruisce SOLO la query successiva ad includere gli oggetti eliminati logicamente
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Business.Data.Objects.Core.DataList`2.IncludeDeleted">
+        <member name="M:Business.Data.Objects.Core.DataList`2.IncludeDeleted(System.Boolean)">
             <summary>
-            Istruisce la query successiva ad includere gli oggetti eliminati logicamente
+            Istruisce SOLO la query successiva ad includere o meno gli oggetti eliminati logicamente
             </summary>
+            <param name="value"></param>
             <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Core.DataList`2.OrderByReset">
@@ -3157,7 +3143,7 @@
         </member>
         <member name="M:Business.Data.Objects.Core.DataObject`1.TryCopyTo(System.Object,System.Boolean)">
             <summary>
-            Prova a copiare i valori su un oggetto di outpu output
+            Prova a copiare i valori su un oggetto di output
             </summary>
             <param name="input"></param>
             <param name="output"></param>
@@ -3834,11 +3820,6 @@
         <member name="M:Business.Data.Objects.Core.OrderBy.Clear">
             <summary>
             Svuota clausola
-            </summary>
-        </member>
-        <member name="T:Business.Data.Objects.Core.PropertyManager">
-            <summary>
-            Classe per la gestione di proprieta'
             </summary>
         </member>
         <member name="T:Business.Data.Objects.Core.PropertyIdentifier">
@@ -5092,6 +5073,15 @@
             <param name="args"></param>
             <returns></returns>
         </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.GetCleanValues(System.Data.IDataReader,System.Int32,System.Int32)">
+            <summary>
+            Dato un IDataReader ritorna un array di oggetti con i valori letti. Il DbNull viene trasformato in null
+            </summary>
+            <param name="reader"></param>
+            <param name="start"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
         <member name="M:Business.Data.Objects.Common.Utils.Extensions.In(System.IComparable,System.IComparable[])">
             <summary>
             Operatore in per oggetti non tipizzati. Viene eseguito internamente la conversione ove necessario
@@ -5159,6 +5149,22 @@
             <param name="input"></param>
             <param name="act"></param>
             <returns></returns>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.ForEachIndexed``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0,System.Int32})">
+            <summary>
+            Esegue un foreach su un IEnumerable fornendo l'indice dell'elemento corrente.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value">Se null non esegue nulla</param>
+            <param name="act"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Common.Utils.Extensions.ForEachSimple``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+             Esegue un foreach su un IEnumerable
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="value">Se null non esegue nulla</param>
+            <param name="act"></param>
         </member>
         <member name="T:Business.Data.Objects.Common.Utils.LinqExt">
             <summary>

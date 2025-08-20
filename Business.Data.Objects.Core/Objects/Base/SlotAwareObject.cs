@@ -38,11 +38,8 @@ namespace Business.Data.Objects.Core.Base
         /// Imposta lo slot
         /// </summary>
         /// <param name="slot"></param>
-        internal virtual void SetSlot(BusinessSlot slot)
-        {
-            this.Slot = slot;
-        }
-
+        internal virtual void SetSlot(BusinessSlot slot) => this.Slot = slot;
+ 
         /// <summary>
         /// Slot associato all'oggetto. E' utilizzato un metodo per evitare serializzazione
         /// </summary>
@@ -60,12 +57,7 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        internal bool ExtraDataExist(string key)
-        {
-            //Verifica
-            return this.ExtraData.ContainsKey(key);
-
-        }
+        internal bool ExtraDataExist(string key) => this.ExtraData.ContainsKey(key);
 
         /// <summary>
         /// Ritorna dati aggiuntivi memorizzati a livello di oggetto (singolo o lista)
@@ -106,61 +98,36 @@ namespace Business.Data.Objects.Core.Base
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void ExtraDataSet(string key, object value)
-        {
-            //Imposta valore
-            this.ExtraData[key] = value;
-        }
-
-
+        public void ExtraDataSet(string key, object value) => this.ExtraData[key] = value;
+   
         /// <summary>
         /// Rimuove dati aggiuntivi su oggetto (singolo o lista) individuati per chiave
         /// </summary>
         /// <param name="key"></param>
-        public void ExtraDataRemove(string key)
-        {
-            //Rimuove
-            this.ExtraData.Remove(key);
-        }
-
+        public void ExtraDataRemove(string key) => this.ExtraData.Remove(key);
 
         /// <summary>
         /// Ritorna il numero di elementi Extra
         /// </summary>
         /// <returns></returns>
-        public int ExtraDataCount()
-        {
-            //Ritorna
-            return this.ExtraData.Count;
-        }
-
+        public int ExtraDataCount() => this.ExtraData.Count;
 
         /// <summary>
         /// Elimina tutti i dati extra
         /// </summary>
-        public void ExtraDataClear()
-        {
-            //Rimuove
-            this.ExtraData.Clear();
-        }
+        public void ExtraDataClear() => this.ExtraData.Clear();
 
         /// <summary>
         /// Ritorna collection di key extra data
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> ExtraDataKeys()
-        {
-            return this.ExtraData.Keys.Select(x => x);
-        }
+        public IEnumerable<string> ExtraDataKeys() => this.ExtraData.Keys.Select(x => x);
 
         /// <summary>
         /// Ritorna collection di valori extra data
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<object> ExtraDataValues()
-        {
-            return this.mExtraData.Values.Select(x => x);
-        }
+        public IEnumerable<object> ExtraDataValues() => this.mExtraData.Values;
 
         #endregion
 

@@ -1,10 +1,11 @@
 using Business.Data.Objects.Common;
 using Business.Data.Objects.Common.Utils;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Business.Data.Objects.Core;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Business.Data.Objects.Common.Utils
 {
@@ -43,6 +44,28 @@ namespace Business.Data.Objects.Common.Utils
 
             return args.Contains(obj);
         }
+
+
+        /// <summary>
+        /// Dato un IDataReader ritorna un array di oggetti con i valori letti. Il DbNull viene trasformato in null
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static object[] GetCleanValues(this IDataReader reader, int start, int count)
+        {
+            var ret = new object[count];
+
+            //Imposta i valori della PK
+            for (int i = start; i < (start + count); i++)
+            {
+                ret[i] = reader.IsDBNull(i) ? null : reader.GetValue(i);
+            }
+
+            return ret;
+        }
+
 
         /// <summary>
         /// Operatore in per oggetti non tipizzati. Viene eseguito internamente la conversione ove necessario
@@ -176,6 +199,45 @@ namespace Business.Data.Objects.Common.Utils
             }));
         }
 
+
+
+        /// <summary>
+        /// Esegue un foreach su un IEnumerable fornendo l'indice dell'elemento corrente.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">Se null non esegue nulla</param>
+        /// <param name="act"></param>
+        public static void ForEachIndexed<T>(this IEnumerable<T> value, Action<T, int> act)
+        {
+            //Se value è null non fa nulla
+            if (value is null)
+                return;
+            var idx = 0;
+            //Esegue l'azione su ogni elemento
+            foreach (var item in value)
+            {
+                act(item, idx++);
+            }
+        }
+
+        /// <summary>
+        ///  Esegue un foreach su un IEnumerable
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">Se null non esegue nulla</param>
+        /// <param name="act"></param>
+        public static void ForEachSimple<T>(this IEnumerable<T> value, Action<T> act)
+        {
+            //Se value è null non fa nulla
+            if (value is null)
+                return;
+
+            //Esegue l'azione su ogni elemento
+            foreach (var item in value)
+            {
+                act(item);
+            }
+        }
 
 
     }

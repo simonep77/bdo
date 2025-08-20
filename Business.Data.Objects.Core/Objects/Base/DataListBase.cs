@@ -25,11 +25,10 @@ namespace Business.Data.Objects.Core.Base
 
         internal ClassSchema mObjSchema;
         internal InnerDataList mInnerList = new InnerDataList();
-        internal protected OrderBy mOrderBy = new OrderBy();
-        internal object mSyncRoot = new object();
-        internal protected bool mIsSearch;
-        internal protected bool mCacheResult;
-        internal protected bool mIncludeDeleted;
+        protected OrderBy mOrderBy = new OrderBy();
+        protected bool mIsSearch;
+        protected bool mCacheResult;
+        protected bool mIncludeDeleted;
 
         #region PROPERTY
 
@@ -41,7 +40,7 @@ namespace Business.Data.Objects.Core.Base
         /// <summary>
         /// Paginatore
         /// </summary>
-        public DataPager Pager {get; set;}
+        public DataPager Pager { get; set; }
 
 
         /// <summary>
@@ -94,29 +93,22 @@ namespace Business.Data.Objects.Core.Base
                         this.Pager.TotRecords = -1;
                 }
 
-                InnerDataListItem oItem = new InnerDataListItem();
-
-                oItem.PkValues = new object[this.mObjSchema.PrimaryKey.Properties.Count];
-
-                for (int i = 0; i < this.mObjSchema.PrimaryKey.Properties.Count; i++)
+                var oItem = new InnerDataListItem()
                 {
-                    if (reader.IsDBNull(i))
-                        oItem.PkValues[i] = null;
-                    else
-                        oItem.PkValues[i] = reader.GetValue(i);
-                }
+                    PkValues = reader.GetCleanValues(0, this.mObjSchema.PrimaryKey.Properties.Count)
+                };
+
+                //Lo Aggiunge a lista
+                this.mInnerList.Add(oItem);
 
                 //Se trattasi di ricerca BDO allora prova a caricare il singolo oggetto dal reader e lo imposta nell'Item
                 if (this.mIsSearch)
                 {
                     //Cerca in LT
-                    if(this.Slot.LiveTrackingEnabled)
-                    {
-                        oItem.PkHashCode = ObjectHelper.GetObjectHashString(this.Slot, this.mObjSchema, oItem.PkValues);
-                        oItem.Object = this.Slot.liveTrackingGet(oItem.PkHashCode);
-                    }
+                    if (this.Slot.LiveTrackingEnabled)
+                        oItem.Object = this.Slot.liveTrackingGet(ObjectHelper.GetObjectHashString(this.Slot, this.mObjSchema, oItem.PkValues));
 
-                    //Se non trovato
+                    //Se non trovato lo imposta dai valori del reader
                     if (oItem.Object == null)
                     {
                         //Crea oggetto vuoto
@@ -140,10 +132,8 @@ namespace Business.Data.Objects.Core.Base
                         }
                     }
                 }
-
-                //Aggiunge a lista
-                this.mInnerList.Add(oItem);
             }
+
             //Se presente un resultset aggiuntivo allora assume che sia il numero di record
             if (reader.NextResult())
             {
@@ -178,9 +168,12 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         internal protected DataObjectBase getItem(int index)
         {
+            //Se oggetto nullo lo carica ed imposta
+            if (this.mInnerList[index].Object == null)
+                this.mInnerList[index].Object = this.Slot.LoadObjectInternalByPK(this.mObjSchema.OriginalType, true, this.mInnerList[index].PkValues);
 
             //Ritorna
-            return this.mInnerList[index].Object ?? this.Slot.LoadObjectInternalByPK(this.mObjSchema.OriginalType, true, this.mInnerList[index].PkValues);
+            return this.mInnerList[index].Object;
 
         }
 
@@ -198,7 +191,6 @@ namespace Business.Data.Objects.Core.Base
             {
                 Object = value,
                 PkValues = this.mObjSchema.PrimaryKey.GetValues(value),
-                PkHashCode = value.GetHashBaseString()
             };
 
             //Lo imposta
@@ -257,7 +249,7 @@ namespace Business.Data.Objects.Core.Base
                         //Query standard
                         rd = db.ExecReader();
 
-                    
+
                     //Qui salva in cache se necessario
                     if (this.mCacheResult)
                     {
@@ -275,13 +267,13 @@ namespace Business.Data.Objects.Core.Base
                         rd = dt.CreateDataReader();
                     }
                 }
-                    
+
                 //Carica dati
                 using (rd)
                 {
                     this.fillListFromReader(rd);
                 }
-                
+
             }
             finally
             {
@@ -291,54 +283,13 @@ namespace Business.Data.Objects.Core.Base
                 this.mIsSearch = false;
             }
 
-            
+
 
             this.fireListChanged(ListChangedType.Reset, -1);
 
             //Ritorna se stesso per semplificare
             return this;
         }
-
-
-
-        #region INDEX MANAGEMENT
-
-        /// <summary>
-        /// Trova un elemento fornendo valori PrimaryKey
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        public int getIndexOfByPK(object[] values)
-        {
-            //Calcola hash dei parametri
-            string uKey = ObjectHelper.GetObjectHashString(this.Slot, this.mObjSchema, values);
-
-            //Crea indice (se non presente)
-            for (int i = 0; i < this.Count; i++)
-            {
-                var item = this.mInnerList[i];
-
-                //Ricalcola/imposta PKHash
-                if (string.IsNullOrEmpty(item.PkHashCode))
-                {
-                    if (item.Object == null)
-                        item.PkHashCode = ObjectHelper.GetObjectHashString(this.Slot, this.mObjSchema, item.PkValues);
-                    else
-                        item.PkHashCode = item.Object.GetHashBaseString();
-                }
-                   
-
-                if (uKey == item.PkHashCode)
-                    return i;
-            }
-
-            //Ritorna
-            return -1;
-        }
-
-
-        #endregion
-
 
         #region QUERY MANAGEMENT
 
@@ -421,36 +372,36 @@ namespace Business.Data.Objects.Core.Base
         private void setLogicalDelete(IDataBase db, StringBuilder sql, bool writeWhere)
         {
             //Se presente gestione della cancellazione logica allora la include nella query
-            if (this.mObjSchema.LogicalDeletes.Count > 0)
+            if (this.mObjSchema.LogicalDeletes.Count == 0)
+                return;
+
+            //Verifica se richiesta incusione dei cancellati, sia a livello di oggetto che di slot
+            if (this.mIncludeDeleted || this.Slot.IncludeDeleted)
+                return;
+
+            IFilter filter = null;
+
+            foreach (var ldProp in this.mObjSchema.LogicalDeletes)
             {
-                //Verifica se richiesta incusione dei cancellati
-                if (this.mIncludeDeleted)
-                    return;
+                IFilter ldfilter;
 
-                IFilter filter = null;
-
-                foreach (var ldProp in this.mObjSchema.LogicalDeletes)
-                {
-                    IFilter ldfilter;
-
-                    if (ldProp.Type.Equals(typeof(DateTime)))
-                        //Se il filtro e' nullo 
-                        ldfilter = Filter.IsNull(ldProp.Name);
-                    else
-                        ldfilter = Filter.Eq(ldProp.Name, 0);
-
-                    //Reimposta il filtro aggiungendo o creandolo
-                    filter = filter?.And(ldfilter) ?? ldfilter;
-                }
-
-                //Imposta SQL filtro
-                if (writeWhere)
-                    sql.Append(@" WHERE ");
+                if (ldProp.Type.Equals(typeof(DateTime)))
+                    //Se il filtro e' nullo 
+                    ldfilter = Filter.IsNull(ldProp.Name);
                 else
-                    sql.Append(@" AND ");
+                    ldfilter = Filter.Eq(ldProp.Name, 0);
 
-                (filter as FilterBase)?.appendFilterSqlInternal(db, this.Slot, this.mObjSchema, sql, 0);
+                //Reimposta il filtro aggiungendo o creandolo
+                filter = filter?.And(ldfilter) ?? ldfilter;
             }
+
+            //Imposta SQL filtro
+            if (writeWhere)
+                sql.Append(@" WHERE ");
+            else
+                sql.Append(@" AND ");
+
+            (filter as FilterBase)?.appendFilterSqlInternal(db, this.Slot, this.mObjSchema, sql, 0);
         }
 
 
