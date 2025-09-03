@@ -242,3 +242,6 @@ LazyStore IDisposable che esegue il dispose dei sottooggetti IDisposable
 [20/08/2025] - 5.0.79 - Simone Pelaia
 IncudeDeleted a livello di slot per includere tutti gli oggetti eliminati logicamente e non doverlo gestire per ogni lista
 Pulizia interna
+
+[03/09/2025] - 5.0.80 - Simone Pelaia
+Rimosso lazystore IDisposable per evitare ricorsioni nella dispose oppure dispose di oggetti shared

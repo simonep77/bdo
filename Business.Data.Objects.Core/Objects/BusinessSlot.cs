@@ -2530,25 +2530,25 @@ namespace Business.Data.Objects.Core
 
 
         #region IDisposable Membri di
-
+        private bool isDisposing;
         /// <summary>
         /// Libera risorse associate
         /// </summary>
         public void Dispose()
         {
+            //Se siamo in dispose esce
+            if (this.isDisposing) 
+                return;
+            this.isDisposing = true;
+
+            //esegue dispose
             try
             {
                 //Disabilita Tracking
                 this.liveTrackingActivation(false);
 
                 //Termina tutte le istanze db definite
-                foreach (var db in this.mDbList.Values)
-                {
-                    db.Dispose();
-                }
-
-                //Esegue il dispose del lazystore e di tutti gli oggetit eventualmente associati
-                this.mLazyStore?.Dispose();
+                this.mDbList.Values.ForEachSimple(x => x.Dispose());
 
                 //Rimuove eventuali eventi rimasti attaccati
                 if (this.OnLogDebugSent != null)

@@ -8,7 +8,7 @@ namespace Business.Data.Objects.Core.Common.Utils
     /// <summary>
     /// Oggetto per caching Lazy
     /// </summary>
-    public class LazyStore: IDisposable
+    public class LazyStore
     {
 
         private Dictionary<string, object> LazyDic = new Dictionary<string, object>();
@@ -58,13 +58,5 @@ namespace Business.Data.Objects.Core.Common.Utils
         /// <param name="value"></param>
         public void Set<T1>(string uniqueKey, T1 value) => this.LazyDic[uniqueKey] = value;
 
-        public void Dispose()
-        {
-            //Esegue il dispose di tutte le istanze Idisposable agganciate al lazy store
-            foreach (var item in this.LazyDic.Values)
-            {
-                (item as IDisposable)?.Dispose();
-            }
-        }
     }
 }
