@@ -245,3 +245,7 @@ Pulizia interna
 
 [03/09/2025] - 5.0.80 - Simone Pelaia
 Rimosso lazystore IDisposable per evitare ricorsioni nella dispose oppure dispose di oggetti shared
+
+[03/09/2025] - 5.0.81 - Simone Pelaia
+Ripristinato MSSQL2012dataBase
+Aggiornato MDSQLDataBase con puntamento interno a MSSQL12dataBase

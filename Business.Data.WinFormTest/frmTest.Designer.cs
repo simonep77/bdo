@@ -46,10 +46,11 @@ namespace Business.Data.WinFormTest
             this.tESTCustomQueryFullRecordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tESTOperatoreINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lINQ2SQLConRawSqlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.sLOTIncudeDeletedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lIVETRACKINGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.mDSQLDataBaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +84,8 @@ namespace Business.Data.WinFormTest
             this.tESTOperatoreINToolStripMenuItem,
             this.lINQ2SQLConRawSqlToolStripMenuItem,
             this.sLOTIncudeDeletedToolStripMenuItem,
-            this.lIVETRACKINGToolStripMenuItem});
+            this.lIVETRACKINGToolStripMenuItem,
+            this.mDSQLDataBaseToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
@@ -188,6 +190,20 @@ namespace Business.Data.WinFormTest
             this.lINQ2SQLConRawSqlToolStripMenuItem.Text = "LINQ 2 SQL Con rawSql";
             this.lINQ2SQLConRawSqlToolStripMenuItem.Click += new System.EventHandler(this.lINQ2SQLConRawSqlToolStripMenuItem_Click);
             // 
+            // sLOTIncudeDeletedToolStripMenuItem
+            // 
+            this.sLOTIncudeDeletedToolStripMenuItem.Name = "sLOTIncudeDeletedToolStripMenuItem";
+            this.sLOTIncudeDeletedToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.sLOTIncudeDeletedToolStripMenuItem.Text = "SLOT IncudeDeleted";
+            this.sLOTIncudeDeletedToolStripMenuItem.Click += new System.EventHandler(this.sLOTIncudeDeletedToolStripMenuItem_Click);
+            // 
+            // lIVETRACKINGToolStripMenuItem
+            // 
+            this.lIVETRACKINGToolStripMenuItem.Name = "lIVETRACKINGToolStripMenuItem";
+            this.lIVETRACKINGToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.lIVETRACKINGToolStripMenuItem.Text = "LIVE TRACKING";
+            this.lIVETRACKINGToolStripMenuItem.Click += new System.EventHandler(this.lIVETRACKINGToolStripMenuItem_Click);
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -210,19 +226,12 @@ namespace Business.Data.WinFormTest
             this.txtLog.Size = new System.Drawing.Size(776, 410);
             this.txtLog.TabIndex = 1;
             // 
-            // sLOTIncudeDeletedToolStripMenuItem
+            // mDSQLDataBaseToolStripMenuItem
             // 
-            this.sLOTIncudeDeletedToolStripMenuItem.Name = "sLOTIncudeDeletedToolStripMenuItem";
-            this.sLOTIncudeDeletedToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
-            this.sLOTIncudeDeletedToolStripMenuItem.Text = "SLOT IncudeDeleted";
-            this.sLOTIncudeDeletedToolStripMenuItem.Click += new System.EventHandler(this.sLOTIncudeDeletedToolStripMenuItem_Click);
-            // 
-            // lIVETRACKINGToolStripMenuItem
-            // 
-            this.lIVETRACKINGToolStripMenuItem.Name = "lIVETRACKINGToolStripMenuItem";
-            this.lIVETRACKINGToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
-            this.lIVETRACKINGToolStripMenuItem.Text = "LIVE TRACKING";
-            this.lIVETRACKINGToolStripMenuItem.Click += new System.EventHandler(this.lIVETRACKINGToolStripMenuItem_Click);
+            this.mDSQLDataBaseToolStripMenuItem.Name = "mDSQLDataBaseToolStripMenuItem";
+            this.mDSQLDataBaseToolStripMenuItem.Size = new System.Drawing.Size(239, 22);
+            this.mDSQLDataBaseToolStripMenuItem.Text = "MDSQLDataBase";
+            this.mDSQLDataBaseToolStripMenuItem.Click += new System.EventHandler(this.mDSQLDataBaseToolStripMenuItem_Click);
             // 
             // frmTest
             // 
@@ -262,5 +271,6 @@ namespace Business.Data.WinFormTest
         private System.Windows.Forms.ToolStripMenuItem lINQ2SQLConRawSqlToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sLOTIncudeDeletedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lIVETRACKINGToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mDSQLDataBaseToolStripMenuItem;
     }
 }

@@ -35,7 +35,7 @@ namespace Business.Data.Objects.Database
                 return false;
             }
         }
-        public override string LastAutoIdFunction { get; } = @"LAST_INSERT_ID()";
+        public override string LastAutoIdFunction => @"LAST_INSERT_ID()";
 
         /// <summary>
         /// Isolamento di default della transazione
@@ -58,18 +58,6 @@ namespace Business.Data.Objects.Database
 
 
         #region "PUBLIC"
-
-
-        /// <summary>
-        /// Ritorna l'Ultimo ID Autoincrement/Identity inserito
-        /// </summary>
-        /// <returns></returns>
-        public override long GetLastAutoId()
-        {
-            this.SQL = @"SELECT LAST_INSERT_ID()";
-            return Convert.ToInt64(this.ExecScalar());
-        }
-
 
         /// <summary>
         /// Ottiene lock su risorsa
@@ -121,22 +109,8 @@ namespace Business.Data.Objects.Database
         {
             this.setTotPagedRecords(0);
 
-            string sTemp;
-            //Manipola Query aggiungendo direttiva conteggio
-            //if (this.SQL.StartsWith("WITH cteq1"))
-            //{
-            //    //Inserisce la calc nell'ultima query finale
-            //    var r = new Regex(_PAGED_REGEX.ToString(), RegexOptions.RightToLeft | RegexOptions.IgnoreCase | RegexOptions.Compiled );
-            //    sTemp = r.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
-
-            //    //Inserisce la limit nella prima query per velocizzre
-            //    var r2 = new Regex(@"[\s]*(WITH cteq1 AS [(])(.*)([)], cteq2.*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            //    sTemp = r2.Replace(this.SQL, $"$1 $2 LIMIT {positionIn},{offsetIn} $3 ", 1);
-            //}
-            //else
-            //{
             //Senza cte
-            sTemp = _PAGED_REGEX.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
+            var sTemp = _PAGED_REGEX.Replace(this.SQL, @"$1 SQL_CALC_FOUND_ROWS $2 ", 1);
             //}
 
             //Scrive query di conteggio record
@@ -175,14 +149,12 @@ namespace Business.Data.Objects.Database
         /// <param name="positionIn"></param>
         /// <param name="offsetIn"></param>
         /// <returns></returns>
-        public override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
+        internal override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
         {
-
             this.setQueryPaged(positionIn, offsetIn);
 
             //Ritorna
             return this.ExecReader();
-
         }
 
         #endregion

@@ -1,10 +1,4 @@
-﻿/*--------------------------------------
-
-  Autore: Simone Pelaia (c)
-  Data  : Data: $(DATE) Time: $(TIME)
- --------------------------------------*/
-
-using System;
+﻿using System;
 using System.Data;
 using System.Data.Common;
 using System.Text.RegularExpressions;
@@ -73,24 +67,7 @@ namespace Business.Data.Objects.Database
         }
 
 
-        public override string LastAutoIdFunction
-        {
-            get
-            {
-                return @"SCOPE_IDENTITY()";
-            }
-        }
-
-
-        /// <summary>
-        /// Ritorna l'Ultimo ID Autoincrement/Identity inserito
-        /// </summary>
-        /// <returns></returns>
-        public override long GetLastAutoId()
-        {
-            this.SQL = @"SELECT SCOPE_IDENTITY()";
-            return Convert.ToInt64(this.ExecScalar());
-        }
+        public override string LastAutoIdFunction => @"SCOPE_IDENTITY()";
 
 
         /// <summary>
@@ -101,23 +78,21 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public override DataTable Select(int positionIn, int offsetIn)
         {
+            //Imposta
+            this.preparePagedQuery(positionIn, offsetIn);
 
-                //Imposta
-                this.preparePagedQuery(positionIn, offsetIn);
+            DataTable oRetTab = this.Select();
 
-                DataTable oRetTab = this.Select();
+            //Se presente almento una riga ne cattura l'ultima che rappresenta il totale righe
+            if (oRetTab.Rows.Count > 0)
+                this.setTotPagedRecords(Convert.ToInt32(oRetTab.Rows[0][oRetTab.Columns.Count - 1]));
 
-                //Se presente almento una riga ne cattura l'ultima che rappresenta il totale righe
-                if (oRetTab.Rows.Count > 0)
-                    this.setTotPagedRecords(Convert.ToInt32(oRetTab.Rows[0][oRetTab.Columns.Count - 1]));
+            //Rimuove colonne di servizio per nasconderle
+            oRetTab.Columns.RemoveAt(oRetTab.Columns.Count - 1);
+            oRetTab.Columns.RemoveAt(oRetTab.Columns.Count - 1);
 
-                //Rimuove colonne di servizio per nasconderle
-                oRetTab.Columns.RemoveAt(oRetTab.Columns.Count - 1);
-                oRetTab.Columns.RemoveAt(oRetTab.Columns.Count - 1);
-
-                //Ritorna
-                return oRetTab;
-
+            //Ritorna
+            return oRetTab;
         }
 
         /// <summary>
@@ -126,15 +101,13 @@ namespace Business.Data.Objects.Database
         /// <param name="positionIn"></param>
         /// <param name="offsetIn"></param>
         /// <returns></returns>
-        public override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
+        internal override DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
         {
+            //Imposta
+            this.preparePagedQuery(positionIn, offsetIn);
 
-                //Imposta
-                this.preparePagedQuery(positionIn, offsetIn);
-
-                //Esegue
-                return this.ExecReader();
-
+            //Esegue
+            return this.ExecReader();
         }
 
     }

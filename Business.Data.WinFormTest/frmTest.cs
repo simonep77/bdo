@@ -595,5 +595,26 @@ namespace Business.Data.WinFormTest
                 this.WriteLog(ss1.PrintInfo());
             }
         }
+
+        private void mDSQLDataBaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ss1 = new BusinessSlot("MDSQLDataBase", "Server=sql.svil.casagit.it;Database=GESTIONALE;User Id=gestionale;Password=Sviluppo1;TrustServerCertificate=true"))
+            {
+                ss1.DB.AutoCloseConnection = true;
+                ss1.LiveTrackingEnabled = true;
+                ss1.ChangeTrackingEnabled = true;
+                ss1.UserName = "Simone";
+
+                ss1.DB.SQL="SELECT top 100 * FROM ANAGRAFICA_PF";
+                var l1 = ss1.DB.Select();
+
+                ss1.DB.SQL= "SELECT ID, COGNOME, NOME FROM ANAGRAFICA_PF union all SELECT ID, DENOMINAZIONE, '' from ANAGRAFICA_PG";
+                var l2 = ss1.DB.Select(0, 100);
+
+
+
+                this.WriteLog(ss1.PrintInfo());
+            }
+        }
     }
 }

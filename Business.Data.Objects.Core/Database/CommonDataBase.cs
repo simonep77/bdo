@@ -80,17 +80,10 @@ namespace Business.Data.Objects.Database
 
         protected virtual bool PagedReaderLastRow => true;
 
-
         /// <summary>
         /// Ritorna il nome della funzione per la cattura dell'ultimo Id inserito automaticamente
         /// </summary>
-        public virtual string LastAutoIdFunction
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public virtual string LastAutoIdFunction => throw new NotImplementedException();
 
         /// <summary>
         /// Statistiche di utilizzo
@@ -138,10 +131,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Lista dei parametri attualmente presenti
         /// </summary>
-        public DbParameterCollection Parameters
-        {
-            get => this._command.Parameters;
-        }
+        public DbParameterCollection Parameters => this._command.Parameters;
 
         /// <summary>
         /// SQL da eseguire (o eseguito)
@@ -327,10 +317,7 @@ namespace Business.Data.Objects.Database
         /// <summary>
         /// Inizia nuova transazione
         /// </summary>
-        public virtual void BeginTransaction()
-        {
-            this.BeginTransaction(this.TransactionDefaultIsolation);
-        }
+        public virtual void BeginTransaction() => this.BeginTransaction(this.TransactionDefaultIsolation);
 
         /// <summary>
         /// Inizia nuova transazione con specifica dell'isolation level
@@ -478,7 +465,8 @@ namespace Business.Data.Objects.Database
         /// <returns></returns>
         public virtual long GetLastAutoId()
         {
-            throw new NotImplementedException(string.Format(DatabaseMessages.Not_Implemented, this.GetType().Name));
+            this.SQL = $"SELECT {this.LastAutoIdFunction}";
+            return Convert.ToInt64(this.ExecScalar());
         }
 
 
@@ -622,7 +610,7 @@ namespace Business.Data.Objects.Database
         /// <param name="positionIn"></param>
         /// <param name="offsetIn"></param>
         /// <returns></returns>
-        public virtual DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
+        internal virtual DbDataReader ExecReaderPaged(int positionIn, int offsetIn)
         {
             throw new NotImplementedException(string.Concat("ExecReaderPaged non implementato per il tipo database ", this.GetType().Name));
         }

@@ -14,7 +14,7 @@ namespace Business.Data.Objects.Database
     /// <summary>
     /// Accesso dati sql server con driver Microsoft.Data
     /// </summary>
-    public class MSSQLMDDataBase : MSSQL2005DataBase
+    public class MDSQLDataBase : MSSQL2012DataBase
     {
         protected override string ProviderAssembly => @"Microsoft.Data.SqlClient";
         protected override string ProviderFactoryClass => @"Microsoft.Data.SqlClient.SqlClientFactory";
@@ -23,7 +23,7 @@ namespace Business.Data.Objects.Database
         /// Costruttore base 
         /// </summary>
         /// <param name="connString"></param>
-        public MSSQLMDDataBase(string connString)
+        public MDSQLDataBase(string connString)
             : base(connString)
         {
         }
@@ -33,7 +33,7 @@ namespace Business.Data.Objects.Database
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="tran"></param>
-        public MSSQLMDDataBase(DbConnection conn, DbTransaction tran)
+        public MDSQLDataBase(DbConnection conn, DbTransaction tran)
             : base(conn, tran)
         {
         }

@@ -1,10 +1,4 @@
-﻿/*--------------------------------------
-
-  Autore: Simone Pelaia (c)
-  Data  : Data: $(DATE) Time: $(TIME)
- --------------------------------------*/
-
-using System;
+﻿using System;
 using System.Data;
 using System.Data.Common;
 
@@ -33,24 +27,8 @@ namespace Business.Data.Objects.Database
         }
 
 
-        public override string LastAutoIdFunction
-        {
-            get
-            {
-                return @"@@IDENTITY";
-            }
-        }
+        public override string LastAutoIdFunction => @"@@IDENTITY";
 
-
-        /// <summary>
-        /// Ritorna l'Ultimo ID Autoincrement/Identity inserito
-        /// </summary>
-        /// <returns></returns>
-        public override long GetLastAutoId()
-        {
-            this.SQL = @"SELECT @@IDENTITY";
-            return Convert.ToInt64(this.ExecScalar());
-        }
 
         /// <summary>
         /// Ottiene il lock di una risorsa con nome

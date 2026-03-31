@@ -32,10 +32,10 @@ namespace Business.Data.Objects.Database
                         return new MYSQLDataBase(connectionString);
                     case @"MSSQL2005DATABASE":
                         return new MSSQL2005DataBase(connectionString);
-                    case @"MSSQLMDDATABASE":
-                        return new MSSQLMDDataBase(connectionString);
-                    //case @"MSSQL2012DATABASE":
-                    //    return new MSSQL2012DataBase(connectionString);
+                    case @"MDSQLDATABASE":
+                        return new MDSQLDataBase(connectionString);
+                    case @"MSSQL2012DATABASE":
+                        return new MSSQL2012DataBase(connectionString);
                     case @"MSSQLDATABASE":
                         return new MSSQLDataBase(connectionString);
                     case @"SQLITEDATABASE":
