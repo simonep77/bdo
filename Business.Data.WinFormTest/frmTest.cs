@@ -69,27 +69,27 @@ namespace Business.Data.WinFormTest
 
                 // cancellazione logica
                 var dtOgg = DateTime.Now;
-                // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
-                // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
-                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In<uint>(Convert.ToUInt32("1"), 1000) & o.CodiceOrdine == "".PadLeft(3, '0'));
+                // Dim lst = ss1.CreateList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
+                // Dim lst = ss1.CreateList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
+                var lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In<uint>(Convert.ToUInt32("1"), 1000) & o.CodiceOrdine == "".PadLeft(3, '0'));
 
                 WriteLog(lst.ToJSON());
 
                 var aa = new uint[] { 1, 7, 4, 55 };
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa));
+                lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa));
                 WriteLog(lst.ToJSON());
 
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa.ToList().ToArray()));
+                lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Id.In(aa.ToList().ToArray()));
                 WriteLog(lst.ToJSON());
 
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
+                lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
                 WriteLog(lst.ToJSON());
 
-                //lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Utente.Like("aaa%"));
+                //lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Utente.Like("aaa%"));
                 //WriteLog(lst.ToXml());
 
 
-                lst = ss1.CreatePagedList<OrdineLista>(1, 10).OrderByLinq(o => o.AnagraficaId).OrderByLinqDesc(o => o.Id).SearchByLinq((o => o.Id > 10));
+                lst = ss1.CreateList<OrdineLista>(1, 10).OrderByLinq(o => o.AnagraficaId).OrderByLinqDesc(o => o.Id).SearchByLinq((o => o.Id > 10));
                 WriteLog(lst.ToJSON());
 
                 var oo = ss1.LoadObjByLINQ<Ordine>(o => o.Id == 150);
@@ -112,7 +112,7 @@ namespace Business.Data.WinFormTest
                 //var el3 = ss1.GetCurrentElapsed();
                 //for (int i = 0; i < count; i++)
                 //{
-                //    var l1 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByColumn(Filter.In(nameof(Ordine.StatoId), 1, 3).And(Filter.Betw(nameof(Ordine.DataInserimento), new DateTime(2000, 1, 1), DateTime.Today)));
+                //    var l1 = ss1.CreateList<OrdineLista>(1, 10).SearchByColumn(Filter.In(nameof(Ordine.StatoId), 1, 3).And(Filter.Betw(nameof(Ordine.DataInserimento), new DateTime(2000, 1, 1), DateTime.Today)));
                 //}
                 //var el4 = ss1.GetCurrentElapsed();
                 //this.WriteLog(el4.Subtract(el3).TotalMilliseconds.ToString());
@@ -122,7 +122,7 @@ namespace Business.Data.WinFormTest
                 var el1 = ss1.GetCurrentElapsed();
                 for (int i = 0; i < count; i++)
                 {
-                    var l1 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.StatoId.In(1, 3) && o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
+                    var l1 = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.StatoId.In(1, 3) && o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
                 }
                 var el2 = ss1.GetCurrentElapsed();
                 this.WriteLog(el2.Subtract(el1).TotalMilliseconds.ToString());
@@ -131,7 +131,7 @@ namespace Business.Data.WinFormTest
                 filter.And(o => o.StatoId.In(1, 3));
                 filter.And(o => o.DataInserimento.Between(new DateTime(2000, 1, 1), DateTime.Today));
 
-                var l3 = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(filter.Result);
+                var l3 = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(filter.Result);
                 this.WriteLog($"Espressione combinata. Count: {l3.Count}");
 
 
@@ -156,8 +156,8 @@ namespace Business.Data.WinFormTest
 
                 // cancellazione logica
                 var dtOgg = DateTime.Now;
-                // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
-                // Dim lst = ss1.CreatePagedList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
+                // Dim lst = ss1.CreateList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id > 1000 And (o.StatoId = 1 Or o.StatoId = 3) And DateTime.Now >= o.DataInserimento And dtOgg >= o.DataInserimento And o.CodiceOrdine <> ss1.UserName)
+                // Dim lst = ss1.CreateList(Of OrdineLista)(1, 10).SearchByLinq(Function(o) o.Id.OpIN(1, 1000))
                 var lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
 
                 foreach (var item in lst)
@@ -293,7 +293,7 @@ namespace Business.Data.WinFormTest
                 //ss1.OnUserInfoRequired += getUserInfoFromSlot;
                 this.WriteLog("Avvio");
 
-                var lst = ss1.CreatePagedList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
+                var lst = ss1.CreateList<OrdineLista>(1, 10).SearchByLinq(o => o.Id > 1000);
 
                 var ord = lst.FirstOrDefault();
 
@@ -364,7 +364,7 @@ namespace Business.Data.WinFormTest
                 for (int i = 0; i < 100000; i++)
                 {
                     var irnd = rnd.Next(1, 100);
-                    var lst = ss1.CreatePagedList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > irnd);
+                    var lst = ss1.CreateList<OrdineLista>(1, 10).CacheResult().SearchByLinq(o => o.Id > irnd);
 
                     //this.WriteLog(ss1.DB.Stats.ToString());
 
@@ -598,7 +598,7 @@ namespace Business.Data.WinFormTest
 
         private void mDSQLDataBaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var ss1 = new BusinessSlot("MDSQLDataBase", "Server=sql.svil.casagit.it;Database=GESTIONALE;User Id=gestionale;Password=Sviluppo1;TrustServerCertificate=true"))
+            using (var ss1 = new BusinessSlot("MDSQLDataBase", "Server=xxxxx;Database=xxxxx;User Id=xxxxx;Password=xxxxx;TrustServerCertificate=true"))
             {
                 ss1.DB.AutoCloseConnection = true;
                 ss1.LiveTrackingEnabled = true;
@@ -608,7 +608,7 @@ namespace Business.Data.WinFormTest
                 ss1.DB.SQL="SELECT top 100 * FROM ANAGRAFICA_PF";
                 var l1 = ss1.DB.Select();
 
-                ss1.DB.SQL= "SELECT ID, COGNOME, NOME FROM ANAGRAFICA_PF union all SELECT ID, DENOMINAZIONE, '' from ANAGRAFICA_PG";
+                ss1.DB.SQL= "SELECT ID, COGNOME, NOME FROM ANAGRAFICA_PF  ORDER BY CURRENT_TIMESTAMP";
                 var l2 = ss1.DB.Select(0, 100);
 
 

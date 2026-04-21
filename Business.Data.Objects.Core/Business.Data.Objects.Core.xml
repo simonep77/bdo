@@ -6639,6 +6639,24 @@
             </summary>
             <param name="lockName"></param>
         </member>
+        <member name="T:Business.Data.Objects.Database.MDSQLDataBase">
+            <summary>
+            Accesso dati sql server con driver Microsoft.Data
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MDSQLDataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MDSQLDataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
         <member name="T:Business.Data.Objects.Database.MSSQL2005DataBase">
             <summary>
             Description of MSSQLDataBase.
@@ -6669,12 +6687,6 @@
             <param name="positionIn"></param>
             <param name="offsetIn"></param>
         </member>
-        <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.GetLastAutoId">
-            <summary>
-            Ritorna l'Ultimo ID Autoincrement/Identity inserito
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.Select(System.Int32,System.Int32)">
             <summary>
             Esegue query paginata
@@ -6686,6 +6698,44 @@
         <member name="M:Business.Data.Objects.Database.MSSQL2005DataBase.ExecReaderPaged(System.Int32,System.Int32)">
             <summary>
             Esegue query paginata con reader
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Business.Data.Objects.Database.MSSQL2012DataBase">
+            <summary>
+            Description of MSSQLDataBase.
+            </summary>
+        </member>
+        <member name="F:Business.Data.Objects.Database.MSSQL2012DataBase._PAGED_REGEX_ORDER">
+            <summary>
+            Regex per cercare primo statement di select che puo' avere o meno distinct e top
+            </summary>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.String)">
+            <summary>
+            Costruttore base 
+            </summary>
+            <param name="connString"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
+            <summary>
+            Costruttore specifico
+            </summary>
+            <param name="conn"></param>
+            <param name="tran"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.preparePagedQuery(System.Int32,System.Int32)">
+            <summary>
+            Imposta query paginata
+            </summary>
+            <param name="positionIn"></param>
+            <param name="offsetIn"></param>
+        </member>
+        <member name="M:Business.Data.Objects.Database.MSSQL2012DataBase.Select(System.Int32,System.Int32)">
+            <summary>
+            Esegue query paginata
             </summary>
             <param name="positionIn"></param>
             <param name="offsetIn"></param>
@@ -6703,12 +6753,6 @@
             <param name="conn"></param>
             <param name="tran"></param>
         </member>
-        <member name="M:Business.Data.Objects.Database.MSSQLDataBase.GetLastAutoId">
-            <summary>
-            Ritorna l'Ultimo ID Autoincrement/Identity inserito
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Business.Data.Objects.Database.MSSQLDataBase.GetLock(System.String,System.Int32)">
             <summary>
             Ottiene il lock di una risorsa con nome
@@ -6721,24 +6765,6 @@
             </summary>
             <param name="lockName"></param>
         </member>
-        <member name="T:Business.Data.Objects.Database.MSSQLMDDataBase">
-            <summary>
-            Accesso dati sql server con driver Microsoft.Data
-            </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MSSQLMDDataBase.#ctor(System.String)">
-            <summary>
-            Costruttore base 
-            </summary>
-            <param name="connString"></param>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MSSQLMDDataBase.#ctor(System.Data.Common.DbConnection,System.Data.Common.DbTransaction)">
-            <summary>
-            Costruttore specifico
-            </summary>
-            <param name="conn"></param>
-            <param name="tran"></param>
-        </member>
         <member name="T:Business.Data.Objects.Database.MYSQLDataBase">
             <summary>
             Description of MYSQLDataBase.
@@ -6750,12 +6776,6 @@
             <summary>
             Isolamento di default della transazione
             </summary>
-        </member>
-        <member name="M:Business.Data.Objects.Database.MYSQLDataBase.GetLastAutoId">
-            <summary>
-            Ritorna l'Ultimo ID Autoincrement/Identity inserito
-            </summary>
-            <returns></returns>
         </member>
         <member name="M:Business.Data.Objects.Database.MYSQLDataBase.GetLock(System.String,System.Int32)">
             <summary>
