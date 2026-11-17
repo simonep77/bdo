@@ -246,6 +246,9 @@ Pulizia interna
 [03/09/2025] - 5.0.80 - Simone Pelaia
 Rimosso lazystore IDisposable per evitare ricorsioni nella dispose oppure dispose di oggetti shared
 
-[03/09/2025] - 5.0.81 - Simone Pelaia
+[31/03/2026] - 5.0.81 - Simone Pelaia
 Ripristinato MSSQL2012dataBase
 Aggiornato MDSQLDataBase con puntamento interno a MSSQL12dataBase
+
+[17/11/2026] - 5.0.82 - Simone Pelaia
+Liste caricate con query custom con primary key a singolo campo vengono precaricate tramite sottoliste con IN (pk1, pk2, ...) per evitare istanziazione 1:1 degli oggetti

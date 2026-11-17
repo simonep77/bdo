@@ -479,7 +479,7 @@ namespace Business.Data.WinFormTest
                 this.WriteLog(ord.First().ToJSON());
                 //this.WriteLog(ss1.GetCurrentElapsed().ToString());
 
-                //this.WriteLog(c2.Print());
+                this.WriteLog(ss1.PrintInfo());
 
 
             }
@@ -493,7 +493,7 @@ namespace Business.Data.WinFormTest
                 ss2.UserName = "Simone";
 
 
-                var ord = ss2.CreateList<ANAGRAFICA_PF_Lista>(1, 10).CercaTipiSoggettoEtaIntervallo(1, 46, new DateTime(2023, 1, 1), new DateTime(2023, 12, 31));
+                var ord = ss2.CreateList<ANAGRAFICA_PF_Lista>(1, 1000).CercaTipiSoggettoEtaIntervallo(1, 46, new DateTime(2023, 1, 1), new DateTime(2023, 12, 31));
 
                 this.WriteLog(ord.First().ToJSON());
                 //this.WriteLog(ss1.GetCurrentElapsed().ToString());

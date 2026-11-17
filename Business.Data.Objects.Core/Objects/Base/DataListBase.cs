@@ -115,7 +115,6 @@ namespace Business.Data.Objects.Core.Base
                         oItem.Object = this.Slot.CreateObjectByType(this.mObjSchema.OriginalType);
                         //Carica dati
                         oItem.Object.FillObjectFromReader(reader, false);
-                        //oItem.PkValues = oItem.Object.mClassSchema.PrimaryKey.GetValues(oItem.Object);
                         //Prova ad inserire nelle cache
                         this.Slot.CacheSetAny(oItem.Object);
                     }
@@ -205,6 +204,8 @@ namespace Business.Data.Objects.Core.Base
         /// <returns></returns>
         internal protected DataListBase doSearch()
         {
+            //Salva info di come eseguiamo la quesry
+            var bIsSearch = this.mIsSearch;
             try
             {
                 //Resetta liste
@@ -282,8 +283,6 @@ namespace Business.Data.Objects.Core.Base
                 this.mIncludeDeleted = false;
                 this.mIsSearch = false;
             }
-
-
 
             this.fireListChanged(ListChangedType.Reset, -1);
 

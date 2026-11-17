@@ -277,8 +277,42 @@ namespace Business.Data.Objects.Core
 
         protected TL DoSearch()
         {
-            //Ritorna se stesso per semplificare
-            return (TL)base.doSearch();
+            //Esegue ricerca
+            base.doSearch();
+
+            //Se abbiamo eseguito una query custom, abbiamo più di un oggetto e abbiamo un'unica pk allora proviamo a precaricare gli oggetti
+            if (this.mInnerList.Count > 1 && this.mInnerList[0].Object == null && this.mObjSchema.PrimaryKey.Properties.Count == 1)
+            {
+                const int I_LOTTO = 800;
+                var iPosition = 0;
+
+                //Eseguiamo query in a lotti per non incappare nei limiti dei vari dbms
+                while (iPosition < this.mInnerList.Count)
+                {
+                    //Preleva gli oggetti da aggiornare e lcrea una lookup per maggior rapidità
+                    var items = this.mInnerList
+                        .Skip(iPosition)
+                        .Take(I_LOTTO)
+                        .ToList()
+                        .ToLookup(x => x.PkValues[0]);
+
+                    //Esegue caricamento oggetti andando ad impostare la pk
+                    var f = Filter.In(this.mObjSchema.PrimaryKey.Properties[0].Column.NormalizedName, items.Select(r => r.Key));
+                    using (TL lista = (TL)this.Slot.CreateList<TL>().searchByColumn(f))
+                    {
+                        //Avanza posizione
+                        iPosition += lista.Count;
+
+                        //Copia oggetti su lista corrente
+                        foreach (var row in lista.mInnerList)
+                        {
+                            items[row.PkValues[0]].First().Object = row.Object;
+                        }
+                    }
+                }
+            }
+
+            return (TL)this;
         }
 
 
